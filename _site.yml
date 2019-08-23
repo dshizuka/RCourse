@@ -8,7 +8,7 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Syllabus"
-      href: Syllabus.html
+      href: syllabus.html
     - text: "Modules"
       href: modules.html
     - text: "CryptPad"
