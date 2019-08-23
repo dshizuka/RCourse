@@ -8,10 +8,9 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Syllabus"
-      href: syllabus.html
+      href: Syllabus.html
     - text: "Modules"
       href: modules.html
     - text: "CryptPad"
       href: https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/
 output_dir: "."
-
