@@ -11,7 +11,7 @@ navbar:
       href: syllabus.html
     - text: "Modules"
       href: modules.html
-    - text: "Cryptpad_trial"
+    - text: "Cryptpadtrial"
       href: https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/
       target: _blank
 output_dir: "."
