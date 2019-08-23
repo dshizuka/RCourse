@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "491187447",
+    "hash" : "0",
     "id" : "24C50AC5",
-    "lastKnownWriteTime" : 1566573197,
-    "last_content_update" : 1566573197565,
+    "lastKnownWriteTime" : 1566574032,
+    "last_content_update" : 1566574032866,
     "path" : "~/Documents/GitHub/RCourse/index.Rmd",
     "project_path" : "index.Rmd",
     "properties" : {
-        "cursorPosition" : "1,12",
+        "cursorPosition" : "13,0",
         "scrollLine" : "0",
         "tempName" : "Untitled1"
     },
