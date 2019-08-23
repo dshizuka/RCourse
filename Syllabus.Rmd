@@ -65,9 +65,9 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 * Week 2: Data Wrangling (*remote class*)
 
-* Week 3: Plotting Basics
+* Week 3: Plotting in Base R
 
-* Week 4: More plotting, creating reports
+* Week 4: Creating reports
 
 * Week 5: Some simple statistics
 
