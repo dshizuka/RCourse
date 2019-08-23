@@ -1,0 +1,14 @@
+name: "Intro to R"
+output:
+  html_document:
+    theme: flatly
+navbar:
+  title: "Intro to R"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Syllabus"
+      href: syllabus.html
+    - text: "Modules"
+      href: modules.html
+output_dir: "."
