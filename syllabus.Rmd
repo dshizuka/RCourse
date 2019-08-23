@@ -2,10 +2,7 @@
 title: "BIOS 967: Intro to R for Biologists"
 subtitle: "Syllabus, Spring 2019"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
-output: 
-  htm_document:
-    toc: yes
-    toc_depth: 2
+output: html_document
 ---
 
 ***
