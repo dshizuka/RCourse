@@ -97,4 +97,4 @@ Go to [https://cran.r-project.org/](https://cran.r-project.org/) and follow dire
 2. **Download and Install *R Studio* **  
 Go to [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/) and download the **R Studio Desktop** installer. Follow directions to install the program.
 3. **Bookmark the Course CryptPad**  
-*CryptPad* is a super useful way to follow along with the codes in real time. We will use this site in class. I have created a course "pad". You should [bookmark this link in your favorite browser](https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/)
+*CryptPad* is a super useful way to follow along with the codes in real time. We will use this site in class. I have created a course "pad". You should [bookmark this link in your favorite browser](https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/){target="_blank"}
