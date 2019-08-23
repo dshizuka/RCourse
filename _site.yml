@@ -13,5 +13,5 @@ navbar:
       href: modules.html
     - text: "Cryptpadtrial"
       href: https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/
-      target: _blank
+      target: "_blank"
 output_dir: "."
