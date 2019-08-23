@@ -1,7 +1,7 @@
 name: "Intro to R"
 output:
   html_document:
-    theme: journal
+    theme: simplex
 navbar:
   title: "Intro to R"
   left:
