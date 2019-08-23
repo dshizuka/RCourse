@@ -32,10 +32,13 @@ output:
 * **Installed programs**: see the ** Before the Course ** section below  
 
 ###<u>How the Course Works</u>
-* The course will consist of one 3-hour session per week. 
+
 * Class sessions will consist of live-coding sessions led by the instructor, as well as individual and group exercises.
-* Each class session will have a handout that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook.
-* Most weeks, there will be a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.
+
+* Each class session will have an acommpanying web module that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook.
+
+* Most weeks, we will start a task during the Thursday session, which will then turn into a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.
+
 * The last part of the semester will mostly be dedicated to conducting independent research projects.
 
 ###<u>Evaluation</u>  
@@ -74,7 +77,7 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 * Week 8: Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9: HCC guest lecture: Running codes on the high-performance computing cluster.
+* Week 9: More Simulations
 
 * Week 10: Batch processing
 
