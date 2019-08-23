@@ -60,7 +60,7 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 * Week 1: Getting started with R
 
-* Week 2: Data Wrangling (*remote class*)
+* Week 2: Data Wrangling
 
 * Week 3: Plotting in Base R
 
@@ -74,7 +74,7 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 * Week 8: Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9: More Simulations
+* Week 9: Write your own functions
 
 * Week 10: Batch processing
 
