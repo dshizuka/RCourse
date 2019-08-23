@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>BIOS 967: Intro to R for Biologists</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">BIOS 967: Intro to R for Biologists</h1>
+<h3 class="subtitle"><em>Syllabus, Spring 2019</em></h3>
+<h4 class="date"><em>updated 08/23/19</em></h4>
+
+</div>
+
+
+<hr />
+<div id="timelocation" class="section level3">
+<h3><u>Time/Location</u></h3>
+<ul>
+<li><strong>T/Th 2-3:20pm @ 210 Brace Labs </strong></li>
+</ul>
+</div>
+<div id="instructor" class="section level3">
+<h3><u>Instructor</u></h3>
+<ul>
+<li><strong>Dai Shizuka</strong></li>
+<li><strong>Office: 410B Manter Hall</strong></li>
+<li><strong>Email: dshizuka2’at’unl.edu</strong></li>
+</ul>
+</div>
+<div id="course-website" class="section level3">
+<h3><u>Course Website</u></h3>
+<div id="course-materials-will-be-posted-at-the-course-blog-httpsdshizuka.github.iorcourse" class="section level4">
+<h4>Course materials will be posted at the course blog: <a href="https://dshizuka.github.io/RCourse/" class="uri">https://dshizuka.github.io/RCourse/</a></h4>
+</div>
+</div>
+<div id="course-goals" class="section level3">
+<h3><u>Course Goals</u></h3>
+<ul>
+<li>Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes, including wrangling data, generating plots, conducting analyses, and generating reports.</li>
+<li>Learn to conduct <strong>reproducible research</strong> and to reproduce research of others</li>
+<li>Make progress on own research by tackling complex tasks with R</li>
+</ul>
+</div>
+<div id="required-materials" class="section level3">
+<h3><u>Required Materials</u></h3>
+<ul>
+<li><strong>Laptop computer</strong>: You will need access to a laptop computer that you can reliably use during class each week.</li>
+<li><strong>Installed programs</strong>: see the ** Before the Course ** section below</li>
+</ul>
+</div>
+<div id="how-the-course-works" class="section level3">
+<h3><u>How the Course Works</u></h3>
+<ul>
+<li>The course will consist of one 3-hour session per week.</li>
+<li>Class sessions will consist of live-coding sessions led by the instructor, as well as individual and group exercises.</li>
+<li>Each class session will have a handout that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook.</li>
+<li>Most weeks, there will be a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.</li>
+<li>The last part of the semester will mostly be dedicated to conducting independent research projects.</li>
+</ul>
+</div>
+<div id="evaluation" class="section level3">
+<h3><u>Evaluation</u></h3>
+<p>Students will be evaluated based on 4 criteria. (1) Participation [20 points], (2) Take-home assignments [40 points], (2) Project proposal [15 points] (3) Write-up of independent project [25 points].</p>
+</div>
+<div id="independent-project" class="section level3">
+<h3><u>Independent Project</u></h3>
+<p>You will spend two weeks towards the end of the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions: (1) Conduct new analyses of your own data (2) Re-create models and/or figures from a publication in your field (I recommend this approach—it really helps you understand concepts at a new level). (3) Conduct meta-analyses or re-analysis of publically available data.</p>
+<p>You will submit a brief plan (&lt; 2 pages) of your project on During the 5th week of the course. However, you can start your project earlier than that. You will submit a write-up (~5 pages, double-spaced including figures) at the end of the course.</p>
+</div>
+<div id="students-with-disabilities" class="section level3">
+<h3><u>Students with disabilities</u></h3>
+<p>Students with disabilities are encouraged to contact the instructor for a confidential discussion of their individual needs for academic accommodation. It is the policy of the University of Nebraska-Lincoln to provide flexible and individualized accommodation to students with documented disabilities that may affect their ability to fully participate in course activities or to meet course requirements. To receive accommodation services, students must be registered with the Services for Students with Disabilities (SSD) office, 132 Canfield Administration, 472-3787 voice or TTY.</p>
+<hr />
+
+</div>
+<div id="tentative-course-schedule-subject-to-change" class="section level3">
+<h3><u>Tentative course schedule (subject to change!)</u></h3>
+<ul>
+<li><p>Week 1: Getting started with R</p></li>
+<li><p>Week 2: Data Wrangling (<em>remote class</em>)</p></li>
+<li><p>Week 3: Plotting Basics</p></li>
+<li><p>Week 4: More plotting, creating reports</p></li>
+<li><p>Week 5: Some simple statistics</p></li>
+<li><p>Week 6: apply functions, loops, statements</p></li>
+<li><p>Week 7: Resampling techniques</p></li>
+<li><p>Week 8: Simulations, stochasticity, <strong>Submit proposal for independent project</strong></p></li>
+<li><p>Week 9: HCC guest lecture: Running codes on the high-performance computing cluster.</p></li>
+<li><p>Week 10: Batch processing</p></li>
+<li><p>Week 11: <em>Spring Break</em></p></li>
+<li><p>Week 12: Worked examples, independent projects</p></li>
+<li><p>Week 13: Worked examples, independent projects</p></li>
+<li><p>Week 14: Independent projects</p></li>
+<li><p>Week 15: Submit final project</p></li>
+</ul>
+<hr />
+</div>
+<div id="before-the-course" class="section level3">
+<h3><u>Before the Course</u></h3>
+<p>Please do the following things before we meet for the first class.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Download and Install <em>R</em> </strong><br />
+Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> and follow directions for downloading and installing R. <em>Even if you already have R</em>, upgrade to the latest version. It will make things easier to have everyone on the same version.</li>
+<li><strong>Download and Install <em>R Studio</em> </strong><br />
+Go to <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a> and download the <strong>R Studio Desktop</strong> installer. Follow directions to install the program.</li>
+<li><strong>Bookmark the Course Etherpad</strong><br />
+<em>Etherpad</em> is a super useful way to follow along with the codes in real time. We will use this site in class. I have created a course “pad”. You should bookmark this url in your favorite browser: <a href="https://public.etherpad-mozilla.org/p/rcoursepad" class="uri">https://public.etherpad-mozilla.org/p/rcoursepad</a></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
