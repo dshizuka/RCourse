@@ -2,6 +2,7 @@ name: "Intro to R"
 output:
   html_document:
     theme: cosmo
+    highlight: textmate
 navbar:
   title: "Intro to R"
   left:
