@@ -1,0 +1,14 @@
+---
+title: "Modules"
+author: "Dai Shizuka"
+date: "8/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Learning Modules
+
+* ####8/27/2019: 01. Let's get started with R! 

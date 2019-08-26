@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Part 1: Introduction to R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Part 1: Introduction to R</h1>
+<h3 class="subtitle"><em>BIOS 998-002: Intro to R</em></h3>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>updated 08/26/19</em></h4>
+
+</div>
+
+
+<hr />
+<div id="what-is-r" class="section level2">
+<h2>1.1 What is R?</h2>
+<p>R is a language that allows you to do data manipulation, conduct any data analysis you can think of, produce beautiful graphs, put together and run simple models, simulations, randomizations… you name it.</p>
+<div id="pros" class="section level4">
+<h4>Pros:</h4>
+<ul>
+<li>It’s all <strong>free</strong>, and it works across platforms (Linux, Mac, PC).<br />
+</li>
+<li><strong>Packages</strong>: free access to bundles of functions that allow you to do all kinds of stats, graphics, etc. You name it, there is probably a package for it. These are open source, which means that there are people who are constantly working to introduce new &amp; improved packages. This also means that R packages are often more up-to-date than some bigger stats software.</li>
+<li><strong>Graphics</strong> are very pretty. Once you get the hang of it, you will be able to generate publication-quality figures in R.<br />
+</li>
+<li><strong>Reproducibility</strong>: Codes/Scripts = perfect record of everything you’ve done. You can apply the exact same analysis to different datasets without mistake. You know exactly what you did, and you can share this with collaborators without miscommunication.<br />
+</li>
+<li><strong>Simulations and models:</strong> If you’ve never been able to create your own simulations or theoretical models, you will be able to do them once you start learning R.<br />
+</li>
+<li><strong>Statistical Analyses</strong>: Most likely, it will also help you learn the proper ways to do stats instead of relying on canned functions in stats software.<br />
+</li>
+<li><strong>Community</strong>: Lots of online forums and help</li>
+</ul>
+</div>
+<div id="drawbacks" class="section level4">
+<h4>Drawbacks:</h4>
+<ul>
+<li>You have to learn a language.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="working-with-rstudio" class="section level2">
+<h2>1.2 Working with RStudio</h2>
+<p>In this class, we will be using an open-source software called <em>RStudio</em>. <em>RStudio</em> is an IDE (Integrated Development Environment)–a fancy word for software that organizes windows and provides a layout that helps make programming easier. Strictly speaking, you don’t really need <em>RStudio</em> or any other IDE. If you prefer, you can simply open the R program and use the R console and editor as separate windows. However, there are some benefits to using <em>RStudio</em>.</p>
+<p>The main benefit to <em>RStudio</em> for this class is that it makes R look the same across platforms. So it should make it easier for me to communicate efficiently with Mac OS and Windows users. Another benefit is access to other tools such as <em>Rmarkdown</em>, which we will learn to use later for generating reports.<br />
+First, open up the R Studio program. You will get a window with 3 panels. Click on the little icon at the top left that looks like this: <img src="image/icon1.png" /><br />
+Now you will have 4 panels.</p>
+<p><img src="images/Panels.png" width="676" style="display: block; margin: auto;" /></p>
+<p>These are the 4 panels you will have:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Script Editor</strong> (Top Left): This is where you will build your script. It is essentially a text file (but has some nice features like syntax coloring). This widow may not automatically appear, but we will use it a lot.</li>
+<li><strong>R Console</strong> (Bottom Left). This is where the commands run.</li>
+<li><strong>Environment/History</strong> (Upper Right). This area will show all objects that are loaded in the workspace. The “History” tab will show you what you have done in the current workspace.<br />
+</li>
+<li><strong>Plots, etc.</strong> (Lower Right). This is where plots will show up. Other tabs will take you to help files, package manager, etc.</li>
+</ol>
+<p>You can set the panels up however you like by going to <code>[Preferences]</code>–<code>[Pane Layout]</code>. For this class, I recommend keeping the pane layout the same as mine so you don’t get confused.</p>
+<hr />
+</div>
+<div id="running-commands-in-the-console" class="section level2">
+<h2>1.3 Running commands in the Console</h2>
+<p>Let’s start with something simple. Try typing the code that is shown in the shaded area into the Console (bottom left panel) and press <code>[return]</code></p>
+<pre class="r"><code>5*2</code></pre>
+<p>You should see an output like this:</p>
+<pre><code>## [1] 10</code></pre>
+<blockquote>
+<p><span style="color:purple"><strong>Note</strong></span><br />
+Here and throughout this course I will present code in the shaded box. This can be typed into the Console, or as you will see in next, you can copy and paste into the Script Editor. The output of codes, if shown, will be displayed below with hashtags (##) in front.</p>
+</blockquote>
+<p><em>Back to the R language:</em> Just performing calculations isn’t that useful–you could just use a calculator.<br />
+R is called an <em>object-oriented language</em>. What this means is that we can assign almost anything (numbers, text, matrices, data, functions, etc.) into an entity called <em>object</em>, and then we can combine these objects to do tasks. Try typing this into the R Console (bottom left)</p>
+<pre class="r"><code>a = 5*2</code></pre>
+<p>You will note that there is no output after typing this in. R simply registered the fact that you have assigned the output of the equation <code>5*2</code> into an <strong>object</strong> called <code>a</code>. You can now display the object by simply typing <code>a</code></p>
+<pre class="r"><code>a</code></pre>
+<pre><code>## [1] 10</code></pre>
+<p>Note that you will also see whatever objects you create in the “environment” window (top right panel).</p>
+<p>Objects are the building blocks of tasks you will perform in R, and thus assigning and manipulating objects is the essence of the R language. Here, we have used an extremely simply example of an object–a number, or <strong>numeric</strong> R lingo. You will see later that objects can be almost anything–a set of numbers, characters, matrices, datasets, lists, outputs of statistical analyses, and any number of special formats. You will soon see that this simple concept can be scaled up to accomplish very complex tasks efficiently.</p>
+<blockquote>
+<p><span style="color:purple"><strong>Some things to know:</strong></span></p>
+<ul>
+<li><code>&gt;</code> is the prompt from R. It means that R is waiting for you to enter something.</li>
+<li>R is case-sensitive</li>
+<li>Spaces are ignored</li>
+<li>If the console gets stuck, press <code>[esc]</code></li>
+<li>Pressing <code>[return]</code> in the Console will run the command.</li>
+</ul>
+</blockquote>
+<hr />
+</div>
+<div id="operators" class="section level2">
+<h2>1.4 Operators</h2>
+<p><strong>Operators</strong> are symbols that have special meaning in R. These are critical to know.</p>
+<table style="width:96%;">
+<colgroup>
+<col width="13%" />
+<col width="81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>#</code></td>
+<td>Comment. R ignores lines that start with this</td>
+</tr>
+<tr class="even">
+<td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code></td>
+<td>Arithmetic operators (plus, minus, divide, multiply, exponent)</td>
+</tr>
+<tr class="odd">
+<td><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></td>
+<td>Relational operators meaning “greater than”“,”greater or equal to“”, “less than”“,”less or equal to“”</td>
+</tr>
+<tr class="even">
+<td><code>==</code></td>
+<td>Relational operator meaning <strong>is equal to</strong></td>
+</tr>
+<tr class="odd">
+<td><code>!=</code></td>
+<td>Relational operator meaning <strong>is not</strong></td>
+</tr>
+<tr class="even">
+<td><code>&lt;=</code> or <code>=</code></td>
+<td>Both used to assign objects</td>
+</tr>
+<tr class="odd">
+<td><code>!</code>, <code>&amp;</code>, <code>|</code></td>
+<td>Logical operator used for indexing, meaning “exclude”, “and”, “or”</td>
+</tr>
+<tr class="even">
+<td><code>%</code></td>
+<td>This symbol is used in several contexts including matrix math, integer division, and value matching</td>
+</tr>
+<tr class="odd">
+<td><code>~</code></td>
+<td>Used for model formulae</td>
+</tr>
+<tr class="even">
+<td><code>$</code></td>
+<td>List indexing (element name)</td>
+</tr>
+<tr class="odd">
+<td><code>:</code></td>
+<td>Create a sequence</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>We will be using most if not all of these operators in due time. For now, let’s get oriented with the first 6 rows of the table above.<br />
+First, it is important to know that R ignores all lines that begin with a hashtag <code>#</code>. Thus, hashtags a really useful for making comments on your code.</p>
+<pre class="r"><code># You can type anything after the hashtag and R will ignore it.</code></pre>
+<p>Second, it’s important to know the difference between <code>&lt;-</code>, <code>=</code> and <code>==</code>.<br />
+<code>&lt;-</code> and <code>=</code> are the same thing: they both assign elements to objects.</p>
+<pre class="r"><code>a &lt;- 5 #this is the same as...
+a = 5</code></pre>
+<p>Some experienced programmers prefer <code>&lt;-</code> due to occasional ambiguity in using the equals sign. In this class, I will use <code>=</code>, which is what I prefer due to its simplicity.</p>
+<p>Third, whereas single equals sign <code>=</code> is used to assign objects, the double equas sign <code>==</code> is a <strong><em>relational operator asking “is something equal to something?”</em></strong></p>
+<p>For example, type in these lines and hit return (you can skip the parts after the <code>#</code>)</p>
+<pre class="r"><code># assign some values
+a = 5
+b = 10
+c = 5</code></pre>
+<pre class="r"><code>a == b # is a equal to b?</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>a == c # is a equal to c?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Let’s play with some other relational operators:</p>
+<pre class="r"><code>a &lt; b #is a less than b?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>a + c == b # is a + c equal to b?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>a != b # a is not the same as b?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>a != c # a is not the same as c?</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<hr />
+</div>
+<div id="functions-and-help-files" class="section level2">
+<h2>1.5 Functions and help files</h2>
+<p><em>Functions</em> are commands that you use to manipulate objects in R. Functions followed by <code>()</code>, and each function comes with specific arguments or syntax that goes inside the parentheses. Function names are like the verbs that you have to learn to master this language.</p>
+<p>For example, the function <code>rep(x,n)</code> is a function that says, “repeat the value x n times”. Try it:</p>
+<pre class="r"><code>rep(a,5)</code></pre>
+<pre><code>## [1] 5 5 5 5 5</code></pre>
+<p>Try another simple function, <code>seq()</code>, which creates a sequence of numbers. Here’s an example.</p>
+<pre class="r"><code>seq(1,10,1)</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>Here, the syntax is important. Generically, <code>seq(x, y, z)</code> says “create a sequence of numbers from x to y at increments of z).<br />
+<strong><em>But how do you find out what the syntax for a function is?</em></strong> This is a really important point about using R. You have to learn how to use each function. Luckily, there is a help file associated with each function. To look at the help file, you simply use ? in front of the function name:</p>
+<pre class="r"><code>?seq</code></pre>
+<p>This should give you a help file in the bottom right ‘outputs’ panel. It’ll look something like this: <img src="images/seq_help.png" width="486" style="display: block; margin: auto;" /></p>
+<p><strong><em>Some important elements of the help file: </em></strong></p>
+<ul>
+<li><p>Upper left corner shows the function, then brackets with the name of the package that contains the function: seq{base} indicates that the function <code>seq()</code> is in the “base package”—it is pre-loaded so you can always use it. Some functions require certain packages to be loaded. We will talk about loading &amp; using packages in a later module.</p></li>
+<li><p>Usage: Shows the syntax. What you should focus on is the different arguments that can be included—this helps specify how the function performs and what outputs are shown.</p></li>
+<li><p>Arguments: This section provides more detail about what goes inside the parentheses. This is probably the most useful part of the help file.</p></li>
+<li><p>Details: This section can be very informative for statistical functions or other complex functions. Read this carefully for new functions.</p></li>
+<li><p>Value: This section tells you what the outputs of the function are. This can also be very useful for more complicated functions. We will likely refer to this section in some cases.</p></li>
+<li><p>Examples: This section often gives you a self-contained example of usage. You can copy and paste codes from here and run them to see what they do.</p></li>
+</ul>
+<p>Ok, now that we’re oriented with the syntax of <code>seq()</code>, let’s play around with the function a bit.<br />
+You can see from the help file that the third argument for this function is “by”, which defines the interval that you want to use for the sequence of numbers. You can change this.</p>
+<pre class="r"><code>seq(1,10,by=0.7)</code></pre>
+<pre><code>##  [1] 1.0 1.7 2.4 3.1 3.8 4.5 5.2 5.9 6.6 7.3 8.0 8.7 9.4</code></pre>
+<p>You can also see that there is an optional argument called “length.out”. It is set as NULL by default—meaning that if you don’t specify it, it will be ignored. However, you can choose to specify the length of the output:</p>
+<pre class="r"><code>seq(1,10,length.out=19)</code></pre>
+<pre><code>##  [1]  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  5.5  6.0  6.5  7.0  7.5
+## [15]  8.0  8.5  9.0  9.5 10.0</code></pre>
+<p>The ability to see the inner workings of each function and specify some aspects of how functions work is one of the strengths of R. Hopefully you will come to appreciate that this flexibility and detail as you learn how to work with a programming language.</p>
+<hr />
+</div>
+<div id="using-the-script-editor" class="section level2">
+<h2>1.6 Using the Script Editor</h2>
+<p>You can type commands directly into the R Console and hit <code>[return]</code> to run the command (as we have done above). However, it is best practice to type your code into the Editor, and then hit <code>[command]+[return]</code> while the cursors is on the line of the command you want to run. There are several advantages to running your commands from the Editor rather than typing directly into the Console:</p>
+<ol style="list-style-type: decimal">
+<li><strong>You can run multiple lines of command at once</strong> by highlighting the entire set of codes you want to run and hitting <code>[command]+[return]</code>.</li>
+<li><strong>You can save your code.</strong> This allows you to keep a record of what you did and your results will be completely reproducible. This is very useful as you are working to set up a big set of analyses of building &amp; debugging models.</li>
+<li><strong>You can annotate your code.</strong> Text following <code>#</code> will show up as a different color in your Editor, and R Console will ignore this text when running your commands. This allows you to keep notes that explain what different sets of codes do.</li>
+</ol>
+<p>Try typing these two lines in your Script Editor (top right), and then highlight both lines and run them by hitting <code>[command]+[return]</code>, or hitting the little <code>Run</code> button at the top of the Script Editor:</p>
+<pre class="r"><code>a=5*2
+b=4
+a/b</code></pre>
+<pre><code>## [1] 2.5</code></pre>
+<p>You have now written a script! Now try annotating the script by adding comments preceded by a hashtag:</p>
+<pre class="r"><code>a=5*2 #This is the same as before
+b=4
+a/b #The answer should be 2.5</code></pre>
+<pre><code>## [1] 2.5</code></pre>
+<p>See what happens if you remove the hashtags and run the script again.</p>
+<hr />
+</div>
+<div id="working-directory-and-saving-your-script" class="section level2">
+<h2>1.7 Working Directory and Saving Your Script</h2>
+<p>Now that we have built a simple script, we should save it. But to save a script, you need to be familiar with the <strong>working directory</strong>. The working directory is the location in your computer where R will know to go save things, or to look for things if you ask it.</p>
+<p>The <em>default working directory</em> can be set by going to <code>[Preferences]</code>. It will be the first item at the top of the preferences window. You can set the default working directory by clicking <code>Browse</code>. Go ahead and set the working directory to a folder for this course.</p>
+<p>Now, if you save the script file, it will be saved in the default working directory. You can save the script by clicking <code>[File]</code>–<code>[Save]</code> or the little floppy disk icon at the top of the Rstudio window.<br />
+However, it is often good practice to actually set the working directory for each project.</p>
+<p>To do this, you will use a function called <code>setwd()</code>. To use this function, you will have to get familiar with the concept of file or folder <strong>paths</strong>. A path name is the “address” of a specific file or folder on your computer. Paths typically look something like <code>/Users/dshizuka/folder</code>.</p>
+<ul>
+<li><strong><em>For Windows</em></strong>, you can get the path name of the file or folder by right-clicking it and click “Copy as Path”</li>
+<li><strong><em>For Mac (or Windows)</em></strong>, you can look for the file/folder in Finder, and then drag and drop the icon into the “Go to file/function” bar at the top of the RStudio window.</li>
+</ul>
+<p><img src="images/GoToFIle.png" width="611" style="display: block; margin: auto;" /></p>
+<p>Once you have the path name, you can set the working directory as something like:</p>
+<pre class="r"><code>setwd(&quot;/Users/dshizuka/folder&quot;) #fill in the path to your working directory folder</code></pre>
+<p><strong>Make sure your path name is inside the quotes!</strong></p>
+<p>You can always check what the current working directory is by typing:</p>
+<pre class="r"><code>getwd()</code></pre>
+<p>Now, save the script you have written so far by going to <code>File</code>–<code>Save</code> and giving it a name like “session_1”. The script file should show up in the folder that is designated as the working directory with the file extension “.R”</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
