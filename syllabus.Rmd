@@ -39,10 +39,10 @@ output: html_document
 * The last part of the semester will mostly be dedicated to conducting independent research projects.
 
 ###<u>Evaluation</u>  
-Students will be evaluated based on 4 criteria. (1) Participation [20 points], (2) Take-home assignments [40 points], (2) Project proposal [15 points] (3) Write-up of independent project [25 points].
+Students will be evaluated based on 4 criteria. (1) Participation [25 points], (2) Take-home assignments [25 points], (2) Project proposal [15 points] (3) Write-up of independent project [35 points].
 
 ###<u>Independent Project</u>
-You will spend two weeks towards the end of the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions:
+You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions:
 (1)	Conduct new analyses of your own data
 (2)	Re-create models and/or figures from a publication in your field (I recommend this approach—it really helps you understand concepts at a new level).
 (3)	Conduct meta-analyses or re-analysis of publically available data. 
