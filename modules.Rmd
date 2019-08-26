@@ -13,4 +13,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ####[01. Let's get started with R!](01.Intro.html)
 
-* ####[02. Types of Objects](02.ObjectTypes.html)
+* ####[02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
