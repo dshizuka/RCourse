@@ -11,4 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Learning Modules
 
-* ####8/27/2019: [01. Let's get started with R!](01.Intro.html)
+* ####[01. Let's get started with R!](01.Intro.html)
+
+* ####[02. Types of Objects](02.ObjectTypes.html)
