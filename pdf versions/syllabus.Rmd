@@ -5,7 +5,7 @@ subtitle: "Syllabus, Spring 2019"
 
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 
-output: html_document
+output: pdf_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
