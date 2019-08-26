@@ -262,3 +262,5 @@ getwd()
 ```
 
 Now, save the script you have written so far by going to `File`--`Save` and giving it a name like "session_1". The script file should show up in the folder that is designated as the working directory with the file extension ".R"  
+
+***
