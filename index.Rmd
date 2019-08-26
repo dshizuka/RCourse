@@ -20,4 +20,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - ####[Course Cryptpad page](https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/){target="_blank"}
 
-- ####Syllabus: click on the "Syllabus" tab above, or [download pdf version]("pdf versions/syllabus.pdf").
+- ####Syllabus: click on the "Syllabus" tab above, or [download pdf version](pdf_versions/syllabus.pdf).
