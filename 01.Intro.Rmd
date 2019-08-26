@@ -1,18 +1,19 @@
 
 ---
 title: "Part 1: Introduction to R"
-subtitle: "BIOS 998-002: Intro to R"
+subtitle: "BIOS 967: Intro to R for Biologists"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
-
+    toc: true
+    toc_depth: 2
+    toc_float: true
 font size: 11pt
 geometry: margin=1in
 ---
 ```{r setup, include=FALSE}
 library(knitr)
-setwd("~/Dropbox/Dai_Teaching/Intro_To_R_2017/1-Intro")
 #knitr::opts_chunk$set(out.width="3.5in")
 ```
 
