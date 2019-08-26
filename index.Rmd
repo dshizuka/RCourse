@@ -13,5 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### This is the course website for **BIOS 967: Intro to R for Biologists**. I will post course modules here each week.
 
+---
 
 
+##Quick Links:
+
+- ###[Course Cryptpad page](https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/){target="_blank"}
