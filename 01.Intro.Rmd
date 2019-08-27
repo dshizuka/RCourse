@@ -91,7 +91,7 @@ a
 ```
 Note that you will also see whatever objects you create in the "environment" window (top right panel). 
 
-Objects are the building blocks of tasks you will perform in R, and thus assigning and manipulating objects is the essence of the R language. Here, we have used an extremely simply example of an object--a number, or **numeric** R lingo. You will see later that objects can be almost anything--a set of numbers, characters, matrices, datasets, lists, outputs of statistical analyses, and any number of special formats. You will soon see that this simple concept can be scaled up to accomplish very complex tasks efficiently.  
+Objects are the building blocks of tasks you will perform in R, and thus assigning and manipulating objects is the essence of the R language. Here, we have used an extremely simply example of an object--a number, or **numeric** in R lingo. You will see [later](02.ObjectTypes.html) that objects can be almost anything--a set of numbers, characters, matrices, datasets, lists, outputs of statistical analyses, and any number of special formats. You will soon see that this simple concept can be scaled up to accomplish very complex tasks efficiently.  
 
 > <span style="color:purple">**Some things to know:**</span>  
 >
@@ -264,3 +264,13 @@ getwd()
 Now, save the script you have written so far by going to `File`--`Save` and giving it a name like "session_1". The script file should show up in the folder that is designated as the working directory with the file extension ".R"  
 
 ***
+
+> <span style="color:purple">**Quick Review of Module 1:**</span>  
+>
+>* You can assign values to ***objects***, which you can manipulate using ***operators*** and ***functions***.
+>
+>* One key to success in R is to learn what each ***operator*** and ***function*** does. This is the part that is like learning a language.
+>
+>* Each function comes with a help file, which you can get by just running a code `?functionname` (replace 'functionname' with the name of the function)
+>
+>* The ***console*** is where the code runs. But use the ***script editor*** to write and save the code script.

@@ -180,7 +180,7 @@ dat
 ```
 Notice that the columns already have names. The `data.frame` function uses the object name as the default column names. However, you can also assign column names using arguments inside the function:
 ```{r}
-dat=data.frame(Gender=sex, Size=size) #Notice the capitalization
+dat=data.frame(Sex=sex, Size=size) #Notice the capitalization
 dat
 ```
 
@@ -193,13 +193,13 @@ dat[,2] #third column
 
 You can also get the columns of the dataframe using the `$` operator:
 ```{r}
-dat$Gender
+dat$Sex
 ```
 Here, the output shows the "levels" available in this column because it is a factor.  
 
 You can find out the type of variable for each column using the function `class()`
 ```{r}
-class(dat$Gender)
+class(dat$Sex)
 class(dat$Size)
 ```
 

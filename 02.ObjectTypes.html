@@ -302,7 +302,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Part 2: Types of Objects in R</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 08/26/19</em></h4>
+<h4 class="date"><em>updated 08/27/19</em></h4>
 
 </div>
 
@@ -535,50 +535,50 @@ dat</code></pre>
 ## 9    F    3
 ## 10   F    4</code></pre>
 <p>Notice that the columns already have names. The <code>data.frame</code> function uses the object name as the default column names. However, you can also assign column names using arguments inside the function:</p>
-<pre class="r"><code>dat=data.frame(Gender=sex, Size=size) #Notice the capitalization
+<pre class="r"><code>dat=data.frame(Sex=sex, Size=size) #Notice the capitalization
 dat</code></pre>
-<pre><code>##    Gender Size
-## 1       M    9
-## 2       M    8
-## 3       M    8
-## 4       M    9
-## 5       M    7
-## 6       F    5
-## 7       F    4
-## 8       F    4
-## 9       F    3
-## 10      F    4</code></pre>
+<pre><code>##    Sex Size
+## 1    M    9
+## 2    M    8
+## 3    M    8
+## 4    M    9
+## 5    M    7
+## 6    F    5
+## 7    F    4
+## 8    F    4
+## 9    F    3
+## 10   F    4</code></pre>
 <div id="indexing-in-dataframes" class="section level4">
 <h4>Indexing in dataframes</h4>
 <p>We can refer to each row or columns in the dataframe using square brackets, just as with the other objects we have learned already.</p>
 <pre class="r"><code>dat[1,] #first row</code></pre>
-<pre><code>##   Gender Size
-## 1      M    9</code></pre>
+<pre><code>##   Sex Size
+## 1   M    9</code></pre>
 <pre class="r"><code>dat[,2] #third column</code></pre>
 <pre><code>##  [1] 9 8 8 9 7 5 4 4 3 4</code></pre>
 <p>You can also get the columns of the dataframe using the <code>$</code> operator:</p>
-<pre class="r"><code>dat$Gender</code></pre>
+<pre class="r"><code>dat$Sex</code></pre>
 <pre><code>##  [1] M M M M M F F F F F
 ## Levels: F M</code></pre>
 <p>Here, the output shows the “levels” available in this column because it is a factor.</p>
 <p>You can find out the type of variable for each column using the function <code>class()</code></p>
-<pre class="r"><code>class(dat$Gender)</code></pre>
+<pre class="r"><code>class(dat$Sex)</code></pre>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <pre class="r"><code>class(dat$Size)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <p>Two more useful functions: <code>str()</code> gives you the structure of the object, and <code>summary()</code> gives you some basic info on each column.</p>
 <pre class="r"><code>str(dat)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  2 variables:
-##  $ Gender: Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 2 2 2 2 2 1 1 1 1 1
-##  $ Size  : num  9 8 8 9 7 5 4 4 3 4</code></pre>
+##  $ Sex : Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 2 2 2 2 2 1 1 1 1 1
+##  $ Size: num  9 8 8 9 7 5 4 4 3 4</code></pre>
 <pre class="r"><code>summary(dat)</code></pre>
-<pre><code>##  Gender      Size    
-##  F:5    Min.   :3.0  
-##  M:5    1st Qu.:4.0  
-##         Median :6.0  
-##         Mean   :6.1  
-##         3rd Qu.:8.0  
-##         Max.   :9.0</code></pre>
+<pre><code>##  Sex        Size    
+##  F:5   Min.   :3.0  
+##  M:5   1st Qu.:4.0  
+##        Median :6.0  
+##        Mean   :6.1  
+##        3rd Qu.:8.0  
+##        Max.   :9.0</code></pre>
 </div>
 <div id="built-in-data-sets" class="section level4">
 <h4>Built-in data sets</h4>
