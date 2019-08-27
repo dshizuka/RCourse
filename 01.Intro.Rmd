@@ -41,7 +41,7 @@ R is a language that allows you to do data manipulation, conduct any data analys
 In this class, we will be using an open-source software called *RStudio*. *RStudio* is an IDE (Integrated Development Environment)--a fancy word for software that organizes windows and provides a layout that helps make programming easier. Strictly speaking, you don't really need *RStudio* or any other IDE. If you prefer, you can simply open the R program and use the R console and editor as separate windows. However, there are some benefits to using *RStudio*.  
 
 The main benefit to *RStudio* for this class is that it makes R look the same across platforms. So it should make it easier for me to communicate efficiently with Mac OS and Windows users. Another benefit is access to other tools such as *Rmarkdown*, which we will learn to use later for generating reports.   
-First, open up the R Studio program. You will get a window with 3 panels. Click on the little icon at the top left that looks like this: ![](image/icon1.png)  
+First, open up the R Studio program. You will get a window with 3 panels. Click on the little icon at the top left that looks like this: ![](images/icon1.png)  
 Now you will have 4 panels.  
 
 ```{r, echo=FALSE, fig.align="center"}
