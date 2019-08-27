@@ -1,7 +1,7 @@
 ---
 title: "BIOS 967: Intro to R for Biologists"
 
-subtitle: "Syllabus, Spring 2019"
+subtitle: "Syllabus, Fall 2019"
 
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 
@@ -64,35 +64,37 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 ###<u>Tentative course schedule (subject to change!)</u>
 
-* Week 1: Getting started with R
+* Week 1 (Aug 27, 29): Getting started with R
 
-* Week 2: Data Wrangling
+* Week 2 (Sept 3, 5): Data Wrangling
 
-* Week 3: Plotting in Base R
+* Week 3 (Sept 10, 12): Plotting in Base R
 
-* Week 4: Creating reports
+* Week 4 (Sept 17, 19): Creating reports
 
-* Week 5: Some simple statistics
+* Week 5 (Sept 24, 26): Some simple statistics
 
-* Week 6: apply functions, loops, statements 
+* Week 6 (Oct 1, 3): Resampling, bootstrapping 
 
-* Week 7: Resampling techniques
+* Week 7 (Oct 8, 10): apply functions, loops, statements
 
-* Week 8: Simulations, stochasticity, **Submit proposal for independent project**
+* Week 8 (Oct 15, 17): Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9: Write your own functions
+* Week 9 (Oct 22, 24): *Fall Break (Tuesday)*; Write your own functions (Thursday)
 
-* Week 10: Batch processing
+* Week 10 (Oct 29, 31): Batch processing
 
-* Week 11: *Spring Break*
+* Week 11 (Nov 5, 7): Worked examples, independent projects
 
-* Week 12: Worked examples, independent projects
+* Week 12 (Nov 12, 14): Worked examples, independent projects
 
-* Week 13: Worked examples, independent projects
+* Week 13 (Nov 19, 21): Independent projects
 
-* Week 14: Independent projects
+* Week 14 (Nov 26, 28): *No class for Thanksgiving*
 
-* Week 15: Submit final project
+* Week 15 (Dec 3, 5): Independent projects
+
+* Week 16 (Dec 10, 12): Independent projects; Submit final project on Thursday
 
 ***
 ###<u>Before the Course</u>  
