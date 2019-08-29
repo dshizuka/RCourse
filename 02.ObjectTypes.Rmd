@@ -155,7 +155,7 @@ mat3
 ```
 You can see that matrices can be “rectangular”, and also you can name the dimensions (rows & columns) of the matrix using `rownames()` and `colnames()`. 
   
-###2.3.1. Indexing a matrix
+###2.3.1. Indexing with a matrix
 
 Indexing in a matrix requires two values inside the square brackets: `[row, column]`. You can also use this to look at entire rows or columns. 
 For example:
@@ -286,26 +286,3 @@ Lists may not be intuitive to you yet, but you will see how convenient this type
 \pagebreak
 
 ***
-
-##***Group Exercise: Learning new functions*** 
-Now that we have learned a few basic types of objects, we can start playing around with some more functions. You will collaborate as a group to learn a set of functions. Each person should choose one or two functions, skim the help file, play around with the function and learn what it does. Then take turns teaching each other what the functions do.  
-
-**Hints:**  
-
-* You can get the help file by using the command ?function_name
-* Different functions use different types of objects as inputs. You can find out what types of objects the function can deal with in the "Arguments" section of the help file
-* Help files almost always have example usage at the bottom. These are often the most useful parts of the help files. You should be able to copy and paste these examples to your console and run them to see what the do. 
-
-
-####Functions to learn:
-
-* `dim()`
-* `quantile()`
-* `t()`
-* `rowSums()`
-* `sort()`
-* `order()`
-* `paste()`
-* `table()`
-* `nchar()`
-
