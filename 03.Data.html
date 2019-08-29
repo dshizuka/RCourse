@@ -338,21 +338,22 @@ div.tocify {
 <p><strong><em>In this class, I will be using .csv files for almost all data importing tasks.</em></strong></p>
 <hr />
 </div>
-<div id="five-ways-to-import-.csv-or-.txt-files" class="section level3">
-<h3>3.2 Five ways to import .csv (or .txt) files</h3>
+</div>
+<div id="five-ways-to-import-.csv-or-.txt-files" class="section level2">
+<h2>3.2 Five ways to import .csv (or .txt) files</h2>
 <p>No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called <code>dat</code>. (tip: I would not use “data” as an object name because <code>data()</code> is a function name). Try out each of the following methods for importing a sample data set called “SampleData_1.csv”.</p>
 <hr />
-<div id="rstudio-project-recommended" class="section level4">
-<h4>1. RStudio Project (recommended)</h4>
+<div id="rstudio-project-recommended" class="section level3">
+<h3>3.2.1. RStudio Project (recommended)</h3>
 <p><strong><em>RStudio Project</em></strong> is a convenient way to organize your projects. When you have your folder organized as a <strong>project directory</strong>, this creates a file called “<yourprojectname>.Rproj” in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).</p>
 <p>Here is an image of how I might organize my course folder: <img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
-<p>In this case, my data files are inside a subfolder called “data”, so the pathname is <code>data/SampleData.csv</code> Using this, I can read in the .csv file using a function called <code>read.csv()</code></p>
+<p>In this case, my data files are inside a subfolder called “data”, so the pathname is <code>data/SampleData.csv</code> Using this, I can read in the .csv file using a function called <code>read.csv()</code>, with the path name. <strong><em>Note that the path name needs to be inside quotes</em></strong>.</p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 <p>One of the biggest benefits of this method is that the pathname is relative to the folder that the .Rproj file is in, which means that as long as the folder is organized in the same way, you can just transfer all the codes to someone else’s computer and it will still work. In contrast, if you are using the full path name, you will always have to edit this for the computer that you are running the code on. This means that, if you simply share the entire folder including the .Rproj file, your collaborator can run your code seamlessly without having to alter the pathname or resetting the working directory.</p>
 <hr />
 </div>
-<div id="entering-the-full-path-name" class="section level4">
-<h4>2. Entering the full path name</h4>
+<div id="entering-the-full-path-name" class="section level3">
+<h3>3.2.2. Entering the full path name</h3>
 <p>You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data.</p>
 <p><strong><em>Finding the path to a file</em></strong> Here is how to get the path to the .csv file on your computer.</p>
 <ul>
@@ -373,38 +374,31 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 </blockquote>
 <hr />
 </div>
-<div id="use-a-url-recommended-for-data-downloadable-from-the-web" class="section level4">
-<h4>3. Use a url (recommended for data downloadable from the web)</h4>
+<div id="use-a-url-recommended-for-data-downloadable-from-the-web" class="section level3">
+<h3>3.2.3. Use a url (recommended for data downloadable from the web)</h3>
 <p>Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name.</p>
-<p>For example, if you right-click on the link up above to download the “SampleData.csv” file (under 3.1: Importing Data), you can “copy link” and get this url: <code>http://127.0.0.1:31115/rmd_output/1/data/SampleData.csv</code></p>
-</div>
-<div id="call-choose-file-prompt." class="section level4">
-<h4>4. Call ‘choose file’ prompt.</h4>
-<p>This will call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not <em>reproducible</em>.</p>
-<pre class="r"><code>dat=read.csv(file.choose())</code></pre>
-</div>
-<div id="using-rstudio-gui" class="section level4">
-<h4>5. Using RStudio GUI</h4>
-<p>In RStudio, select <code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code> The first time you do this, you may be asked to install the <code>readr</code> package. <strong>Note:</strong> I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).</p>
+<p>For example, if you right-click on the link up above to download the “SampleData.csv” file (under 3.1: Importing Data), you can “copy link address” and get this url: <code>https://dshizuka.github.io/RCourse/data/SampleData.csv</code></p>
+<p>So, you can simply download that file using this url instead of the path name:</p>
+<pre class="r"><code>dat=read.csv(&quot;https://dshizuka.github.io/RCourse/data/SampleData.csv&quot;)</code></pre>
+<p>Super useful! But <strong>note:</strong> only use this if you know that the url is going to be stable for a long time! If you need to be able to reproduce your analysis in the long term, it may pay off to download the data and save it on your computer and use Option 1.</p>
 <hr />
-<p>So let’s now use method #2 to import the sample data and look at the structure of the data:</p>
-<pre class="r"><code>dat=read.csv(file=&quot;data/SampleData.csv&quot;)
-str(dat)</code></pre>
-<pre class="r"><code>dat=read.csv(file=&quot;data/SampleData.csv&quot;)
-str(dat)</code></pre>
-<p>A good thing to check is whether the columns are all of the correct type (e.g., continuous variables come out as numeric, categorical variables come out as factor, etc.)</p>
 </div>
-<div id="some-important-arguments-inside-read.csv" class="section level4">
-<h4>Some important arguments inside <code>read.csv</code></h4>
-<p>You can specify what data values should be imported as unknown data (<code>NA</code>). You do this by using the argument <code>na.string=</code>. For example, if you want R to ignore all the cell values that contain “#N/A” in your .csv file:</p>
-<pre class="r"><code>dat=read.csv(file=&quot;data/SampleData.csv&quot;, na.string=&quot;#N/A&quot;)</code></pre>
+<div id="call-choose-file-prompt." class="section level3">
+<h3>3.2.4. Call ‘choose file’ prompt.</h3>
+<p>You can also call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not <em>reproducible</em>.</p>
+<pre class="r"><code>dat=read.csv(file.choose())</code></pre>
+<hr />
+</div>
+<div id="using-rstudio-gui" class="section level3">
+<h3>3.2.5. Using RStudio GUI</h3>
+<p>In RStudio, select <code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code> The first time you do this, you may be asked to install the <code>readr</code> package.</p>
+<p><strong>Note:</strong> I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).</p>
 <hr />
 <blockquote>
 <p><span style="color:purple"><strong>Importing from .txt files:</strong></span></p>
 <p>A more generic function is <code>read.table()</code>. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files <code>dat=read.table(file.choose(), sep=&quot;,&quot;)</code>, or tab-delimited files <code>dat=read.table(file.choose(), sep=&quot;\t&quot;)</code>. So the <code>read.table()</code> function is more flexible in many ways.</p>
 </blockquote>
 <hr />
-</div>
 </div>
 </div>
 <div id="some-common-errors-when-importing-data" class="section level2">
@@ -433,34 +427,56 @@ str(dat)</code></pre>
 <li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
 </ul></li>
 </ul>
-</div>
-<div id="exercise-troubleshoot-data-import" class="section level2">
-<h2>Exercise: Troubleshoot data import</h2>
-<p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look at its data structure:</p>
-<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) 
-str(errdat)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    14 obs. of  6 variables:
-##  $ Indiv_ID: Factor w/ 14 levels &quot;&quot;,&quot;20-01&quot;,&quot;20-02&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...
-##  $ sex     : Factor w/ 3 levels &quot; &quot;,&quot;female&quot;,&quot;male&quot;: 3 3 2 2 2 3 2 3 3 2 ...
-##  $ age     : Factor w/ 3 levels &quot;&quot;,&quot;adult&quot;,&quot;juvenile&quot;: 2 3 2 2 3 3 2 2 3 3 ...
-##  $ size    : Factor w/ 10 levels &quot;**&quot;,&quot;25&quot;,&quot;25.5&quot;,..: 10 8 4 2 2 8 4 9 7 4 ...
-##  $ weight  : Factor w/ 11 levels &quot;&quot;,&quot;#N/A!&quot;,&quot;55.5&quot;,..: 11 5 2 3 9 8 4 10 7 6 ...
-##  $ X       : int  1 NA NA NA NA NA NA NA NA NA ...</code></pre>
-<p>Step 2: Fix the spreadsheet so that you get the following:</p>
-<ul>
-<li>The column called “sex” only has “female” and “male”.</li>
-<li>The column called “size” is numeric</li>
-<li>The column called “weight” is numeric</li>
-<li>The column called “X” is removed.</li>
-</ul>
+<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
 <hr />
+</div>
+<div id="working-with-imported-data" class="section level2">
+<h2>3.4 Working with imported data</h2>
+<p><br></p>
+<div id="looking-at-the-data" class="section level3">
+<h3>3.4.1 Looking at the data</h3>
+<p>Now that you have the data imported as an object called <code>dat</code>, let’s look at it! You can do this simply by calling the object:</p>
+<pre class="r"><code>dat</code></pre>
+<pre><code>##    Indiv.ID    sex      age size weight
+## 1     20-01   male    adult 29.5   66.5
+## 2     20-02   male juvenile 28.0   58.5
+## 3     20-03 female    adult 26.0   57.0
+## 4     20-04 female    adult 25.0   55.5
+## 5     20-05 female juvenile 25.0   62.0
+## 6     20-06   male juvenile 28.0   61.0
+## 7     20-07 female    adult 26.0   58.0
+## 8     20-08   male    adult 28.5   65.0
+## 9     20-09   male juvenile 27.5   60.0
+## 10    20-10 female juvenile 26.0   59.0
+## 11    20-11   male    adult 25.5   62.0
+## 12    20-12 female    adult 27.0   59.0
+## 13    20-13 female    adult 26.5   60.0</code></pre>
+<p>This data only has 13 rows, so it’s manageable. But sometimes you have a much larger dataset, and you don’t really want to see all of it, but you want to check that the correct data was imported. In that case, you can use a function called <code>head()</code> which will show you just the first 6 lines of an object.</p>
+<pre class="r"><code>head(dat)</code></pre>
+<pre><code>##   Indiv.ID    sex      age size weight
+## 1    20-01   male    adult 29.5   66.5
+## 2    20-02   male juvenile 28.0   58.5
+## 3    20-03 female    adult 26.0   57.0
+## 4    20-04 female    adult 25.0   55.5
+## 5    20-05 female juvenile 25.0   62.0
+## 6    20-06   male juvenile 28.0   61.0</code></pre>
+<p>Sometimes, you also want to double check that your data imported as the correct file type. To do this, you can use the function <code>class()</code> to look up the object class:</p>
+<pre class="r"><code>class(dat)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>Good. This is a data frame.</p>
+<hr />
+</div>
 <div id="subsets-and-subtotals" class="section level3">
-<h3>3.4 Subsets and Subtotals</h3>
+<h3>3.4.2 Subsets and Subtotals</h3>
 <p>Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.<br />
-We already covered how to look at specific columns using either the <code>[]</code> or <code>$</code> operators. For example, to look at the sex of individuals in the sample data, we can do either:</p>
-<pre class="r"><code>#These commands will do the same thing
-dat$sex
-dat[,2]
+We already covered how to look at specific columns using either the <code>[]</code> or <code>$</code> operators. For example, let’s try using the <code>$</code> operator to look at the sex of individuals in the sample data.</p>
+<pre class="r"><code>dat$sex</code></pre>
+<pre><code>##  [1] male   male   female female female male   female male   male   female
+## [11] male   female female
+## Levels: female male</code></pre>
+<p>So this gives us just the column named “sex” as a character string</p>
+<p>You can do the equivalent by using the <code>[]</code> operator.</p>
+<pre class="r"><code>dat[,2]
 dat[,&quot;sex&quot;]</code></pre>
 <p>In contrast, there is no equivalent of the <code>$</code> for selecting rows. But we can specify the rows we want to look at using the first element within <code>[]</code>:</p>
 <pre class="r"><code>dat[2,] #get the second row of the dataset</code></pre>
@@ -521,7 +537,12 @@ Basically, <code>which()</code> allows you to get the element number of a vector
 <pre><code>## [1] 29.5 28.0 28.0 28.5 27.5 25.5</code></pre>
 <pre class="r"><code>dat$size[dat$sex==&quot;male&quot;]</code></pre>
 <pre><code>## [1] 29.5 28.0 28.0 28.5 27.5 25.5</code></pre>
-<p>Using this, you can look at the mean size of males vs. females</p>
+<hr />
+</div>
+</div>
+<div id="summary-data" class="section level3">
+<h3>3.4.3 Summary data</h3>
+<p>Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let’s look at the mean size of males vs. females using the function <code>mean()</code></p>
 <pre class="r"><code>mean(dat$size[dat$sex==&quot;male&quot;])</code></pre>
 <pre><code>## [1] 27.83333</code></pre>
 <pre class="r"><code>mean(dat$size[dat$sex==&quot;female&quot;])</code></pre>
@@ -564,15 +585,13 @@ class(tap)</code></pre>
 ## 2   male    adult  83.5
 ## 3 female juvenile  51.0
 ## 4   male juvenile  83.5</code></pre>
-</div>
+<hr />
 </div>
 </div>
 <div id="linking-two-data-sets" class="section level2">
 <h2>3.5 Linking two data sets</h2>
-<p>There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. Let’s start by inputting two different sets of data (one of them is the same as what we have been using so far). Remember that your directory name will be different for you:</p>
-<pre class="r"><code>#assuming the working directory is already set to your sample data folder:
-dat=read.csv(file=&quot;data/SampleData.csv&quot;,header=TRUE)
-chromo=read.csv(file=&quot;data/sex_chromo.csv&quot;, header=TRUE)</code></pre>
+<p>There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. Let’s start by importing two different sets of data (one of them is the same as what we have been using so far). To get started, we will now import a second dataset called <code>sex_chromo.csv</code>, which should already be saved in your “data” subfolder.</p>
+<pre class="r"><code>chromo=read.csv(&quot;data/sex_chromo.csv&quot;)</code></pre>
 <p>We now have two dataframes—dat and sex. This second dataframe has information of sex chromosomes that we have identified for each individual using molecular methods. We now use a match() function to look up which rows correspond to the same individual:</p>
 <pre class="r"><code>match(dat$Indiv.ID,chromo$Indiv.ID)</code></pre>
 <pre><code>##  [1]  8  9  1  2  3 10  4 11 12  5 13  6  7</code></pre>
@@ -622,110 +641,6 @@ merged.dat2</code></pre>
 ##          XX XY
 ##   female  7  0
 ##   male    0  6</code></pre>
-<div id="folder-organization-file-formats" class="section level3">
-<h3>3.1.3 Folder Organization &amp; File Formats</h3>
-<ul>
-<li>keep all <strong><em>raw data</em></strong> in a folder (maybe call it “data”)</li>
-</ul>
-</div>
-<div id="long-vs.-wide-format-data" class="section level3">
-<h3>3.3 “Long” vs. “Wide” format data</h3>
-<p>The most important thing to keep in mind is that your data should contain <strong>each observation as a separate row</strong>. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number.</p>
-<p>For example, this is a “wide-format” dataframe:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Subject</th>
-<th>Time 1</th>
-<th>Time 2</th>
-<th>Time 3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>1.2</td>
-<td>2.5</td>
-<td>4.1</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>1.6</td>
-<td>2.6</td>
-<td>3.8</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>0.9</td>
-<td>2.4</td>
-<td>3.6</td>
-</tr>
-</tbody>
-</table>
-<p>The data set could be organized in a “long-format”:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Subject</th>
-<th>Time</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>1</td>
-<td>1.2</td>
-</tr>
-<tr class="even">
-<td>A</td>
-<td>2</td>
-<td>2.5</td>
-</tr>
-<tr class="odd">
-<td>A</td>
-<td>3</td>
-<td>4.1</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>1</td>
-<td>1.6</td>
-</tr>
-<tr class="odd">
-<td>B</td>
-<td>2</td>
-<td>2.6</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>3</td>
-<td>3.8</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>1</td>
-<td>0.9</td>
-</tr>
-<tr class="even">
-<td>C</td>
-<td>2</td>
-<td>2.4</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>3</td>
-<td>3.6</td>
-</tr>
-</tbody>
-</table>
-<p>The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows.</p>
-<p><strong><em>In general, it is preferable to keep your data in the “long-format”. This is because you can ‘wrangle’ this data type more flexibly, and it is also more approriate for a wider array of analyses. We will address these points in the next module</em></strong></p>
-</div>
-</div>
-<div id="exercise-import-your-own-data" class="section level2">
-<h2>Exercise: Import your own data</h2>
-<p>After you have run through the module, try importing your own dataset and check to make sure that all of your columns show up correctly. Then trying subsetting and calculating means of values according to different categorical variables.</p>
 </div>
 
 

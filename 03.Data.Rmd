@@ -46,13 +46,13 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 ***
 
-###3.2 Five ways to import .csv (or .txt) files
+##3.2 Five ways to import .csv (or .txt) files
 
 No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
 
 ***
 
-####1. RStudio Project (recommended)
+###3.2.1. RStudio Project (recommended)
 
 ***RStudio Project*** is a convenient way to organize your projects. When you have your folder organized as a **project directory**, this creates a file called "<yourprojectname>.Rproj" in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).
 
@@ -62,7 +62,7 @@ knitr::include_graphics("images/folderorganization1.png")
 ```
 
 In this case, my data files are inside a subfolder called "data", so the pathname is `data/SampleData.csv`
-Using this, I can read in the .csv file using a function called `read.csv()`
+Using this, I can read in the .csv file using a function called `read.csv()`, with the path name. ***Note that the path name needs to be inside quotes***.
 
 
 ```{r}
@@ -76,7 +76,7 @@ One of the biggest benefits of this method is that the pathname is relative to t
 
 ***
 
-####2. Entering the full path name
+###3.2.2. Entering the full path name
 You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data. 
 
 
@@ -113,43 +113,37 @@ dat=read.csv("data/SampleData.csv")
 
 ***
 
-####3. Use a url (recommended for data downloadable from the web)
+###3.2.3. Use a url (recommended for data downloadable from the web)
 
 Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name. 
 
-For example, if you right-click on the link up above to download the "SampleData.csv" file (under 3.1: Importing Data), you can "copy link" and get this url:
-`http://127.0.0.1:31115/rmd_output/1/data/SampleData.csv`
+For example, if you right-click on the link up above to download the "SampleData.csv" file (under 3.1: Importing Data), you can "copy link address" and get this url:
+`https://dshizuka.github.io/RCourse/data/SampleData.csv`
 
-####4. Call 'choose file' prompt. 
-This will call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not *reproducible*.
+So, you can simply download that file using this url instead of the path name:
+
+```{r}
+dat=read.csv("https://dshizuka.github.io/RCourse/data/SampleData.csv")
+```
+
+Super useful! But **note:** only use this if you know that the url is going to be stable for a long time! If you need to be able to reproduce your analysis in the long term, it may pay off to download the data and save it on your computer and use Option 1. 
+
+***
+
+###3.2.4. Call 'choose file' prompt. 
+You can also call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not *reproducible*.
 ```{r, eval=FALSE}
 dat=read.csv(file.choose())
 ```
 
-  
-####5. Using RStudio GUI
+***
+
+###3.2.5. Using RStudio GUI
 In RStudio, select `[File]`--`[Import Dataset]`--`[From CSV...]`
-The first time you do this, you may be asked to install the `readr` package. **Note:** I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).
+The first time you do this, you may be asked to install the `readr` package. 
 
---------
-So let's now use method #2 to import the sample data and look at the structure of the data:
-```{r, eval=F}
+**Note:** I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).
 
-dat=read.csv(file="data/SampleData.csv")
-str(dat)
-```
-```{r, eval=F, results='markup'}
-
-dat=read.csv(file="data/SampleData.csv")
-str(dat)
-```
-A good thing to check is whether the columns are all of the correct type (e.g., continuous variables come out as numeric, categorical variables come out as factor, etc.)
-
-####Some important arguments inside `read.csv`
-You can specify what data values should be imported as unknown data (`NA`). You do this by using the argument `na.string=`. For example, if you want R to ignore all the cell values that contain "#N/A" in your .csv file:
-```{r, eval=F}
-dat=read.csv(file="data/SampleData.csv", na.string="#N/A")
-```
 
 ***
 
@@ -158,6 +152,7 @@ dat=read.csv(file="data/SampleData.csv", na.string="#N/A")
 >A more generic function is `read.table()`. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files `dat=read.table(file.choose(), sep=",")`, or tab-delimited files `dat=read.table(file.choose(), sep="\t")`. So the `read.table()` function is more flexible in many ways.
 
 ***
+
 
 ##3.3 Some common errors when importing data
 
@@ -180,28 +175,49 @@ Some common problems:
     + You probably have a cell value in the column that is non-numeric, e.g., "#N/A" or 'hidden space'
     + Fix: You can specify what kind of characters should be interpreted as `NA` using the `na.string=` argument (see above).
 
-## Exercise: Troubleshoot data import
-Step 1: Import the `SampleData_w_errors.csv` file and look at its data structure:
-
-```{r, eval=T}
-errdat=read.csv("data/SampleData_w_errors.csv") 
-str(errdat)
-```
-
-Step 2: Fix the spreadsheet so that you get the following:
-
-* The column called "sex" only has "female" and "male".
-* The column called "size" is numeric
-* The column called "weight" is numeric
-* The column called "X" is removed.
+We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management. 
 
 ***
-###3.4 Subsets and Subtotals
+##3.4 Working with imported data
+
+<br>
+
+###3.4.1 Looking at the data
+
+
+Now that you have the data imported as an object called `dat`, let's look at it! You can do this simply by calling the object:
+
+```{r}
+dat
+```
+
+This data only has 13 rows, so it's manageable. But sometimes you have a much larger dataset, and you don't really want to see all of it, but you want to check that the correct data was imported. In that case, you can use a function called `head()` which will show you just the first 6 lines of an object. 
+
+```{r}
+head(dat)
+```
+
+Sometimes, you also want to double check that your data imported as the correct file type. To do this, you can use the function `class()` to look up the object class:
+```{r}
+class(dat)
+```
+
+Good. This is a data frame.
+
+***
+
+###3.4.2 Subsets and Subtotals
+
 Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.  
-We already covered how to look at specific columns using either the `[]` or `$` operators. For example, to look at the sex of individuals in the sample data, we can do either:
-```{r, eval=F}
-#These commands will do the same thing
+We already covered how to look at specific columns using either the `[]` or `$` operators. For example, let's try using the `$` operator to look at the sex of individuals in the sample data.
+
+```{r, eval=T}
 dat$sex
+```
+So this gives us just the column named "sex" as a character string
+
+You can do the equivalent by using the `[]` operator.
+```{r, eval=F}
 dat[,2]
 dat[,"sex"]
 ```
@@ -248,7 +264,12 @@ dat[dat$sex=="male","size"]
 dat$size[dat$sex=="male"]
 ```
 
-Using this, you can look at the mean size of males vs. females
+***
+
+###3.4.3 Summary data
+
+Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let's look at the mean size of males vs. females using the function `mean()`
+
 ```{r}
 mean(dat$size[dat$sex=="male"])
 mean(dat$size[dat$sex=="female"])
@@ -282,15 +303,16 @@ tapply(dat$size,list(dat$sex,dat$age),sum)
 aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),sum)
 ```
 
+***
+
 ##3.5 Linking two data sets
 
 There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. 
 	You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. 
-	Let’s start by inputting two different sets of data (one of them is the same as what we have been using so far). Remember that your directory name will be different for you:
+	Let’s start by importing two different sets of data (one of them is the same as what we have been using so far). To get started, we will now import a second dataset called `sex_chromo.csv`, which should already be saved in your "data" subfolder.
+	
 ```{r}
-#assuming the working directory is already set to your sample data folder:
-dat=read.csv(file="data/SampleData.csv",header=TRUE)
-chromo=read.csv(file="data/sex_chromo.csv", header=TRUE)
+chromo=read.csv("data/sex_chromo.csv")
 ```
 
 We now have two dataframes—dat and sex. This second dataframe has information of sex chromosomes that we have identified for each individual using molecular methods. 
@@ -326,46 +348,3 @@ Lastly, try this code to see that (in this hypothetical dataset), the sex chromo
 table(merged.dat2$sex,merged.dat2$chromosomes)
 ```
 
-
-###3.1.3 Folder Organization & File Formats
-
-- keep all ***raw data*** in a folder (maybe call it "data")
-
-
-###3.3 "Long" vs. "Wide" format data
-
-The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number. 
-
-For example, this is a "wide-format" dataframe:  
-
-Subject|Time 1|Time 2|Time 3
-----|----|----|----
-A | 1.2 | 2.5 | 4.1
-B | 1.6 | 2.6 | 3.8
-C | 0.9 | 2.4 | 3.6
-
-The data set could be organized in a "long-format": 
-
-Subject|Time|Value
--------|----|-----
-A|1|1.2
-A|2|2.5
-A|3|4.1
-B|1|1.6
-B|2|2.6
-B|3|3.8
-C|1|0.9
-C|2|2.4
-C|3|3.6
-
-The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
-
-***In general, it is preferable to keep your data in the "long-format". This is because you can 'wrangle' this data type more flexibly, and it is also more approriate for a wider array of analyses. We will address these points in the next module***
-
-
-
-
-
-##Exercise: Import your own data
-
-After you have run through the module, try importing your own dataset and check to make sure that all of your columns show up correctly. Then trying subsetting and calculating means of values according to different categorical variables. 
