@@ -319,9 +319,16 @@ div.tocify {
 <blockquote>
 <p><span style="color:purple"><strong>Do this before you start this section!</strong></span></p>
 <ul>
-<li>Click on the following links to download three files: <a href="data/SampleData.csv">“SampleData.csv”</a>, <a href="data/SampleData_w_errors.csv">“SampleData_w_errors.csv”</a>, <a href="data/sex_chromo.csv">“sex_chromo.csv”</a></li>
+<li>Click on the following links to download three files:</li>
 </ul>
-<p><a href="data/SampleData.csv" download> or this link </a></p>
+<ol style="list-style-type: decimal">
+<li><a href="data/SampleData.csv">SampleData.csv</a></li>
+<li><a href="data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
+<li><a href="data/sex_chromo.csv">sex_chromo.csv</a></li>
+</ol>
+<ul>
+<li>Save these files into a subfolder called “data” inside your working directory (i.e., the folder where you are keeping all of your course materials)</li>
+</ul>
 </blockquote>
 <div id="file-formats-use-.csv-or-.txt" class="section level3">
 <h3>3.1.1 File Formats: Use .csv (or .txt)</h3>
@@ -331,32 +338,45 @@ div.tocify {
 <p><strong><em>In this class, I will be using .csv files for almost all data importing tasks.</em></strong></p>
 <hr />
 </div>
-<div id="importing-.csv-or-.txt-files" class="section level3">
-<h3>3.2 Importing .csv (or .txt) files</h3>
+<div id="five-ways-to-import-.csv-or-.txt-files" class="section level3">
+<h3>3.2 Five ways to import .csv (or .txt) files</h3>
 <p>No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called <code>dat</code>. (tip: I would not use “data” as an object name because <code>data()</code> is a function name). Try out each of the following methods for importing a sample data set called “SampleData_1.csv”.</p>
-<div id="five-ways-to-import-data-from-.csv-file" class="section level4">
-<h4>Five ways to import data from .csv file:</h4>
-</div>
-<div id="rstudio-project-most-recommended" class="section level4">
-<h4>1. RStudio Project (most recommended)</h4>
+<hr />
+<div id="rstudio-project-recommended" class="section level4">
+<h4>1. RStudio Project (recommended)</h4>
 <p><strong><em>RStudio Project</em></strong> is a convenient way to organize your projects. When you have your folder organized as a <strong>project directory</strong>, this creates a file called “<yourprojectname>.Rproj” in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).</p>
-<p>Here is an image of how I might organize my course folder: <img src="images/folderorganization1.png" width="302" style="display: block; margin: auto;" /></p>
+<p>Here is an image of how I might organize my course folder: <img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>In this case, my data files are inside a subfolder called “data”, so the pathname is <code>data/SampleData.csv</code> Using this, I can read in the .csv file using a function called <code>read.csv()</code></p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
+<p>One of the biggest benefits of this method is that the pathname is relative to the folder that the .Rproj file is in, which means that as long as the folder is organized in the same way, you can just transfer all the codes to someone else’s computer and it will still work. In contrast, if you are using the full path name, you will always have to edit this for the computer that you are running the code on. This means that, if you simply share the entire folder including the .Rproj file, your collaborator can run your code seamlessly without having to alter the pathname or resetting the working directory.</p>
+<hr />
 </div>
 <div id="entering-the-full-path-name" class="section level4">
 <h4>2. Entering the full path name</h4>
-<p>Using the above example location for the file, you can use either of the below versions of the pathname to import the data. ***Remember: You will have to change the path inside the lines of code here to be where the file resides in your computer.</p>
-<p><em>Quick refresher: finding the path to a file</em><br />
-Importing data is easier if you know how to get the path to the .csv file on your computer. We covered this in <a href="http://rpubs.com/rcourse998/module1-intro">module 1 (Intro)</a>.</p>
+<p>You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data.</p>
+<p><strong><em>Finding the path to a file</em></strong> Here is how to get the path to the .csv file on your computer.</p>
 <ul>
 <li><strong><em>For Windows</em></strong>, you can get the path name of the file or folder by right-clicking it and click “Copy as Path”</li>
 <li><strong><em>For Mac (or Windows)</em></strong>, you can look for the file/folder in Finder, and then drag and drop the icon into the “Go to file/function” bar at the top of the RStudio window.</li>
 </ul>
 <p>As an example, say I made folder on my <strong>desktop</strong> called <strong>Rcourse</strong> and inside that folder, I made another folder called <strong>Week_2</strong>. If my data folder is inside that, this would be the path: <code>/Users/dshizuka/Desktop/Rcourse/Week_2/data</code><br />
 In turn, the path to a file inside that folder might be: <code>/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv</code></p>
+<p>So in this case, your line of code to import the data would be:</p>
+<pre class="r"><code>dat=read.csv(&quot;/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv&quot;)</code></pre>
+<p><strong><em>Alternatively</em></strong>, you can use <code>setwd()</code> to set your working directory, and then enter a simpler path name. This essentially breaks up the process into two lines:</p>
+<pre class="r"><code>setwd(&quot;/Users/dshizuka/Desktop/Rcourse/Week_2&quot;)
+dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
+<p><strong><em>Remember: You will have to change the path inside the lines of code here to be where the file resides in your computer.</em></strong></p>
+<blockquote>
+<p><span style="color:purple"><strong>Difference between options 1 and 2:</strong></span></p>
+<p>Options 1 and 2 (using RStudio Project and Entering Full Path Name) are essentially the same thing in that you are telling R how to find the file on your computer that you want to import. It’s just that RStudio Projects makes this much more straightforward and transferable because the pathname becomes relative to your working directory automatically.</p>
+</blockquote>
+<hr />
 </div>
 <div id="use-a-url-recommended-for-data-downloadable-from-the-web" class="section level4">
 <h4>3. Use a url (recommended for data downloadable from the web)</h4>
+<p>Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name.</p>
+<p>For example, if you right-click on the link up above to download the “SampleData.csv” file (under 3.1: Importing Data), you can “copy link” and get this url: <code>http://127.0.0.1:31115/rmd_output/1/data/SampleData.csv</code></p>
 </div>
 <div id="call-choose-file-prompt." class="section level4">
 <h4>4. Call ‘choose file’ prompt.</h4>
