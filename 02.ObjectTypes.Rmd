@@ -27,7 +27,7 @@ Object Type   | Detail
 **Factor** | A set of characters with finite levels
 **Logical**| TRUE or FALSE
 **Date**| Dates and times can take on special formats 
-**Vector** | A variable with multiple values of the same type (i.e., numeric, character, logical, etc.)
+**Vector** | A variable with multiple values of the *same type* (i.e., numeric, character, factor, logical, etc.)
 **Matrix** | A two-dimensional array of numbers
 **Array** | A set of numbers arranged in any number of dimensions. For example, you can have a three-dimentional array, which is essentially a stack of matrices. 
 **Data frame** | A two-dimensional object with each column consisting of a numerica vector or character string. What you typically thing of as a spreadsheet. 
