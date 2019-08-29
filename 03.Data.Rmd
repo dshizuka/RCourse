@@ -22,61 +22,49 @@ To import data into R, you will create an object that points to a dataset somewh
 
 ##3.1 Importing Data
 
+<br>
+
+><span style="color:purple">**Do this before you start this section!**</span>
+>
+>* Click on the following links to download three files: ["SampleData.csv"](data/SampleData.csv), ["SampleData_w_errors.csv"](data/SampleData_w_errors.csv), ["sex_chromo.csv"](data/sex_chromo.csv)
+>
+><a href="data/SampleData.csv" download> or this link </a>
+
 ###3.1.1 File Formats: Use .csv (or .txt)
 
-Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While there are many problems 
+Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While we have all likely had headaches associated with Excel, it's undeniable that it is still the predominant way to compile our data.  
 
-R can read several file formats, but the popular excel format (.xlsor .xlsx) is NOT one of them (unless you use a specialized package like `xlsx`). Instead, you will most often convert your excel sheet into one of two formats: tab-delimited files or comma-separated-values files (.csv). These are file formats that can be read by any text editor.   
+R can read several file formats, but the popular excel format (.xlsor .xlsx) is NOT one of them (unless you use a specialized package, e.g., `xlsx`). Instead, you will most often convert your excel sheet into one of two formats: ***tab-delimited files (saved as .txt)*** or ***comma-separated-values files (.csv)***. These are simple text files in which each entry is separated by a tab or comma (respectively). The huge advantage of these formats is that they are non-proprietary file formats that can be read by any text editor. One potential drawback is that you cannot keep any type of formatting (like highlighting of cells on a spread sheet) or special characters. 
+
+
 If you use Excel or any other spreadsheet for data storage, you can easily convert those into one of these formats using `[Save as...]`  
 
-In this class, I will be using .csv files for almost all data importing tasks. 
+***In this class, I will be using .csv files for almost all data importing tasks.***
 
-R can also handle databases (e.g., Microsoft Access) using a special package called RODBC. You can get a comprehensive tutorial [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html#Relational-databases)
+***
 
+###3.2 Importing .csv (or .txt) files
 
-###3.1.3 Folder Organization & File Formats
+No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
 
-- keep all ***raw data*** in a folder (maybe call it "data")
+####Five ways to import data from .csv file:
 
+####1. RStudio Project (most recommended)
 
-###3.3 "Long" vs. "Wide" format data
+***RStudio Project*** is a convenient way to organize your projects. When you have your folder organized as a **project directory**, this creates a file called "<yourprojectname>.Rproj" in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).
 
-The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number. 
+Here is an image of how I might organize my course folder:
+```{r, echo=FALSE, fig.align="center"}
+knitr::include_graphics("images/folderorganization1.png")
+```
 
-For example, this is a "wide-format" dataframe:  
+```{r}
 
-Subject|Time 1|Time 2|Time 3
-----|----|----|----
-A | 1.2 | 2.5 | 4.1
-B | 1.6 | 2.6 | 3.8
-C | 0.9 | 2.4 | 3.6
+dat=read.csv("data/SampleData.csv")
+```
+####2. Entering the full path name
+Using the above example location for the file, you can use either of the below versions of the pathname to import the data. ***Remember: You will have to change the path inside the lines of code here to be where the file resides in your computer.
 
-The data set could be organized in a "long-format": 
-
-Subject|Time|Value
--------|----|-----
-A|1|1.2
-A|2|2.5
-A|3|4.1
-B|1|1.6
-B|2|2.6
-B|3|3.8
-C|1|0.9
-C|2|2.4
-C|3|3.6
-
-The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
-
-***In general, it is preferable to keep your data in the "long-format". This is because you can 'wrangle' this data type more flexibly, and it is also more approriate for a wider array of analyses. We will address these points in the next module***
-
-
-##3.2 Import .csv files
-
-###Step 1: Download the practice data folder:  
-Go to the course google drive folder for week 2 and download the entire folder called 'data' by right-clicking (or control-click) and selecting 'download'. It will compress the files into a .zip format and you can save it somewhere on your computer. Uncompress the .zip file, and you should end up with a folder named 'data'. 
-
-
-###Step 2: Find out the path to your data folder and files
 *Quick refresher: finding the path to a file*  
 Importing data is easier if you know how to get the path to the .csv file on your computer. We covered this in [module 1 (Intro)](http://rpubs.com/rcourse998/module1-intro). 
 
@@ -86,32 +74,17 @@ Importing data is easier if you know how to get the path to the .csv file on you
 As an example, say I made folder on my **desktop** called **Rcourse** and inside that folder, I made another folder called **Week_2**. If my data folder is inside that, this would be the path: `/Users/dshizuka/Desktop/Rcourse/Week_2/data`  
 In turn, the path to a file inside that folder might be:  `/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv`
 
-###Step 3: Import the data
-There are several ways to import your data in to R. Two of the methods require the use of file paths. There are two other ways you can import data without the path by manually browsing and choosing your file. However, I strongly recommend learning how to use the paths to import data. One reason is that it actually takes you longer to browse for the file. Another reason is that the script is not reproducible if you don't know which file is supposed to be imported. But at the end of the day, it's your choice how to do this. 
-
-No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
-
-####Four ways to import data:
-
-####1. Directly enter full path to file
-Using the above example location for the file, you can use either of the below versions of the pathname to import the data. ***Remeber: You will have to change the path inside the lines of code here to be where the file resides in your computer.
-```{r, eval=T}
-
-dat=read.csv("data/SampleData.csv") 
-
-
-```
-  
+####3. Use a url (recommended for data downloadable from the web)
 
   
-####3. Call 'choose file' prompt. 
+####4. Call 'choose file' prompt. 
 This will call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not *reproducible*.
 ```{r, eval=FALSE}
 dat=read.csv(file.choose())
 ```
 
   
-####4. Using RStudio GUI
+####5. Using RStudio GUI
 In RStudio, select `[File]`--`[Import Dataset]`--`[From CSV...]`
 The first time you do this, you may be asked to install the `readr` package. **Note:** I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).
 
@@ -135,9 +108,13 @@ You can specify what data values should be imported as unknown data (`NA`). You 
 dat=read.csv(file="data/SampleData.csv", na.string="#N/A")
 ```
 
->####Importing from .txt files:
-A more generic function is `read.table()`. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files `dat=read.table(file.choose(), sep=",")`, or tab-delimited files `dat=read.table(file.choose(), sep="\t")`. So the `read.table()` function is more flexible in many ways.
+***
 
+><span style="color:purple">**Importing from .txt files:**</span>
+>
+>A more generic function is `read.table()`. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files `dat=read.table(file.choose(), sep=",")`, or tab-delimited files `dat=read.table(file.choose(), sep="\t")`. So the `read.table()` function is more flexible in many ways.
+
+***
 
 ##3.3 Some common errors when importing data
 
@@ -305,6 +282,46 @@ Lastly, try this code to see that (in this hypothetical dataset), the sex chromo
 ```{r}
 table(merged.dat2$sex,merged.dat2$chromosomes)
 ```
+
+
+###3.1.3 Folder Organization & File Formats
+
+- keep all ***raw data*** in a folder (maybe call it "data")
+
+
+###3.3 "Long" vs. "Wide" format data
+
+The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number. 
+
+For example, this is a "wide-format" dataframe:  
+
+Subject|Time 1|Time 2|Time 3
+----|----|----|----
+A | 1.2 | 2.5 | 4.1
+B | 1.6 | 2.6 | 3.8
+C | 0.9 | 2.4 | 3.6
+
+The data set could be organized in a "long-format": 
+
+Subject|Time|Value
+-------|----|-----
+A|1|1.2
+A|2|2.5
+A|3|4.1
+B|1|1.6
+B|2|2.6
+B|3|3.8
+C|1|0.9
+C|2|2.4
+C|3|3.6
+
+The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
+
+***In general, it is preferable to keep your data in the "long-format". This is because you can 'wrangle' this data type more flexibly, and it is also more approriate for a wider array of analyses. We will address these points in the next module***
+
+
+
+
 
 ##Exercise: Import your own data
 
