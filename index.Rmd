@@ -16,7 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ---
 
 ## Updates
-*8/29/19: **Assignment 1** Here is the [assignment file](pdf_versions/Assignment1.pdf) and an [example assignment folder](data/Assignment1_example.zip)
+
+* 8/29/19: **Assignment 1** Here is the [assignment file](pdf_versions/Assignment1.pdf) and an [example assignment folder](data/Assignment1_example.zip)
 
 
 * 08/27/19: **Week 1!** Welcome to the course! First, we will go through some intros and course mechanics. Then, we will plan to get through Modules 1 and 2 (See ["Modules" page](modules.html)), which will get us up and running with R. There will be an assignment posted on Thursday, to be completed by Tuesday next week. 
