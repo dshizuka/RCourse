@@ -387,10 +387,46 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <div id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset." class="section level4">
 <h4>6. Avoid keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
 <p>This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.</p>
+<hr />
+<blockquote>
+<p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
+<p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
+</blockquote>
+<hr />
 </div>
+</div>
+</div>
+<div id="troubleshooting-data-import" class="section level2">
+<h2>4.2 Troubleshooting Data Import</h2>
+<p>Even when you have taken care to follow the above dos and don’ts, you will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
+<div id="some-common-problems" class="section level4">
+<h4>Some common problems:</h4>
+<ul>
+<li><strong>File won’t import</strong>
+<ul>
+<li>Are you sure you saved the file as a .csv file?</li>
+<li>Is the path and file name correct?</li>
+<li>Is the path and file name inside quotes?</li>
+</ul></li>
+<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
+</ul></li>
+<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
+<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
+</ul></li>
+<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
+<ul>
+<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
+<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
+</ul></li>
+</ul>
+<hr />
 </div>
 <div id="wide--vs.long-format-data" class="section level3">
-<h3>4.2.3. Wide- vs. Long-format data</h3>
+<h3>4.1.3. Wide- vs. Long-format data</h3>
 <p>The most important thing to keep in mind is that your data should contain <strong>each observation as a separate row</strong>. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number.</p>
 <p>For example, this is the WRONG way to structure a dataframe:</p>
 <table>
@@ -483,41 +519,35 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p>The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows.</p>
 <p>For more on this distinction, see <a href="http://www.jstatsoft.org/v59/i10">Wickham (2014) paper</a> on “Tidy Data”</p>
 <hr />
-<blockquote>
-<p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
-<p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
-</blockquote>
-<hr />
 </div>
 </div>
-<div id="troubleshooting-data-import" class="section level2">
-<h2>4.2 Troubleshooting Data Import</h2>
-<p>You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
-<p>Some common problems:</p>
+<div id="group-exercise-troubleshoot-data-import" class="section level2">
+<h2>Group Exercise: Troubleshoot data import</h2>
+<p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look at its data structure:</p>
+<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) #assuming your working directory is set to the sample data folder
+errdat</code></pre>
+<pre><code>##    Indiv_ID    sex      age size weight  X
+## 1     20-01   male    adult 29.5   66.5  1
+## 2     20-02   male juvenile   28   58.5 NA
+## 3     20-03 female    adult   26  #N/A! NA
+## 4     20-04 female    adult   25   55.5 NA
+## 5     20-05 female juvenile   25     62 NA
+## 6     20-06   male juvenile   28     61 NA
+## 7     20-07 female    adult   26     58 NA
+## 8     20-08   male    adult 28.5     65 NA
+## 9     20-09   male juvenile 27.5     60 NA
+## 10    20-10 female juvenile   26     59 NA
+## 11    20-11   male    adult 25.5     62 NA
+## 12    20-12 female    adult   27     59 NA
+## 13    20-13 female    adult 26.5     60 NA
+## 14                            **        NA</code></pre>
+<p>Step 2: Fix the spreadsheet so that you get the following:</p>
 <ul>
-<li><strong>It won’t import</strong>
-<ul>
-<li>Are you sure you saved the file as a .csv file?</li>
-<li>Is the path and file name correct?</li>
-<li>Is the path and file name inside quotes?</li>
-</ul></li>
-<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
-<ul>
-<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
-</ul></li>
-<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
-<ul>
-<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
-<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
-</ul></li>
-<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
-<ul>
-<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
-<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
-</ul></li>
+<li>The column called “sex” only has “female” and “male”.</li>
+<li>The column called “size” is numeric</li>
+<li>The column called “weight” is numeric</li>
+<li>The column called “X” is removed.</li>
 </ul>
-<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
-<hr />
 </div>
 
 
