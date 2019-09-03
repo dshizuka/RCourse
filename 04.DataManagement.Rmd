@@ -45,7 +45,7 @@ knitr::include_graphics("images/eggdata_image.png")
 
 <br>
 
-####1. Don't keep multiple tables in one sheet
+####1. **Don't** keep multiple tables in one sheet
 This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"}
@@ -53,23 +53,63 @@ knitr::include_graphics("images/multitable.png")
 ```
 
 
-***The solution: Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1***
+***Solution:*** Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1***
 
 <br>
 
-####2. Don't use special characters or commas. 
+####2. **Don't** use special characters or commas. 
 
-####3. Don't use formatting (i.e., highlighting) to convey information.
+Excel is capable of handling special characters that other software cannot. For example, if you have the 'degree' symbol (C$^\circ$) or 'em dash' (where "--" gets converted to one long dash), these will not be read correctly when you import data in R. Do NOT use these special characters in your data. 
 
-####4. Use good 'null values'
-
-####5. Avoid keeping summary data along with raw data (i.e., don't make a "group means" column in your dataset). 
+Also, commas cause problems when you are saving data in .csv files because the commas are designated for separating columns. If you like to write notes in your data, just make sure you don't use commas! (e.g., if need be, you could use semi-colons)
 
 
+***Solution:*** Always think about whether your inputs will be read correctly by R or other stats program. Default to non-proprietary formats. 
 
-><span style="color:purple">***Key rule in reproducible research: Try not to mess with raw data! ***</span>
->
->Once you have collected data, it is best to try to keep that raw data ***raw***. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you "fixed" and what you did not. Also, there are times when you later realize that you "fixed" the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible. 
+
+<br>
+
+####3. **Don't** use formatting (i.e., highlighting) to convey information.
+
+You can always add another column to include that information as another variable.
+
+```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes", out.width="100%"}
+knitr::include_graphics("images/highlighting.png")
+```
+
+<br>
+
+####4. **Do** use good 'null values'
+
+* **Always put in 0 if the observed vaule is 0** (i.e., don't skip the cell just because it's 0). If you don't it becomes indistinguishable from unknown or unobserved data.
+
+* **Don't use other numbers (e.g., 999 or -999).** This used to be common practice for some stats software. But this can cause problems because it may be inadvertently used in calculations.
+
+* **Don't use other symbols (-, ., ?).** Again, this used to be common practice for some people, but this can cause problems because R won't know how to interpret it.
+
+* ***Good options include:*** 
+    + Blank cells. But only if you are careful to always put 0 when the correct value is 0.
+    + Consistent, conventional abbreviation (e.g., NA, NULL).** ***BUT***, note that "NA" may be used as abbreviations for other things, like "North America". But if used in a column that is otherwise numeric, R can automatically interpret this as null value.
+
+If you are using consistent null value designations, you can specify these values as null using the `na.string=` argument within the `read.csv()` function. For example,
+
+```{r, eval=F}
+dat=read.csv("data/SampleData.csv", na.string=c("NA", "#N/A"))
+```
+The above code will tell R that cells with either "NA" or "#N/A" should be interpreted as missing data.
+
+<br>
+
+####5. Do not use merged cells!
+
+Merging cells makes your data unreadable by R (or other stats software)
+
+<br>
+
+####6. Avoid keeping summary data along with raw data (i.e., don't make a "group means" column in your dataset). 
+
+This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.
+
 
 ###4.2.3. Wide- vs. Long-format data
 
@@ -103,6 +143,11 @@ For more on this distinction, see [Wickham (2014) paper](http://www.jstatsoft.or
 
 ***
 
+><span style="color:purple">***Key rule in reproducible research: Try not to mess with raw data! ***</span>
+>
+>Once you have collected data, it is best to try to keep that raw data ***raw***. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you "fixed" and what you did not. Also, there are times when you later realize that you "fixed" the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible. 
+
+***
 ##4.2 Troubleshooting Data Import
 
 You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 

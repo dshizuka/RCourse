@@ -333,7 +333,7 @@ Example spreadsheet of data on egg size of American Coots
 <h3>4.1.2 Spreadsheet dos and don’ts!</h3>
 <p><br></p>
 <div id="dont-keep-multiple-tables-in-one-sheet" class="section level4">
-<h4>1. Don’t keep multiple tables in one sheet</h4>
+<h4>1. <strong>Don’t</strong> keep multiple tables in one sheet</h4>
 <p>This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.</p>
 <div class="figure" style="text-align: center">
 <img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="482" />
@@ -341,24 +341,52 @@ Example spreadsheet of data on egg size of American Coots
 example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
 </p>
 </div>
-<p><strong><em>The solution: Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1</em></strong></p>
+<p><strong><em>Solution:</em></strong> Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1***</p>
 <p><br></p>
 </div>
 <div id="dont-use-special-characters-or-commas." class="section level4">
-<h4>2. Don’t use special characters or commas.</h4>
+<h4>2. <strong>Don’t</strong> use special characters or commas.</h4>
+<p>Excel is capable of handling special characters that other software cannot. For example, if you have the ‘degree’ symbol (C<span class="math inline">\(^\circ\)</span>) or ‘em dash’ (where “–” gets converted to one long dash), these will not be read correctly when you import data in R. Do NOT use these special characters in your data.</p>
+<p>Also, commas cause problems when you are saving data in .csv files because the commas are designated for separating columns. If you like to write notes in your data, just make sure you don’t use commas! (e.g., if need be, you could use semi-colons)</p>
+<p><strong><em>Solution:</em></strong> Always think about whether your inputs will be read correctly by R or other stats program. Default to non-proprietary formats.</p>
+<p><br></p>
 </div>
 <div id="dont-use-formatting-i.e.-highlighting-to-convey-information." class="section level4">
-<h4>3. Don’t use formatting (i.e., highlighting) to convey information.</h4>
+<h4>3. <strong>Don’t</strong> use formatting (i.e., highlighting) to convey information.</h4>
+<p>You can always add another column to include that information as another variable.</p>
+<div class="figure" style="text-align: center">
+<img src="images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
+<p class="caption">
+example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
+</p>
 </div>
-<div id="use-good-null-values" class="section level4">
-<h4>4. Use good ‘null values’</h4>
+<p><br></p>
+</div>
+<div id="do-use-good-null-values" class="section level4">
+<h4>4. <strong>Do</strong> use good ‘null values’</h4>
+<ul>
+<li><p><strong>Always put in 0 if the observed vaule is 0</strong> (i.e., don’t skip the cell just because it’s 0). If you don’t it becomes indistinguishable from unknown or unobserved data.</p></li>
+<li><p><strong>Don’t use other numbers (e.g., 999 or -999).</strong> This used to be common practice for some stats software. But this can cause problems because it may be inadvertently used in calculations.</p></li>
+<li><p><strong>Don’t use other symbols (-, ., ?).</strong> Again, this used to be common practice for some people, but this can cause problems because R won’t know how to interpret it.</p></li>
+<li><strong><em>Good options include:</em></strong>
+<ul>
+<li>Blank cells. But only if you are careful to always put 0 when the correct value is 0.</li>
+<li>Consistent, conventional abbreviation (e.g., NA, NULL).** <strong><em>BUT</em></strong>, note that “NA” may be used as abbreviations for other things, like “North America”. But if used in a column that is otherwise numeric, R can automatically interpret this as null value.</li>
+</ul></li>
+</ul>
+<p>If you are using consistent null value designations, you can specify these values as null using the <code>na.string=</code> argument within the <code>read.csv()</code> function. For example,</p>
+<pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;, na.string=c(&quot;NA&quot;, &quot;#N/A&quot;))</code></pre>
+<p>The above code will tell R that cells with either “NA” or “#N/A” should be interpreted as missing data.</p>
+<p><br></p>
+</div>
+<div id="do-not-use-merged-cells" class="section level4">
+<h4>5. Do not use merged cells!</h4>
+<p>Merging cells makes your data unreadable by R (or other stats software)</p>
+<p><br></p>
 </div>
 <div id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset." class="section level4">
-<h4>5. Avoid keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
-<blockquote>
-<p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
-<p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
-</blockquote>
+<h4>6. Avoid keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
+<p>This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.</p>
 </div>
 </div>
 <div id="wide--vs.long-format-data" class="section level3">
@@ -454,6 +482,11 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 </table>
 <p>The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows.</p>
 <p>For more on this distinction, see <a href="http://www.jstatsoft.org/v59/i10">Wickham (2014) paper</a> on “Tidy Data”</p>
+<hr />
+<blockquote>
+<p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
+<p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
+</blockquote>
 <hr />
 </div>
 </div>
