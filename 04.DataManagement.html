@@ -327,9 +327,11 @@ div.tocify {
 Example spreadsheet of data on egg size of American Coots
 </p>
 </div>
+<p><br></p>
 </div>
 <div id="spreadsheet-dos-and-donts" class="section level3">
 <h3>4.1.2 Spreadsheet dos and don’ts!</h3>
+<p><br></p>
 <div id="dont-keep-multiple-tables-in-one-sheet" class="section level4">
 <h4>1. Don’t keep multiple tables in one sheet</h4>
 <p>This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.</p>
@@ -339,7 +341,8 @@ Example spreadsheet of data on egg size of American Coots
 example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
 </p>
 </div>
-<p><strong><em>The solution: Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data.</em></strong></p>
+<p><strong><em>The solution: Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1</em></strong></p>
+<p><br></p>
 </div>
 <div id="dont-use-special-characters-or-commas." class="section level4">
 <h4>2. Don’t use special characters or commas.</h4>
@@ -356,8 +359,102 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
 <p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
 </blockquote>
-<hr />
 </div>
+</div>
+<div id="wide--vs.long-format-data" class="section level3">
+<h3>4.2.3. Wide- vs. Long-format data</h3>
+<p>The most important thing to keep in mind is that your data should contain <strong>each observation as a separate row</strong>. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number.</p>
+<p>For example, this is the WRONG way to structure a dataframe:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Subject</th>
+<th>Time 1</th>
+<th>Time 2</th>
+<th>Time 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1.2</td>
+<td>2.5</td>
+<td>4.1</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>1.6</td>
+<td>2.6</td>
+<td>3.8</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>0.9</td>
+<td>2.4</td>
+<td>3.6</td>
+</tr>
+</tbody>
+</table>
+<p>The correct structure for this data set would be:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Subject</th>
+<th>Time</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>1</td>
+<td>1.2</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>2</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>A</td>
+<td>3</td>
+<td>4.1</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>1</td>
+<td>1.6</td>
+</tr>
+<tr class="odd">
+<td>B</td>
+<td>2</td>
+<td>2.6</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>3</td>
+<td>3.8</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>1</td>
+<td>0.9</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>2</td>
+<td>2.4</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>3</td>
+<td>3.6</td>
+</tr>
+</tbody>
+</table>
+<p>The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows.</p>
+<p>For more on this distinction, see <a href="http://www.jstatsoft.org/v59/i10">Wickham (2014) paper</a> on “Tidy Data”</p>
+<hr />
 </div>
 </div>
 <div id="troubleshooting-data-import" class="section level2">
