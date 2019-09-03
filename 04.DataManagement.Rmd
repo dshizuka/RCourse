@@ -17,6 +17,8 @@ library(knitr)
 
 In Module 3, we covered how to import and look at subsets of data. Here, we will deal with situations where you need to troubleshoot the data import process. Here in Module 4, we will deal with common issues that arise while importing data, as well as some best practices in data formatting. Finally, we will touch on how to change the formatting of your data set within R. 
 
+**Note:** Excercises at the end of the module assumes you downloaded sample data as directed in Module 3. 
+
 ***
 
 ##4.1 Formatting your data in spreadsheets
@@ -192,9 +194,15 @@ Step 2: Fix the spreadsheet so that you get the following:
 * The column called "weight" is numeric
 * The column called "X" is removed.
 
-## Group Exercise: Troubleshoot data import
+***
 
-```{r, eval=T}
-eggdat=read.csv("data/EggMeasurements_example.csv") #assuming your working directory is set to the sample data folder
-eggdat
-```
+## Group Exercise 2: Improve my egg measurement data
+
+* Click on [this link]("data/EggMeasurements_example.csv") to download some real data I collected on egg sizes of American Coots (*Fulica americana*) *before* I knew anything about R or programming. 
+
+* Save the data in the "data" subfolder within your course folder.
+
+* Try importing the data to R and also look at the spreadsheet in Excel. 
+
+* **Come up with as many recommendations as possible on how to improve this excel sheet.**
+
