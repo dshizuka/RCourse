@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Module : Managing Data</title>
+<title>Module 4: Managing Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -300,14 +300,95 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Module : Managing Data</h1>
+<h1 class="title toc-ignore">Module 4: Managing Data</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
 <h4 class="date"><em>updated 09/03/19</em></h4>
 
 </div>
 
 
-
+<p>In Module 3, we covered how to import and look at subsets of data. Here, we will deal with situations where you need to troubleshoot the data import process. Here in Module 4, we will deal with common issues that arise while importing data, as well as some best practices in data formatting. Finally, we will touch on how to change the formatting of your data set within R.</p>
+<hr />
+<div id="formatting-your-data-in-spreadsheets" class="section level2">
+<h2>4.1 Formatting your data in spreadsheets</h2>
+<p>This first part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.</p>
+<p>One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. In this section, we will go over some dos and don’ts of spreadsheets for data management.</p>
+<p>***Some of this material is from a free online resource from datacarpentry.org: <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/">“Data Organization in Spreadsheets for Ecologists”</a></p>
+<div id="basic-structure-of-a-spreadsheet" class="section level3">
+<h3>4.1.1 Basic structure of a spreadsheet</h3>
+<ol style="list-style-type: decimal">
+<li><p>First line (Header) are names of variables. Each variable is one column. Do not use values as column names.</p></li>
+<li><p>Each subject (animal, plant, cell, etc.) should have an ID. This is useful if you have multiple spreadsheet where you have different information about the subject–if you have a common ID, you can link together datasets more easily.</p></li>
+<li><p>Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column.</p></li>
+</ol>
+<div class="figure" style="text-align: center">
+<img src="images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
+<p class="caption">
+Example spreadsheet of data on egg size of American Coots
+</p>
+</div>
+</div>
+<div id="spreadsheet-dos-and-donts" class="section level3">
+<h3>4.1.2 Spreadsheet dos and don’ts!</h3>
+<div id="dont-keep-multiple-tables-in-one-sheet" class="section level4">
+<h4>1. Don’t keep multiple tables in one sheet</h4>
+<p>This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.</p>
+<div class="figure" style="text-align: center">
+<img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="482" />
+<p class="caption">
+example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
+</p>
+</div>
+<p><strong><em>The solution: Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data.</em></strong></p>
+</div>
+<div id="dont-use-special-characters-or-commas." class="section level4">
+<h4>2. Don’t use special characters or commas.</h4>
+</div>
+<div id="dont-use-formatting-i.e.-highlighting-to-convey-information." class="section level4">
+<h4>3. Don’t use formatting (i.e., highlighting) to convey information.</h4>
+</div>
+<div id="use-good-null-values" class="section level4">
+<h4>4. Use good ‘null values’</h4>
+</div>
+<div id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset." class="section level4">
+<h4>5. Avoid keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
+<blockquote>
+<p><span style="color:purple"><strong><em>Key rule in reproducible research: Try not to mess with raw data! </em></strong></span></p>
+<p>Once you have collected data, it is best to try to keep that raw data <strong><em>raw</em></strong>. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you “fixed” and what you did not. Also, there are times when you later realize that you “fixed” the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+</div>
+<div id="troubleshooting-data-import" class="section level2">
+<h2>4.2 Troubleshooting Data Import</h2>
+<p>You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
+<p>Some common problems:</p>
+<ul>
+<li><strong>It won’t import</strong>
+<ul>
+<li>Are you sure you saved the file as a .csv file?</li>
+<li>Is the path and file name correct?</li>
+<li>Is the path and file name inside quotes?</li>
+</ul></li>
+<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
+</ul></li>
+<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
+<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
+</ul></li>
+<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
+<ul>
+<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
+<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
+</ul></li>
+</ul>
+<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
+<hr />
+</div>
 
 
 

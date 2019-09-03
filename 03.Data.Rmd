@@ -326,27 +326,3 @@ table(merged.dat2$sex,merged.dat2$chromosomes)
 
 ***
 
-##3.5 Troubleshooting/Cleaning Data in R
-
-You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 
-
-Some common problems:  
-
-* **It won't import**
-    + Are you sure you saved the file as a .csv file? 
-    + Is the path and file name correct?
-    + Is the path and file name inside quotes?
-    
-* **I get a weird column that has a bunch of `NA`**
-    + You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.
-* **I have a weird column at the bottom of my data that is just a bunch of `NA`**
-    + You probably have a cell at the bottom of your spreadsheet with "hidden spaces".
-    + Fix: In excel, do a "Find and Replace" to replace blank space with some character (e.g., a *) and then go and find and erase those characters.
-
-* **Column is supposed to be numeric but it is showing up as factors.**
-    + You probably have a cell value in the column that is non-numeric, e.g., "#N/A" or 'hidden space'
-    + Fix: You can specify what kind of characters should be interpreted as `NA` using the `na.string=` argument (see above).
-
-We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management. 
-
-***
