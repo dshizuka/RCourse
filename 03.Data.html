@@ -94,9 +94,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -302,7 +299,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Module 3: Working With Data</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 08/29/19</em></h4>
+<h4 class="date"><em>updated 09/03/19</em></h4>
 
 </div>
 
@@ -313,8 +310,8 @@ div.tocify {
 <p>To import data into R, you will create an object that points to a dataset somewhere on your computer. R will then import that data as a <strong>dataframe</strong> object (<a href="02.ObjectTypes.html">see Module 2</a>).</p>
 <hr />
 </div>
-<div id="importing-data" class="section level2">
-<h2>3.1 Importing Data</h2>
+<div id="importing-data-overview" class="section level2">
+<h2>3.1 Importing Data: Overview</h2>
 <p><br></p>
 <blockquote>
 <p><span style="color:purple"><strong>Do this before you start this section!</strong></span></p>
@@ -339,8 +336,8 @@ div.tocify {
 <hr />
 </div>
 </div>
-<div id="five-ways-to-import-.csv-or-.txt-files" class="section level2">
-<h2>3.2 Five ways to import .csv (or .txt) files</h2>
+<div id="five-ways-to-import-data-from-.csv-or-.txt-files" class="section level2">
+<h2>3.2 Five ways to import data from .csv (or .txt) files</h2>
 <p>No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called <code>dat</code>. (tip: I would not use “data” as an object name because <code>data()</code> is a function name). Try out each of the following methods for importing a sample data set called “SampleData_1.csv”.</p>
 <hr />
 <div id="rstudio-project-recommended" class="section level3">
@@ -401,40 +398,11 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 <hr />
 </div>
 </div>
-<div id="some-common-errors-when-importing-data" class="section level2">
-<h2>3.3 Some common errors when importing data</h2>
-<p>You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
-<p>Some common problems:</p>
-<ul>
-<li><strong>It won’t import</strong>
-<ul>
-<li>Are you sure you saved the file as a .csv file?</li>
-<li>Is the path and file name correct?</li>
-<li>Is the path and file name inside quotes?</li>
-</ul></li>
-<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
-<ul>
-<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
-</ul></li>
-<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
-<ul>
-<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
-<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
-</ul></li>
-<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
-<ul>
-<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
-<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
-</ul></li>
-</ul>
-<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
-<hr />
-</div>
 <div id="working-with-imported-data" class="section level2">
-<h2>3.4 Working with imported data</h2>
+<h2>3.3 Working with imported data</h2>
 <p><br></p>
 <div id="looking-at-the-data" class="section level3">
-<h3>3.4.1 Looking at the data</h3>
+<h3>3.3.1 Looking at the data</h3>
 <p>Now that you have the data imported as an object called <code>dat</code>, let’s look at it! You can do this simply by calling the object:</p>
 <pre class="r"><code>dat</code></pre>
 <pre><code>##    Indiv.ID    sex      age size weight
@@ -467,7 +435,7 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 <hr />
 </div>
 <div id="subsets-and-subtotals" class="section level3">
-<h3>3.4.2 Subsets and Subtotals</h3>
+<h3>3.3.2 Subsets and Subtotals</h3>
 <p>Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.<br />
 We already covered how to look at specific columns using either the <code>[]</code> or <code>$</code> operators. For example, let’s try using the <code>$</code> operator to look at the sex of individuals in the sample data.</p>
 <pre class="r"><code>dat$sex</code></pre>
@@ -541,7 +509,7 @@ Basically, <code>which()</code> allows you to get the element number of a vector
 </div>
 </div>
 <div id="summary-data" class="section level3">
-<h3>3.4.3 Summary data</h3>
+<h3>3.3.3 Summary data</h3>
 <p>Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let’s look at the mean size of males vs. females using the function <code>mean()</code></p>
 <pre class="r"><code>mean(dat$size[dat$sex==&quot;male&quot;])</code></pre>
 <pre><code>## [1] 27.83333</code></pre>
@@ -589,7 +557,7 @@ class(tap)</code></pre>
 </div>
 </div>
 <div id="linking-two-data-sets" class="section level2">
-<h2>3.5 Linking two data sets</h2>
+<h2>3.4 Linking two data sets</h2>
 <p>There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. Let’s start by importing two different sets of data (one of them is the same as what we have been using so far). To get started, we will now import a second dataset called <code>sex_chromo.csv</code>, which should already be saved in your “data” subfolder.</p>
 <pre class="r"><code>chromo=read.csv(&quot;data/sex_chromo.csv&quot;)</code></pre>
 <p>We now have two dataframes—dat and sex. This second dataframe has information of sex chromosomes that we have identified for each individual using molecular methods. We now use a match() function to look up which rows correspond to the same individual:</p>
@@ -641,6 +609,35 @@ merged.dat2</code></pre>
 ##          XX XY
 ##   female  7  0
 ##   male    0  6</code></pre>
+</div>
+<div id="troubleshootingcleaning-data-in-r" class="section level2">
+<h2>3.5 Troubleshooting/Cleaning Data in R</h2>
+<p>You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
+<p>Some common problems:</p>
+<ul>
+<li><strong>It won’t import</strong>
+<ul>
+<li>Are you sure you saved the file as a .csv file?</li>
+<li>Is the path and file name correct?</li>
+<li>Is the path and file name inside quotes?</li>
+</ul></li>
+<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
+</ul></li>
+<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
+<ul>
+<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
+<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
+</ul></li>
+<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
+<ul>
+<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
+<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
+</ul></li>
+</ul>
+<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
+<hr />
 </div>
 
 

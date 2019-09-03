@@ -20,7 +20,7 @@ To import data into R, you will create an object that points to a dataset somewh
 
 ***
 
-##3.1 Importing Data
+##3.1 Importing Data: Overview
 
 <br>
 
@@ -46,7 +46,7 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 ***
 
-##3.2 Five ways to import .csv (or .txt) files
+##3.2 Five ways to import data from .csv (or .txt) files
 
 No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
 
@@ -153,36 +153,11 @@ The first time you do this, you may be asked to install the `readr` package.
 
 ***
 
-
-##3.3 Some common errors when importing data
-
-You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 
-
-Some common problems:  
-
-* **It won't import**
-    + Are you sure you saved the file as a .csv file? 
-    + Is the path and file name correct?
-    + Is the path and file name inside quotes?
-    
-* **I get a weird column that has a bunch of `NA`**
-    + You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.
-* **I have a weird column at the bottom of my data that is just a bunch of `NA`**
-    + You probably have a cell at the bottom of your spreadsheet with "hidden spaces".
-    + Fix: In excel, do a "Find and Replace" to replace blank space with some character (e.g., a *) and then go and find and erase those characters.
-
-* **Column is supposed to be numeric but it is showing up as factors.**
-    + You probably have a cell value in the column that is non-numeric, e.g., "#N/A" or 'hidden space'
-    + Fix: You can specify what kind of characters should be interpreted as `NA` using the `na.string=` argument (see above).
-
-We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management. 
-
-***
-##3.4 Working with imported data
+##3.3 Working with imported data
 
 <br>
 
-###3.4.1 Looking at the data
+###3.3.1 Looking at the data
 
 
 Now that you have the data imported as an object called `dat`, let's look at it! You can do this simply by calling the object:
@@ -206,7 +181,7 @@ Good. This is a data frame.
 
 ***
 
-###3.4.2 Subsets and Subtotals
+###3.3.2 Subsets and Subtotals
 
 Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.  
 We already covered how to look at specific columns using either the `[]` or `$` operators. For example, let's try using the `$` operator to look at the sex of individuals in the sample data.
@@ -247,6 +222,7 @@ dat[dat$sex!="male",] #this will give you the records for individuals that are N
 ```
 
 ####Using the `which()` function:
+
 Another way to subset the data is to use the `which()` function, which is extremely useful. We will be using this function a lot as we go forward.  
 Basically, `which()` allows you to get the element number of a vector that fits certain criteria. For example, these are the row numbers for males in the dataset:
 ```{r}
@@ -266,7 +242,7 @@ dat$size[dat$sex=="male"]
 
 ***
 
-###3.4.3 Summary data
+###3.3.3 Summary data
 
 Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let's look at the mean size of males vs. females using the function `mean()`
 
@@ -305,7 +281,7 @@ aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),sum)
 
 ***
 
-##3.5 Linking two data sets
+##3.4 Linking two data sets
 
 There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. 
 	You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. 
@@ -348,3 +324,29 @@ Lastly, try this code to see that (in this hypothetical dataset), the sex chromo
 table(merged.dat2$sex,merged.dat2$chromosomes)
 ```
 
+***
+
+##3.5 Troubleshooting/Cleaning Data in R
+
+You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 
+
+Some common problems:  
+
+* **It won't import**
+    + Are you sure you saved the file as a .csv file? 
+    + Is the path and file name correct?
+    + Is the path and file name inside quotes?
+    
+* **I get a weird column that has a bunch of `NA`**
+    + You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.
+* **I have a weird column at the bottom of my data that is just a bunch of `NA`**
+    + You probably have a cell at the bottom of your spreadsheet with "hidden spaces".
+    + Fix: In excel, do a "Find and Replace" to replace blank space with some character (e.g., a *) and then go and find and erase those characters.
+
+* **Column is supposed to be numeric but it is showing up as factors.**
+    + You probably have a cell value in the column that is non-numeric, e.g., "#N/A" or 'hidden space'
+    + Fix: You can specify what kind of characters should be interpreted as `NA` using the `na.string=` argument (see above).
+
+We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management. 
+
+***
