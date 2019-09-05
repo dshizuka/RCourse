@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+*9/5/19: I have now uploaded [Assignment 2](pdfs/Assignment2.pdf). In this assignment, you will create and upload a project folder that includes the data file (.csv), .rproj file, and a .R script file. 
+
 * 9/5/19: In the "Formatting Data" module, I borrow heavily from the ["Data Organization in Spreadsheets for Ecologists"](https://datacarpentry.org/spreadsheet-ecology-lesson/) lesson from [datacarpentry.org](datacarpentry.org). I encourage you to go take a look at the lesson. 
 
 * 8/29/19: **Assignment 1** Here is the [assignment file](pdfs/Assignment1.pdf) and an [example assignment folder](data/Assignment1_example.zip). This file includes a sample dataset and a sample readme file.
