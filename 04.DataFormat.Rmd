@@ -5,7 +5,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
@@ -29,6 +29,12 @@ One of the reasons that many formatting problems arise while keeping data in spr
 
 ***Some of this material is from a free online resource from datacarpentry.org: ["Data Organization in Spreadsheets for Ecologists"](https://datacarpentry.org/spreadsheet-ecology-lesson/)
 
+```{r, echo=FALSE, fig.align="center", fig.cap="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set.", out.width="50%"}
+knitr::include_graphics("images/excel_form.png")
+```
+
+***
+
 ###4.1.1 Basic structure of a spreadsheet
 
 1. First line (Header) are names of variables. Each variable is one column. Do not use values as column names.
@@ -37,11 +43,15 @@ One of the reasons that many formatting problems arise while keeping data in spr
 
 3. Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column. 
 
+4. Don't add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data. 
+
 ```{r, echo=FALSE, fig.align="center", fig.cap="Example spreadsheet of data on egg size of American Coots", out.width="100%"}
 knitr::include_graphics("images/eggdata_image.png")
 ```
 
 <br>
+
+***
 
 ###4.1.2 Spreadsheet dos and don'ts!
 
@@ -71,9 +81,11 @@ Also, commas cause problems when you are saving data in .csv files because the c
 
 <br>
 
-####3. **Don't** use formatting (i.e., highlighting) to convey information.
+####3. **Don't** use formatting (i.e., highlighting) to convey information or make spreadsheets look pretty by merging cells.
 
-You can always add another column to include that information as another variable.
+This is a common mistake that comes from using Excel as forms. 
+
+If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes", out.width="100%"}
 knitr::include_graphics("images/highlighting.png")
@@ -102,9 +114,7 @@ The above code will tell R that cells with either "NA" or "#N/A" should be inter
 
 <br>
 
-####5. Do not use merged cells!
-
-Merging cells makes your data unreadable by R (or other stats software)
+####5. **DO** use good column names (variable names)
 
 <br>
 

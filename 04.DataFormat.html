@@ -180,7 +180,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
@@ -315,12 +315,20 @@ div.tocify {
 <p>This first part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.</p>
 <p>One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. In this section, we will go over some dos and don’ts of spreadsheets for data management.</p>
 <p>***Some of this material is from a free online resource from datacarpentry.org: <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/">“Data Organization in Spreadsheets for Ecologists”</a></p>
+<div class="figure" style="text-align: center">
+<img src="images/excel_form.png" alt="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set." width="50%" />
+<p class="caption">
+Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a <em>form</em> made in Excel. NOT a good example of a data set.
+</p>
+</div>
+<hr />
 <div id="basic-structure-of-a-spreadsheet" class="section level3">
 <h3>4.1.1 Basic structure of a spreadsheet</h3>
 <ol style="list-style-type: decimal">
 <li><p>First line (Header) are names of variables. Each variable is one column. Do not use values as column names.</p></li>
 <li><p>Each subject (animal, plant, cell, etc.) should have an ID. This is useful if you have multiple spreadsheet where you have different information about the subject–if you have a common ID, you can link together datasets more easily.</p></li>
 <li><p>Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column.</p></li>
+<li><p>Don’t add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data.</p></li>
 </ol>
 <div class="figure" style="text-align: center">
 <img src="images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
@@ -329,6 +337,7 @@ Example spreadsheet of data on egg size of American Coots
 </p>
 </div>
 <p><br></p>
+<hr />
 </div>
 <div id="spreadsheet-dos-and-donts" class="section level3">
 <h3>4.1.2 Spreadsheet dos and don’ts!</h3>
@@ -352,9 +361,10 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p><strong><em>Solution:</em></strong> Always think about whether your inputs will be read correctly by R or other stats program. Default to non-proprietary formats.</p>
 <p><br></p>
 </div>
-<div id="dont-use-formatting-i.e.-highlighting-to-convey-information." class="section level4">
-<h4>3. <strong>Don’t</strong> use formatting (i.e., highlighting) to convey information.</h4>
-<p>You can always add another column to include that information as another variable.</p>
+<div id="dont-use-formatting-i.e.-highlighting-to-convey-information-or-make-spreadsheets-look-pretty-by-merging-cells." class="section level4">
+<h4>3. <strong>Don’t</strong> use formatting (i.e., highlighting) to convey information or make spreadsheets look pretty by merging cells.</h4>
+<p>This is a common mistake that comes from using Excel as forms.</p>
+<p>If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.</p>
 <div class="figure" style="text-align: center">
 <img src="images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
 <p class="caption">
@@ -380,9 +390,8 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p>The above code will tell R that cells with either “NA” or “#N/A” should be interpreted as missing data.</p>
 <p><br></p>
 </div>
-<div id="do-not-use-merged-cells" class="section level4">
-<h4>5. Do not use merged cells!</h4>
-<p>Merging cells makes your data unreadable by R (or other stats software)</p>
+<div id="do-use-good-column-names-variable-names" class="section level4">
+<h4>5. <strong>DO</strong> use good column names (variable names)</h4>
 <p><br></p>
 </div>
 <div id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset." class="section level4">
