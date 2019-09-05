@@ -1,11 +1,11 @@
 ---
-title: "Module 4: Managing Data"
+title: "Module 4: Formatting Data for Analysis"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
@@ -19,15 +19,24 @@ In Module 3, we covered how to import and look at subsets of data. Here, we will
 
 **Note:** Excercises at the end of the module assumes you downloaded sample data as directed in Module 3. 
 
+**Note:** Some of this material is from a free online resource from datacarpentry.org: ["Data Organization in Spreadsheets for Ecologists"](https://datacarpentry.org/spreadsheet-ecology-lesson/)
+
 ***
 
-##4.1 Formatting your data in spreadsheets
+##4.1 Formatting spreadsheets to keep data for analysis
 
 This first part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.
 
-One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. In this section, we will go over some dos and don'ts of spreadsheets for data management.
+One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. 
 
-***Some of this material is from a free online resource from datacarpentry.org: ["Data Organization in Spreadsheets for Ecologists"](https://datacarpentry.org/spreadsheet-ecology-lesson/)
+Similarly, you might use spreadsheets with formatting for purposes other than keeping data for analysis (e.g., using it as a way to track progress on a project). The formatting for that kind of use is different than for storing data. 
+
+
+```{r, echo=FALSE, fig.align="center", fig.cap="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set.", out.width="50%"}
+knitr::include_graphics("images/excel_form.png")
+```
+
+***
 
 ###4.1.1 Basic structure of a spreadsheet
 
@@ -37,11 +46,15 @@ One of the reasons that many formatting problems arise while keeping data in spr
 
 3. Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column. 
 
+4. Don't add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data. 
+
 ```{r, echo=FALSE, fig.align="center", fig.cap="Example spreadsheet of data on egg size of American Coots", out.width="100%"}
 knitr::include_graphics("images/eggdata_image.png")
 ```
 
 <br>
+
+***
 
 ###4.1.2 Spreadsheet dos and don'ts!
 
@@ -59,7 +72,13 @@ knitr::include_graphics("images/multitable.png")
 
 <br>
 
-####2. **Don't** use special characters or commas. 
+####2. **Don't** include title/metadata/table caption at the top (or bottom) of your data.
+
+*The first row of your dataset should always be your column names (header). Don't add extra information at the top of your dataset. If you need to add extra information about the data, put it in your readme file.
+
+*Similarly, the last line of your dataset should be the last set of observations. Don't include column totals/subtotals, etc. at the end of your dataset. This will cause problems when reading the data into R. 
+
+####3. **Don't** use special characters or commas. 
 
 Excel is capable of handling special characters that other software cannot. For example, if you have the 'degree' symbol (C$^\circ$) or 'em dash' (where "--" gets converted to one long dash), these will not be read correctly when you import data in R. Do NOT use these special characters in your data. 
 
@@ -71,9 +90,11 @@ Also, commas cause problems when you are saving data in .csv files because the c
 
 <br>
 
-####3. **Don't** use formatting (i.e., highlighting) to convey information.
+####4. **Don't** use formatting (i.e., highlighting) to convey information or make spreadsheets look pretty by merging cells.
 
-You can always add another column to include that information as another variable.
+This is a common mistake that comes from using Excel as forms. 
+
+If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes", out.width="100%"}
 knitr::include_graphics("images/highlighting.png")
@@ -81,7 +102,7 @@ knitr::include_graphics("images/highlighting.png")
 
 <br>
 
-####4. **Do** use good 'null values'
+####5. **Do** use good 'null values'
 
 * **Always put in 0 if the observed vaule is 0** (i.e., don't skip the cell just because it's 0). If you don't it becomes indistinguishable from unknown or unobserved data.
 
@@ -90,8 +111,8 @@ knitr::include_graphics("images/highlighting.png")
 * **Don't use other symbols (-, ., ?).** Again, this used to be common practice for some people, but this can cause problems because R won't know how to interpret it.
 
 * ***Good options include:*** 
-    + Blank cells. But only if you are careful to always put 0 when the correct value is 0.
-    + Consistent, conventional abbreviation (e.g., NA, NULL).** ***BUT***, note that "NA" may be used as abbreviations for other things, like "North America". But if used in a column that is otherwise numeric, R can automatically interpret this as null value.
+    + **Blank cells.** But only if you are careful to always put 0 when the correct value is 0.
+    + **Consistent, conventional abbreviation (e.g., NA, NULL).** But note that "NA" may be used as abbreviations for other things, like "North America". But if used in a column that is otherwise numeric, R can automatically interpret this as null value.
 
 If you are using consistent null value designations, you can specify these values as null using the `na.string=` argument within the `read.csv()` function. For example,
 
@@ -102,13 +123,17 @@ The above code will tell R that cells with either "NA" or "#N/A" should be inter
 
 <br>
 
-####5. Do not use merged cells!
+####6. **Do** use good column names (variable names)
 
-Merging cells makes your data unreadable by R (or other stats software)
+* Avoid using special characters or spaces in your column names. These will automatically converted to "." when you import to R. Removing spaces or using "_" or "." instead will make your life easier.
+
+* Use relatively short but informative column names. But keep a readme.txt file associated with your data where you store detailed information on how each variable was measured.
+
+
 
 <br>
 
-####6. Avoid keeping summary data along with raw data (i.e., don't make a "group means" column in your dataset). 
+####7. **Avoid** keeping summary data along with raw data (i.e., don't make a "group means" column in your dataset). 
 
 This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.
 
@@ -146,37 +171,6 @@ Even when you have taken care to follow the above dos and don'ts, you will often
 ***
 
 
-###4.1.3. Wide- vs. Long-format data
-
-The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number. 
-
-For example, this is the WRONG way to structure a dataframe:  
-
-Subject|Time 1|Time 2|Time 3
-----|----|----|----
-A | 1.2 | 2.5 | 4.1
-B | 1.6 | 2.6 | 3.8
-C | 0.9 | 2.4 | 3.6
-
-The correct structure for this data set would be: 
-
-Subject|Time|Value
--------|----|-----
-A|1|1.2
-A|2|2.5
-A|3|4.1
-B|1|1.6
-B|2|2.6
-B|3|3.8
-C|1|0.9
-C|2|2.4
-C|3|3.6
-
-The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
-
-For more on this distinction, see [Wickham (2014) paper](http://www.jstatsoft.org/v59/i10) on "Tidy Data"
-
-***
 
 ## Group Exercise: Troubleshoot data import
 
@@ -206,3 +200,33 @@ Step 2: Fix the spreadsheet so that you get the following:
 
 * **Come up with as many recommendations as possible on how to improve this excel sheet.**
 
+***
+##4.3. Wide- vs. Long-format data
+
+The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number. 
+
+For example, this is the WRONG way to structure a dataframe:  
+
+Subject|Time 1|Time 2|Time 3
+----|----|----|----
+A | 1.2 | 2.5 | 4.1
+B | 1.6 | 2.6 | 3.8
+C | 0.9 | 2.4 | 3.6
+
+The correct structure for this data set would be: 
+
+Subject|Time|Value
+-------|----|-----
+A|1|1.2
+A|2|2.5
+A|3|4.1
+B|1|1.6
+B|2|2.6
+B|3|3.8
+C|1|0.9
+C|2|2.4
+C|3|3.6
+
+The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
+
+For more on this distinction, see [Wickham (2014) paper](http://www.jstatsoft.org/v59/i10) on "Tidy Data"

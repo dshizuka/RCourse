@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Module 4: Managing Data</title>
+<title>Module 4: Formatting Data for Analysis</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,7 +180,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
@@ -300,27 +300,36 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Module 4: Managing Data</h1>
+<h1 class="title toc-ignore">Module 4: Formatting Data for Analysis</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 09/03/19</em></h4>
+<h4 class="date"><em>updated 09/05/19</em></h4>
 
 </div>
 
 
 <p>In Module 3, we covered how to import and look at subsets of data. Here, we will deal with situations where you need to troubleshoot the data import process. Here in Module 4, we will deal with common issues that arise while importing data, as well as some best practices in data formatting. Finally, we will touch on how to change the formatting of your data set within R.</p>
 <p><strong>Note:</strong> Excercises at the end of the module assumes you downloaded sample data as directed in Module 3.</p>
+<p><strong>Note:</strong> Some of this material is from a free online resource from datacarpentry.org: <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/">“Data Organization in Spreadsheets for Ecologists”</a></p>
 <hr />
-<div id="formatting-your-data-in-spreadsheets" class="section level2">
-<h2>4.1 Formatting your data in spreadsheets</h2>
+<div id="formatting-spreadsheets-to-keep-data-for-analysis" class="section level2">
+<h2>4.1 Formatting spreadsheets to keep data for analysis</h2>
 <p>This first part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.</p>
-<p>One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. In this section, we will go over some dos and don’ts of spreadsheets for data management.</p>
-<p>***Some of this material is from a free online resource from datacarpentry.org: <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/">“Data Organization in Spreadsheets for Ecologists”</a></p>
+<p>One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data.</p>
+<p>Similarly, you might use spreadsheets with formatting for purposes other than keeping data for analysis (e.g., using it as a way to track progress on a project). The formatting for that kind of use is different than for storing data.</p>
+<div class="figure" style="text-align: center">
+<img src="images/excel_form.png" alt="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set." width="50%" />
+<p class="caption">
+Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a <em>form</em> made in Excel. NOT a good example of a data set.
+</p>
+</div>
+<hr />
 <div id="basic-structure-of-a-spreadsheet" class="section level3">
 <h3>4.1.1 Basic structure of a spreadsheet</h3>
 <ol style="list-style-type: decimal">
 <li><p>First line (Header) are names of variables. Each variable is one column. Do not use values as column names.</p></li>
 <li><p>Each subject (animal, plant, cell, etc.) should have an ID. This is useful if you have multiple spreadsheet where you have different information about the subject–if you have a common ID, you can link together datasets more easily.</p></li>
 <li><p>Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column.</p></li>
+<li><p>Don’t add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data.</p></li>
 </ol>
 <div class="figure" style="text-align: center">
 <img src="images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
@@ -329,6 +338,7 @@ Example spreadsheet of data on egg size of American Coots
 </p>
 </div>
 <p><br></p>
+<hr />
 </div>
 <div id="spreadsheet-dos-and-donts" class="section level3">
 <h3>4.1.2 Spreadsheet dos and don’ts!</h3>
@@ -345,16 +355,22 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p><strong><em>Solution:</em></strong> Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1***</p>
 <p><br></p>
 </div>
+<div id="dont-include-titlemetadatatable-caption-at-the-top-or-bottom-of-your-data." class="section level4">
+<h4>2. <strong>Don’t</strong> include title/metadata/table caption at the top (or bottom) of your data.</h4>
+<p>*The first row of your dataset should always be your column names (header). Don’t add extra information at the top of your dataset. If you need to add extra information about the data, put it in your readme file.</p>
+<p>*Similarly, the last line of your dataset should be the last set of observations. Don’t include column totals/subtotals, etc. at the end of your dataset. This will cause problems when reading the data into R.</p>
+</div>
 <div id="dont-use-special-characters-or-commas." class="section level4">
-<h4>2. <strong>Don’t</strong> use special characters or commas.</h4>
+<h4>3. <strong>Don’t</strong> use special characters or commas.</h4>
 <p>Excel is capable of handling special characters that other software cannot. For example, if you have the ‘degree’ symbol (C<span class="math inline">\(^\circ\)</span>) or ‘em dash’ (where “–” gets converted to one long dash), these will not be read correctly when you import data in R. Do NOT use these special characters in your data.</p>
 <p>Also, commas cause problems when you are saving data in .csv files because the commas are designated for separating columns. If you like to write notes in your data, just make sure you don’t use commas! (e.g., if need be, you could use semi-colons)</p>
 <p><strong><em>Solution:</em></strong> Always think about whether your inputs will be read correctly by R or other stats program. Default to non-proprietary formats.</p>
 <p><br></p>
 </div>
-<div id="dont-use-formatting-i.e.-highlighting-to-convey-information." class="section level4">
-<h4>3. <strong>Don’t</strong> use formatting (i.e., highlighting) to convey information.</h4>
-<p>You can always add another column to include that information as another variable.</p>
+<div id="dont-use-formatting-i.e.-highlighting-to-convey-information-or-make-spreadsheets-look-pretty-by-merging-cells." class="section level4">
+<h4>4. <strong>Don’t</strong> use formatting (i.e., highlighting) to convey information or make spreadsheets look pretty by merging cells.</h4>
+<p>This is a common mistake that comes from using Excel as forms.</p>
+<p>If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.</p>
 <div class="figure" style="text-align: center">
 <img src="images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
 <p class="caption">
@@ -364,15 +380,15 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p><br></p>
 </div>
 <div id="do-use-good-null-values" class="section level4">
-<h4>4. <strong>Do</strong> use good ‘null values’</h4>
+<h4>5. <strong>Do</strong> use good ‘null values’</h4>
 <ul>
 <li><p><strong>Always put in 0 if the observed vaule is 0</strong> (i.e., don’t skip the cell just because it’s 0). If you don’t it becomes indistinguishable from unknown or unobserved data.</p></li>
 <li><p><strong>Don’t use other numbers (e.g., 999 or -999).</strong> This used to be common practice for some stats software. But this can cause problems because it may be inadvertently used in calculations.</p></li>
 <li><p><strong>Don’t use other symbols (-, ., ?).</strong> Again, this used to be common practice for some people, but this can cause problems because R won’t know how to interpret it.</p></li>
 <li><strong><em>Good options include:</em></strong>
 <ul>
-<li>Blank cells. But only if you are careful to always put 0 when the correct value is 0.</li>
-<li>Consistent, conventional abbreviation (e.g., NA, NULL).** <strong><em>BUT</em></strong>, note that “NA” may be used as abbreviations for other things, like “North America”. But if used in a column that is otherwise numeric, R can automatically interpret this as null value.</li>
+<li><strong>Blank cells.</strong> But only if you are careful to always put 0 when the correct value is 0.</li>
+<li><strong>Consistent, conventional abbreviation (e.g., NA, NULL).</strong> But note that “NA” may be used as abbreviations for other things, like “North America”. But if used in a column that is otherwise numeric, R can automatically interpret this as null value.</li>
 </ul></li>
 </ul>
 <p>If you are using consistent null value designations, you can specify these values as null using the <code>na.string=</code> argument within the <code>read.csv()</code> function. For example,</p>
@@ -380,13 +396,16 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 <p>The above code will tell R that cells with either “NA” or “#N/A” should be interpreted as missing data.</p>
 <p><br></p>
 </div>
-<div id="do-not-use-merged-cells" class="section level4">
-<h4>5. Do not use merged cells!</h4>
-<p>Merging cells makes your data unreadable by R (or other stats software)</p>
+<div id="do-use-good-column-names-variable-names" class="section level4">
+<h4>6. <strong>Do</strong> use good column names (variable names)</h4>
+<ul>
+<li><p>Avoid using special characters or spaces in your column names. These will automatically converted to “.” when you import to R. Removing spaces or using “_&quot; or “.” instead will make your life easier.</p></li>
+<li><p>Use relatively short but informative column names. But keep a readme.txt file associated with your data where you store detailed information on how each variable was measured.</p></li>
+</ul>
 <p><br></p>
 </div>
 <div id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset." class="section level4">
-<h4>6. Avoid keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
+<h4>7. <strong>Avoid</strong> keeping summary data along with raw data (i.e., don’t make a “group means” column in your dataset).</h4>
 <p>This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.</p>
 <hr />
 <blockquote>
@@ -426,8 +445,48 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 </ul>
 <hr />
 </div>
-<div id="wide--vs.long-format-data" class="section level3">
-<h3>4.1.3. Wide- vs. Long-format data</h3>
+</div>
+<div id="group-exercise-troubleshoot-data-import" class="section level2">
+<h2>Group Exercise: Troubleshoot data import</h2>
+<p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look at its data structure:</p>
+<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) #assuming your working directory is set to the sample data folder
+errdat</code></pre>
+<pre><code>##    Indiv_ID    sex      age size weight  X
+## 1     20-01   male    adult 29.5   66.5  1
+## 2     20-02   male juvenile   28   58.5 NA
+## 3     20-03 female    adult   26  #N/A! NA
+## 4     20-04 female    adult   25   55.5 NA
+## 5     20-05 female juvenile   25     62 NA
+## 6     20-06   male juvenile   28     61 NA
+## 7     20-07 female    adult   26     58 NA
+## 8     20-08   male    adult 28.5     65 NA
+## 9     20-09   male juvenile 27.5     60 NA
+## 10    20-10 female juvenile   26     59 NA
+## 11    20-11   male    adult 25.5     62 NA
+## 12    20-12 female    adult   27     59 NA
+## 13    20-13 female    adult 26.5     60 NA
+## 14                            **        NA</code></pre>
+<p>Step 2: Fix the spreadsheet so that you get the following:</p>
+<ul>
+<li>The column called “sex” only has “female” and “male”.</li>
+<li>The column called “size” is numeric</li>
+<li>The column called “weight” is numeric</li>
+<li>The column called “X” is removed.</li>
+</ul>
+<hr />
+</div>
+<div id="group-exercise-2-improve-my-egg-measurement-data" class="section level2">
+<h2>Group Exercise 2: Improve my egg measurement data</h2>
+<ul>
+<li><p>Click on <a href="%22data/EggMeasurements_example.csv%22">this link</a> to download some real data I collected on egg sizes of American Coots (<em>Fulica americana</em>) <em>before</em> I knew anything about R or programming.</p></li>
+<li><p>Save the data in the “data” subfolder within your course folder.</p></li>
+<li><p>Try importing the data to R and also look at the spreadsheet in Excel.</p></li>
+<li><p><strong>Come up with as many recommendations as possible on how to improve this excel sheet.</strong></p></li>
+</ul>
+<hr />
+</div>
+<div id="wide--vs.long-format-data" class="section level2">
+<h2>4.3. Wide- vs. Long-format data</h2>
 <p>The most important thing to keep in mind is that your data should contain <strong>each observation as a separate row</strong>. For example, each subject should be a separate row. If you have repeated measurements from the same subject, each observation should be a separate row, and you should have a column that specifies which observation/trial number.</p>
 <p>For example, this is the WRONG way to structure a dataframe:</p>
 <table>
@@ -519,45 +578,6 @@ example from <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-co
 </table>
 <p>The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows.</p>
 <p>For more on this distinction, see <a href="http://www.jstatsoft.org/v59/i10">Wickham (2014) paper</a> on “Tidy Data”</p>
-<hr />
-</div>
-</div>
-<div id="group-exercise-troubleshoot-data-import" class="section level2">
-<h2>Group Exercise: Troubleshoot data import</h2>
-<p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look at its data structure:</p>
-<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) #assuming your working directory is set to the sample data folder
-errdat</code></pre>
-<pre><code>##    Indiv_ID    sex      age size weight  X
-## 1     20-01   male    adult 29.5   66.5  1
-## 2     20-02   male juvenile   28   58.5 NA
-## 3     20-03 female    adult   26  #N/A! NA
-## 4     20-04 female    adult   25   55.5 NA
-## 5     20-05 female juvenile   25     62 NA
-## 6     20-06   male juvenile   28     61 NA
-## 7     20-07 female    adult   26     58 NA
-## 8     20-08   male    adult 28.5     65 NA
-## 9     20-09   male juvenile 27.5     60 NA
-## 10    20-10 female juvenile   26     59 NA
-## 11    20-11   male    adult 25.5     62 NA
-## 12    20-12 female    adult   27     59 NA
-## 13    20-13 female    adult 26.5     60 NA
-## 14                            **        NA</code></pre>
-<p>Step 2: Fix the spreadsheet so that you get the following:</p>
-<ul>
-<li>The column called “sex” only has “female” and “male”.</li>
-<li>The column called “size” is numeric</li>
-<li>The column called “weight” is numeric</li>
-<li>The column called “X” is removed.</li>
-</ul>
-</div>
-<div id="group-exercise-2-improve-my-egg-measurement-data" class="section level2">
-<h2>Group Exercise 2: Improve my egg measurement data</h2>
-<ul>
-<li><p>Click on <a href="%22data/EggMeasurements_example.csv%22">this link</a> to download some real data I collected on egg sizes of American Coots (<em>Fulica americana</em>) <em>before</em> I knew anything about R or programming.</p></li>
-<li><p>Save the data in the “data” subfolder within your course folder.</p></li>
-<li><p>Try importing the data to R and also look at the spreadsheet in Excel.</p></li>
-<li><p><strong>Come up with as many recommendations as possible on how to improve this excel sheet.</strong></p></li>
-</ul>
 </div>
 
 
