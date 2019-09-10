@@ -26,7 +26,15 @@ There many, many different ways to visualize data (see [datavizproject.com](http
 
 [The directory of visualizations presented in Claus Wilke's online version of his book](https://serialmentor.com/dataviz/directory-of-visualizations.html) is as good as any I've seen.
 
+###5.1.1 Types of data: Continuous, Count, and Categorical
 
+* **Continuous data** are quantitative measurements that can take any value. That is, it can be divided and reduced to finer levels. For example, take weight, height, or length.  
+
+* **Count data** or frequencies are also quantitative measurements, but they cannot be divided into smaller levels. They are counts of whole things. These are typically integers. 
+
+* **Categorical data** are *qualitative data* are characteristics, descriptors or labels that are not numerical. 
+
+Depending on the mix of different variables, you can display them in different ways. 
 
 ***
 
