@@ -20,15 +20,17 @@ But let's not get ahead of ourselves. In this module, we will cover the basics o
 
 ***
 
-##First Question: What do you want to show?
+##5.1 First Question: What do you want to show?
 
 There many, many different ways to visualize data (see [datavizproject.com](https://datavizproject.com/)). In fact, "data visualization" is an industry in and of itself at this point. What we need is some directory of different kinds of ways to visualize a given set of data. 
 
 [The directory of visualizations presented in Claus Wilke's online version of his book](https://serialmentor.com/dataviz/directory-of-visualizations.html) is as good as any I've seen.
 
+
+
 ***
 
-##5.1 The Basics
+##5.2 The Basics
 We will start with the generic `plot()` function. This function can produce a variety of basic plots. The function can take two different syntax:
 
 * `plot(x , y)` – The Cartesian format will take two variables and plot the first element on the x-axis and the second element on the y-axis. The plot this produces will depend on the type of variables (i.e., numeric or factor) that you put in. 
@@ -38,7 +40,7 @@ R will automatically detect the type of vector (variable) you are trying to plot
 
 ***
 
-###5.1.1 Let's try it out:
+###5.2.1 Let's try it out:
 Try plotting two numerical vectors (i.e., continuous variables) that we create:
 ```{r, eval=F}
 a=seq(1,15, 1) #continuous variable 1
@@ -74,29 +76,8 @@ Notice that, in the formula syntax, the order of the variables is different. Her
 
 ***
 
-###5.1.2 A bit more on boxplots...
-```{r, eval=F}
-plot(a, fac) #output not shown
-```
-
-If you want to create a horizontal box plot, the correct way to do it is:
-```{r, eval=F}
-plot(fac, a horizontal=T) #output not shown
-```
-
-There is also another way to create a box plot, using the `boxplot()` function. For this, the input is different: You will put a series of numerical vectors as different elements. Try this:
-```{r, eval=F}
-boxplot(1:5, 6:10, 11:15, names=c("A", "B", "C"))
-```
-```{r, eval=T, echo=F,fig.height=3, fig.width=4}
-par(mar=c(4,4,1,2))
-boxplot(1:5, 6:10, 11:15, names=c("A", "B", "C"))
-```
-
-*What is actually happening when you use the `plot()` function is that when R runs different functions depending on your input format. Thus, if R detects that you want to plot a factor on the x-axis and numeric on the y-axis, it calls the `boxplot()` function and runs that function instead. A lot of functions in R work this way: it can call different functions depending on what your inputs look like. Functions like these are sometimes called "wrapper functions". You don't really need to know this...* 
-
 ***
-###5.1.3 Line plots and others
+###5.2.2 Line plots and others
 If you have a timeseries, you sometimes want to create a **line plot**. You can do this simply by designating the plot 'type' inside the `plot()` function:
 
 ```{r, eval=F}
@@ -111,10 +92,24 @@ response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
 plot(t, response, type="l") #plot a line plot
 ```
 
-You can plot the same figure using points, or both points and lines, and a few other formats (you can look these up using `?plot()`). Try these out (outputs not shown):
+
+You can plot the same figure with both lines and points by using `type="b"` for "both"
+
+```{r, eval=F}
+t=seq(1,10,1) # time sequence, from 1 to 10
+response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
+plot(t, response, type="b") #plot a line plot
+```
+```{r, eval=T, echo=F,fig.height=3, fig.width=4}
+par(mar=c(4,4,1,2))
+t=seq(1,10,1) # time sequence, from 1 to 10
+response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
+plot(t, response, type="b") #plot a line plot
+```
+
+You can plot the same figure using a few other formats (you can look these up using `?plot()`). Try these out (outputs not shown):
 ```{r, eval=F}
 plot(t, response, type="p") #plot just points
-plot(t, response, type="b") #plot both points and lines
 plot(t, response, type="h") #Make a histogram-like plot with thin lines
 plot(t, response, type="s") #Make stair steps
 ```
@@ -122,7 +117,7 @@ plot(t, response, type="s") #Make stair steps
 ***
 
 
-##5.2 Plotting data from a dataframe
+##5.3 Plotting data from a dataframe
 Let's practice plotting data from a dataframe.  
 First, we need some data to play with. For this exercise, we will use a dataset called `iris`, which is pre-loaded in R:
 ```{r, eval=FALSE}
@@ -169,10 +164,10 @@ plot(Sepal.Width~Sepal.Length, data=iris)
 
 ***
 
-## 5.3 Formatting the plot
+## 5.4 Formatting the plot
 R presents many many ways to customize the format of your plots. We will go through several of these, and then we will learn how to find out more.
 
-####5.3.1 Axis labels and plot title
+####5.4.1 Axis labels and plot title
 You can relabel the axes using the arguments `xlab=` and `ylab=`:
 ```{r, eval=F}
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width")
@@ -200,7 +195,7 @@ par(mar=c(4,4,3,2))
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width", main="Length vs. width of sepals in Iris", las=1, xlim=c(0,10), ylim=c(0,5))
 ```
 
-###5.3.2 Types of points
+###5.4.2 Types of points
 You can specify the types of points you want to use with the `pch=` argument. Try this:
 ```{r, eval=F}
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width", las=1, pch=4)
@@ -227,7 +222,7 @@ plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width
 
 ***
 
-##5.4 Colors!
+##5.5 Colors!
 You can specify the colors of the points using the argument `col=` inside the `plot()` function. This argument can take many different types of inputs:
 
 * numerical values from 1:8
@@ -237,7 +232,7 @@ You can specify the colors of the points using the argument `col=` inside the `p
 * the `rgb()` function
 
 
-###5.4.1 Using numerical values:
+###5.5.1 Using numerical values:
 ```{r, eval=F}
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width",  las=1, pch=19, col=4)
 ```
@@ -252,7 +247,7 @@ plot(1:8, rep(1, 8), pch=19, col=1:8, cex=2,yaxt="n", xaxt="n",ylab="", xlab="",
 axis(1, at=1:8, lty=0)
 ```
 
-###5.4.2 Using named colors:
+###5.5.2 Using named colors:
 You can also specify colors using just the names of colors as characters. For example, to make a plot with red dots:
 ```{r, eval=F}
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width",  las=1, pch=19, col="red")
@@ -270,7 +265,7 @@ plot(1:8, rep(1, 8), pch=19, col=c("tomato", "firebrick", "goldenrod2", "chartre
 axis(1, at=1:8, labels=c("tomato", "firebrick", "goldenrod2", "chartreuse4", "darkviolet", "mediumorchid3", "slateblue", "mistyrose4"), lty=0)
 ```
 
-###5.4.3 Using hexadecimal color specification:
+###5.5.3 Using hexadecimal color specification:
 You can use the standard hexadecimal color specification. For example, the hexadecimal code for green is #00FF00:
 ```{r, eval=F}
 plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width",  las=1, pch=19, col="#00FF00")
@@ -282,7 +277,7 @@ plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width
 
 You can look up hex color codes here: [http://www.color-hex.com/](http://www.color-hex.com/)
 
-###5.4.4 Creating a color palette:
+###5.5.4 Creating a color palette:
 There are several functions to create color palettes from a template. For example, we can use a `rainbow()` function. You can put the number of colors you want, and the function will pick three colors that are the most different from each other within the specified spectrum. 
 
 Try it out by plotting 12 different colors:
@@ -312,7 +307,7 @@ Try the same with `heat.colors()`, `topo.colors()`, and `cm.colors()`.
 
 You can get more color palettes from other R Packages such as RColorBrewer. 
 
-###5.4.5 Using the rgb() to produce different colors
+###5.5.5 Using the rgb() to produce different colors
 
 There are a couple of ways to create color gradients. First, you can use the `rgb()` function to create custom colors. This function takes four arguments: intensities of red, green, blue, and the alpha transparency value. Thus, you can create any color with any opacity. Here are some examples of colors that you can produce with the `rgb()` function. 
 ```{r, echo=F, fig.height=3, fig.width=6}
@@ -340,7 +335,7 @@ plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width
 
 ***
 
-##5.5 Setting up the plotting region using `par()`
+##5.6 Setting up the plotting region using `par()`
 
 The `par()` function is used *before* the `plot()` function to set up aspects of the plotting region. For example, you can set the plotting region to be two columns and plot two different plots using `mfrow=` argument inside the `par()` function. 
 
@@ -358,7 +353,7 @@ plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width
 
 ***
 
-##5.6 How to learn more about `plot()` and `par()` functions
+###5.6.1 How to learn more about `plot()` and `par()` functions
 
 So we have learned some ways to customize plots in the sections above. As you might imagine, there are many, many more ways to customize plots. Most of the graphical parameters you need can be found by looking in the help file for the function `par()`. Take a look at this help file:
 ```{r, eval=F}
