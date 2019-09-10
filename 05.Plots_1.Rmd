@@ -28,11 +28,11 @@ There many, many different ways to visualize data (see [datavizproject.com](http
 
 ###5.1.1 Types of data: Continuous, Count, and Categorical
 
-* **Continuous data** are quantitative measurements that can take any value. That is, it can be divided and reduced to finer levels. For example, take weight, height, or length.  
+* **Continuous data** are quantitative measurements that can take any value. That is, it can be divided and reduced to finer levels. For example, take weight, height, or length. In R, these types of data would be handled as numerical vectors.
 
-* **Count data** or frequencies are also quantitative measurements, but they cannot be divided into smaller levels. They are counts of whole things. These are typically integers. 
+* **Count data** or frequencies are also quantitative measurements, but they cannot be divided into smaller levels. They are counts of whole things. These are typically integers. In R, they would be either numerical vectors or integers. 
 
-* **Categorical data** are *qualitative data* are characteristics, descriptors or labels that are not numerical. 
+* **Categorical data** are *qualitative data* are characteristics, descriptors or labels that are not numerical. In R, these would be stored as factors or character strings. 
 
 Depending on the mix of different variables, you can display them in different ways. 
 
@@ -48,7 +48,8 @@ R will automatically detect the type of vector (variable) you are trying to plot
 
 ***
 
-###5.2.1 Let's try it out:
+###5.2.1 Let's try it out: Scatterplots and boxplots
+
 Try plotting two numerical vectors (i.e., continuous variables) that we create:
 ```{r, eval=F}
 a=seq(1,15, 1) #continuous variable 1
@@ -63,6 +64,7 @@ plot(a, b) #plot two continuous variables
 ```
 
 You can see that R automatically detects the two vectors (`a` and `b`) as continuous variables and creates a scatter plot.  
+<br>
 Now, let's create a fictitious factor vector (i.e., discrete variable) and plot one of the continuous variables against that.
 ```{r, eval=F}
 fac=factor(c(rep("A", 5), rep("B", 5), rep("C", 5))) #a factor
@@ -84,8 +86,7 @@ Notice that, in the formula syntax, the order of the variables is different. Her
 
 ***
 
-***
-###5.2.2 Line plots and others
+###5.2.2 Line plots
 If you have a timeseries, you sometimes want to create a **line plot**. You can do this simply by designating the plot 'type' inside the `plot()` function:
 
 ```{r, eval=F}
@@ -123,6 +124,24 @@ plot(t, response, type="s") #Make stair steps
 ```
 
 ***
+
+###5.2.3 Bar plots
+
+Now let's try making a simple barplot showing frequencies of some categorical variable. Here, we'll just set up some fictional set of observations of individuals belonging to some groups (say species), "a", "b" and "c"
+```{r eval=T}
+groups=c(rep("a", 10), rep("b", 5), rep("c", 2))
+
+```
+
+
+We can plot the frequencies of these groups as a barplot:
+
+```{r}
+groups.table=table(groups) #create a frequency table
+groups.table #look at it
+
+barplot(groups.table) #plot it
+```
 
 
 ##5.3 Plotting data from a dataframe
