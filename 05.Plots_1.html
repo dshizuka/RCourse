@@ -94,6 +94,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -299,14 +302,21 @@ div.tocify {
 
 <h1 class="title toc-ignore">Module 5: Basics of Plots</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 09/09/19</em></h4>
+<h4 class="date"><em>updated 09/10/19</em></h4>
 
 </div>
 
 
 <hr />
-<p>R is amazing for graphics. Once you learn how to play around with the codes, it is almost infinitely customizable.<br />
-In this module, we will cover the basics of the plotting functions in the base package of R. There are many additional packages that help you produce fancier plots (e.g., ‘ggplot2’ and ‘lattice’). We may cover ggplot2 later in the course.</p>
+<p>R is amazing for graphics–i.e., visualizing data. Once you learn how to play around with the codes, it is almost infinitely customizable. In fact, R has become a major tool for graphics departments at major journalism outlets such as the <a href="https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535">BBC</a>. There are also many wonderful resources for how to make compelling and clear visualizations of data <a href="https://serialmentor.com/dataviz/index.html">(e.g., this book by Claus Wilke)</a></p>
+<p>But let’s not get ahead of ourselves. In this module, we will cover the basics of the plotting functions in the base package of R. There are many additional packages that help you produce fancier plots (e.g., ‘ggplot2’ and ‘lattice’). We may cover ggplot2 later in the course.</p>
+<hr />
+<div id="first-question-what-do-you-want-to-show" class="section level2">
+<h2>First Question: What do you want to show?</h2>
+<p>There many, many different ways to visualize data (see <a href="https://datavizproject.com/">datavizproject.com</a>). In fact, “data visualization” is an industry in and of itself at this point. What we need is some directory of different kinds of ways to visualize a given set of data.</p>
+<p><a href="https://serialmentor.com/dataviz/directory-of-visualizations.html">The directory of visualizations presented in Claus Wilke’s online version of his book</a> is as good as any I’ve seen.</p>
+<hr />
+</div>
 <div id="the-basics" class="section level2">
 <h2>5.1 The Basics</h2>
 <p>We will start with the generic <code>plot()</code> function. This function can produce a variety of basic plots. The function can take two different syntax:</p>
@@ -315,6 +325,7 @@ In this module, we will cover the basics of the plotting functions in the base p
 <li><code>plot(y~x)</code> is an alternative syntax (“formula” syntax) which will produce the same plot as above. In this case, you are plotting a relationship–i.e., <code>y</code> as a function of <code>x</code></li>
 </ul>
 <p>R will automatically detect the type of vector (variable) you are trying to plot.</p>
+<hr />
 <div id="lets-try-it-out" class="section level3">
 <h3>5.1.1 Let’s try it out:</h3>
 <p>Try plotting two numerical vectors (i.e., continuous variables) that we create:</p>
