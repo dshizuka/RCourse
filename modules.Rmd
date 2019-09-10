@@ -18,3 +18,5 @@ knitr::opts_chunk$set(echo = TRUE)
 * ####[03. Importing and Navigating Data](03.Data.html)
 
 * ####[04. Formatting Data for Analysis](04.DataFormat.html)
+
+* ####[05. Basics of Plots](05.Plots_1.html)
