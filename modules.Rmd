@@ -20,3 +20,5 @@ knitr::opts_chunk$set(echo = TRUE)
 * ####[04. Formatting Data for Analysis](04.DataFormat.html)
 
 * ####[05. Basics of Plots](05.Plots_1.html)
+
+    + [05.1 Worked Example: Plotting the change of butterfly size under climate change](05.1.Plot_Bowden.html)
