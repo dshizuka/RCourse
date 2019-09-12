@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * 9/12/19: I have now uploaded [Assignment 3](pdfs/Assignment3.pdf). This assignment is to use the data that you have uploaded to make a figure for an analysis you want to conduct with the data. 
 
-* 9/12/19: Starting next week, I will be holding office hours on Tu/F 10-11am at my office  410B Manter Hall
+* 9/12/19: Starting next week, I will be holding office hours on **Tuesday/Friday 10-11am ** at my office, 410B Manter Hall. There will be a few days I know I will not be able to make it though: (e.g., September 27, October 8, October 18).
 
 * 9/10/19: Today, we will be starting on plotting in R! On Thursday, we will be putting these lessons to practice and reproducing figures from [this publication (Bowden et al., 2016)](https://doi.org/10.1098/rsbl.2015.0574) using archived data. Please read this brief paper before class on Thursday. [Download the pdf here: Bowden et al. (2016).](pdfs/Bowden2016.pdf)
 
