@@ -92,7 +92,7 @@ plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", l
   
 In fact, it is pretty straightforward to re-create all 3 panels in Figure 1. We just need to use the `par()` function to create 
 
-```{r, eval=T, echo=F, fig.height=6, fig.width=2}
+```{r, eval=T, echo=T, fig.height=6, fig.width=2}
 par(mar=c(4,4,2,2), mfrow=c(3,1))
 plot(year.dat$year, year.dat$snow, pch=19, xlab="", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 
@@ -136,12 +136,14 @@ str(fit.snow) #output not shown
 ```
 This will yield a very long output that details all of the components of the model fitting results that we might want. Ok, so how do we extract the information we want from this statistical analysis? One convenient function is the `summary()` function:
 
-```{r, results='hide'}
+```{r}
 summary(fit.snow)
 ```
 So this gives us a good overview of the statistical outpu, but it gives us a lot of information, and you have to know what to look for. Let's look at these values closely:
 
-![Output of `summary(fit.snow)`](images/5.1_summary_fit.snow.png)
+```{r, echo=FALSE, fig.align="left", out.width="50%"}
+knitr::include_graphics("images/5.1_summary_fit.snow.png")
+```
 
 
 The values reported in the caption of Figure 1 of the paper are in the rectangles:
@@ -156,11 +158,11 @@ The values reported in the caption of Figure 1 of the paper are in the rectangle
 
 ***
 
-###Group Exercise: 
-Conduct linear regression analyses for the following relationships:
-
-* May-June temperature across years
-* May-August temperature from the previous year, across years. 
+><span style="color:purple">***Extra Exercise: ***</span> 
+>Conduct linear regression analyses for the following relationships:
+>
+>* May-June temperature across years
+>* May-August temperature from the previous year, across years. 
 
 ***
 
@@ -364,8 +366,10 @@ To see how this works, let's try:
 par(mar=c(4,4,1,2))
 
 plot(mean~year, data=subset(wl.colias, sex=="f"), type="b", pch=19, ylim=c(21,24), xlim=c(1996,2013), las=1)
-points(mean~year, data=subset(wl.colias, sex=="m"), type="b", pch=1)
+
 arrows(wl.colias$year, wl.colias$mean+wl.colias$se, wl.colias$year, wl.colias$mean-wl.colias$se, code=3) #code=3 draws double-sided arrows
+
+points(mean~year, data=subset(wl.colias, sex=="m"), type="b", pch=1)
 ```
 
 
