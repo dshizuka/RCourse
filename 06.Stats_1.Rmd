@@ -1,0 +1,71 @@
+---
+title: "Module 6: Some Simple Stats"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+I expect that many, if not all of you are here to learn how to do statistical analyses in R. However, from the beginning, I have told you that this is not a "Stats Class", as I am not going over any principles of statistics. Nevertheless, I will go through some examples of simple statistical analyses that will get you familiar with the language and syntax of statistical functions in R. 
+
+***
+
+##1. Chi-square: Testing differences between frequencies across categories
+
+The Chi-square, or contingency table analysis, is an analysis of count data. Let’s consider this simple example:
+
+Let’s say you’ve collected data on two color morphs of moths: gray and white. Your hypothesis is that dark morphs are more likely to live in dark (industrial) backgrounds. Here’s your data:
+
+```{r, echo=F}
+mat=matrix(c(115, 85, 30, 70), nrow=2, dimnames = list(c("Gray", "White"),c("Industrial ", "Rural")))
+knitr::kable(mat, format="markdown", align='l', longtable=F)
+```
+
+Let’s start by entering this data into R as a matrix:
+```{r}
+moths=matrix(c(115, 30, 85, 70), nrow=2, byrow=TRUE, dimnames=list(c("Gray", "White"), c("Industrial", "Rural")))
+moths
+```
+
+Here’s a simple way to create a bar plot to compare frequencies across two different factors:
+
+```{r}
+barplot(moths, beside=TRUE, legend=TRUE, col=c("darkgray", "white"))
+```
+
+So visually, the data seems to support our hypothesis: there are relatively more black individuals in the industrial site. Now let’s test this with a Chi-square test:
+
+```{r}
+chisq.test(moths)
+```
+
+***
+
+##ANOVA: Comparing a continuous variable across groups
+
+Analysis of Variance (ANOVA) is a way to compare whether groups (e.g., different sites, different treatments, etc.) differ in some measured continuous variable. What ANOVA does is partition variation into within-group and across-group variation. We conclude that groups are different if the variation across groups is much larger than the variation within groups.
+
+Let’s first start by plotting a bar plot and standard errors of the means (SEMs) for the
+`chickwts` dataset, which is pre-loaded in R. This dataset comes from an experiment where newly hatched chicks were randomly allocated into 6 groups, and each group was fed with a different feed supplement. The chicks were all weighed at 6 weeks old.
+
+Let's check out the dataset first:
+```{r}
+?chickwts #This will give you a help file that includes information about the dataset. 
+head(chickwts)
+```
+
+Now let's try plotting the data.
+
+```{r}
+plot(weight~feed,data=chickwts)
+```
+
+We get the sense that there are some differences in chick weights based on feed supplement. Let’s test this hypothesis with ANOVA using the `aov()` function.
+
+```{r}
+aov.mod=aov(weight~feed, data=chickwts) 
+summary(aov.mod)
+```
