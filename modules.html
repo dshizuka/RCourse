@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Dai Shizuka" />
@@ -70,9 +71,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -86,7 +85,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -96,6 +94,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -111,7 +112,6 @@ body {
   padding-top: 66px;
   margin-top: -66px;
 }
-
 .section h2 {
   padding-top: 66px;
   margin-top: -66px;
@@ -131,6 +131,43 @@ body {
 .section h6 {
   padding-top: 66px;
   margin-top: -66px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -152,19 +189,73 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -203,8 +294,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Modules</h1>
-<h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>8/26/2019</em></h4>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">8/26/2019</h4>
 
 </div>
 
@@ -212,15 +303,19 @@ $(document).ready(function () {
 <div id="learning-modules" class="section level2">
 <h2>Learning Modules</h2>
 <ul>
-<li><h4 id="lets-get-started-with-r"><a href="01.Intro.html">01. Let’s get started with R!</a></h4></li>
-<li><h4 id="types-of-objects-vectors-strings-matrices-dataframes-lists"><a href="02.ObjectTypes.html">02. Types of Objects (vectors, strings, matrices, dataframes, lists)</a></h4></li>
-<li><h4 id="importing-and-navigating-data"><a href="03.Data.html">03. Importing and Navigating Data</a></h4></li>
-<li><h4 id="formatting-data-for-analysis"><a href="04.DataFormat.html">04. Formatting Data for Analysis</a></h4></li>
-<li><h4 id="basics-of-plots"><a href="05.Plots_1.html">05. Basics of Plots</a></h4>
-<ul>
-<li><a href="05.1.Plot_Bowden.html">05.1 Worked Example: Plotting the change of butterfly size under climate change</a></li>
-</ul></li>
+<li><h3 id="lets-get-started-with-r"><a href="01.Intro.html">01. Let’s get started with R!</a></h3></li>
+<li><h3 id="types-of-objects-vectors-strings-matrices-dataframes-lists"><a href="02.ObjectTypes.html">02. Types of Objects (vectors, strings, matrices, dataframes, lists)</a></h3></li>
+<li><h3 id="importing-and-navigating-data"><a href="03.Data.html">03. Importing and Navigating Data</a></h3></li>
+<li><h3 id="formatting-data-for-analysis"><a href="04.DataFormat.html">04. Formatting Data for Analysis</a></h3></li>
+<li><h3 id="basics-of-plots"><a href="05.Plots_1.html">05. Basics of Plots</a></h3></li>
+<li><h3 id="some-simple-statistics"><a href="06.Stats_1.html">06. Some Simple Statistics</a></h3></li>
 </ul>
+</div>
+<div id="worked-examples" class="section level2">
+<h2>Worked Examples:</h2>
+<div id="worked-example-plotting-the-change-of-butterfly-size-under-climate-change" class="section level4">
+<h4><a href="05.1.Plot_Bowden.html">Worked Example: Plotting the change of butterfly size under climate change</a></h4>
+</div>
 </div>
 
 
@@ -240,6 +335,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

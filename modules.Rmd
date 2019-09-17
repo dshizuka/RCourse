@@ -11,14 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Learning Modules
 
-* ####[01. Let's get started with R!](01.Intro.html)
+* ###[01. Let's get started with R!](01.Intro.html)
 
-* ####[02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
+* ###[02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
 
-* ####[03. Importing and Navigating Data](03.Data.html)
+* ###[03. Importing and Navigating Data](03.Data.html)
 
-* ####[04. Formatting Data for Analysis](04.DataFormat.html)
+* ###[04. Formatting Data for Analysis](04.DataFormat.html)
 
-* ####[05. Basics of Plots](05.Plots_1.html)
+* ###[05. Basics of Plots](05.Plots_1.html)
 
-    + [05.1 Worked Example: Plotting the change of butterfly size under climate change](05.1.Plot_Bowden.html)
+* ###[06. Some Simple Statistics](06.Stats_1.html)
+
+##Worked Examples:
+
+####[Worked Example: Plotting the change of butterfly size under climate change](05.1.Plot_Bowden.html)
+    
