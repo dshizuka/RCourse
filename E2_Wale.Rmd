@@ -1,11 +1,12 @@
 ---
-title: 'Module 8: Effect of anthropogenic noise on crab physiology' 
+title: 'Worked Example: Effect of anthropogenic noise on crab physiology' 
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output:
   pdf_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
+    toc_float: true
 ---
 ***
 ```{r setup, include=FALSE}
@@ -13,7 +14,7 @@ library(knitr)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=70),tidy=TRUE)
 ```
 
-##8.1 The Study
+##1. The Study
 
 ![Shore crab, *Carcinus maenas*](images/E2/crab.jpg){width="20%"}
 
@@ -32,7 +33,7 @@ The study is summarized by these two figures:
 
 ***
 
-##8.2 The Data
+##2 The Data
 The data are publicly accessible on Dryad: <http://datadryad.org/resource/doi:10.5061/dryad.36f65> 
 The data are saved in two separate "worksheets" within .xlsx file. We will need to save the two sheets separately as individual .csv files. Follow these steps:
 
@@ -43,17 +44,16 @@ The data are saved in two separate "worksheets" within .xlsx file. We will need 
 
 Let's load the datasets into R and take a quick a look to check that the dataframes look correct.
 ```{r, out.width="50%"}
-setwd("~/Dropbox/dai_teaching/Intro_To_R_2017/Exercise-Wale2013")
-single=read.csv("single_exposure.csv")
+single=read.csv("data/single_exposure.csv")
 head(single)
 
-mult=read.csv("multiple_exposure.csv")
+mult=read.csv("data/multiple_exposure.csv")
 head(mult)
 ```
 
 ***
 
-##8.3 Testing the relationships between mass, noise, and physiology
+##3 Testing the relationships between mass, noise, and physiology
 ####(Testing the interaction between a continuous variable and a factor)
 \
 A central question here is whether the sound environment affects the physiology of crabs. However, we also know that physiological measures are often affected by body size. Thus, we would like to know whether the relationship between mass and oxygen consumption differ across treatments.  
@@ -64,11 +64,11 @@ Let's break this down. We are interested in the relationships between 3 measures
 2. Body mass (continuous variable)
 3. Experimental treatment (discrete factor w/ two levels: ambient vs. ship noise)
 
-###8.3.1 Plotting Figure 1
+###3.1 Plotting Figure 1
 
 We can plot the relationships between these three things this way:
 
-```{r, out.width='50%', echo=F, fig.cap="*Figure 1: The relationship between body mass and oxygen consumption in shore crabs. Individuals in the 'Ambient' treatment shown in open circles, individuals in 'Ship' treatment shown in filled diamonds.*"}
+```{r, out.width='50%', echo=T, fig.cap="*Figure 1: The relationship between body mass and oxygen consumption in shore crabs. Individuals in the 'Ambient' treatment shown in open circles, individuals in 'Ship' treatment shown in filled diamonds.*"}
 # Run two regression analyses: one for each treatment
 mod1=lm(Oxygen.consumed~Crab.mass, 
         data=subset(single, single$Playback.treatment=="Ambient"))
@@ -87,7 +87,6 @@ lines(xv, yv1, lty=2, lwd=1.5)
 lines(xv, yv2, lty=1, lwd=1.5)
 ```
 
-> **Exercise: Write the code to create this figure!**
 
 
 So, what should we take away from this figure? There are three relationships shown here:
@@ -101,7 +100,7 @@ So, what should we take away from this figure? There are three relationships sho
 How do we test these relationships statistically?
 When we have a continuous dependent variable (Oxygen consumption) and two independent variables--one continuous (mass) and one discrete (playback treatment), we conduct an *Analysis of Covariance*, or **ANCOVA**.[^2] 
 
-###8.3.2 Running an ANCOVA
+###3.2 Running an ANCOVA
 
 You can run an ANCOVA in R in two different ways. First, you could build a linear model and then compute the analysis of variance table. Second, you could run use the `aov()` wrapper for a linear model and then just look at the output using a summary function. 
 
@@ -129,7 +128,7 @@ summary(lm(Oxygen.consumed~Crab.mass, data=subset(single, single$Playback.treatm
 summary(aov(Oxygen.consumed~Playback.treatment, data=single))
 ```
 
-###8.3.3: Table of basic statistical tests
+###3.3: Table of basic statistical tests
 Here is a table with some of the most common statistical tests
 
 Dependent Variable | Independent Variable(s) | Test | function 
@@ -146,7 +145,7 @@ counts or proportions | continuous | poisson regression | `glm()` |
 
 ***
 
-##8.4 Examining the effect of repeated exposure to noise
+##4 Examining the effect of repeated exposure to noise
 The second part of the study uses a *repeated* playback of ambient or ship noise to look at cumulative effects of noise on the physiology of shore crabs. 
 
 In this part of the study, each individual was exposed to repeated trials of noise playbacks, and their oxygen consumption was measured each time. 
@@ -193,7 +192,7 @@ However, note that this will sort the days incorrectly because "Day11" comes aft
 
 In any case, we will only be dealing with the long-format data from here on out.
 
-###8.4.2 Conducting the repeated-measures ANOVA
+###4.2 Conducting the repeated-measures ANOVA
 
 Now, we are ready to conduct our *repeat-measures two-way ANOVA* analysis.  
 
@@ -209,7 +208,7 @@ summary(aov.mod)
 This gives us the result that there is a significant interaction between playback treatment and the changes in the crab's response to the playback experiment across days. Graphically, we can see from Figure 2 in the paper that oxygen consumption increases for the control treatment ("Ambient"") but not the "Ship" treatment. 
 As with the single-exposure treatment, we really shouldn't be interpreting the "general" relationship between day and oxygen consumption nor the treatment and oxygen consumption...
 
-###8.4.3: A little bit of a correction on the paper:
+###4.3: A little bit of a correction on the paper:
 
 Ok, thus far we have re-created the analyses that were conducted and presented in the paper. Here, I would like to point out a couple of minor but significant-enough errors in this analysis.
 
@@ -244,7 +243,7 @@ summary(aov.mod2)
 Now you see that the interaction effect is even stronger, although the results don't really change qualitatively. I suspect that most of the difference comes simply from the change in degrees of freedom when days are treated as a continuous variable rather than categorical variables. 
 
 
-###8.4.4: Accounting for repeated measures using a ***linear mixed-effects model***
+###4.4: Accounting for repeated measures using a ***linear mixed-effects model***
 
 An alternative to using the repeated-measures ANOVA here is to use assign "ID" as a ***random effect***. In very general terms, a random effect is a way to assign a hierarchical model in which you are exploring the relationships between a dependent variable and a set of ***fixed effects*** within categories (assigned as the random effect). It is a complicated concept, but it is widely applicable in ecological and biological statistics. There are number of R packages that can handle mixed-effects models, including `nlme`, `lme4`, `MCMCglmm` and others. Here is an example using the `nlme` package:
 If you don't have this installed on your computer yet, run:
@@ -270,14 +269,14 @@ Mixed-models are very complicated, and different packages deal with them in diff
 
 ***
 
-##8.5 Figure 2
+##5 Figure 2
 
 Let's play around with different versions of Figure 2. For all of these, we will need to calculate the standard error, so first, the custom function for calculating standard error:
 ```{r}
 se=function(x) sqrt(var(x)/length(x))
 ```
 
-###8.5.1 The old way
+###5.1 The old way
 ```{r, out.width="50%"}
 #step 1: create a summarized dataset with means and standard errors
 d1=aggregate(mult_long$oxy, list(mult_long$day_num,mult_long$Playback.treatment), mean)
@@ -292,7 +291,7 @@ points(mean~day, data=subset(d1, treatment=="Ship"), type="b",pch=21, bg="black"
 arrows(d1$day, d1$mean-d1$se, d1$day, d1$mean+d1$se, code=3, angle=90, length=0.1)
 ```
 
-###8.5.2 A fancier way to summarize data using `dplyr`
+###5.2 A fancier way to summarize data using `dplyr`
 There are a couple of packages that help us accomplish complex tasks in fewer keystrokes or in a more organized way. Hadley Wickham <http://hadley.nz/> is an R whiz that has created a series of groundbreaking R packages including `tidyr`, `dplyr` and `ggplot2`. These packages enhance your R skills. However, the downside is that it takes a little bit of additional learning curve to understand how to use these tools. We have already touched on `tidyr`. Here, I will introduce you very briefly to `dplyr`, which is a package for manipulating data, and `ggplot2`, an popular package for graphics. 
 
 Here is how to make the summarized dataset (mean and standard error) using `dplyr`. You can find a more complete guide on this package here: <https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html>
@@ -306,7 +305,7 @@ d2 = mult_long %>%
 head(d2)
 ```
 
-###8.5.3 Plotting the figure with `ggplot2`
+###5.3 Plotting the figure with `ggplot2`
 
 See this page for details on how to use `ggplot2`: <http://docs.ggplot2.org/current/>
 
@@ -319,7 +318,7 @@ p = p + geom_point(aes(x=day_num, y=mean, colour=Playback.treatment), size=5)
 p
 ```
 
-##8.5.4 Figure 2 as bar plots
+##5.4 Figure 2 as bar plots
 
 We can display Figure 2 as a series of paired bar plots. 
 ```{r, message=FALSE, out.width="50%"}

@@ -13,7 +13,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Module 8: Effect of anthropogenic noise on crab physiology</title>
+<title>Worked Example: Effect of anthropogenic noise on crab physiology</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -293,7 +293,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Module 8: Effect of anthropogenic noise on crab physiology</h1>
+<h1 class="title toc-ignore">Worked Example: Effect of anthropogenic noise on crab physiology</h1>
 <h4 class="author">Dai Shizuka</h4>
 <h4 class="date">updated 09/17/19</h4>
 
@@ -302,7 +302,7 @@ $(document).ready(function () {
 
 <hr />
 <div id="the-study" class="section level2">
-<h2>8.1 The Study</h2>
+<h2>1. The Study</h2>
 <div class="figure">
 <img src="images/E2/crab.jpg" alt="Shore crab, Carcinus maenas" style="width:20.0%" />
 <p class="caption">Shore crab, <em>Carcinus maenas</em></p>
@@ -318,7 +318,7 @@ The study is summarized by these two figures:</p>
 <hr />
 </div>
 <div id="the-data" class="section level2">
-<h2>8.2 The Data</h2>
+<h2>2 The Data</h2>
 <p>The data are publicly accessible on Dryad: <a href="http://datadryad.org/resource/doi:10.5061/dryad.36f65" class="uri">http://datadryad.org/resource/doi:10.5061/dryad.36f65</a> The data are saved in two separate “worksheets” within .xlsx file. We will need to save the two sheets separately as individual .csv files. Follow these steps:</p>
 <ol style="list-style-type: decimal">
 <li>Save the “Wale et al_data file.xlsx” in your working directory folder for the week.</li>
@@ -327,8 +327,7 @@ The study is summarized by these two figures:</p>
 <li>Save the second sheet (“Multiple exposure experiment”) as a .csv file names “multiple.csv”</li>
 </ol>
 <p>Let’s load the datasets into R and take a quick a look to check that the dataframes look correct.</p>
-<pre class="r"><code>setwd(&quot;~/Dropbox/dai_teaching/Intro_To_R_2017/Exercise-Wale2013&quot;)
-single = read.csv(&quot;single_exposure.csv&quot;)
+<pre class="r"><code>single = read.csv(&quot;data/single_exposure.csv&quot;)
 head(single)</code></pre>
 <pre><code>##   Playback.treatment Crab.mass Oxygen.consumed
 ## 1            Ambient     50.73        142.4711
@@ -337,7 +336,7 @@ head(single)</code></pre>
 ## 4            Ambient     57.32        168.3071
 ## 5            Ambient     84.90        209.4783
 ## 6            Ambient     49.58        154.7141</code></pre>
-<pre class="r"><code>mult = read.csv(&quot;multiple_exposure.csv&quot;)
+<pre class="r"><code>mult = read.csv(&quot;data/multiple_exposure.csv&quot;)
 head(mult)</code></pre>
 <pre><code>##   Playback.treatment     Day1      Day3      Day5      Day7      Day9
 ## 1            Ambient 1.921936 0.9849995 0.9842713 0.9828148 0.9828148
@@ -356,7 +355,7 @@ head(mult)</code></pre>
 <hr />
 </div>
 <div id="testing-the-relationships-between-mass-noise-and-physiology" class="section level2">
-<h2>8.3 Testing the relationships between mass, noise, and physiology</h2>
+<h2>3 Testing the relationships between mass, noise, and physiology</h2>
 <div id="testing-the-interaction-between-a-continuous-variable-and-a-factor" class="section level4">
 <h4>(Testing the interaction between a continuous variable and a factor)</h4>
 <p><br />
@@ -369,17 +368,30 @@ A central question here is whether the sound environment affects the physiology 
 </ol>
 </div>
 <div id="plotting-figure-1" class="section level3">
-<h3>8.3.1 Plotting Figure 1</h3>
+<h3>3.1 Plotting Figure 1</h3>
 <p>We can plot the relationships between these three things this way:</p>
+<pre class="r"><code># Run two regression analyses: one for each treatment
+mod1 = lm(Oxygen.consumed ~ Crab.mass, data = subset(single, single$Playback.treatment == 
+    &quot;Ambient&quot;))
+mod2 = lm(Oxygen.consumed ~ Crab.mass, data = subset(single, single$Playback.treatment == 
+    &quot;Ship&quot;))
+
+# set up the x and y coordinates for the regression lines
+xv = c(min(single$Crab.mass), max(single$Crab.mass))
+yv1 = predict(mod1, list(Crab.mass = xv))
+yv2 = predict(mod2, list(Crab.mass = xv))
+
+# Figure 1
+plot(Oxygen.consumed ~ Crab.mass, data = single, pch = c(1, 18)[Playback.treatment], 
+    cex = 1.5, las = 1, xlim = c(0, 90), ylim = c(0, 375))
+lines(xv, yv1, lty = 2, lwd = 1.5)
+lines(xv, yv2, lty = 1, lwd = 1.5)</code></pre>
 <div class="figure">
 <img src="E2_Wale_files/figure-html/unnamed-chunk-2-1.png" alt="*Figure 1: The relationship between body mass and oxygen consumption in shore crabs. Individuals in the 'Ambient' treatment shown in open circles, individuals in 'Ship' treatment shown in filled diamonds.*" width="50%" />
 <p class="caption">
 <em>Figure 1: The relationship between body mass and oxygen consumption in shore crabs. Individuals in the ‘Ambient’ treatment shown in open circles, individuals in ‘Ship’ treatment shown in filled diamonds.</em>
 </p>
 </div>
-<blockquote>
-<p><strong>Exercise: Write the code to create this figure!</strong></p>
-</blockquote>
 <p>So, what should we take away from this figure? There are three relationships shown here:</p>
 <ol style="list-style-type: decimal">
 <li><p>There seems to be a positive relationship between mass and oxygen consumption</p></li>
@@ -389,7 +401,7 @@ A central question here is whether the sound environment affects the physiology 
 <p>How do we test these relationships statistically? When we have a continuous dependent variable (Oxygen consumption) and two independent variables–one continuous (mass) and one discrete (playback treatment), we conduct an <em>Analysis of Covariance</em>, or <strong>ANCOVA</strong>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 </div>
 <div id="running-an-ancova" class="section level3">
-<h3>8.3.2 Running an ANCOVA</h3>
+<h3>3.2 Running an ANCOVA</h3>
 <p>You can run an ANCOVA in R in two different ways. First, you could build a linear model and then compute the analysis of variance table. Second, you could run use the <code>aov()</code> wrapper for a linear model and then just look at the output using a summary function.</p>
 <div id="ancova-option-1-lm-and-anova" class="section level4">
 <h4>ANCOVA Option 1: <code>lm()</code> and <code>anova()</code></h4>
@@ -422,7 +434,7 @@ summary(aov(Oxygen.consumed ~ Playback.treatment, data = single))</code></pre>
 </div>
 </div>
 <div id="table-of-basic-statistical-tests" class="section level3">
-<h3>8.3.3: Table of basic statistical tests</h3>
+<h3>3.3: Table of basic statistical tests</h3>
 <p>Here is a table with some of the most common statistical tests</p>
 <table style="width:78%;">
 <colgroup>
@@ -494,7 +506,7 @@ summary(aov(Oxygen.consumed ~ Playback.treatment, data = single))</code></pre>
 </div>
 </div>
 <div id="examining-the-effect-of-repeated-exposure-to-noise" class="section level2">
-<h2>8.4 Examining the effect of repeated exposure to noise</h2>
+<h2>4 Examining the effect of repeated exposure to noise</h2>
 <p>The second part of the study uses a <em>repeated</em> playback of ambient or ship noise to look at cumulative effects of noise on the physiology of shore crabs.</p>
 <p>In this part of the study, each individual was exposed to repeated trials of noise playbacks, and their oxygen consumption was measured each time.</p>
 <p>We have already import the data for this part of the study at the beginning of this module. Let’s refresh our memory about what this looks like.</p>
@@ -563,7 +575,7 @@ head(mult_wide)</code></pre>
 <p>In any case, we will only be dealing with the long-format data from here on out.</p>
 </div>
 <div id="conducting-the-repeated-measures-anova" class="section level3">
-<h3>8.4.2 Conducting the repeated-measures ANOVA</h3>
+<h3>4.2 Conducting the repeated-measures ANOVA</h3>
 <p>Now, we are ready to conduct our <em>repeat-measures two-way ANOVA</em> analysis.</p>
 <ul>
 <li><strong><em>“Repeated-measures”</em></strong> means you have multiple measurements taken for each subject–in this case, you measured the oxygen consumption rate for a crab at Days 1, 3, 5, 7, 9, 11, 13, and 15.</li>
@@ -588,7 +600,7 @@ summary(aov.mod)</code></pre>
 <p>This gives us the result that there is a significant interaction between playback treatment and the changes in the crab’s response to the playback experiment across days. Graphically, we can see from Figure 2 in the paper that oxygen consumption increases for the control treatment (“Ambient”“) but not the”Ship&quot; treatment. As with the single-exposure treatment, we really shouldn’t be interpreting the “general” relationship between day and oxygen consumption nor the treatment and oxygen consumption…</p>
 </div>
 <div id="a-little-bit-of-a-correction-on-the-paper" class="section level3">
-<h3>8.4.3: A little bit of a correction on the paper:</h3>
+<h3>4.3: A little bit of a correction on the paper:</h3>
 <p>Ok, thus far we have re-created the analyses that were conducted and presented in the paper. Here, I would like to point out a couple of minor but significant-enough errors in this analysis.</p>
 <ol style="list-style-type: decimal">
 <li><p>First, in the two-way repeated-measures ANOVA presented above, the “ID” variable needs to be assigned as a <strong>factor</strong>, i.e., a categorical variable that has no order. Currently, this variable is an integer, and as such it is interpreted as something that has rank-order (i.e., individual with ID = 1 has some quantitity that is lower than an individual with ID = 10). This is not correct.</p></li>
@@ -647,7 +659,7 @@ summary(aov.mod2)</code></pre>
 <p>Now you see that the interaction effect is even stronger, although the results don’t really change qualitatively. I suspect that most of the difference comes simply from the change in degrees of freedom when days are treated as a continuous variable rather than categorical variables.</p>
 </div>
 <div id="accounting-for-repeated-measures-using-a-linear-mixed-effects-model" class="section level3">
-<h3>8.4.4: Accounting for repeated measures using a <strong><em>linear mixed-effects model</em></strong></h3>
+<h3>4.4: Accounting for repeated measures using a <strong><em>linear mixed-effects model</em></strong></h3>
 <p>An alternative to using the repeated-measures ANOVA here is to use assign “ID” as a <strong><em>random effect</em></strong>. In very general terms, a random effect is a way to assign a hierarchical model in which you are exploring the relationships between a dependent variable and a set of <strong><em>fixed effects</em></strong> within categories (assigned as the random effect). It is a complicated concept, but it is widely applicable in ecological and biological statistics. There are number of R packages that can handle mixed-effects models, including <code>nlme</code>, <code>lme4</code>, <code>MCMCglmm</code> and others. Here is an example using the <code>nlme</code> package: If you don’t have this installed on your computer yet, run:</p>
 <pre class="r"><code>install.packages(&quot;nlme&quot;)</code></pre>
 <p>Here is the syntax to use to structure a mixed-effects model with “oxy” (oxygen consumption) as the dependent variable, “Playback.treatment” and “day_num” as fixed effects, and “ID” as the random effect:</p>
@@ -671,11 +683,11 @@ More generally, linear mixed-effects models, and its extension, the <em>Generali
 </div>
 </div>
 <div id="figure-2" class="section level2">
-<h2>8.5 Figure 2</h2>
+<h2>5 Figure 2</h2>
 <p>Let’s play around with different versions of Figure 2. For all of these, we will need to calculate the standard error, so first, the custom function for calculating standard error:</p>
 <pre class="r"><code>se = function(x) sqrt(var(x)/length(x))</code></pre>
 <div id="the-old-way" class="section level3">
-<h3>8.5.1 The old way</h3>
+<h3>5.1 The old way</h3>
 <pre class="r"><code># step 1: create a summarized dataset with means and standard errors
 d1 = aggregate(mult_long$oxy, list(mult_long$day_num, mult_long$Playback.treatment), 
     mean)
@@ -695,7 +707,7 @@ arrows(d1$day, d1$mean - d1$se, d1$day, d1$mean + d1$se, code = 3, angle = 90,
 <p><img src="E2_Wale_files/figure-html/unnamed-chunk-18-1.png" width="50%" /></p>
 </div>
 <div id="a-fancier-way-to-summarize-data-using-dplyr" class="section level3">
-<h3>8.5.2 A fancier way to summarize data using <code>dplyr</code></h3>
+<h3>5.2 A fancier way to summarize data using <code>dplyr</code></h3>
 <p>There are a couple of packages that help us accomplish complex tasks in fewer keystrokes or in a more organized way. Hadley Wickham <a href="http://hadley.nz/" class="uri">http://hadley.nz/</a> is an R whiz that has created a series of groundbreaking R packages including <code>tidyr</code>, <code>dplyr</code> and <code>ggplot2</code>. These packages enhance your R skills. However, the downside is that it takes a little bit of additional learning curve to understand how to use these tools. We have already touched on <code>tidyr</code>. Here, I will introduce you very briefly to <code>dplyr</code>, which is a package for manipulating data, and <code>ggplot2</code>, an popular package for graphics.</p>
 <p>Here is how to make the summarized dataset (mean and standard error) using <code>dplyr</code>. You can find a more complete guide on this package here: <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html" class="uri">https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html</a></p>
 <pre class="r"><code>library(dplyr)</code></pre>
@@ -714,7 +726,7 @@ head(d2)</code></pre>
 ## 6 Ambient                 11  2.28 0.292</code></pre>
 </div>
 <div id="plotting-the-figure-with-ggplot2" class="section level3">
-<h3>8.5.3 Plotting the figure with <code>ggplot2</code></h3>
+<h3>5.3 Plotting the figure with <code>ggplot2</code></h3>
 <p>See this page for details on how to use <code>ggplot2</code>: <a href="http://docs.ggplot2.org/current/" class="uri">http://docs.ggplot2.org/current/</a></p>
 <pre class="r"><code>## make figure 2 with ggplot2
 library(ggplot2)
@@ -728,7 +740,7 @@ p</code></pre>
 </div>
 </div>
 <div id="figure-2-as-bar-plots" class="section level2">
-<h2>8.5.4 Figure 2 as bar plots</h2>
+<h2>5.4 Figure 2 as bar plots</h2>
 <p>We can display Figure 2 as a series of paired bar plots.</p>
 <pre class="r"><code># make it bar plots
 tab.mean = xtabs(mean ~ Playback.treatment + day_num, data = d2)
