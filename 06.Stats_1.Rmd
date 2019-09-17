@@ -44,8 +44,9 @@ chisq.test(moths)
 
 ***
 
-##ANOVA: Comparing a continuous variable across groups
+##2. ANOVA: Comparing a continuous variable across groups
 
+###2.1 A simple example with `chickwts`
 Analysis of Variance (ANOVA) is a way to compare whether groups (e.g., different sites, different treatments, etc.) differ in some measured continuous variable. What ANOVA does is partition variation into within-group and across-group variation. We conclude that groups are different if the variation across groups is much larger than the variation within groups.
 
 Let’s first start by plotting a bar plot and standard errors of the means (SEMs) for the
@@ -68,4 +69,186 @@ We get the sense that there are some differences in chick weights based on feed 
 ```{r}
 aov.mod=aov(weight~feed, data=chickwts) 
 summary(aov.mod)
+```
+
+The output answers are major question: Yes, there is a significant difference between treatments.
+
+###2.2 Testing Assumptions of ANOVA
+
+The second thing we’ll likely want to do is to test our assumptions. You can do this graphically:
+
+```{r, fig.width=4}
+plot(aov.mod)
+```
+
+The first plot looks at residual vs. fitted values—if there are weird patterns here, e.g., the points “fan out” towards the right side of the plot, then you might have heteroscedasticity (variance differs across treatments with different means). The second plot looks for non- normality of errors. Ideally, you want this “qqplot” to look fairly straight. The third plot is the “standardized” (or “studentized”) residuals plotted against the fitted values—this should also look fairly flat. The fourth plot looks for patterns related to leverage, or the degree of influence a data point has on the patterns.
+
+
+Another way to check for heteroscedasticity in the data is to use statistical tests, such as Bartlett test, Fligner-Killeen test, or Levene’s test. E.g.,
+
+```{r}
+fligner.test(weight~feed,data=chickwts)
+```
+
+This test suggests that the groups have no significant differences in variance, so that's good.
+
+
+###2.3 Posthoc tests
+
+The above ANOVA analysis told us that there are differences among groups. However, that is not quite that useful. What we really want to know is which groups are different from each other? To ask this question, you need to conduct pairwise comparisons. You could do a series of two-sample t-tests, but this is not so robust when you do too many comparisons at once. A standard procedure for post-hoc multiple comparisons is the Tukey’s HSD (hostly significant difference) test. You can conduct that simply in R:
+
+```{r}
+thsd=TukeyHSD(aov.mod) 
+thsd
+```
+
+This test suggests that there are significance difference between:
+
+* linseed vs. casein
+* soybean vs. casein
+* meatmeal vs. horsebean
+* soybean vs. horsebean
+* sunflower vs. horsebean
+* sunflower vs. linseed
+* sunflower vs. soybean
+
+Look at the boxplot again and see if those results make sense:
+
+```{r}
+plot(weight~feed,data=chickwts)
+```
+
+Test          | Description         | Function
+---------------|--------------------|----------------
+Two-sample T-Test | Parametric test of means of two groups | `t.test()`
+Mann-Whitney U-test | Non-parametric version of two-sample t | `wilcox.test()`
+Kruskall-Wallis test | Non-parametric comparison of two or more groups | `kruskal.test()`
+Welch’s test | ANOVA with relaxed assumption about heterogeneous variances | `oneway.test()`
+Paired t-test | Two-sample t-test for repeated measures | `t.test(paired=TRUE)`
+Wilcoxon signed-rank test | Nonparametric version of paired t | `Wilcox.test(paired=TRUE)`
+---------------
+
+##3. Linear Regression
+
+Now we are going to explore the relationship of one continuous variable to another continuous variable using a linear regression.
+
+Linear regression, ANOVA and other analysis (e.g., ANCOVA) are all part of a general technique referred to as General Linear Models, which allows for the analysis of continuous and categorical variables. This is different from Generalized Linear Models, which additionally allows for distributions to be other than normal. Very confusing, I know.
+
+To demonstrate linear regression and its extension, the ANCOVA, we will use a dataset called `mtcars`. This is a dataset on the performance of car models from 1974 *Motor Trend US* magazine.
+
+```{r}
+?mtcars
+head(mtcars)
+```
+
+First, let's plot something... like the relationship between the weight of the car and its fuel efficiency
+
+```{r}
+plot(mpg~wt, data=mtcars, pch=19)
+```
+
+You can see there is going to be some strong relationship here. Let's investigate this as a linear regression using the function `lm()`:
+
+```{r}
+lm.mod=lm(mpg~wt, data=mtcars)
+summary(lm.mod)
+```
+
+You can see this is a very strong relationship, with $R^2 = 0.74$ and very low P-value.
+
+We can plot this relationship onto the scatterplot:
+
+```{r}
+plot(mpg~wt, data=mtcars, pch=19)
+lm.mod=lm(mpg~wt, data=mtcars)
+xv=seq(min(mtcars$wt), max(mtcars$wt), length=2)
+yv=predict(lm.mod, data.frame(wt=xv))
+lines(xv, yv)
+```
+
+##4. ANCOVA: Testing the effects of a continuous variable & a categorical factor
+
+###4.1 Performing an ANCOVA
+
+Continuing with the above example using `mtcars` ... Let's look a little bit closer at the data. Now we will plot the relationship between car weight and fuel efficiency, but looking at automatic vs. manual transmission cars. 
+
+```{r}
+my.pal=c("tomato", "slateblue")
+plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)
+```
+
+The `mtcars$am` variable is 0 = automatic and 1 = manual (see help file `?mtcars`). So the above code will put the automatic transmission in "tomato" and manual transmission in "slateblue".
+
+Overall, it seems that manual transmission is lighter, and it also tends to get better gas mileage. But is the relationship between weight and fuel efficiency different between the two transmission types? This is the question we can get at with an ANCOVA. 
+
+There are at least two ways to do this. 
+
+Option 1: Use `aov()` to fit model and see output using `summary()`
+```{r}
+mtcars$trans.type=factor(mtcars$am)
+ancova.mod1=aov(mpg~wt*trans.type, data=mtcars)
+summary(ancova.mod1)
+```
+
+
+Option 1: Use `lm()` to fit model and use `anova()` to see output
+```{r}
+ancova.mod2=lm(mpg~wt*trans.type, data=mtcars)
+anova(ancova.mod2)
+```
+
+You can see that they give you identical results (with one-digit difference in rounding).
+
+###4.2 Plotting the results
+
+Ok, so the above results suggest that there is some *interaction effect* between weight and transmission type on fuel efficiency. Let's visualize this by running two linear models independently on each transmission type and then drawing the model fits on top of the scatter plots. 
+
+```{r}
+auto.dat=subset(mtcars, am==0)
+manu.dat=subset(mtcars, am==1)
+lm.auto=lm(mpg~wt, data=auto.dat)
+lm.manu=lm(mpg~wt, data=manu.dat)
+my.pal=c("tomato", "slateblue")
+plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)
+abline(lm.auto, col="tomato", lwd=2)
+abline(lm.manu, col="slateblue", lwd=2)
+```
+
+A more complicated routine, but a prettier plot:
+```{r}
+my.pal=c("tomato", "slateblue")
+plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)
+
+xv0=seq(min(auto.dat$wt), max(auto.dat$wt), length=10)
+yv0=predict(lm.auto, data.frame(wt=xv0))
+lines(xv0, yv0, col="tomato", lwd=2)
+
+xv1=seq(min(manu.dat$wt), max(manu.dat$wt), length=11)
+yv1=predict(lm.manu, data.frame(wt=xv1))
+lines(xv1, yv1, col="slateblue", lty=2, lwd=2)
+```
+
+
+***
+##Linear Mixed Models
+Mixed effects models are often used to analyze ‘nested’ or ‘hierarchical’ data. For example, in a repeated measures design, the same measurement is taken from a subject over different times and perhaps different treatments. If your objective is to understand the overall effects of time or treatment, then you want to account for variations among individuals.
+
+There are several packages for conducting mixed-effects models in R. Perhaps the most commonly used package is `lme4()`. Use the codes below to load the package, learn about one of the datasets that come with the package (called `sleepstudy`) and a simple use of the `lmer()` function to conduct a mixed model analysis.
+
+> <span style="color:purple">**Downloading and installing packages**</span>  
+>
+> To do this part, you will need to download and install a stats package that can handle linear mixed-effects models. The one we will use here is `lme4`. 
+
+> You can install this package by running the command: `install.packages('lme4')`
+> In addition, we will use the `lmerTest` package to generate a P-value from the linear mixed-effects model. To install that package, run `install.packages('lmerTest')`
+
+```{r, message=F}
+library(lme4) 
+library(lmerTest)
+?sleepstudy
+```
+```{r}
+mix.mod1=lmer(Reaction~Days+ (Days|Subject), data=sleepstudy) #mixed effects model of Days, with Days nested in Subject as random effect summary(mix.mod1) #summary of lmer output does not give you p-values
+anova(mix.mod1)
+
 ```
