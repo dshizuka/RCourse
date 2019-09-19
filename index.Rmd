@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+* 9/19/19: I have now uploaded [Assignment 4](pdfs/Assignment4.pdf). In this assignment, you will find a published paper with publicly accessible archived data, and you will write a script to import this data and make a plot. I am giving little bit longer timeline for this assignment--it will be due on Thursday, September 26th. 
+
 * 9/12/19: I have now uploaded [Assignment 3](pdfs/Assignment3.pdf). This assignment is to use the data that you have uploaded to make a figure for an analysis you want to conduct with the data. 
 
 * 9/12/19: Starting next week, I will be holding office hours on **Tuesday/Friday 10-11am ** at my office, 410B Manter Hall. There will be a few days I know I will not be able to make it though: (e.g., September 27, October 8, October 18).
