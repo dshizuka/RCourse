@@ -18,7 +18,7 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=70),tidy=TRUE)
 
 ![Shore crab, *Carcinus maenas*](images/E2/crab.jpg){width="20%"}
 
-Today, we will recreate some aspects of a study (Wales et al. 2013)[^1] on the effect of anthropogenic noise on the metabolic rate of the shore crab, *Carcinus maenas*. You can download the pdf [here](pdfs/wale2013.pdf). 
+Today, we will recreate some aspects of a study (Wales et al. 2013)[^1] on the effect of anthropogenic noise on the metabolic rate of the shore crab, *Carcinus maenas*. You can download the pdf [here](pdfs/Wale2013.pdf). 
 
 \
 

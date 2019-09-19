@@ -7,7 +7,6 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Dai Shizuka" />
@@ -71,7 +70,9 @@ h6 {
 </style>
 
 
+</head>
 
+<body>
 
 <style type = "text/css">
 .main-container {
@@ -85,18 +86,13 @@ code {
 }
 img {
   max-width:100%;
+  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
-}
-summary {
-  display: list-item;
 }
 </style>
 
@@ -112,6 +108,7 @@ body {
   padding-top: 66px;
   margin-top: -66px;
 }
+
 .section h2 {
   padding-top: 66px;
   margin-top: -66px;
@@ -131,43 +128,6 @@ body {
 .section h6 {
   padding-top: 66px;
   margin-top: -66px;
-}
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -189,73 +149,19 @@ $(document).ready(function () {
 });
 </script>
 
+
+<div class="container-fluid main-container">
+
 <!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
 
 <!-- code folding -->
 
 
-
-
-</head>
-
-<body>
-
-
-<div class="container-fluid main-container">
 
 
 
@@ -294,8 +200,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Worked Example: Effect of anthropogenic noise on crab physiology</h1>
-<h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/19/19</h4>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>updated 09/19/19</em></h4>
 
 </div>
 
@@ -307,7 +213,7 @@ $(document).ready(function () {
 <img src="images/E2/crab.jpg" alt="Shore crab, Carcinus maenas" style="width:20.0%" />
 <p class="caption">Shore crab, <em>Carcinus maenas</em></p>
 </div>
-<p>Today, we will recreate some aspects of a study (Wales et al. 2013)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> on the effect of anthropogenic noise on the metabolic rate of the shore crab, <em>Carcinus maenas</em>. You can download the pdf <a href="pdfs/wale2013.pdf">here</a>.</p>
+<p>Today, we will recreate some aspects of a study (Wales et al. 2013)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> on the effect of anthropogenic noise on the metabolic rate of the shore crab, <em>Carcinus maenas</em>. You can download the pdf <a href="pdfs/Wale2013.pdf">here</a>.</p>
 <p><br />
 The study is summarized by these two figures:</p>
 <p><img src="images/E2/Fig1.png" /> <img src="images/E2/Fig2.png" /></p>
@@ -711,6 +617,7 @@ arrows(d1$day, d1$mean - d1$se, d1$day, d1$mean + d1$se, code = 3, angle = 90,
 <p>There are a couple of packages that help us accomplish complex tasks in fewer keystrokes or in a more organized way. Hadley Wickham <a href="http://hadley.nz/" class="uri">http://hadley.nz/</a> is an R whiz that has created a series of groundbreaking R packages including <code>tidyr</code>, <code>dplyr</code> and <code>ggplot2</code>. These packages enhance your R skills. However, the downside is that it takes a little bit of additional learning curve to understand how to use these tools. We have already touched on <code>tidyr</code>. Here, I will introduce you very briefly to <code>dplyr</code>, which is a package for manipulating data, and <code>ggplot2</code>, an popular package for graphics.</p>
 <p>Here is how to make the summarized dataset (mean and standard error) using <code>dplyr</code>. You can find a more complete guide on this package here: <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html" class="uri">https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html</a></p>
 <pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.5.2</code></pre>
 <pre class="r"><code>d2 = mult_long %&gt;% group_by(Playback.treatment, day_num) %&gt;% summarise(mean = mean(oxy), 
     se = se(oxy))
 head(d2)</code></pre>
@@ -729,8 +636,9 @@ head(d2)</code></pre>
 <h3>5.3 Plotting the figure with <code>ggplot2</code></h3>
 <p>See this page for details on how to use <code>ggplot2</code>: <a href="http://docs.ggplot2.org/current/" class="uri">http://docs.ggplot2.org/current/</a></p>
 <pre class="r"><code>## make figure 2 with ggplot2
-library(ggplot2)
-p = ggplot(d2)
+library(ggplot2)</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.5.2</code></pre>
+<pre class="r"><code>p = ggplot(d2)
 p = p + geom_errorbar(aes(x = day_num, ymax = mean + se, ymin = mean - 
     se, width = 0.5))
 p = p + geom_point(aes(x = day_num, y = mean, colour = Playback.treatment), 
@@ -783,23 +691,6 @@ $(document).ready(function () {
 
 
 </script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
-<!-- code folding -->
-
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
