@@ -9,3 +9,29 @@ output:
     toc_float: true
 ---
 
+##1. Intro to `dplyr` and the 'tidyverse'
+
+```{r, out.width="10%", echo=F}
+knitr::include_graphics("images/hex-dplyr.png")
+knitr::include_graphics("images/hex-tidyr.png")
+```
+
+Now that we have dipped our feet into plots and stats in R, I think you are getting a better sense of the fact that 'wrangling' or 'manipulating' data is one of the biggest steps to becoming proficient in R and all that it has to offer. 
+
+For example, for any given analysis, you may have to subset data, filter out certain data that don't meet some criteria, focus in on a select set of variables of interest, calculate means, and variance for different groups, etc. etc. 
+
+These tasks are where the packages [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/) and other packages in the [tidyverse](https://www.tidyverse.org/)--a series of packages designed for all kinds of data tasks. This also includes the popular [ggplot2](https://ggplot2.tidyverse.org/) package for graphics. 
+
+The tidyverse packages are constructed by [Hadley Wickam](http://hadley.nz/). There are several books that cover how to use these packages, including *R for Data Science* [which is available for free as an online book](https://r4ds.had.co.nz/)
+
+```{r, out.width="20%", echo=F}
+knitr::include_graphics("images/R_for_Data_Science_cover.png")
+```
+
+
+##2. What makes `dplyr` and `tidyverse` different?
+
+* Piping `%>%`
+* tibble
+* functions that have special syntax -- but once you learn them, it's hard to go back.
+
