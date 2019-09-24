@@ -144,6 +144,6 @@ head(dat.merge)
 ```{r}
 #with dyplr
 dat.a=left_join(dat.a, dat.c, by="nest") %>% mutate(std.chick.col=chin_chroma-mean.col)
-dat.a
+head(dat.a)
 ```
 #####
