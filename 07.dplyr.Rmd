@@ -63,10 +63,87 @@ To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
 
 ***
 
-##3. An example using data on chick color of American coots (*Fulica americana*)
+##3. An example using data on chick color of American coots 
 
-[link to data](data/chickcolor_Rclass.csv)
+
+
+To demonstrate how `dplyr` functions work, we will use a dataset from a project on color variation in American coots (*Fulica americana*), a waterbird of the Rail family. Coots lay a relatively large number of eggs (6-12 eggs) in nests built out of old vegetation on top of water in wetlands across western North America. 
+
+There are at least two very weird thing about coots: 
+One weird thing is that they are 'conspecific brood parasites'--i.e., they make their own nests, but they will also opportunistically lay eggs in their neighboring coot nests. Our research has shown that they can, under certain circumstances, tell which eggs and chicks in their nest are parasitic (Lyon 2003; Shizuka & Lyon 2010).
+
+The other very weird thing is that they have **extremely bright ornamental juvenile traits (red beaks, red head, orange plumes around the neck, etc.)** when they hatch. They then lose these traits over the first few weeks of life. By the time they have fledged, they are black and gray with white beaks, and the only color they retain is a small patch or red on their forehead. Birds commonly have bright ornamental traits related to sexual selection, but it is relatively rare to have such bright ornaments as babies (probably because it could make them easy targets for predators).
+
+```{r, out.width="40%", echo=F}
+knitr::include_graphics("images/CootFeeding_lowres.jpg")
+
+knitr::include_graphics("images/cootnest.jpg")
+```
+
+Past work (Lyon et al. 1994) has shown that, if you artificially remove some of these ornaments (i.e., the orange tips of feathers around neck), parents discriminate against these 'dull' chicks and preferentially feed chicks that retain the ornaments.
+
+In the present work (NOTE: *this is unpublished data (under review)*), we investigate the causes and consequences of variation in color (i.e., how 'red' the chicks are) within and between broods. To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. We combine this data with various other measures for each chick, including the order in which they were laid as eggs, the size of egg, and the order in which they hatched.
+
+Here is the [link to data](data/chickcolor_Rclass.csv). Save this in your course folder in the "data" subfolder.
+
+Then import this data to R:
 
 ```{r}
 dat=read.csv("data/chickcolor_Rclass.csv")
+head(dat)
 ```
+
+Let's also load the entire `tidyverse` series of packages
+```{r, eval=F, echo=F}
+install.packages('tidyverse')
+```
+```{r}
+library('tidyverse')
+```
+
+###task 1: filter out parasite chicks and then calculate mean chick color for each brood
+
+```{r}
+#old way
+dat.a=dat
+dat.b=dat.a[which(dat.a$is.parasite==F),]
+dat.c=aggregate(dat.b$chin_chroma, by=list(dat.b$nest), mean, na.rm=T)
+names(dat.c)=c("nest", "mean.col")
+head(dat.c)
+```
+
+```{r}
+#dplyr way, option 1
+x=filter(dat.a, is.parasite==FALSE)
+y=group_by(x, nest)
+z=summarise(y, mean(chin_chroma))
+z
+```
+
+```{r}
+#dplyr way, with piping
+dat %>% filter(is.parasite==FALSE) %>% group_by(nest) %>% summarise(mean.col=mean(chin_chroma))
+```
+
+
+###task 2: standardize each chick's color measure against average of its nest.
+
+```{r}
+#old way
+dat.a$nest.mean.col=dat.c[match(dat.a$nest, dat.c$nest), 2]
+dat.a$std.col=dat.a$chin_chroma-dat.a$nest.mean.col
+head(dat.a)
+```
+
+```{r}
+#with merge()
+dat.merge=merge(dat.a, dat.c, by="nest")
+head(dat.merge)
+```
+
+```{r}
+#with dyplr
+dat.a=left_join(dat.a, dat.c, by="nest") %>% mutate(std.chick.col=chin_chroma-mean.col)
+dat.a
+```
+#####
