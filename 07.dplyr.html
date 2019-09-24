@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Dai Shizuka" />
@@ -73,9 +74,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -89,13 +88,18 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -111,7 +115,6 @@ body {
   padding-top: 66px;
   margin-top: -66px;
 }
-
 .section h2 {
   padding-top: 66px;
   margin-top: -66px;
@@ -131,6 +134,43 @@ body {
 .section h6 {
   padding-top: 66px;
   margin-top: -66px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -152,47 +192,65 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -241,8 +299,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -251,6 +307,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -298,8 +364,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Module 7: Data Wrangling with dplyr</h1>
-<h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 09/23/19</em></h4>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 09/24/19</h4>
 
 </div>
 
@@ -312,14 +378,43 @@ div.tocify {
 <p>These tasks are where the packages <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a> and other packages in the <a href="https://www.tidyverse.org/">tidyverse</a>–a series of packages designed for all kinds of data tasks. This also includes the popular <a href="https://ggplot2.tidyverse.org/">ggplot2</a> package for graphics.</p>
 <p>The tidyverse packages are constructed by <a href="http://hadley.nz/">Hadley Wickam</a>. There are several books that cover how to use these packages, including <em>R for Data Science</em> <a href="https://r4ds.had.co.nz/">which is available for free as an online book</a></p>
 <p><img src="images/R_for_Data_Science_cover.png" width="20%" /></p>
+<hr />
 </div>
-<div id="what-makes-dplyr-and-tidyverse-different" class="section level2">
-<h2>2. What makes <code>dplyr</code> and <code>tidyverse</code> different?</h2>
+<div id="working-with-dplyr" class="section level2">
+<h2>2. Working with <code>dplyr</code></h2>
+<p><br></p>
+<div id="main-dplyr-functions" class="section level3">
+<h3>2.1 Main <code>dplyr</code> functions</h3>
 <ul>
-<li>Piping <code>%&gt;%</code></li>
+<li><code>select()</code> select columns by criteria</li>
+<li><code>filter()</code> filter rows by criteria</li>
+<li><code>mutate()</code>: add new variable using functions</li>
+<li><code>summarise()</code>: calculate summary statistic for a given variable</li>
+<li><code>arrange()</code>: change order of rows</li>
+<li><code>group_by()</code>: run any of above function ‘by group’ defined using criteria</li>
+</ul>
+<p><br></p>
+</div>
+<div id="pipe-operator" class="section level3">
+<h3>2.2 Pipe Operator (<code>%&gt;%</code>)</h3>
+<p><code>dplyr</code> makes use of the pipe operator <code>%&gt;%</code>, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient.</p>
+<p><br></p>
+</div>
+<div id="tibble" class="section level3">
+<h3>2.3 Tibble</h3>
+<p>The output of <code>dplyr</code> functions is a “tibble”, a special class of data frame. It is largely the same as a data.frame but it has some features (or rather, lack of features) that make for ‘defensive coding’. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow “partial matching”.</p>
+<p>To learn more about tibbles, start <a href="https://tibble.tidyverse.org/">here</a></p>
+<ul>
 <li>tibble</li>
 <li>functions that have special syntax – but once you learn them, it’s hard to go back.</li>
 </ul>
+<hr />
+</div>
+</div>
+<div id="an-example-using-data-on-chick-color-of-american-coots-fulica-americana" class="section level2">
+<h2>3. An example using data on chick color of American coots (<em>Fulica americana</em>)</h2>
+<p><a href="data/chickcolor_Rclass.csv">link to data</a></p>
+<pre class="r"><code>dat=read.csv(&quot;data/chickcolor_Rclass.csv&quot;)</code></pre>
 </div>
 
 
@@ -340,6 +435,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

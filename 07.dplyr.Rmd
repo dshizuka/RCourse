@@ -28,10 +28,45 @@ The tidyverse packages are constructed by [Hadley Wickam](http://hadley.nz/). Th
 knitr::include_graphics("images/R_for_Data_Science_cover.png")
 ```
 
+***
 
-##2. What makes `dplyr` and `tidyverse` different?
+##2. Working with `dplyr`
 
-* Piping `%>%`
+<br>
+
+###2.1 Main `dplyr` functions
+
+* `select()` select columns by criteria
+* `filter()` filter rows by criteria
+* `mutate()`: add new variable using functions
+* `summarise()`: calculate summary statistic for a given variable
+* `arrange()`: change order of rows
+* `group_by()`: run any of above function 'by group' defined using criteria
+
+<br>
+
+###2.2 Pipe Operator (`%>%`)
+
+`dplyr` makes use of the pipe operator `%>%`, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient. 
+
+<br>
+
+###2.3 Tibble
+
+The output of `dplyr` functions is a "tibble", a special class of data frame. It is largely the same as a data.frame but it has some features (or rather, lack of features) that make for 'defensive coding'. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow "partial matching".
+
+To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
+
+
 * tibble
 * functions that have special syntax -- but once you learn them, it's hard to go back.
 
+***
+
+##3. An example using data on chick color of American coots (*Fulica americana*)
+
+[link to data](data/chickcolor_Rclass.csv)
+
+```{r}
+dat=read.csv("data/chickcolor_Rclass.csv")
+```
