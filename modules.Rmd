@@ -25,6 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ###[Extra: Data Wrangling with `dplyr`](dplyr.html)
 
+* ###[07. Custom Functions (and if-else statements)](07.Functions.html)
+
 ***
 
 ##Worked Examples:
