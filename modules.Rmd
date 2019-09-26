@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ###[06. Some Simple Statistics](06.Stats_1.html)
 
-* ###[Extra: Data Wrangling with `dplyr`](07.dplyr.html)
+* ###[Extra: Data Wrangling with `dplyr`](dplyr.html)
 
 ***
 
