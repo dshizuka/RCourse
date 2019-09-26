@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Module 7: Custom Functions (and If-Else statements)</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Module 7: Custom Functions (and If-Else statements)</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">9/26/2019</h4>
+
+</div>
+
+
+<div id="intro-to-making-your-own-functions" class="section level2">
+<h2>1. Intro to making your own functions</h2>
+<p>Today we will learn a little bit about functions. This may be one of the most useful things you learn about R. Once you learn how to write your own functions, the world is your oyster. You will no longer be limited in your work by software—if no software does what you want or you don’t want to pay money for a piece of software, then just learn to write your own functions.</p>
+<p>A function is basically a wrapper for one or a series of lines of code that you want to run with a given set of inputs. If there is not a pre-built function in R or any R package… you can write one yourself! The ability to write function is also really useful if you have some sort of routine that you need to run often. The syntax for writing a function is:</p>
+<p><code>function(&quot;input arguments&quot;) {&quot;code for what to do with the inputs&quot;}</code></p>
+<p>So, inside the <code>function()</code> parentheses, you will simply list the objects that you will use as inputs. That will be followed by a space and then the series of lines of code that the function will do.</p>
+<p>For example, here’s is a custom function for calculating the mean of a vector:</p>
+<pre class="r"><code>mean.custom=function(x) sum(x)/length(x)</code></pre>
+<p>Now that you have made this, you can use it by simply using <code>mean.custom()</code> as a function.</p>
+<p>Let’s use this to calculate the mean of numbers 1 through 10:</p>
+<pre class="r"><code>mean.custom(1:10)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<hr />
+</div>
+<div id="using-if-else-statements-to-add-arguments-inside-functions" class="section level2">
+<h2>2. Using If-Else statements to add arguments inside functions</h2>
+<div id="what-are-arguments" class="section level3">
+<h3>2.1 What are arguments?</h3>
+<p>You will notice that many R functions have a set of arguments that you use to control how the function is executed. Take, for example the <code>plot()</code> function–it has a lot of arguments that can be used to change the output.</p>
+<p>Let’s try plotting the change in atmospheric concentration of CO2 in two different ways. We know that this can be done with a simple argument, <code>type=</code>.</p>
+<pre class="r"><code>plot(co2, type=&quot;p&quot;, pch=20) #with points</code></pre>
+<p><img src="07.Functions_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
+<pre class="r"><code>plot(co2, type=&quot;l&quot;) #with a line</code></pre>
+<p><img src="07.Functions_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
+<p>To add arguments to your custom function, you can add an input variable that will act as your argument, and then you need to include if-else statements inside your function to control the output.</p>
+</div>
+<div id="a-digression-into-if-else-statements" class="section level3">
+<h3>2.2 A digression into If-else statements</h3>
+<p>So, to include arguments into your custom functions, you will need to know a little bit about if-else statements. Let’s start with the simple “If Statment”. This follows a structure like this:</p>
+<p><code>if(condition) code</code></p>
+<p>This is going to execute the code if the condition = TRUE</p>
+<div class="figure" style="text-align: center">
+<img src="images/If.png" alt="The If statement" width="50%" />
+<p class="caption">
+The If statement
+</p>
+</div>
+<p>Let’s do an example: Let’s say we have an object called <code>answer</code>, that holds a number. We are going to make an ‘if statement’ that says, if <code>answer</code> is equal to the mean of the numbers 1 through 10, tell me I am correct.</p>
+<p>Now try it with the correct answer, <code>answer=5.5</code></p>
+<pre class="r"><code>answer=5.5
+if (answer==mean(1:10)) print(&quot;you are correct&quot;)</code></pre>
+<pre><code>## [1] &quot;you are correct&quot;</code></pre>
+<p>Now try it with a wrong answer:</p>
+<pre class="r"><code>answer=5
+if (answer==mean(1:10)) print(&quot;you are correct&quot;)</code></pre>
+<p>What you will find is that this will not give you any output. This is because the if statement only executes the code when the condition is true, and does not execute the code otherwise.</p>
+<p>To get an output when the answer is wrong, you need to use both an “If” statement and an “Else” statement.</p>
+<div class="figure" style="text-align: center">
+<img src="images/If-else.png" alt="The If-Else statement" width="50%" />
+<p class="caption">
+The If-Else statement
+</p>
+</div>
+<p>Try this:</p>
+<p>If-Else statement with correct answer</p>
+<pre class="r"><code>answer=5.5
+if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)</code></pre>
+<pre><code>## [1] &quot;you are correct&quot;</code></pre>
+<p>If-Else statement with wrong answer</p>
+<pre class="r"><code>answer=5
+if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)</code></pre>
+<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
+<p>Now, you can actually make this into a function:</p>
+<pre class="r"><code>mean.1to10=function(answer) {if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)}</code></pre>
+<pre class="r"><code>mean.1to10(answer=5.5)</code></pre>
+<pre><code>## [1] &quot;you are correct&quot;</code></pre>
+<pre class="r"><code>mean.1to10(answer=5)</code></pre>
+<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
+</div>
+<div id="custom-function-with-arguments" class="section level3">
+<h3>2.3 Custom function with arguments</h3>
+<p>Ok, so now you kind of know how if-else statements work. Let’s now build a better function for calculating averages. Let’s say we want to be able to calculate the <strong>geometric mean</strong>, which is the <em>n</em>th root of the product of <em>n</em> numbers, as well as the arithmetic mean.</p>
+<pre class="r"><code>average=function(x, type=&quot;arithmetic&quot;){
+  if(type==&quot;arithmetic&quot;) sum(x)/length(x)
+  else if(type==&quot;geometric&quot;) prod(x)^(1/length(x))
+}</code></pre>
+<p>Then, we can calculate the arithmetic or geometric mean easily:</p>
+<pre class="r"><code>average(1:10, type=&quot;arithmetic&quot;)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<pre class="r"><code>average(1:10, type=&quot;geometric&quot;)</code></pre>
+<pre><code>## [1] 4.528729</code></pre>
+<p>Note also that in the function, we have set the default type to be arithmetic:</p>
+<pre class="r"><code>average(1:10)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<p>One problem is that, if we choose a different type of average, say median (or if we simply misspell the type), then the code simply won’t run.</p>
+<pre class="r"><code>average(1:10, type=&quot;median&quot;)</code></pre>
+<p>So a good practice is to also include an error message if something in the arguments doesn’t work correctly. We can do this by layering another if-else statement below the previous one:</p>
+<pre class="r"><code>average=function(x, type=&quot;arithmetic&quot;){
+  if(type==&quot;arithmetic&quot;) sum(x)/length(x)
+  else if (type==&quot;geometric&quot;) prod(x)^(1/length(x))
+  else &quot;we can&#39;t handle that type of average&quot;
+}</code></pre>
+<p>Now:</p>
+<pre class="r"><code>average(1:10, type=&quot;median&quot;)</code></pre>
+<pre><code>## [1] &quot;we can&#39;t handle that type of average&quot;</code></pre>
+</div>
+</div>
+<div id="building-a-custom-function-for-measuring-standard-error-of-the-mean" class="section level2">
+<h2>3. Building a custom function for measuring standard error of the mean</h2>
+<p>A common thing people find out about R is that there is no built-in function for calculating standard error of the mean, a pretty common statistic. There are probably a lot of theoretical reasons for that (‘standard error’ can mean different things to different people), but we won’t delve into that.</p>
+<p>Standard Error of the Mean is simply the standard deviation divided by the square root of the sample size. This is also equivalent to taking the square root of the variance divided by the sample size. So, let’s make the function:</p>
+<pre class="r"><code>se=function(x) sqrt(var(x)/length(x))
+se(1:10)</code></pre>
+<pre><code>## [1] 0.9574271</code></pre>
+<p>Let’s include in this function an option to remove NAs before calculating the standar error:</p>
+<pre class="r"><code>se=function(x, na.rm=F) {
+  if(na.rm==F) sqrt(var(x)/length(x))
+  else if (na.rm==T) sqrt(var(x[is.na(x)==F])/length(x[is.na(x)==F]))
+}</code></pre>
+<p>Now we can calculate standard error and mean from some continuous variable. Let’s take Petal Length from the <code>iris</code> dataset:</p>
+<pre class="r"><code>means=tapply(iris$Petal.Length, iris$Species, mean)
+ses=tapply(iris$Petal.Length, iris$Species, se)
+means</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+##      1.462      4.260      5.552</code></pre>
+<pre class="r"><code>ses</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+## 0.02455980 0.06645545 0.07804970</code></pre>
+<p>Let’s use this to make barplots with error bars:</p>
+<pre class="r"><code>p=barplot(means, ylim=c(0,6), las=1, ylab=&quot;Petal Length&quot;)
+arrows(p, means+ses, p, means-ses, code=3, angle=90)</code></pre>
+<p><img src="07.Functions_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
