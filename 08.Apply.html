@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Module 8: Random Numbers, Apply, and Loops</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Module 8: Random Numbers, Apply, and Loops</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 10/03/19</h4>
+
+</div>
+
+
+<hr />
+<p>In this module, we will go over several useful R tricks that make things faster…</p>
+<div id="random-number-generators" class="section level2">
+<h2>8.1 Random number generators</h2>
+<p>The essence of stochasticity is that a parameter will vary randomly–but <strong><em>what do we mean by random!?</em></strong> If you think about it, there is an infinate number of ways to sample a random set of numbers<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Let’s consider some options:</p>
+<div id="sampling-from-a-given-set-of-numbers-with-or-without-replacement." class="section level4">
+<h4>8.1.1 Sampling from a given set of numbers <strong><em>with or without replacement</em></strong>.</h4>
+<p>We often want to generate a set of random number given some distribution. Say, for example, we want to sample randomly from a set of numbers. For example, let’s sample 5 integer between 1 and 10.</p>
+<pre class="r"><code>sample(1:10, 5, replace = F)  #5 random numbers between 1 and 10</code></pre>
+<pre><code>## [1] 9 6 2 3 8</code></pre>
+<p>You will probably notice that you have generated a <em>different</em> set of random numbers than what is shown here. This makes sense, but it makes it difficult to make this code <em>reproducible</em>. What we can do is to use <code>set.seed()</code> to make this process repeatable:</p>
+<pre class="r"><code>set.seed(2)  #you can put whatever number inside set.seed()
+sample(1:10, 5, replace = F)  #5 random numbers between 1 and 10s</code></pre>
+<pre><code>## [1]  5  6  9  1 10</code></pre>
+<p>When you run the code like this, you should always get “2, 7, 5, 10, 6”<br />
+Try changing the number inside the <code>set.seed()</code> and see what you get.</p>
+<p>Note that we have used <strong><code>replace=F</code></strong> to indicate that, once we choose a number, we want to avoid choosing it again. This is akin to physically picking 5 cards out of a set of 10 at the same time. We can do that up to the sample size, but no more. So, this will work:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace = F)  #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1]  5  6  9  1 10  7  4  8  3  2</code></pre>
+<p>But this will NOT work:</p>
+<pre class="r"><code>sample(1:10, 11, replace = F)  #11 random numbers between 1 and 10</code></pre>
+<pre><code>## Error in sample.int(length(x), size, replace, prob): cannot take a sample larger than the population when &#39;replace = FALSE&#39;</code></pre>
+<p>In the first iteration, you have simply shuffled the order of the numbers. But you cannot shuffle 11 cards out of a deck of 10.</p>
+<p>Compare this to the case when we set <code>replace=TRUE</code>:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace = T)  #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1] 5 6 6 8 1 1 9 2 1 3</code></pre>
+<p>You will notice that we have chose some numbers multiple times (“2” appears three times, “10” and “6” appear twice). When you set <code>replace=TRUE</code>, we are basically simulating a situation where we choose a card, write down the number, <strong><em>and then put it back before picking up another card</em></strong>. This process is the essence of a simulation procedure called <strong>bootstrapping</strong>.</p>
+<p>A quick recap:</p>
+<ul>
+<li><code>sample(x, n)</code> allows you to randomly sample <em>n</em> numbers from the set <code>x</code>.</li>
+<li><code>replace=F</code> (default) means once you sample one number, you will not sample it again. You can use this to shuffle the order of numbers (generally called <em>randomization</em>)</li>
+<li><code>replace=T</code> allows for sampling a number more than once. You can use this to resample a set of numbers with equal probability (generally called <em>bootstrapping</em>)</li>
+</ul>
+<hr />
+</div>
+<div id="sampling-from-probability-distributions" class="section level4">
+<h4>8.1.2 Sampling from probability distributions</h4>
+<p>Rather than sampling from a discrete set of numbers, we might want to sample numbers from a given hypothetical distribution. As an illustration, let’s sample a set of 100 numbers from a normal distribution with mean of 0 and standard deviation of 1</p>
+<pre class="r"><code>set.seed(2)
+rn = rnorm(10, mean = 0, sd = 1)
+rn</code></pre>
+<pre><code>##  [1] -0.89691455  0.18484918  1.58784533 -1.13037567 -0.08025176
+##  [6]  0.13242028  0.70795473 -0.23969802  1.98447394 -0.13878701</code></pre>
+<p>You can see that it generates numbers with 8 digits. We can generate a <strong>histogram</strong> and check to see if the output of the <code>rnorm()</code> function really looks like a normal distribution. Let’s do it with 1,000 numbers so that we reduce sampling error.</p>
+<pre class="r"><code>set.seed(2)
+hist(rnorm(1000, mean = 0, sd = 1), freq = F)</code></pre>
+<p><img src="08.Apply_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p>Looks about right.</p>
+<p>Now let’s try the same thing but with a <strong>uniform distribution</strong> of numbers ranging from 0 to 1</p>
+<pre class="r"><code>set.seed(2)
+runif(10, min = 0, max = 1)</code></pre>
+<pre><code>##  [1] 0.1848823 0.7023740 0.5733263 0.1680519 0.9438393 0.9434750 0.1291590
+##  [8] 0.8334488 0.4680185 0.5499837</code></pre>
+<pre class="r"><code>hist(runif(1000, min = 0, max = 1), freq = F)</code></pre>
+<p><img src="08.Apply_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+</div>
+<div id="coin-flips" class="section level3">
+<h3>8.1.3 Coin-flips</h3>
+<p>We can use the <code>rbinom()</code> function to simulate coin-flips, i.e., generating 0s and 1s randomly.</p>
+<ol style="list-style-type: decimal">
+<li>Flipping the coin 100 times, keeping track of result each time.</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+coin = rbinom(100, 1, prob = 0.5)  #100 trials of a single flip of the coin
+coin</code></pre>
+<pre><code>##   [1] 0 1 1 0 1 1 0 1 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 1 1 1
+##  [36] 1 1 0 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 1 1 1 1 1 1 0 1 0 0 0 0 0
+##  [71] 0 0 0 0 0 1 0 1 0 1 0 1 0 0 0 1 1 0 1 0 1 0 0 1 0 0 0 0 0 0</code></pre>
+<pre class="r"><code>table(coin)  #generate a table of results</code></pre>
+<pre><code>## coin
+##  0  1 
+## 55 45</code></pre>
+<pre class="r"><code>sum(coin)/length(coin)  #calculate probability of 1</code></pre>
+<pre><code>## [1] 0.45</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Flipping the coin 100 times, but with skewed probability</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flip = 100
+coin4 = rbinom(100, 1, prob = 0.25)
+table(coin4)</code></pre>
+<pre><code>## coin4
+##  0  1 
+## 72 28</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>10 trials of 100 fair coin flips</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flips = 100
+coin2 = rbinom(10, flips, prob = 0.5)
+coin2</code></pre>
+<pre><code>##  [1] 48 47 59 45 46 54 50 58 58 52</code></pre>
+</div>
+<div id="table-of-probability-distributions" class="section level3">
+<h3>9.1.4 Table of probability distributions</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Function to generate numbers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Beta</td>
+<td><code>rbeta()</code></td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td><code>rbinom()</code></td>
+</tr>
+<tr class="odd">
+<td>Chi-square</td>
+<td><code>rchisq()</code></td>
+</tr>
+<tr class="even">
+<td>Exponential</td>
+<td><code>rexp()</code></td>
+</tr>
+<tr class="odd">
+<td>Gamma</td>
+<td><code>rgamma()</code></td>
+</tr>
+<tr class="even">
+<td>Geometric</td>
+<td><code>rgeom()</code></td>
+</tr>
+<tr class="odd">
+<td>Logistic</td>
+<td><code>rlogis()</code></td>
+</tr>
+<tr class="even">
+<td>Log Normal</td>
+<td><code>rlnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Negative Binomial</td>
+<td><code>rnbinom()</code></td>
+</tr>
+<tr class="even">
+<td>Normal</td>
+<td><code>rnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Poisson</td>
+<td><code>rpois()</code></td>
+</tr>
+<tr class="even">
+<td>Uniform</td>
+<td><code>runif()</code></td>
+</tr>
+<tr class="odd">
+<td>Weibull</td>
+<td><code>rweibull()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="the-apply-family-of-functions" class="section level2">
+<h2>8.2 The “apply-family” of functions</h2>
+<p>The “apply family” function–which includes <code>apply()</code>, <code>sapply()</code>, <code>lapply()</code> and <code>tapply()</code>–takes a series of elements and applies a given function to it. The function to be applied can be defined within the ‘apply’ function.</p>
+<p>Each apply-family function varies slightly in its syntax or output format.</p>
+<div id="applying-a-function-to-a-set-of-elements-using-sapply-and-lapply" class="section level3">
+<h3>9.1.1 Applying a function to a set of elements using <code>sapply()</code> and <code>lapply()</code></h3>
+<p>Here, we will use the <code>sapply()</code> function, which can take a series of elements, run a function on it, and then save the output in the simplest format (“s” in “sapply” is for “simplify”).<br />
+Let’s try out a really simple application:</p>
+<pre class="r"><code>sapply(1:5, function(x) x * 2)</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p>Here, what we did was to:</p>
+<ol style="list-style-type: decimal">
+<li>Take each element of <code>1:10</code> (integers from 1 to 10) and multiply each element by 2</li>
+<li>Store the output in the simplest form, which is a vector</li>
+</ol>
+<p>Compare that with the <code>lapply()</code> function, which saves the output as a list.</p>
+<pre class="r"><code>lapply(1:5, function(x) x * 2)</code></pre>
+<pre><code>## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 6
+## 
+## [[4]]
+## [1] 8
+## 
+## [[5]]
+## [1] 10</code></pre>
+<p>Here’s another example:</p>
+<pre class="r"><code>var = c(1, 2, 3)
+sapply(1:10, function(x) x * var)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+## [1,]    1    2    3    4    5    6    7    8    9    10
+## [2,]    2    4    6    8   10   12   14   16   18    20
+## [3,]    3    6    9   12   15   18   21   24   27    30</code></pre>
+<p>What have we done here?</p>
+<ol style="list-style-type: decimal">
+<li>Set up an object called <code>var</code>, which is a vector of three numbers: 1, 2 and 3</li>
+<li>Then, take each element of <code>1:10</code> and multiply by <code>var</code>, which itself is 3 numbers.</li>
+<li>Organize the results as a matrix, which is the simplest format to store a 2-dimensional set of numbers. In this case, there will be 3 rows of 10 numbers.</li>
+</ol>
+<p>Again, compare this result with the output of <code>lapply()</code> (output not shown):</p>
+<pre class="r"><code>var = c(1, 2, 3)
+lapply(1:10, function(x) x * var)</code></pre>
+<p>So you can see that the output of <code>sapply()</code> is more user-friendly than the output of <code>lapply()</code> in general. However, <code>lapply()</code> is really useful when you want to apply a function whose output is not a neat set of values.</p>
+<p>As an example, let’s use the <code>lapply()</code> function to run a linear regression on a list of dataframes. First, we will create such a list by “splitting” the familiar <code>iris</code> dataset by species (output not shown):</p>
+<pre class="r"><code>iris.list = split(iris, iris$Species)
+iris.list</code></pre>
+<p>Now we have a list object with three dataframes. Let’s now use the <code>lapply()</code> function to conduct the same linear regression model <code>Petal.Length~Sepal.Length</code> on each dataset. The output will be the <code>anova()</code> tables that show the F-statistic and overall model fits.</p>
+<pre class="r"><code>lapply(iris.list, function(x) anova(lm(Petal.Length ~ Sepal.Length, 
+    data = x)))</code></pre>
+<pre><code>## $setosa
+## Analysis of Variance Table
+## 
+## Response: Petal.Length
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)  
+## Sepal.Length  1 0.10549 0.10549  3.6898 0.0607 .
+## Residuals    48 1.37231 0.02859                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## $versicolor
+## Analysis of Variance Table
+## 
+## Response: Petal.Length
+##              Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Sepal.Length  1 6.1521  6.1521  63.263 2.586e-10 ***
+## Residuals    48 4.6679  0.0972                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## $virginica
+## Analysis of Variance Table
+## 
+## Response: Petal.Length
+##              Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Sepal.Length  1 11.1471 11.1471  141.64 6.298e-16 ***
+## Residuals    48  3.7777  0.0787                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>You can see that the three species vary in their relationships between sepal length and petal length. Here’s one way to visualize it:</p>
+<pre class="r"><code>par(mfrow = c(1, 3))
+plot(Petal.Length ~ Sepal.Length, data = iris.list[[1]], pch = 19, 
+    col = 1, main = &quot;setosa&quot;)
+plot(Petal.Length ~ Sepal.Length, data = iris.list[[2]], pch = 19, 
+    col = 2, main = &quot;versicolor&quot;)
+plot(Petal.Length ~ Sepal.Length, data = iris.list[[3]], pch = 19, 
+    col = 3, main = &quot;virginica&quot;)</code></pre>
+<p><img src="08.Apply_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+</div>
+<div id="tapply-and-comparing-it-to-aggregate" class="section level3">
+<h3>8.2.2 <code>tapply()</code> (and comparing it to <code>aggregate()</code>)</h3>
+<p>The <code>tapply()</code> function applies a function to a set of values that are grouped by some factor. This is pretty much the same as the <code>aggregate()</code> function, but the output format is different. As a demo, let’s first set up a dataframe:</p>
+<pre class="r"><code>fac = c(rep(&quot;A&quot;, 4), rep(&quot;B&quot;, 4), rep(&quot;C&quot;, 4))
+num = 1:12
+dat = data.frame(num, fac)
+dat</code></pre>
+<pre><code>##    num fac
+## 1    1   A
+## 2    2   A
+## 3    3   A
+## 4    4   A
+## 5    5   B
+## 6    6   B
+## 7    7   B
+## 8    8   B
+## 9    9   C
+## 10  10   C
+## 11  11   C
+## 12  12   C</code></pre>
+<p>Now, we’ll sum the values associated each factor (A, B or C). We’ll do this using <code>tapply()</code> and <code>aggregate()</code> and compare the outputs:</p>
+<pre class="r"><code>tapply(dat$num, list(dat$fac), sum)</code></pre>
+<pre><code>##  A  B  C 
+## 10 26 42</code></pre>
+<pre class="r"><code>aggregate(num, list(fac = fac), sum)</code></pre>
+<pre><code>##   fac  x
+## 1   A 10
+## 2   B 26
+## 3   C 42</code></pre>
+</div>
+<div id="working-with-arrays-using-apply" class="section level3">
+<h3>8.2.3 Working with arrays using <code>apply()</code></h3>
+<p>The <code>apply()</code> function is useful when you want to apply a function on an array (i.e., an n-dimensional set of numbers). Here, the syntax is apply(X, MARGIN, FUN, …), where X is a matrix or array, MARGIN is the direction in which the function will applied—for a matrix, <code>MARGIN=1</code> indicates rows, and <code>MARGIN=2</code> indicates columns. For example:</p>
+<pre class="r"><code>m = matrix(1:20, nrow = 5, byrow = TRUE)
+m</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    2    3    4
+## [2,]    5    6    7    8
+## [3,]    9   10   11   12
+## [4,]   13   14   15   16
+## [5,]   17   18   19   20</code></pre>
+<pre class="r"><code>apply(m, 1, sum)  #sum the rows</code></pre>
+<pre><code>## [1] 10 26 42 58 74</code></pre>
+<pre class="r"><code>apply(m, 2, sum)  #sum the columns</code></pre>
+<pre><code>## [1] 45 50 55 60</code></pre>
+<p>Or you can set the margin to <code>c(1,2)</code> to apply a function to row/column combinations (i.e., each cell)</p>
+<pre class="r"><code>apply(m, c(1, 2), function(x) x^2)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    9   16
+## [2,]   25   36   49   64
+## [3,]   81  100  121  144
+## [4,]  169  196  225  256
+## [5,]  289  324  361  400</code></pre>
+<p>Where <code>apply()</code> really shines is when working with larger-dimensional arrays. For example, consider a 3x4x5 3-D array.</p>
+<p><img src="images/array.png" style="width:50.0%" /> We can sum across each of those dimensions:</p>
+<pre class="r"><code>a = array(1:60, dim = c(5, 4, 3))
+apply(a, 1, sum)</code></pre>
+<pre><code>## [1] 342 354 366 378 390</code></pre>
+<pre class="r"><code>apply(a, 2, sum)</code></pre>
+<pre><code>## [1] 345 420 495 570</code></pre>
+<pre class="r"><code>apply(a, 3, sum)</code></pre>
+<pre><code>## [1]  210  610 1010</code></pre>
+<pre class="r"><code>apply(a, c(1, 2), sum)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   63   78   93  108
+## [2,]   66   81   96  111
+## [3,]   69   84   99  114
+## [4,]   72   87  102  117
+## [5,]   75   90  105  120</code></pre>
+</div>
+</div>
+<div id="for-loops" class="section level2">
+<h2>8.3 For-Loops</h2>
+<p>A “for loop” is another way to repeat a function or series of functions many times. The idea here is to request that an index (e.g., i) take on a series of values, and that a lines of commands are executed as many times as there are different values of i.</p>
+<div id="simple-examples-of-for-loops" class="section level3">
+<h3>8.3.1 Simple examples of for-loops</h3>
+<p>Here’s a simple example for just repeating a command 5 times:</p>
+<pre class="r"><code>for (i in 1:5) print(i * 2)</code></pre>
+<pre><code>## [1] 2
+## [1] 4
+## [1] 6
+## [1] 8
+## [1] 10</code></pre>
+<p>Sometimes, it is useful to store the results of a loop to an object. Here, let’s repeat the above command, but we will save the result as a vector. To do this, we will have to first create an empty vector and then request that the output of the command is stored in order. Here, I recommend that you first establish the number of iterations you want to run the command. You’ll see what you mean here:</p>
+<pre class="r"><code>times = 5
+v = numeric(length = times)
+for (i in 1:times) v[i] = i * 2
+v</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p>Let’s try combining a for-loop with <code>sample()</code>. Let’s generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a row of a matrix (the final matrix should be 5 rows of 10 columns).</p>
+<pre class="r"><code>set.seed(2)
+times = 5
+m = matrix(nrow = times, ncol = 10)
+for (i in 1:times) {
+    m[i, ] = sample(1:10, 10, replace = F)
+}
+m</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+## [1,]    5    6    9    1   10    7    4    8    3     2
+## [2,]    1    3    6    2    9   10    7    5    4     8
+## [3,]    6    9   10    5    8    3    1    7    2     4
+## [4,]    6    2    7    9    3    4   10    1    5     8
+## [5,]    9    1    2    4    5    6    7    8   10     3</code></pre>
+<p><strong>Mini-exercise:</strong> What do you think this code will produce (note <em>where</em> I put the <code>set.seed()</code> function)</p>
+<pre class="r"><code>times = 5
+m = matrix(nrow = times, ncol = 10)
+for (i in 1:times) {
+    set.seed(2)
+    m[i, ] = sample(1:10, 10, replace = F)
+}
+m</code></pre>
+<div id="practice-with-for-loops-the-p-value" class="section level4">
+<h4>8.3.2 Practice with for-loops: The P-value</h4>
+<p>Let’s use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let’s investigate this case for the p-value generated from a Pearson’s correlation coefficient. Let’s start by testing the correlation between two random sets of values drawn from normal distributions:</p>
+<pre class="r"><code>set.seed(2)
+r1 = rnorm(100)
+r2 = rnorm(100)
+test = cor.test(r1, r2)
+test</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  r1 and r2
+## t = -0.54989, df = 98, p-value = 0.5836
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.2491651  0.1425093
+## sample estimates:
+##         cor 
+## -0.05546129</code></pre>
+<p>What we have done is see if two sets of random numbers are correlated. As expected, we have a low correlations coefficient and high P-value.<br />
+<strong>However</strong>, what if we did this test a bunch of times? We should get a “significant correlation” (P&lt;0.05) 5% of the time. Let’s try this and see if that’s true. What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. The results will be a series of TRUE/FALSE. We can look at the proportion of iterations in which the answer was TRUE.</p>
+<pre class="r"><code>times = 10000
+set.seed(2)
+results = vector(length = times)
+cor.coefs = vector(length = times)
+for (i in 1:times) {
+    r1 = rnorm(100)
+    r2 = rnorm(100)
+    test = cor.test(r1, r2)
+    p = test$p.value
+    results[i] = p &lt;= 0.05
+}
+sum(results + 0)</code></pre>
+<pre><code>## [1] 508</code></pre>
+<p>You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a ‘significant’ result 500 times.</p>
+<hr />
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Strictly speaking, we can only generate pseudo-random numbers–the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

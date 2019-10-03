@@ -1,0 +1,324 @@
+---
+title: 'Module 8: Random Numbers, Apply, and Loops' 
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+```{r setup, include=F}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+***
+In this module, we will go over several useful R tricks that make things faster...
+
+##8.1 Random number generators
+
+The essence of stochasticity is that a parameter will vary randomly--but ***what do we mean by random!?***
+If you think about it, there is an infinate number of ways to sample a random set of numbers[^1]. Let's consider some options:
+
+####8.1.1 Sampling from a given set of numbers ***with or without replacement***. 
+We often want to generate a set of random number given some distribution. Say, for example, we want to sample randomly from a set of numbers. For example, let's sample 5 integer between 1 and 10. 
+
+```{r}
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10
+```
+You will probably notice that you have generated a *different* set of random numbers than what is shown here. This makes sense, but it makes it difficult to make this code *reproducible*. What we can do is to use `set.seed()` to make this process repeatable:
+
+```{r}
+set.seed(2) #you can put whatever number inside set.seed()
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10s
+```
+When you run the code like this, you should always get "2, 7, 5, 10, 6"  
+Try changing the number inside the `set.seed()` and see what you get. 
+
+Note that we have used **`replace=F`** to indicate that, once we choose a number, we want to avoid choosing it again. This is akin to physically picking 5 cards out of a set of 10 at the same time. We can do that up to the sample size, but no more. So, this will work:
+
+```{r}
+set.seed(2)
+sample(1:10, 10, replace=F) #10 random numbers between 1 and 10
+```
+But this will NOT work:
+```{r, error=T}
+sample(1:10, 11, replace=F) #11 random numbers between 1 and 10
+```
+
+In the first iteration, you have simply shuffled the order of the numbers. But you cannot shuffle 11 cards out of a deck of 10. 
+
+Compare this to the case when we set `replace=TRUE`:
+```{r}
+set.seed(2)
+sample(1:10, 10, replace=T) #10 random numbers between 1 and 10
+```
+You will notice that we have chose some numbers multiple times ("2" appears three times, "10" and "6" appear twice). When you set `replace=TRUE`, we are basically simulating a situation where we choose a card, write down the number, ***and then put it back before picking up another card***. This process is the essence of a simulation procedure called **bootstrapping**. 
+
+A quick recap:
+
+* `sample(x, n)` allows you to randomly sample *n* numbers from the set `x`.
+* `replace=F` (default) means once you sample one number, you will not sample it again. You can use this to shuffle the order of numbers (generally called *randomization*)
+* `replace=T` allows for sampling a number more than once. You can use this to resample a set of numbers with equal probability (generally called *bootstrapping*)
+
+***
+
+####8.1.2 Sampling from probability distributions
+
+Rather than sampling from a discrete set of numbers, we might want to sample numbers from a given hypothetical distribution. 
+As an illustration, let's sample a set of 100 numbers from a normal distribution with mean of 0 and standard deviation of 1
+```{r}
+set.seed(2)
+rn=rnorm(10, mean=0, sd=1)
+rn
+```
+
+You can see that it generates numbers with 8 digits. 
+We can generate a **histogram** and check to see if the output of the `rnorm()` function really looks like a normal distribution. Let's do it with 1,000 numbers so that we reduce sampling error.
+
+```{r, out.width='50%'}
+set.seed(2)
+hist(rnorm(1000, mean=0, sd=1), freq=F)
+```
+
+Looks about right.
+
+Now let's try the same thing but with a **uniform distribution** of numbers ranging from 0 to 1
+```{r, out.width='50%'}
+set.seed(2)
+runif(10, min=0, max=1)
+hist(runif(1000, min=0, max=1), freq=F)
+```
+
+
+###8.1.3 Coin-flips
+We can use the `rbinom()` function to simulate coin-flips, i.e., generating 0s and 1s randomly.
+
+(1) Flipping the coin 100 times, keeping track of result each time.
+```{r}
+set.seed(2)
+coin=rbinom(100, 1, prob=0.5) #100 trials of a single flip of the coin
+coin
+table(coin) #generate a table of results
+sum(coin)/length(coin) #calculate probability of 1
+```
+
+(2) Flipping the coin 100 times, but with skewed probability
+```{r}
+set.seed(2)
+flip=100
+coin4=rbinom(100, 1, prob=0.25)
+table(coin4)
+```
+
+(3) 10 trials of 100 fair coin flips
+```{r}
+set.seed(2)
+flips=100
+coin2=rbinom(10, flips, prob=0.5)
+coin2
+```
+
+###9.1.4 Table of probability distributions
+Distribution | Function to generate numbers
+--------|-------------
+Beta  | `rbeta()`
+Binomial | `rbinom()`
+Chi-square | `rchisq()`
+Exponential | `rexp()`
+Gamma | `rgamma()`
+Geometric | `rgeom()`
+Logistic | `rlogis()`
+Log Normal | `rlnorm()`
+Negative Binomial | `rnbinom()`
+Normal | `rnorm()`
+Poisson | `rpois()`
+Uniform | `runif()`
+Weibull | `rweibull()`
+
+
+***
+
+##8.2 The "apply-family" of functions
+
+The "apply family" function--which includes `apply()`, `sapply()`, `lapply()` and `tapply()`--takes a series of elements and applies a given function to it. The function to be applied can be defined within the 'apply' function.  
+
+Each apply-family function varies slightly in its syntax or output format. 
+
+###9.1.1 Applying a function to a set of elements using `sapply()` and `lapply()`
+Here, we will use the `sapply()` function, which can take a series of elements, run a function on it, and then save the output in the simplest format ("s" in "sapply" is for "simplify").
+\
+Let's try out a really simple application:
+```{r}
+sapply(1:5, function(x) x*2)
+```
+Here, what we did was to:
+
+(1) Take each element of `1:10` (integers from 1 to 10) and multiply each element by 2
+(2) Store the output in the simplest form, which is a vector
+
+
+Compare that with the `lapply()` function, which saves the output as a list.
+```{r, eval=T}
+lapply(1:5, function(x) x*2)
+```
+
+
+Here's another example:
+```{r}
+var=c(1,2,3)
+sapply(1:10, function(x) x*var)
+```
+What have we done here?
+
+(1) Set up an object called `var`, which is a vector of three numbers: 1, 2 and 3
+(2) Then, take each element of `1:10` and multiply by `var`, which itself is 3 numbers. 
+(3) Organize the results as a matrix, which is the simplest format to store a 2-dimensional set of numbers. In this case, there will be 3 rows of 10 numbers. 
+
+
+Again, compare this result with the output of `lapply()` (output not shown):
+```{r, eval=F}
+var=c(1,2,3)
+lapply(1:10, function(x) x*var)
+```
+
+So you can see that the output of `sapply()` is more user-friendly than the output of `lapply()` in general. However, `lapply()` is really useful when you want to apply a function whose output is not a neat set of values.  
+
+As an example, let's use the `lapply()` function to run a linear regression on a list of dataframes. First, we will create such a list by "splitting" the familiar `iris` dataset by species (output not shown):
+```{r, results='hide'}
+iris.list=split(iris, iris$Species)
+iris.list
+```
+Now we have a list object with three dataframes. Let's now use the `lapply()` function to conduct the same linear regression model `Petal.Length~Sepal.Length` on each dataset. The output will be the `anova()` tables that show the F-statistic and overall model fits. 
+```{r}
+lapply(iris.list, function(x) anova(lm(Petal.Length~Sepal.Length, data=x)))
+```
+You can see that the three species vary in their relationships between sepal length and petal length. Here's one way to visualize it:
+```{r, fig.height=3, fig.width=8}
+par(mfrow=c(1,3))
+plot(Petal.Length~Sepal.Length, data=iris.list[[1]], pch=19, col=1, main="setosa")
+plot(Petal.Length~Sepal.Length, data=iris.list[[2]], pch=19, col=2, main="versicolor")
+plot(Petal.Length~Sepal.Length, data=iris.list[[3]], pch=19, col=3, main="virginica")
+```
+
+###8.2.2 `tapply()` (and comparing it to `aggregate()`)
+The `tapply()` function applies a function to a set of values that are grouped by some factor. This is pretty much the same as the `aggregate()` function, but the output format is different. 
+As a demo, let's first set up a dataframe:
+```{r}
+fac=c(rep("A", 4), rep("B", 4), rep("C", 4))
+num=1:12
+dat=data.frame(num, fac)
+dat
+```
+
+Now, we'll sum the values associated each factor (A, B or C). We'll do this using `tapply()` and `aggregate()` and compare the outputs:
+```{r}
+tapply(dat$num, list(dat$fac), sum)
+aggregate(num, list(fac=fac), sum)
+```
+
+###8.2.3 Working with arrays using `apply()`
+The `apply()` function is useful when you want to apply a function on an array (i.e., an n-dimensional set of numbers). Here, the syntax is apply(X, MARGIN, FUN, ...), where X is a matrix or array, MARGIN is the direction in which the function will applied—for a matrix, `MARGIN=1` indicates rows, and `MARGIN=2` indicates columns. For example:
+
+```{r}
+m=matrix(1:20, nrow=5, byrow=TRUE) 
+m
+apply(m,1,sum) #sum the rows
+apply(m,2,sum) #sum the columns
+
+```
+
+Or you can set the margin to `c(1,2)` to apply a function to row/column combinations (i.e., each cell)
+```{r}
+apply(m,c(1,2),function(x) x^2)
+```
+
+Where `apply()` really shines is when working with larger-dimensional arrays. For example, consider a 3x4x5 3-D array. 
+
+![](images/array.png){width="50%"}
+We can sum across each of those dimensions:
+```{r}
+a=array(1:60, dim=c(5, 4, 3)) 
+apply(a, 1, sum)
+apply(a, 2, sum)
+apply(a, 3, sum)
+apply(a, c(1,2), sum)
+```
+
+
+##8.3 For-Loops
+
+A “for loop” is another way to repeat a function or series of functions many times. The idea here is to request that an index (e.g., i) take on a series of values, and that a lines of commands are executed as many times as there are different values of i.
+
+###8.3.1 Simple examples of for-loops
+
+Here’s a simple example for just repeating a command 5 times:
+```{r}
+for (i in 1:5) print(i*2)
+```
+
+Sometimes, it is useful to store the results of a loop to an object. Here, let’s repeat the above command, but we will save the result as a vector. To do this, we will have to first create an empty vector and then request that the output of the command is stored in order. Here, I recommend that you first establish the number of iterations you want to run the command. You’ll see what you mean here:
+```{r}
+times=5 
+v=numeric(length=times)
+for (i in 1:times) v[i]=i*2
+v
+```
+
+Let's try combining a for-loop with `sample()`. Let's generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a row of a matrix (the final matrix should be 5 rows of 10 columns).
+
+```{r}
+set.seed(2)
+times=5
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times){
+m[i,]=sample(1:10, 10, replace=F)
+}
+m
+```
+
+**Mini-exercise:** What do you think this code will produce (note *where* I put the `set.seed()` function)
+```{r, eval=F}
+times=5
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times){
+set.seed(2)
+m[i,]=sample(1:10, 10, replace=F)
+}
+m
+```
+
+####8.3.2 Practice with for-loops: The P-value
+
+Let's use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let's investigate this case for the p-value generated from a Pearson's correlation coefficient. 
+Let's start by testing the correlation between two random sets of values drawn from normal distributions:
+```{r}
+set.seed(2)
+r1=rnorm(100)
+r2=rnorm(100)
+test=cor.test(r1, r2)
+test
+```
+What we have done is see if two sets of random numbers are correlated. As expected, we have a low correlations coefficient and high P-value.  
+**However**, what if we did this test a bunch of times? We should get a "significant correlation" (P<0.05) 5% of the time. Let's try this and see if that's true. 
+What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. The results will be a series of TRUE/FALSE. We can look at the proportion of iterations in which the answer was TRUE.
+
+```{r}
+times=10000
+set.seed(2)
+results=vector(length=times)
+cor.coefs=vector(length=times)
+for(i in 1:times){
+r1=rnorm(100)
+r2=rnorm(100)
+test=cor.test(r1,r2)
+p=test$p.value
+results[i]=p<=0.05
+}
+sum(results+0)
+```
+
+You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a 'significant' result 500 times. 
+
+***
+[^1]: Strictly speaking, we can only generate pseudo-random numbers--the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it. 
