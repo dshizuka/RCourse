@@ -27,6 +27,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ###[07. Custom Functions (and if-else statements)](07.Functions.html)
 
+* ###[08. Apply Fuctions and Loops](08.Apply.html)
+
 ***
 
 ##Worked Examples:
