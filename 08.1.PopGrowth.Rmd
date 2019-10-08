@@ -18,7 +18,9 @@ library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE, fig.pos="h")
 ```
 
-Let's also install and load packages that we'll use.
+Let's also install and load packages that we'll use. `primer` is a package associated with the book, "A Primer of Ecology with R" [(get full pdf version here)](http://www.cas.miamioh.edu/~stevenmh/stevens-2009-part.pdf). `RColorBrewer` is a package that gives you access to friendly color palettes. 
+
+
 ```{r, eval=F, message=F}
 #if you don't have these packages on your computer:
 install.packages('primer') 
