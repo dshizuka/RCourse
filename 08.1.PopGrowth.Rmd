@@ -1,5 +1,5 @@
 ---
-title: 'Module 10: Modeling Population Growth' 
+title: 'Module 8 Example: Modeling Population Growth' 
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output:
@@ -10,6 +10,8 @@ output:
 ***
 
 ####In this module, we will be demonstrating some basic concepts in population ecology using R. This will help us get practice with using a variety of R tricks such as apply functions, sampling random numbers, and using for-loops.
+
+***
 
 ####Set up: 
 To begin this module, I will show you how to set up the .Rmd file so that code does not go off the page when rendering in pdf. To do this, you will use the `opts_chunk$set()` function in the `knitr` package:
@@ -33,7 +35,7 @@ library(RColorBrewer)
 
 ***
 
-##9.1 Modeling the basic exponential/geometric population growth model
+##1 Modeling the basic exponential/geometric population growth model
 
 Let's think of a hypothetical population that you have observed over two years. Say there were 100 individuals in the first year, and 150 individuals in the second year. Then, we can say that the growth rate of the population over those two years is $\frac{N_2}{N_1}=1.5$.  
 More generally, we can think of the annual growth rate, $\lambda$ as the number of individuals in one year compared to the year before:  
@@ -67,33 +69,21 @@ round(N,0)
 ```
 
 Let's plot this on a linear scale and log scale. 
-```{r, echo=T, eval=F, fig.width=4, fig.height=3, out.height='2in'}
-plot(t, N, type="o", pch=19, las=1)
-```
-```{r, echo=F, fig.width=4, fig.height=3, out.height='2in'}
-par(mar=c(4,4,1,4))
+```{r, echo=T, eval=T, fig.width=4, fig.height=4}
 plot(t, N, type="o", pch=19, las=1)
 ```
 
-```{r, echo=T, eval=F, fig.width=4, fig.height=3, out.height='2in'}
-plot(t, N, type="o", log="y", pch=19, las=1)
-```
-```{r, echo=F, fig.width=4, fig.height=3, out.height='2in'}
-par(mar=c(4,4,1,4))
+
+```{r, echo=T, eval=T, fig.width=4, fig.height=4}
 plot(t, N, type="o", log="y", pch=19, las=1)
 ```
 
-**Note:** *Compare this with this alternative method to plot y on the log-scale (base 10 log). Clue: pay attention to the y-axis tick marks.*
-```{r, echo=T, eval=F, fig.width=4, fig.height=3, out.height='3in'}
-#output not shown
-plot(t, log10(N), type="o", pch=19, las=1)
-```
 
 These two plots describe exponential (or geometric) population growth: i.e., population under a constant growth rate.
 
 ***
 **A digression**: Let's use this opportunity to demonstrate a solution to a question I've had a number of times in assignments: how can you plot a two-panel plot and customize the margins on each panel separately? You can do this by setting up the plotting using a `layout()` function (instead of `par(mfrow=)`), which will allow us to set the margins separately for each panel. Here's a demo:
-```{r, fig.width=4, fig.height=6, out.height='3in'}
+```{r, fig.width=4, fig.height=6}
 layout(matrix(c(1,2), nrow=2))
 par(mar=c(0.5,4,4,4))
 plot(t, N, type="o", pch=19, las=1, xaxt="n", main="Population Growth on Two Scales")
@@ -102,9 +92,21 @@ par(mar=c(4,4,0.5,4))
 plot(t, N, type="o", log="y",pch=19, las=1)
 ```
 
+Compare this with:
+```{r, fig.width=8, fig.height=4}
+layout(matrix(c(1,2), nrow=1))
+par(mar=c(4,4,2,0.5))
+plot(t, N, type="o", pch=19, las=1)
+
+par(mar=c(4,4,2,0.5))
+plot(t, N, type="o", log="y",pch=19, las=1)
+axis(side=2, labels=F)
+```
+
+
 ***
 
-##9.2 Varying the growth rate
+##2. Varying the growth rate
 
 Now, let's try projecting the population with different growth rates, $\lambda$. Let's think about how to do this. We will now have two parameters that vary ($t$ and $\lambda$). This means that we want an output that is a *matrix*, with one parameter (say $t$) on the rows and the other parameter ($\lambda$) on the columns. We will do this by employing the `sapply()` function. 
 \
@@ -164,7 +166,7 @@ Since the instantaneous rate of growth, $r = \ln\lambda$:
 * ##### Population decreases when $\lambda<1$ or $r<0$ 
 
 
-##9.3 Simulating stochasticity
+##3. Simulating stochasticity
 
 Thus far, we have assumed that population growth rate is constant through time. This is clearly not the case in most natural populations. Even disregarding density-dependent mechanisms, populationg growth rates fluctuate due to different sources of stochasticity (i.e., randomness). One major source of randomness in population growth rate is ***environmental stochasticity:*** i.e., random fluctuations in population growth rate due to good and bad years. 
 
@@ -252,11 +254,13 @@ abline(h=100, lty=2)
 
 This figure shows the population trajectories of this population under 10 runs of the simulation. Remember that in all of these cases, the mean population growth rate[^2] is 1.2--i.e., the population is supposed to be growing at a pretty quick pace. Yet, none of the simulations show the population growing much over 20 years. In fact, the population size decreased in 4 out of the 10 simulations. This demonstrates a central concept in population ecology (and conservation biology)--*variation in population growth rates tend to slow down population growth*. 
 
-##9.4 Population Viability Analysis: An over-simplified example
+**
+
+##4. Population Viability Analysis: An over-simplified example
 
 Population Viability Analysis (PVA) is a population modeling method to assess extinction risk of a population or species. It is the mathematical foundation of conservation biology, and it is used worldwide to guide management decisions for threatened species. Here, I will walk through a simplified example of PVA using an example dataset. 
 
-###9.4.1 The Song Sparrow Dataset
+###4.1 The Song Sparrow Dataset
 Here, we will be using the `sparrows` dataset from the R package `primer`. You should have already installed and loaded the package at the beginning of the module. If you haven't yet, run `library(primer)` to load it.  
 The `primer` package is a package that is associated with a textbook called "A Primer of Ecology with R", written by Henry Stevens[^3]. The `sparrow` dataset is based on counts of Song Sparrows (*Melospiza melodia*) in Darrtown, OH from 1966 to 2003. 
 
@@ -275,14 +279,14 @@ We can plot the data:
 plot(Count~Year, data=sparrows, type="o", las=1)
 ```
 
-###9.4.2 Calculating lambda from counts
+###4.2 Calculating lambda from counts
 
 The first thing we can do with this data is to extract the annual population growth rates $\lambda$ for each pair of years. That is, we need to calculate $\frac{N_2}{N_1}$, $\frac{N_3}{N_2}$, $\frac{N_4}{N_3}$, etc.
 ```{r, fig.width=4, fig.height=4}
 counts=sparrows$Count
 l=counts[-1]/counts[-length(counts)]
 round(l, 2)
-hist(l, breaks=20, main="Histogram of lambdas")
+hist(l, breaks=20, main="Histogram of lambdas", col="gray")
 ```
 
 Let's extract the mean and standard deviation of $\ln\lambda$:
@@ -299,8 +303,15 @@ sim.l=rlnorm(50, meanlog=mean(log(l)), sdlog=sd(log(l)))
 round(sim.l,2)
 ```
 
-###9.4.3 Projecting the population over 20 years
+###4.3 Projecting the population over 20 years
 Let' use this to simulate this Song Sparrow population over the next 20 years (or rather, from 2003 to 2023).
+
+First, let's look at the population size in 2003, the last year in this dataset:
+```{r}
+tail(sparrows)
+```
+
+So we will use N0 = 43 as our starting point, and simulate the population over the next 20 years.
 
 ```{r, fig.height=3.5, fig.width=4.5}
 #Single simulation
@@ -318,7 +329,7 @@ plot(1:(time), N, type="o", las=1, xaxt="n")
 axis(side=1, at=c(1,6,11,16,20), labels=c(2003, 2008, 2013, 2018, 2023))
 ```
 
-Using the same principles as the stochastic simulations in Section 9.3, we can also conduct multiple simulations and plot the results
+Using the same principles as the stochastic simulations in Section 3, we can also conduct multiple simulations and plot the results
 ```{r, fig.height=3.5, fig.width=4.5}
 set.seed(2)
 sims=5
@@ -338,7 +349,9 @@ matplot(1:time,outmat, type="l", las=1, lty=5, ylim=c(0,200), ylab="N", xaxt="n"
 axis(side=1, at=c(1,6,11,16,20), labels=c(2003, 2008, 2013, 2018, 2023))
 ```
 
-###9.4.4 The PVA: What is the extinction risk?
+You can see that there are scenarios in which the population increases to very large numbers, and other scenarios in which the opulation declines.
+
+###4.4 The PVA: What is the extinction risk?
 
 Now, let's say we want to ask a question about extinction risk of this population. For example, we might ask what are the chances that this population goes extinct within 100 years, given the observed pattern in population sizes? To figure this out, we need to conduct a large number of simulations (in this case, let's do 1,000x) projecting the population for 100 years (or 101, if starting from year 0). Then, we want to ask: in how many iterations of this model does the population size dip below 2 (the minimum number of individuals needed to reproduce)?
 
