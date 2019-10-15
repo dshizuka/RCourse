@@ -462,12 +462,21 @@ p</code></pre>
 location = c(long = mean(longs), lat = mean(lats))
 map = get_stamenmap(location, bbox = c(left = -1.5, bottom = 51.7, right = -1.2, 
     top = 51.9), zoom = 10, source = &quot;stamen&quot;, maptype = &quot;terrain-background&quot;, 
-    filetype = &quot;png&quot;)
-# now add this map as the base, and then plot the geom_path on top of it.
+    filetype = &quot;png&quot;)</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain-background/10/507/338.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain-background/10/508/338.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain-background/10/507/339.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain-background/10/508/339.png</code></pre>
+<pre><code>## Warning in if (!crop) {: the condition has length &gt; 1 and only the first
+## element will be used</code></pre>
+<pre><code>## Warning in if (crop) {: the condition has length &gt; 1 and only the first
+## element will be used</code></pre>
+<pre class="r"><code># now add this map as the base, and then plot the geom_path on top of it.
 map_lines = ggmap(map) + geom_path(aes(x = Longitude, y = Latitude, group = Date, 
     colour = as.numeric(Date)), data = all.dat.R1A35) + scale_colour_gradient(low = &quot;gold&quot;, 
     high = &quot;red&quot;)
 map_lines</code></pre>
+<p><img src="09.batch_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <ul>
 <li>Note: You used to be able to directly plot onto a google map, but this now requires an API key. It’s possible to do this for free but I’m not going to go through this in this tutorial.</li>
 </ul>

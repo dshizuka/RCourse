@@ -226,7 +226,7 @@ p
 #### with ggmap
 
 We can make this even fancier, and overlay these results on a terrain map using the package 'ggmap':
-```{r, eval=F}
+```{r, eval=T}
 #use the get_map() function to download a map centered on the mean long/lat position of the bird, with a given zoom factor
 location = c(long=mean(longs), lat=mean(lats))
 map=get_stamenmap(location, bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10, source="stamen", maptype="terrain-background", filetype="png")
