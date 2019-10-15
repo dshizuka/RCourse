@@ -31,6 +31,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
     + ####[08.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
 
+* ###[09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
+
 ***
 
 ##Worked Examples:
