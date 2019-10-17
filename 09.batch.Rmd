@@ -30,9 +30,9 @@ I have chosen this study because (1) it's super interesting and (2) the complete
 
 * Go to the Dryad database for the associated data files: <http://dx.doi.org/10.5061/dryad.j444n>.
 
-* Go ahead and download the entire .zip file to your data folder.
+* Go ahead and download the entire .zip file to your computer.
 
-* Save the folder as "Flack2014"
+* Unzip and save the folder within the "data" subfolder in your Rprojects folder. 
 
 Here is a visualization of the folder structure of the data inside your data subfolder:
 
