@@ -343,6 +343,16 @@ legend("topleft", legend=c("A: Sequential", "B: Rotation", "C: Random"), pch=21,
 
 What's really interesting here is that Treatements B & C perform better than Group A by the 5th and 6th release. By that point, the individuals in groups B and C have the same experience with this particular route as individuals in group A, but they have experienced more releases overall.
 
+Same plot with ggplot:
+```{r}
+p = ggplot(summ.dat, aes(x=trial, y=mean.fpe, color=group)) +
+  geom_point(size=3) + 
+  geom_line() + 
+  geom_errorbar(aes(ymin=mean.fpe-se.fpe, ymax=mean.fpe+se.fpe), width=0.3)
+p
+```
+
+
 This result doesn't necessarily hold up for Routes 2 and 3 though, possibly because the "group A" birds have had enough general practice in finding homing routes. 
 
 ![Route 2](images/batch/Route2.png){width="40%"}

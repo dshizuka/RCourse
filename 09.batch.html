@@ -202,7 +202,7 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">Module 12: How Pigeons Learn Routes</h1>
 <h3 class="subtitle"><em>A Lesson in Batch Processing</em></h3>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 10/15/19</em></h4>
+<h4 class="date"><em>updated 10/17/19</em></h4>
 
 </div>
 
@@ -593,6 +593,12 @@ legend(&quot;topleft&quot;, legend = c(&quot;A: Sequential&quot;, &quot;B: Rotat
     pt.bg = colors, title = &quot;Group&quot;, cex = 0.8)</code></pre>
 <p><img src="09.batch_files/figure-html/unnamed-chunk-26-1.png" width="480" /></p>
 <p>What’s really interesting here is that Treatements B &amp; C perform better than Group A by the 5th and 6th release. By that point, the individuals in groups B and C have the same experience with this particular route as individuals in group A, but they have experienced more releases overall.</p>
+<p>Same plot with ggplot:</p>
+<pre class="r"><code>p = ggplot(summ.dat, aes(x = trial, y = mean.fpe, color = group)) + geom_point(size = 3) + 
+    geom_line() + geom_errorbar(aes(ymin = mean.fpe - se.fpe, ymax = mean.fpe + 
+    se.fpe), width = 0.3)
+p</code></pre>
+<p><img src="09.batch_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>This result doesn’t necessarily hold up for Routes 2 and 3 though, possibly because the “group A” birds have had enough general practice in finding homing routes.</p>
 <p><img src="images/batch/Route2.png" alt="Route 2" style="width:40.0%" /> <img src="images/batch/Route3.png" alt="Route 3" style="width:40.0%" /></p>
 </div>
