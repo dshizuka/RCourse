@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+* 10/17/19. Project proposals are due today! Upload them to your Box folder. Please try to do this by the end of today.
+
 * 10/2/19. I have now uploaded the [Guidelines for the Independent Project](pdfs/Independent Projects Guideline_2019.pdf). There are three major components: (1) Project Proposal, (2) Progress Reports, and (3) Final Report. See the pdf for details. 
 
 * 9/19/19: I have now uploaded [Assignment 4](pdfs/Assignment4.pdf). In this assignment, you will find a published paper with publicly accessible archived data, and you will write a script to import this data and make a plot. I am giving little bit longer timeline for this assignment--it will be due on Thursday, September 26th. 
