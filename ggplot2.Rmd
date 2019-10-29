@@ -1,0 +1,91 @@
+---
+title: "Extra: Data Wrangling with dplyr"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(out.width="50%")
+```
+
+```{r, message=F, warning=F}
+library(ggplot2)
+library(dplyr)
+```
+
+Key reference: https://r4ds.had.co.nz/data-visualisation.html
+
+##1. The basics of the ggplot2 syntax
+
+* First specify the data and (optionally) the basic "mapping" parameters using the `ggplot()` function.
+
+* Then, add specific plot components using additional functions such as `geom_points()`. Note that you literally add these components using `+`
+
+```{r}
+#step 1: blank plotting area
+ggplot(data=iris, mapping=aes(x=Sepal.Length, y=Sepal.Width))
+
+
+#step 2: add scatter plot
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point()
+
+```
+
+***
+```{r}
+# step 3: add color by species
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2)
+
+```
+
+```{r}
+# step 3 - alternative
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(aes(col=Species), size=2)
+
+```
+
+**In Base R**
+```{r, eval=T}
+colorset=rainbow(3) #create a palette of 3 colors
+pt.cols=colorset[as.numeric(iris$Species)] #This is now a vector of colors for each point
+
+plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width", las=1, pch=19, col=pt.cols)
+
+```
+
+***
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class))
+```
+
+```{r}
+ggplot(data = filter(mpg, class!="2seater"), mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class))
+```
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class))
+```
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class)) +
+  geom_smooth(method="lm", color="black")
+```
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, col=class), se=F)
+```
