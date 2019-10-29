@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Extra: Data Wrangling with dplyr</title>
+<title>Extra: Intro to ggplot2</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -297,9 +297,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Extra: Data Wrangling with dplyr</h1>
+<h1 class="title toc-ignore">Extra: Intro to ggplot2</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 10/28/19</em></h4>
+<h4 class="date"><em>updated 10/29/19</em></h4>
 
 </div>
 
@@ -309,50 +309,77 @@ library(dplyr)</code></pre>
 <p>Key reference: <a href="https://r4ds.had.co.nz/data-visualisation.html" class="uri">https://r4ds.had.co.nz/data-visualisation.html</a></p>
 <div id="the-basics-of-the-ggplot2-syntax" class="section level2">
 <h2>1. The basics of the ggplot2 syntax</h2>
+<p>ggplot2 uses what is called <em>layered grammar of graphics</em></p>
 <ul>
-<li><p>First specify the data and (optionally) the basic “mapping” parameters using the <code>ggplot()</code> function.</p></li>
-<li><p>Then, add specific plot components using additional functions such as <code>geom_points()</code>. Note that you literally add these components using <code>+</code></p></li>
+<li><p>First specify the data using the <code>ggplot()</code> function.</p></li>
+<li><p>Add “aesthetic mapping” (i.e., specify the visual parameters of the graphic) using <code>aes()</code> within the <code>ggplot()</code> function. This will act as the default aesthetics for all layers, but you can overwrite them within the <code>geom_</code> functions as well.</p></li>
+<li><p>Then, add specific plot components using additional <code>geom_</code> functions (such as <code>geom_points()</code>). Note that you literally add these components using <code>+</code></p></li>
+<li><p>Layer on any other components with additional <code>geom_</code> or <code>stat_</code> functions</p>
+<ul>
+<li>These layers can include summary stats (e.g., means, medians, counts, etc… or any other stats that you can calculate via custom functions).</li>
+</ul></li>
+<li><p>Make adjustments via scales, axes, legends, etc.</p></li>
 </ul>
+<hr />
+</div>
+<div id="building-a-simple-scatterplot-step-by-step" class="section level2">
+<h2>Building a simple scatterplot, step-by-step</h2>
 <pre class="r"><code>#step 1: blank plotting area
 ggplot(data=iris, mapping=aes(x=Sepal.Length, y=Sepal.Width))</code></pre>
 <p><img src="ggplot2_files/figure-html/unnamed-chunk-2-1.png" width="50%" /></p>
 <pre class="r"><code>#step 2: add scatter plot
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point()</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-2-2.png" width="50%" /></p>
-<hr />
-<pre class="r"><code># step 3: add color by species
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
+<pre class="r"><code># step 3: add color by species, change point size
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
-<pre class="r"><code># step 3 - alternative
-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
-  geom_point(aes(col=Species), size=2)</code></pre>
 <p><img src="ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
-<p><strong>In Base R</strong></p>
-<pre class="r"><code>colorset=rainbow(3) #create a palette of 3 colors
-pt.cols=colorset[as.numeric(iris$Species)] #This is now a vector of colors for each point
+<pre class="r"><code># step 3 - alternative syntax
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(aes(color=Species), size=2)</code></pre>
+</div>
+<div id="other-simple-plots" class="section level2">
+<h2>Other simple plots</h2>
+<p>Boxplot:</p>
+<pre class="r"><code>ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  geom_boxplot()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Bar plot (just means)</p>
+<pre class="r"><code>ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
+  geom_bar(stat=&quot;summary&quot;, fun.y=&quot;mean&quot;)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Points with error bars</p>
+<pre class="r"><code>se=function(x) sqrt(var(x)/length(x))
+ymax=function(x) mean(x) + se(x)
+ymin=function(x) mean(x) - se(x)
 
-plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
+ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  stat_summary(fun.y= mean, fun.ymin = ymin, fun.ymax=ymax)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <hr />
+</div>
+<div id="adding-model-outputs-onto-plots" class="section level2">
+<h2>Adding model outputs onto plots</h2>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class))</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
-<pre class="r"><code>ggplot(data = filter(mpg, class!=&quot;2seater&quot;), mapping = aes(x = displ, y = hwy)) +
-  geom_point(mapping = aes(color = class))</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class))</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method=&quot;lm&quot;, color=&quot;black&quot;)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, col=class), se=F)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="50%" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>You can filter data within the ggplot function (you have also have loaded <code>dplyr</code> or <code>tidyverse</code> library to use the <code>filter()</code> function though).</p>
+<pre class="r"><code>ggplot(data = filter(mpg, class!=&quot;2seater&quot;), mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, col=class), se=F)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 
 

@@ -26,13 +26,32 @@ p
 
 # step 3 - alternative
 p = ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
-  geom_point(aes(col=Species), size=2)
+  geom_point(aes(color=Species), size=2)
 p
 
 #step 4: labels
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(aes(col=Species), size=2) +
   labs(x="Sepal Length (cm)", y="Sepal Width (cm)")
+
+
+ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  geom_boxplot()
+
+
+ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
+  geom_bar(stat="summary", fun.y="mean")
+
+
+
+ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
+  geom_bar(stat="summary", fun.y="mean")
+
+se=function(x) sqrt(var(x)/length(x))
+ymax=function(x) mean(x) + se(x)
+ymin=function(x) mean(x) - se(x)
+ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  stat_summary(fun.y= mean, fun.ymin = ymin, fun.ymax=ymax)
 
 
 ####

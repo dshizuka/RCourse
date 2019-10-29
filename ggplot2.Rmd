@@ -1,5 +1,5 @@
 ---
-title: "Extra: Data Wrangling with dplyr"
+title: "Extra: Intro to ggplot2"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(out.width="50%")
+#knitr::opts_chunk$set(out.width="50%")
 ```
 
 ```{r, message=F, warning=F}
@@ -23,56 +23,90 @@ Key reference: https://r4ds.had.co.nz/data-visualisation.html
 
 ##1. The basics of the ggplot2 syntax
 
-* First specify the data and (optionally) the basic "mapping" parameters using the `ggplot()` function.
+ggplot2 uses what is called *layered grammar of graphics*  
 
-* Then, add specific plot components using additional functions such as `geom_points()`. Note that you literally add these components using `+`
+* First specify the data using the `ggplot()` function.
 
-```{r}
+* Add "aesthetic mapping" (i.e., specify the visual parameters of the graphic) using `aes()` within the `ggplot()` function. This will act as the default aesthetics for all layers, but you can overwrite them within the `geom_` functions as well.
+
+* Then, add specific plot components using additional `geom_` functions (such as `geom_points()`). Note that you literally add these components using `+`
+
+* Layer on any other components with additional `geom_` or `stat_` functions
+
+    + These layers can include summary stats (e.g., means, medians, counts, etc... or any other stats that you can calculate via custom functions).
+    
+
+* Make adjustments via scales, axes, legends, etc.
+
+***
+
+## Building a simple scatterplot, step-by-step
+```{r, out.width="50%"}
 #step 1: blank plotting area
 ggplot(data=iris, mapping=aes(x=Sepal.Length, y=Sepal.Width))
+```
 
-
+```{r, out.width="50%"}
 #step 2: add scatter plot
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point()
 
 ```
 
-***
-```{r}
-# step 3: add color by species
+```{r, out.width="50%"}
+# step 3: add color by species, change point size
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2)
 
 ```
 
-```{r}
-# step 3 - alternative
+```{r, out.width="50%", eval=F}
+# step 3 - alternative syntax
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
-  geom_point(aes(col=Species), size=2)
+  geom_point(aes(color=Species), size=2)
 
 ```
 
-**In Base R**
-```{r, eval=T}
-colorset=rainbow(3) #create a palette of 3 colors
-pt.cols=colorset[as.numeric(iris$Species)] #This is now a vector of colors for each point
 
-plot(Sepal.Width~Sepal.Length, data=iris, xlab="Sepal Length", ylab="Sepal Width", las=1, pch=19, col=pt.cols)
+## Other simple plots
+
+Boxplot:
+
+```{r}
+ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  geom_boxplot()
+```
+
+
+Bar plot (just means)
+
+```{r}
+ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
+  geom_bar(stat="summary", fun.y="mean")
+```
+
+Points with error bars
+
+```{r}
+se=function(x) sqrt(var(x)/length(x))
+ymax=function(x) mean(x) + se(x)
+ymin=function(x) mean(x) - se(x)
+
+ggplot(iris, aes(x= Species, y=Sepal.Width)) +
+  stat_summary(fun.y= mean, fun.ymin = ymin, fun.ymax=ymax)
 
 ```
+
 
 ***
+
+## Adding model outputs onto plots 
 
 ```{r}
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class))
 ```
 
-```{r}
-ggplot(data = filter(mpg, class!="2seater"), mapping = aes(x = displ, y = hwy)) +
-  geom_point(mapping = aes(color = class))
-```
 
 ```{r}
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
@@ -84,8 +118,17 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method="lm", color="black")
 ```
+
 ```{r}
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = class)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, col=class), se=F)
+```
+
+You can filter data within the ggplot function (you have also have loaded `dplyr` or `tidyverse` library to use the `filter()` function though). 
+
+```{r}
+ggplot(data = filter(mpg, class!="2seater"), mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method="lm", aes(x = displ, y = hwy, col=class), se=F)
 ```
