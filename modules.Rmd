@@ -33,6 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ###[09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
 
+* ###[Extra: Intro to ggplot2](ggplot.html)
 ***
 
 ##Worked Examples:

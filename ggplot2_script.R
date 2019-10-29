@@ -76,6 +76,8 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_smooth(method="lm", aes(x = displ, y = hwy, col=class), se=F) +
   labs(x="Enging Displacement", y="Highway Miles Per Gallon")
 
+
+# let's do a new version, let's look at
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method="loess", se=T) +
@@ -83,5 +85,69 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = drv)) +
-  geom_smooth(method="lm", aes(x = displ, y = hwy, col=drv), se=F)+
-  labs(x="Engine Displacement", y="Highway Miles Per Gallon")
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2")
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_manual(values=c("4"='tomato', "f"='slateblue', "r"='darkgreen'))
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv, shape = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_manual(values=c("4"='tomato', "f"='slateblue', "r"='darkgreen')) +
+  facet_wrap(~drv)
+
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv, shape = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_manual(values=c("4"='tomato', "f"='slateblue', "r"='darkgreen')) +
+  facet_wrap(~drv, nrow=2)
+
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2") +
+  scale_y_continuous(limits=c(10,50))
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2") +
+  scale_y_continuous(limits=c(10,50), breaks=seq(10,50,5))
+
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2", labels=c("4WD", "front-wheel", "rear-wheel")) +
+  theme_classic()
+
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2", labels=c("4WD", "front-wheel", "rear-wheel")) +
+  theme(panel.background = element_blank(), panel.border = element_rect(fill=NA))
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method="lm", aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x="Engine Displacement", y="Highway Miles Per Gallon") +
+  scale_color_brewer(palette="Set2", labels=c("4WD", "front-wheel", "rear-wheel")) +
+  theme(panel.grid =element_blank(), panel.border = element_rect(fill=NA), panel.background = element_rect(fill="lightyellow"))

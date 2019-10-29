@@ -323,7 +323,7 @@ library(dplyr)</code></pre>
 <hr />
 </div>
 <div id="building-a-simple-scatterplot-step-by-step" class="section level2">
-<h2>Building a simple scatterplot, step-by-step</h2>
+<h2>2. Building a simple scatterplot, step-by-step</h2>
 <pre class="r"><code>#step 1: blank plotting area
 ggplot(data=iris, mapping=aes(x=Sepal.Length, y=Sepal.Width))</code></pre>
 <p><img src="ggplot2_files/figure-html/unnamed-chunk-2-1.png" width="50%" /></p>
@@ -340,7 +340,7 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(aes(color=Species), size=2)</code></pre>
 </div>
 <div id="other-simple-plots" class="section level2">
-<h2>Other simple plots</h2>
+<h2>3. Other simple plots</h2>
 <p>Boxplot:</p>
 <pre class="r"><code>ggplot(iris, aes(x= Species, y=Sepal.Width)) +
   geom_boxplot()</code></pre>
@@ -360,7 +360,7 @@ ggplot(iris, aes(x= Species, y=Sepal.Width)) +
 <hr />
 </div>
 <div id="adding-model-outputs-onto-plots" class="section level2">
-<h2>Adding model outputs onto plots</h2>
+<h2>4. Adding model outputs onto plots</h2>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class))</code></pre>
 <p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
@@ -380,6 +380,82 @@ ggplot(iris, aes(x= Species, y=Sepal.Width)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, col=class), se=F)</code></pre>
 <p><img src="ggplot2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="making-adjustments-with-additional-specifications" class="section level2">
+<h2>5. Making adjustments with additional specifications</h2>
+<p>Let’s start a new plot, using the “drive type” (4WD, front-wheel, rear-wheel) as the grouping variable:</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Now make adjustments to the axis labels</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div id="changing-color-palette-using-scale_color" class="section level3">
+<h3>changing color palette using <code>scale_color</code></h3>
+<p>Using ColorBrewer</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_brewer(palette=&quot;Set2&quot;, labels=c(&quot;4WD&quot;, &quot;front-wheel&quot;, &quot;rear-wheel&quot;))</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Using custom sets of colors</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv, shape = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_manual(values=c(&quot;4&quot;=&#39;tomato&#39;, &quot;f&quot;=&#39;slateblue&#39;, &quot;r&quot;=&#39;darkgreen&#39;), labels=c(&quot;4WD&quot;, &quot;front-wheel&quot;, &quot;rear-wheel&quot;))</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="faceting" class="section level3">
+<h3>Faceting</h3>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv, shape = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_manual(values=c(&quot;4&quot;=&#39;tomato&#39;, &quot;f&quot;=&#39;slateblue&#39;, &quot;r&quot;=&#39;darkgreen&#39;)) +
+  facet_wrap(~drv)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color=drv, shape = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_manual(values=c(&quot;4&quot;=&#39;tomato&#39;, &quot;f&quot;=&#39;slateblue&#39;, &quot;r&quot;=&#39;darkgreen&#39;)) +
+  facet_wrap(~drv, ncol=2)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="background" class="section level3">
+<h3>Background</h3>
+<p>Playing around with themes</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_brewer(palette=&quot;Set2&quot;, labels=c(&quot;4WD&quot;, &quot;front-wheel&quot;, &quot;rear-wheel&quot;)) +
+  theme_classic()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>Customizing the panel, v1</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_brewer(palette=&quot;Set2&quot;, labels=c(&quot;4WD&quot;, &quot;front-wheel&quot;, &quot;rear-wheel&quot;)) +
+  theme(panel.background = element_blank(), panel.border = element_rect(fill=NA))</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Customizing the panel, v2</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(method=&quot;lm&quot;, aes(x = displ, y = hwy, color=drv), se=F)+
+  labs(x=&quot;Engine Displacement&quot;, y=&quot;Highway Miles Per Gallon&quot;) +
+  scale_color_brewer(palette=&quot;Set2&quot;, labels=c(&quot;4WD&quot;, &quot;front-wheel&quot;, &quot;rear-wheel&quot;)) +
+  theme(panel.grid =element_blank(), panel.border = element_rect(fill=NA), panel.background = element_rect(fill=&quot;lightyellow&quot;))</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
 </div>
 
 
