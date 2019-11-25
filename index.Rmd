@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+* 11/25/19. [Updated guidelines for Independent Projects!](pdfs/Independent Projects Guideline_2019.pdf)
+
 * 10/17/19. Project proposals are due today! Upload them to your Box folder. Please try to do this by the end of today.
 
 * 10/2/19. I have now uploaded the [Guidelines for the Independent Project](pdfs/Independent Projects Guideline_2019.pdf). There are three major components: (1) Project Proposal, (2) Progress Reports, and (3) Final Report. See the pdf for details. 
