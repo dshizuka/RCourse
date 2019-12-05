@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
-* 11/25/19. [Updated guidelines for Independent Projects!](pdfs/Independent Projects Guideline_2019.pdf)
+* 11/25/19. [Updated guidelines for Independent Projects!](pdfs/Independent Projects Guideline_2019_revised.pdf)
 
 * 10/17/19. Project proposals are due today! Upload them to your Box folder. Please try to do this by the end of today.
 
