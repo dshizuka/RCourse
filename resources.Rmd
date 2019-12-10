@@ -20,12 +20,17 @@ Now that you have taken this course to get started with R, here are a few tips o
 
 **R is a language**, and like any language, you will lose your fluency if you don't use it. 
 
-* Annotate your codes so that you don't forget what each line does! Try to write code so that YOU will understand it 10 years later (trust me, I have had to do this).
+* **Learn from your (past) self: Annotate your codes so that you don't forget what each line does!** Try to write code so that YOU will understand it 10 years later (trust me, I have had to do this).
 
-* Make your own "worked examples" of papers in your research area using open-access data. This takes investment in time & energy, but it will be well worth it for what you will learn + the confidence you will gain. You can look for data in the papers you read--the data are often archived as supplemental materials or archived at data repositories such as [Dryad](https://datadryad.org), [figshare](https://figshare.com/) or [Open Science Framework](https://osf.io/)
+* **Make your own "worked examples" of papers in your research area using open-access data.** This takes investment in time & energy, but it will be well worth it for what you will learn + the confidence you will gain. You can look for data in the papers you read--the data are often archived as supplemental materials or archived at data repositories such as [Dryad](https://datadryad.org), [figshare](https://figshare.com/) or [Open Science Framework](https://osf.io/)
 
-* Join in on the R online learning community. One example is via TidyTuesday ([website here](https://github.com/rfordatascience/tidytuesday)), which is a weekly data science exercise hosted by the `R4DS Online Learning Community`. They post different open access datasets every week (on Tuesday) and encourages people to create and present visualizations or analyses using [#TidyTuesday](https://twitter.com/hashtag/tidytuesday?lang=en). As you participate and look at other people's codes, you will learn new tricks that you never would have come upon otherwise!
+* **Join in on the R online learning community.** There are many ways to find a community of people who are learning R and share tips. Importantly, you should *contribute* your codes and tips to these communities!
 
+    + One example is via TidyTuesday ([website here](https://github.com/rfordatascience/tidytuesday)), which is a weekly data science exercise hosted by the `R4DS Online Learning Community`. They post different open access datasets every week (on Tuesday) and encourages people to create and present visualizations or analyses using [#TidyTuesday](https://twitter.com/hashtag/tidytuesday?lang=en). As you participate and look at other people's codes, you will learn new tricks that you never would have come upon otherwise!
+
+    + You can also find a lot of R communities via social media, e.g., twitter: [@R4DScommunity](https://twitter.com/R4DScommunity); [@WeAreRLadies](https://twitter.com/WeAreRLadies)
+    
+    + Various community blogs that publish R tips and tutorials: e.g., [R-bloggers](https://www.r-bloggers.com/)
 
 ***
 
