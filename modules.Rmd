@@ -34,11 +34,13 @@ knitr::opts_chunk$set(echo = TRUE)
 * ###[09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
 
 * ###[Extra: Intro to ggplot2](ggplot2.html)
+
+* ###[What now? More resources for continuing to learn R](resources.html)
 ***
 
 ##Worked Examples:
 
-####[Worked Example: Plotting the change of butterfly size under climate change](05.1.Plot_Bowden.html)
+####[Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
 
 ####[Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](E2_Wale.html)
     

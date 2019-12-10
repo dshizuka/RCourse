@@ -94,9 +94,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -302,7 +299,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Worked Example: Plotting the change in butterfly size with climate change</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 09/12/19</em></h4>
+<h4 class="date"><em>updated 12/09/19</em></h4>
 
 </div>
 
@@ -357,7 +354,7 @@ str(boloria)  #look at one of the dataframes</code></pre>
 <h2>5.2 Recreating Figure 1: Scatterplot with fit line</h2>
 <p>The first thing we will try is to re-create Figure 1, which has three panels and shows how the snowmelt dat, average May-June temperature, and average May-August temperature (of the previous year) has changed across the study period. They present this as a scatterplot and a simple linear regression fit line.</p>
 <div class="figure">
-<img src="images/5.1_Fig1.png" alt="Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt (F_{1,16} = 8.92, estimate = -1.05, R^2_{Adj} = 0.32, p &lt; 0.008), (b) May-June_t temperature (F_{1,16} = 10.87, estimate = 0.11, R^2_{Adj} = 0.37, p &lt; 0.005) and (c) May-June_{t-1} temperature (F_{1,16} = 22.52, estimate = 0.11, R^2_{Adj} = 0.56, p &lt; 0.001) from 1996-2013 at Zackenberg, Greenland" />
+<img src="images/Ex1_Fig1.png" alt="Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt (F_{1,16} = 8.92, estimate = -1.05, R^2_{Adj} = 0.32, p &lt; 0.008), (b) May-June_t temperature (F_{1,16} = 10.87, estimate = 0.11, R^2_{Adj} = 0.37, p &lt; 0.005) and (c) May-June_{t-1} temperature (F_{1,16} = 22.52, estimate = 0.11, R^2_{Adj} = 0.56, p &lt; 0.001) from 1996-2013 at Zackenberg, Greenland" />
 <p class="caption">Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt (<span class="math inline">\(F_{1,16}\)</span> = 8.92, estimate = -1.05, <span class="math inline">\(R^2_{Adj}\)</span> = 0.32, <span class="math inline">\(p\)</span> &lt; 0.008), (b) <span class="math inline">\(May-June_t\)</span> temperature (<span class="math inline">\(F_{1,16}\)</span> = 10.87, estimate = 0.11, <span class="math inline">\(R^2_{Adj}\)</span> = 0.37, <span class="math inline">\(p\)</span> &lt; 0.005) and (c) <span class="math inline">\(May-June_{t-1}\)</span> temperature (<span class="math inline">\(F_{1,16}\)</span> = 22.52, estimate = 0.11, <span class="math inline">\(R^2_{Adj}\)</span> = 0.56, <span class="math inline">\(p\)</span> &lt; 0.001) from 1996-2013 at Zackenberg, Greenland</p>
 </div>
 <p><strong>Alright, let’s try to re-create this!</strong></p>
@@ -392,7 +389,7 @@ head(year.dat)  #look at first 6 lines</code></pre>
 <pre class="r"><code>plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;, 
     las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995, 
         2015), xaxp = c(1995, 2015, 4))</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-5-1.png" width="288" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-5-1.png" width="288" /></p>
 <p>In fact, it is pretty straightforward to re-create all 3 panels in Figure 1. We just need to use the <code>par()</code> function to create</p>
 <pre class="r"><code>par(mar = c(4, 4, 2, 2), mfrow = c(3, 1))
 plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;&quot;, ylab = &quot;snowmelt (DOY)&quot;, 
@@ -406,7 +403,7 @@ plot(year.dat$year, year.dat$mayjun, pch = 19, xlab = &quot;&quot;, ylab = &quot
 plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;, 
     ylab = &quot;average temp t-1&quot;, las = 1, ylim = c(0.5, 4.5), yaxp = c(1, 
         4, 3), xlim = c(1995, 2015), xaxp = c(1995, 2015, 4))</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-6-1.png" width="192" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-6-1.png" width="192" /></p>
 <p>We won’t worry about the minutiae of the axis labels. Let’s move on to the regression line.</p>
 <hr />
 </div>
@@ -445,7 +442,7 @@ class(fit.snow)</code></pre>
 ## Multiple R-squared:  0.3531, Adjusted R-squared:   0.31 
 ## F-statistic: 8.189 on 1 and 15 DF,  p-value: 0.01188</code></pre>
 <p>So this gives us a good overview of the statistical outpu, but it gives us a lot of information, and you have to know what to look for. Let’s look at these values closely:</p>
-<p><img src="images/5.1_summary_fit.snow.png" width="50%" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="images/Ex1_summary_fit.snow.png" width="50%" style="display: block; margin: auto auto auto 0;" /></p>
 <p>The values reported in the caption of Figure 1 of the paper are in the rectangles:</p>
 <ul>
 <li>“Estimate” for the independent variable (year) is the <strong>slope parameter <span class="math inline">\(b\)</span></strong> (red rectangle). The intercept parameter <span class="math inline">\(a\)</span> is above that.</li>
@@ -471,7 +468,7 @@ class(fit.snow)</code></pre>
     las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995, 
         2015), xaxp = c(1995, 2015, 4))
 abline(fit.snow)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-12-1.png" width="336" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-12-1.png" width="336" /></p>
 <p>What the <code>abline()</code> function essentially does is extract the intercept and slope parameters from the regression fit and draws that line. This is very convenient and generally gives us what we want. However, the problem with this method is that the line is not confined to the dataset (i.e., the line extrapolates beyond the data we have).</p>
 <hr />
 </div>
@@ -499,7 +496,7 @@ predict.snow</code></pre>
     las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995, 
         2015), xaxp = c(1995, 2015, 4))
 lines(xv, predict.snow)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-15-1.png" width="336" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-15-1.png" width="336" /></p>
 <p><strong>Note</strong> Since we are fitting a simple straight line, we technically only need two x-values to accomplish this. So, the following codes would produce the same figure (output not shown).</p>
 <pre class="r"><code>xv2 = c(1996, 2013)  #just the minimum and maximum values on the x-axis
 predict.snow2 = predict(fit.snow, list(year = xv))
@@ -534,7 +531,7 @@ lines(xv, predict.mayjun)
 plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;, 
     ylab = &quot;Average Temperature Last Year&quot;, las = 1)
 lines(xv, predict.mayaug.1)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-17-1.png" width="240" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-17-1.png" width="240" /></p>
 <p>We can add a bunch of arguments to the plotting function to really make it close to the Figure if we want to make it a real publication-quality figure. (I won’t walk through all of the arguments)</p>
 <pre class="r"><code>par(mfrow = c(3, 1), xpd = T)
 par(mar = c(4, 5, 1, 2))
@@ -561,7 +558,7 @@ plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;,
     cex = 1.5)
 lines(xv, predict.mayaug.1)
 text(1990, 4.5, substitute(italic(&quot;(c)&quot;)))</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-18-1.png" width="288" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-18-1.png" width="288" /></p>
 <hr />
 </div>
 </div>
@@ -569,7 +566,7 @@ text(1990, 4.5, substitute(italic(&quot;(c)&quot;)))</code></pre>
 <h2>5.3 Recreating Figure 2</h2>
 <p>Now, we will work on re-creating Figure 2, which is a 4-panel figure with the average wing length of males and females (and error bars) for each species (panels <em>a</em> and <em>b</em>), and the relationship between average wing length and the average May-August temperature of the previous year (panels <em>c</em> and <em>d</em>).</p>
 <div class="figure">
-<img src="images/5.1_Fig2.png" alt="Figure 2 from Bowden et al. (2015): Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available." />
+<img src="images/Ex1_Fig2.png" alt="Figure 2 from Bowden et al. (2015): Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available." />
 <p class="caption">Figure 2 from Bowden et al. (2015): <em>Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available.</em></p>
 </div>
 <hr />
@@ -592,13 +589,13 @@ head(wl.colias)</code></pre>
 <p>Let’s start building panel <em>a</em>. What we want to do is plot the data for one sex (say female), and then add the points for the second sex (male) on that same plot. To do this, a useful function is <code>subset()</code>, which allows us to easily specify a subset of data. Try this to plot the data for just the females:</p>
 <pre class="r"><code>plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;, 
     pch = 19)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-22-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-22-1.png" width="384" /></p>
 <p>Ok, so now what we have to do is plot this with the proper axis limits and then add the male data:</p>
 <pre class="r"><code>plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;, 
     pch = 19, ylim = c(21, 24), xlim = c(1996, 2013), las = 1)
 points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot;b&quot;, 
     pch = 1)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-24-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-24-1.png" width="384" /></p>
 <p>Notice that there is one problem here, which is that the plot connects the dots between the years 2009 and 2011, even though the data for 2010 is missing. The figure in the publication correctly omits this line. We will address this later.</p>
 <hr />
 </div>
@@ -654,7 +651,7 @@ arrows(wl.colias$year, wl.colias$mean + wl.colias$se, wl.colias$year,
 
 points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot;b&quot;, 
     pch = 1)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-29-1.png" width="480" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-29-1.png" width="480" /></p>
 <p>So we can just amend the arrows function here to make the angles of the arrowheads to be 90 degrees and shorten the tips:</p>
 <pre class="r"><code>par(mar = c(4, 4, 1, 2))
 plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;, 
@@ -663,7 +660,7 @@ points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot
     pch = 1)
 arrows(wl.colias$year, wl.colias$mean + wl.colias$se, wl.colias$year, 
     wl.colias$mean - wl.colias$se, code = 3, angle = 90, length = 0.05)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-30-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-30-1.png" width="384" /></p>
 <p>That’s pretty close to Figure 2(a)</p>
 <hr />
 </div>
@@ -708,13 +705,13 @@ points_se(x = &quot;year&quot;, y = &quot;WL&quot;, data = subset(wl.colias, sex
     &quot;f&quot;), color = &quot;black&quot;)  #plot just female data
 points_se(x = &quot;year&quot;, y = &quot;WL&quot;, data = subset(wl.colias, sex == 
     &quot;m&quot;), color = &quot;white&quot;)  #plot just male data</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-34-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-34-1.png" width="384" /></p>
 <p>Great! Now here is where going through the trouble of setting up a plotting function pays off. First, it makes it easy to plot the <em>Boloria</em> data using the exact same plotting parameters (except the y-axis has to be adjusted because these butterflies are smaller).</p>
 <pre class="r"><code>plot(WL ~ year, data = wl.boloria, type = &quot;n&quot;, ylim = c(17, 20), 
     xlim = c(1996, 2013), las = 1)
 points_se(data = subset(wl.boloria, sex == &quot;f&quot;), color = &quot;black&quot;)  #plot just female data
 points_se(data = subset(wl.boloria, sex == &quot;m&quot;), color = &quot;white&quot;)  #plot just male data</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-36-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-36-1.png" width="384" /></p>
 <p>To go further, we can fix the details like skipping the year 2010 by plotting the points for years &lt;2010 and years &gt;2010 separately for each sex and each species, all in two vertical panels. I’ll also adjust the tick marks a bit:</p>
 <pre class="r"><code>par(mar = c(4, 4, 1, 2), mfrow = c(2, 1))
 
@@ -741,7 +738,7 @@ points_se(data = subset(wl.boloria, sex == &quot;m&quot; &amp; year &lt; 2010),
     color = &quot;white&quot;)
 points_se(data = subset(wl.boloria, sex == &quot;m&quot; &amp; year &gt; 2010), 
     color = &quot;white&quot;)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-37-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-37-1.png" width="384" /></p>
 <p>We’ve pretty much re-created Figure 2(a,b)!</p>
 <p>Some things that are worth thinking about here are:</p>
 <ul>
@@ -767,7 +764,7 @@ wl.boloria$mayaug.1 = year.dat[match(wl.boloria$year, year.dat$year),
 <pre class="r"><code>plot(mean ~ mayaug.1, data = wl.colias, pch = 21, bg = c(&quot;black&quot;, 
     &quot;white&quot;)[as.numeric(sex)], xlim = c(0, 5), las = 1, xlab = &quot;May-Aug temp (t-1)&quot;, 
     ylab = &quot;average wing length (mm)&quot;)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-40-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-40-1.png" width="384" /></p>
 <p>Then, we need to fit a separate linear regression for males and females, and then we will add those lines.<br />
 First, the linear models for each sex for <em>Colias</em></p>
 <pre class="r"><code>fit.col_f = lm(mean ~ mayaug.1, data = subset(wl.colias, sex == 
@@ -784,7 +781,7 @@ plot(mean ~ mayaug.1, data = wl.colias, pch = 21, bg = c(&quot;black&quot;,
     ylab = &quot;average wing length (mm)&quot;)
 lines(xv, predict.col.f)
 lines(xv, predict.col.m)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-43-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-43-1.png" width="384" /></p>
 <p>We can do the same thing with <em>Boloria</em>:</p>
 <pre class="r"><code>fit.bol_f = lm(mean ~ mayaug.1, data = subset(wl.boloria, sex == 
     &quot;f&quot;))
@@ -800,7 +797,7 @@ plot(mean ~ mayaug.1, data = wl.boloria, pch = 21, bg = c(&quot;black&quot;,
     ylab = &quot;average wing length (mm)&quot;)
 lines(xv, predict.bol.f)
 lines(xv, predict.bol.m)</code></pre>
-<p><img src="05.1.Plot_Bowden_files/figure-html/unnamed-chunk-44-1.png" width="384" /></p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-44-1.png" width="384" /></p>
 <hr />
 <p>Ok, I hope you feel like you learned some things by going through this exercise!</p>
 </div>

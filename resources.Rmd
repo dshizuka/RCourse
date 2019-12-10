@@ -1,0 +1,37 @@
+---
+title: "What now?: More resources to continue learning R"
+author: "Dai Shizuka"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Now that you have taken this course and hopefully made it "over the hump" in getting started with R, here are a few tips on things you can do to keeping up (and improving) your R skills. 
+
+
+###Tip 1: Keep practicing
+
+**R is a language**, and like any language, you will lose your fluency if you don't use it. 
+
+* #### #TidyTuesday
+
+
+###Tip 2: Useful (free) books
+
+```{r, echo=FALSE, fig.align="left", out.width="10%"}
+knitr::include_graphics("images/R_for_Data_Science_cover.png")
+```
+
+* #### [R for Data Science](https://r4ds.had.co.nz/index.html) 
+
+
+```{r, echo=FALSE, fig.align="left", out.width="10%"}
+knitr::include_graphics("images/Rbook.cover.gif")
+```
+* #### ***The R Book*** (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use [this link](https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075) for access (you'll probably need to log in using the library credentials).

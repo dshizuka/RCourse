@@ -57,7 +57,7 @@ Now, we can proceed with our exercise.
 
 The first thing we will try is to re-create Figure 1, which has three panels and shows how the snowmelt dat, average May-June temperature, and average May-August temperature (of the previous year) has changed across the study period. They present this as a scatterplot and a simple linear regression fit line.
 
-![Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt ($F_{1,16}$ = 8.92, estimate = -1.05, $R^2_{Adj}$ = 0.32, $p$ < 0.008), (b) $May-June_t$ temperature ($F_{1,16}$ = 10.87, estimate = 0.11, $R^2_{Adj}$ = 0.37, $p$ < 0.005) and (c) $May-June_{t-1}$ temperature ($F_{1,16}$ = 22.52, estimate = 0.11, $R^2_{Adj}$ = 0.56, $p$ < 0.001) from 1996-2013 at Zackenberg, Greenland](images/5.1_Fig1.png)
+![Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt ($F_{1,16}$ = 8.92, estimate = -1.05, $R^2_{Adj}$ = 0.32, $p$ < 0.008), (b) $May-June_t$ temperature ($F_{1,16}$ = 10.87, estimate = 0.11, $R^2_{Adj}$ = 0.37, $p$ < 0.005) and (c) $May-June_{t-1}$ temperature ($F_{1,16}$ = 22.52, estimate = 0.11, $R^2_{Adj}$ = 0.56, $p$ < 0.001) from 1996-2013 at Zackenberg, Greenland](images/Ex1_Fig1.png)
 
 **Alright, let's try to re-create this!**  
 
@@ -142,7 +142,7 @@ summary(fit.snow)
 So this gives us a good overview of the statistical outpu, but it gives us a lot of information, and you have to know what to look for. Let's look at these values closely:
 
 ```{r, echo=FALSE, fig.align="left", out.width="50%"}
-knitr::include_graphics("images/5.1_summary_fit.snow.png")
+knitr::include_graphics("images/Ex1_summary_fit.snow.png")
 ```
 
 
@@ -272,7 +272,7 @@ text(1990, 4.5, substitute(italic("(c)")))
 
 Now, we will work on re-creating Figure 2, which is a 4-panel figure with the average wing length of males and females (and error bars) for each species (panels *a* and *b*), and the relationship between average wing length and the average May-August temperature of the previous year (panels *c* and *d*). 
 
-![Figure 2 from Bowden et al. (2015): *Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available.*](images/5.1_Fig2.png)
+![Figure 2 from Bowden et al. (2015): *Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available.*](images/Ex1_Fig2.png)
 
 ***
 

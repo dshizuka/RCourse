@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Modules</title>
+<title>What now?: More resources to continue learning R</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -164,6 +167,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -199,46 +297,33 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Modules</h1>
+<h1 class="title toc-ignore">What now?: More resources to continue learning R</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>8/26/2019</em></h4>
 
 </div>
 
 
-<div id="learning-modules" class="section level2">
-<h2>Learning Modules</h2>
+<p>Now that you have taken this course and hopefully made it “over the hump” in getting started with R, here are a few tips on things you can do to keeping up (and improving) your R skills.</p>
+<div id="tip-1-keep-practicing" class="section level3">
+<h3>Tip 1: Keep practicing</h3>
+<p><strong>R is a language</strong>, and like any language, you will lose your fluency if you don’t use it.</p>
 <ul>
-<li><h3 id="lets-get-started-with-r"><a href="01.Intro.html">01. Let’s get started with R!</a></h3></li>
-<li><h3 id="types-of-objects-vectors-strings-matrices-dataframes-lists"><a href="02.ObjectTypes.html">02. Types of Objects (vectors, strings, matrices, dataframes, lists)</a></h3></li>
-<li><h3 id="importing-and-navigating-data"><a href="03.Data.html">03. Importing and Navigating Data</a></h3></li>
-<li><h3 id="formatting-data-for-analysis"><a href="04.DataFormat.html">04. Formatting Data for Analysis</a></h3></li>
-<li><h3 id="basics-of-plots"><a href="05.Plots_1.html">05. Basics of Plots</a></h3></li>
-<li><h3 id="some-simple-statistics"><a href="06.Stats_1.html">06. Some Simple Statistics</a></h3></li>
-<li><h3 id="extra-data-wrangling-with-dplyr"><a href="dplyr.html">Extra: Data Wrangling with <code>dplyr</code></a></h3></li>
-<li><h3 id="custom-functions-and-if-else-statements"><a href="07.Functions.html">07. Custom Functions (and if-else statements)</a></h3></li>
-<li><h3 id="apply-fuctions-and-loops"><a href="08.Apply.html">08. Apply Fuctions and Loops</a></h3>
-<ul>
-<li><h4 id="apply-loops-example-population-growth-models"><a href="08.1.PopGrowth.html">08.1 Apply &amp; Loops example: Population Growth Models</a></h4></li>
-</ul></li>
-<li><h3 id="batch-processing-example-using-flack-et-al.-2014"><a href="09.batch.html">09. Batch Processing (Example using Flack et al. 2014)</a></h3></li>
-<li><h3 id="extra-intro-to-ggplot2"><a href="ggplot2.html">Extra: Intro to ggplot2</a></h3></li>
-<li><h3 id="what-now-more-resources-for-continuing-to-learn-r"><a href="resources.html">What now? More resources for continuing to learn R</a></h3>
-<hr /></li>
+<li><h4 id="tidytuesday">#TidyTuesday</h4></li>
 </ul>
 </div>
-<div id="worked-examples" class="section level2">
-<h2>Worked Examples:</h2>
-<div id="worked-example-plotting-the-change-of-butterfly-size-under-climate-change" class="section level4">
-<h4><a href="Ex1.Plot_Bowden.html">Worked Example: Plotting the change of butterfly size under climate change</a></h4>
-</div>
-<div id="worked-example-plots-and-stats-on-effect-of-anthropogenic-noise-on-crab-physiology" class="section level4">
-<h4><a href="E2_Wale.html">Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology</a></h4>
-</div>
+<div id="tip-2-useful-free-books" class="section level3">
+<h3>Tip 2: Useful (free) books</h3>
+<p><img src="images/R_for_Data_Science_cover.png" width="10%" style="display: block; margin: auto auto auto 0;" /></p>
+<ul>
+<li><h4 id="r-for-data-science"><a href="https://r4ds.had.co.nz/index.html">R for Data Science</a></h4></li>
+</ul>
+<p><img src="images/Rbook.cover.gif" width="10%" style="display: block; margin: auto auto auto 0;" /> * #### <strong><em>The R Book</em></strong> (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use <a href="https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075">this link</a> for access (you’ll probably need to log in using the library credentials).</p>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
