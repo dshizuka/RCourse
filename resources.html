@@ -20,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -167,101 +164,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -303,29 +205,39 @@ div.tocify {
 </div>
 
 
-<p>Now that you have taken this course and hopefully made it “over the hump” in getting started with R, here are a few tips on things you can do to keeping up (and improving) your R skills.</p>
+<p>The explicit goal of this course was to get you over the hump in getting started with R. You used these new skills to complete an independent project that meets your own research goals for the moment. Hopefully, this course has given you some new skills and the</p>
+<p>Now that you have taken this course to get started with R, here are a few tips on things you can do to keep up and keep improving your R skills.</p>
+<div id="be-confident.-you-can-do-this-but-the-road-doesnt-stop-here" class="section level4">
+<h4>Be confident. You CAN do this! But the road doesn’t stop here!</h4>
+<hr />
+</div>
 <div id="tip-1-keep-practicing" class="section level3">
 <h3>Tip 1: Keep practicing</h3>
 <p><strong>R is a language</strong>, and like any language, you will lose your fluency if you don’t use it.</p>
 <ul>
-<li><h4 id="tidytuesday-is-a-weekly-data-science-exercise-hosted-by-the-r4ds-online-learning-community"><a href="https://github.com/rfordatascience/tidytuesday">#TidyTuesday</a> is a weekly data science exercise hosted by the <code>R4DS Online Learning Community</code></h4></li>
-<li><h4 id="make-your-own-worked-examples-of-papers-you-read.-this-takes-investment-in-time-energy-but-it-will-be-well-worth-it-for-what-you-will-learn-the-confidence-you-will-gain">Make your own “worked examples” of papers you read. This takes investment in time &amp; energy, but it will be well worth it for what you will learn + the confidence you will gain!</h4></li>
+<li><p>TidyTuesday (<a href="https://github.com/rfordatascience/tidytuesday">website here</a>) is a weekly data science exercise hosted by the <code>R4DS Online Learning Community</code>. They post different open access datasets every week (on Tuesday) and encourages people to create and present visualizations or analyses using <a href="https://twitter.com/hashtag/tidytuesday?lang=en">#TidyTuesday</a>.</p></li>
+<li><p>Make your own “worked examples” of papers you read. This takes investment in time &amp; energy, but it will be well worth it for what you will learn + the confidence you will gain!</p></li>
+<li><p>Get in the habit.</p></li>
 </ul>
 <hr />
 </div>
-<div id="tip-2-useful-free-books" class="section level3">
-<h3>Tip 2: Useful (free) books</h3>
+<div id="tip-2-useful-free-books-and-online-resources" class="section level3">
+<h3>Tip 2: Useful (free) books and online resources</h3>
 <p><img src="images/R_for_Data_Science_cover.png" width="10%" style="display: block; margin: auto auto auto 0;" /></p>
 <ul>
-<li><h4 id="r-for-data-science"><a href="https://r4ds.had.co.nz/index.html">R for Data Science</a></h4></li>
+<li><a href="https://r4ds.had.co.nz/index.html">R for Data Science</a> is an online book (though also available in hard copy) written by Hadley Wickham, the architect of the <code>tidyverse</code>. But I find that this book has a lot of good content and exercises for learning how to do various tasks in R.</li>
 </ul>
-<p><img src="images/Rbook.cover.gif" width="10%" style="display: block; margin: auto auto auto 0;" /> * #### <strong><em>The R Book</em></strong> (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use <a href="https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075">this link</a> for access (you’ll probably need to log in using the library credentials).</p>
+<p><img src="images/Rbook.cover.gif" width="10%" style="display: block; margin: auto auto auto 0;" /></p>
+<ul>
+<li><strong><em>The R Book</em></strong> (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use <a href="https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075">this link</a> for access (you’ll probably need to log in using the library credentials).</li>
+</ul>
+</div>
+<div id="tip-3-online-resources" class="section level3">
+<h3>Tip 3: Online resources</h3>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 

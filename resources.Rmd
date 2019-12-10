@@ -1,41 +1,53 @@
 ---
 title: "What now?: More resources to continue learning R"
 author: "Dai Shizuka"
-output: 
-  html_document:
-    toc: true
-    toc_depth: 2
-    toc_float: true
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Now that you have taken this course and hopefully made it "over the hump" in getting started with R, here are a few tips on things you can do to keeping up (and improving) your R skills. 
+The explicit goal of this course was to get you over the hump in getting started with R. You used these new skills to complete an independent project that meets your own research goals for the moment. Hopefully, this course has given you some new skills and the 
+  
+Now that you have taken this course to get started with R, here are a few tips on things you can do to keep up and keep improving your R skills. 
 
+####Be confident. You CAN do this! But the road doesn't stop here!
 
-###Tip 1: Keep practicing
+*** 
+
+###Tip 1: Keep building up your skills
 
 **R is a language**, and like any language, you will lose your fluency if you don't use it. 
 
-* #### [#TidyTuesday](https://github.com/rfordatascience/tidytuesday) is a weekly data science exercise hosted by the `R4DS Online Learning Community`
+* Annotate your codes so that you don't forget what each line does! Try to write code so that YOU will understand it 10 years later (trust me, I have had to do this).
 
-* #### Make your own "worked examples" of papers you read. This takes investment in time & energy, but it will be well worth it for what you will learn + the confidence you will gain!
+* TidyTuesday ([website here](https://github.com/rfordatascience/tidytuesday)) is a weekly data science exercise hosted by the `R4DS Online Learning Community`. They post different open access datasets every week (on Tuesday) and encourages people to create and present visualizations or analyses using [#TidyTuesday](https://twitter.com/hashtag/tidytuesday?lang=en).
+
+* Make your own "worked examples" of papers you read. This takes investment in time & energy, but it will be well worth it for what you will learn + the confidence you will gain!
+
+
 
 ***
 
 
-###Tip 2: Useful (free) books
+###Tip 2: Useful (free) books and online resources
 
 ```{r, echo=FALSE, fig.align="left", out.width="10%"}
 knitr::include_graphics("images/R_for_Data_Science_cover.png")
 ```
 
-* #### [R for Data Science](https://r4ds.had.co.nz/index.html) 
+* [R for Data Science](https://r4ds.had.co.nz/index.html) is an online book (though also available in hard copy) written by Hadley Wickham, the architect of the `tidyverse`. But I find that this book has a lot of good content and exercises for learning how to do various tasks in R. 
 
 
 ```{r, echo=FALSE, fig.align="left", out.width="10%"}
 knitr::include_graphics("images/Rbook.cover.gif")
 ```
-* #### ***The R Book*** (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use [this link](https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075) for access (you'll probably need to log in using the library credentials).
+
+* ***The R Book*** (Crawley) is available as electronic copy (downloadable as pdf) via the UNL library. Use [this link](https://onlinelibrary-wiley-com.libproxy.unl.edu/doi/book/10.1002/9780470515075) for access (you'll probably need to log in using the library credentials).
+
+
+###Tip 3: More courses
+
+* [datacamp](https://www.datacamp.com/)
+
