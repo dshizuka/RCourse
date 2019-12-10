@@ -19,7 +19,7 @@ Now that you have taken this course and hopefully made it "over the hump" in get
 
 **R is a language**, and like any language, you will lose your fluency if you don't use it. 
 
-* #### #TidyTuesday
+* #### [#TidyTuesday](https://github.com/rfordatascience/tidytuesday) is a weekly data science exercise hosted by the `R4DS Online Learning Community`
 
 * #### Make your own "worked examples" of papers you read. This takes investment in time & energy, but it will be well worth it for what you will learn + the confidence you will gain!
 
