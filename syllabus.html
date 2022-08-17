@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>BIOS 967: Intro to R for Biologists</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -41,37 +55,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
 
-</head>
 
-<body>
+
+
 
 <style type = "text/css">
 .main-container {
@@ -79,13 +67,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -96,44 +79,59 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -144,26 +142,93 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -171,7 +236,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -197,13 +262,13 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">BIOS 967: Intro to R for Biologists</h1>
-<h3 class="subtitle"><em>Syllabus, Fall 2019</em></h3>
-<h4 class="date"><em>updated 08/27/19</em></h4>
+<h3 class="subtitle">Syllabus, Fall 2022</h3>
+<h4 class="date">updated 08/16/22</h4>
 
 </div>
 
@@ -212,7 +277,7 @@ $(document).ready(function () {
 <div id="timelocation" class="section level3">
 <h3><u>Time/Location</u></h3>
 <ul>
-<li><strong>T/Th 2-3:20pm @ 210 Brace Labs </strong></li>
+<li><strong>T/Th 12:30-1:50pm @ 401 Manter Hall </strong></li>
 </ul>
 </div>
 <div id="instructor" class="section level3">
@@ -225,81 +290,154 @@ $(document).ready(function () {
 </div>
 <div id="course-website" class="section level3">
 <h3><u>Course Website</u></h3>
-<div id="course-materials-will-be-posted-at-the-course-blog-httpsdshizuka.github.iorcourse" class="section level4">
-<h4>Course materials will be posted at the course blog: <a href="https://dshizuka.github.io/RCourse/" class="uri">https://dshizuka.github.io/RCourse/</a></h4>
+<div
+id="course-materials-will-be-posted-at-the-course-blog-httpsdshizuka.github.iorcourse"
+class="section level4">
+<h4>Course materials will be posted at the course blog: <a
+href="https://dshizuka.github.io/RCourse/">https://dshizuka.github.io/RCourse/</a></h4>
 </div>
 </div>
 <div id="course-goals" class="section level3">
 <h3><u>Course Goals</u></h3>
 <ul>
-<li>Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes, including wrangling data, generating plots, conducting analyses, and generating reports.</li>
-<li>Learn to conduct <strong>reproducible research</strong> and to reproduce research of others</li>
-<li>Make progress on own research by tackling complex tasks with R</li>
+<li><p>Get over the hump in learning the R programming language and
+become proficient in using R for a variety of purposes, including
+wrangling data, generating plots, conducting analyses, and generating
+reports.</p></li>
+<li><p>Learn to conduct <strong>reproducible research</strong> and to
+reproduce research of others.</p></li>
+<li><p>Get experience making brief presentations on research to an
+interdisciplinary audience, and to gain a broad sense for the types of
+work that graduate student peers are conducting.</p></li>
+<li><p>Make progress on own research by tackling complex tasks with
+R</p></li>
 </ul>
 </div>
 <div id="required-materials" class="section level3">
 <h3><u>Required Materials</u></h3>
 <ul>
-<li><strong>Laptop computer</strong>: You will need access to a laptop computer that you can reliably use during class each week.</li>
-<li><strong>Installed programs</strong>: see the ** Before the Course ** section below</li>
+<li><strong>Laptop computer</strong>: You will need access to a laptop
+computer that you can reliably use during class each week.</li>
+<li><strong>Installed programs</strong>: see the ** Before the Course **
+section below</li>
 </ul>
 </div>
 <div id="how-the-course-works" class="section level3">
 <h3><u>How the Course Works</u></h3>
 <ul>
-<li><p>Class sessions will consist of live-coding sessions led by the instructor, as well as individual and group exercises.</p></li>
-<li><p>Each class session will have an acommpanying web module that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook.</p></li>
-<li><p>Most weeks, we will start a task during the Thursday session, which will then turn into a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.</p></li>
-<li><p>The last part of the semester will mostly be dedicated to conducting independent research projects.</p></li>
+<li><p>Class sessions will consist of live-coding sessions led by the
+instructor, as well as individual and group exercises.</p></li>
+<li><p>Each class session will have an acommpanying web module that
+provides details and codes. These are designed to be guides that will
+help you retain the information in the future. Compiled together, this
+will essentially be your textbook.</p></li>
+<li><p>Most weeks, we will start a task during the Thursday session,
+which will then turn into a homework assignment. Sometimes this will
+entail generating and submitting code scripts. Other times, it will
+require you to prepare data, look up literature, or other
+tasks.</p></li>
+<li><p>Three times during the semester, we will have project
+presentation sessions. in the <strong>first session</strong> near the
+beginning of the semester, each student will present a <em>brief</em>
+overview of their research theme. This can be very broad description of
+the theme or a detailed account of a specific project. In the
+<strong>second session</strong> in the middle of the semester, students
+will present a ‘progress report’–a description of the project that they
+settled on, and where they are on the project. In the <strong>third
+session</strong>, the students will present their final
+products.</p></li>
+<li><p>The last part of the semester will mostly be dedicated to
+conducting independent research projects.</p></li>
 </ul>
 </div>
 <div id="evaluation" class="section level3">
 <h3><u>Evaluation</u></h3>
-<p>Students will be evaluated based on 4 criteria. (1) Participation [25 points], (2) Take-home assignments [25 points], (2) Project proposal [15 points] (3) Write-up of independent project [35 points].</p>
+<p>Students will be evaluated based on 4 criteria. (1) Participation [25
+points], (2) Take-home assignments [25 points], (2) Project proposal [15
+points] (3) Write-up of independent project [35 points].</p>
 </div>
 <div id="independent-project" class="section level3">
 <h3><u>Independent Project</u></h3>
-<p>You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions: (1) Conduct new analyses of your own data (2) Re-create models and/or figures from a publication in your field (I recommend this approach—it really helps you understand concepts at a new level). (3) Conduct meta-analyses or re-analysis of publically available data.</p>
-<p>You will submit a brief plan (&lt; 2 pages) of your project on During the 5th week of the course. However, you can start your project earlier than that. You will submit a write-up (~5 pages, double-spaced including figures) at the end of the course.</p>
+<p>You will spend several weeks during the course conducting independent
+projects. We will have regular class during this time, but I will be
+available to help you with your R codes. This is an opportunity for you
+to work on something new that will further your research goals. I will
+leave the format fairly open, but here are some suggestions: (1) Conduct
+new analyses of your own data (2) Re-create models and/or figures from a
+publication in your field (I recommend this approach—it really helps you
+understand concepts at a new level). (3) Conduct meta-analyses or
+re-analysis of publically available data.</p>
+<p>You will submit a brief plan (&lt; 2 pages) of your project on During
+the 5th week of the course. However, you can start your project earlier
+than that. You will submit a write-up (~5 pages, double-spaced including
+figures) at the end of the course.</p>
 </div>
 <div id="students-with-disabilities" class="section level3">
 <h3><u>Students with disabilities</u></h3>
-<p>Students with disabilities are encouraged to contact the instructor for a confidential discussion of their individual needs for academic accommodation. It is the policy of the University of Nebraska-Lincoln to provide flexible and individualized accommodation to students with documented disabilities that may affect their ability to fully participate in course activities or to meet course requirements. To receive accommodation services, students must be registered with the Services for Students with Disabilities (SSD) office, 132 Canfield Administration, 472-3787 voice or TTY.</p>
+<p>Students with disabilities are encouraged to contact the instructor
+for a confidential discussion of their individual needs for academic
+accommodation. It is the policy of the University of Nebraska-Lincoln to
+provide flexible and individualized accommodation to students with
+documented disabilities that may affect their ability to fully
+participate in course activities or to meet course requirements. To
+receive accommodation services, students must be registered with the
+Services for Students with Disabilities (SSD) office, 132 Canfield
+Administration, 472-3787 voice or TTY.</p>
 <hr />
-
+<div style="page-break-after: always;"></div>
 </div>
-<div id="tentative-course-schedule-subject-to-change" class="section level3">
+<div id="tentative-course-schedule-subject-to-change"
+class="section level3">
 <h3><u>Tentative course schedule (subject to change!)</u></h3>
 <ul>
-<li><p>Week 1 (Aug 27, 29): Getting started with R</p></li>
-<li><p>Week 2 (Sept 3, 5): Data Wrangling</p></li>
-<li><p>Week 3 (Sept 10, 12): Plotting in Base R</p></li>
-<li><p>Week 4 (Sept 17, 19): Creating reports</p></li>
-<li><p>Week 5 (Sept 24, 26): Some simple statistics</p></li>
-<li><p>Week 6 (Oct 1, 3): Resampling, bootstrapping</p></li>
-<li><p>Week 7 (Oct 8, 10): apply functions, loops, statements</p></li>
-<li><p>Week 8 (Oct 15, 17): Simulations, stochasticity, <strong>Submit proposal for independent project</strong></p></li>
-<li><p>Week 9 (Oct 22, 24): <em>Fall Break (Tuesday)</em>; Write your own functions (Thursday)</p></li>
-<li><p>Week 10 (Oct 29, 31): Batch processing</p></li>
-<li><p>Week 11 (Nov 5, 7): Worked examples, independent projects</p></li>
-<li><p>Week 12 (Nov 12, 14): Worked examples, independent projects</p></li>
-<li><p>Week 13 (Nov 19, 21): Independent projects</p></li>
-<li><p>Week 14 (Nov 26, 28): <em>No class for Thanksgiving</em></p></li>
-<li><p>Week 15 (Dec 3, 5): Independent projects</p></li>
-<li><p>Week 16 (Dec 10, 12): Independent projects; Submit final project on Thursday</p></li>
+<li><p>Week 1 (Aug 23, 25): Getting started with R</p></li>
+<li><p>Week 2 (Aug 30, Sep 1): Data Wrangling</p></li>
+<li><p>Week 3 (Sep 6, 8): Plotting in Base R</p></li>
+<li><p>Week 4 (Sep 13, 15): Creating reports</p></li>
+<li><p>Week 5 (Sep 20, 22): Some simple statistics (Thursday independent
+work)</p></li>
+<li><p>Week 6 (Sep 27, 29): Resampling, bootstrapping</p></li>
+<li><p>Week 7 (Oct 4, 6): apply functions, loops, statements;
+<strong>(Thursday independent work)</strong></p></li>
+<li><p>Week 8 (Oct 11, 13): Simulations, stochasticity, <strong>Submit
+proposal for independent project</strong></p></li>
+<li><p>Week 9 (Oct 20): <strong>Fall Break (Tuesday 18th)</strong>;
+Write your own functions (Thursday)</p></li>
+<li><p>Week 10 (Oct 25, 27): Batch processing</p></li>
+<li><p>Week 11 (Nov 1, 3): Worked examples, independent
+projects</p></li>
+<li><p>Week 12 (Nov 8, 10): Worked examples, independent
+projects</p></li>
+<li><p>Week 13 (Nov 15, 17): Independent projects</p></li>
+<li><p>Week 14 (Nov 22, 24): <strong>No class for
+Thanksgiving</strong></p></li>
+<li><p>Week 15 (Nov 29, Dec 1): Independent projects</p></li>
+<li><p>Week 16 (Dec 6, 8): Independent projects presentation</p></li>
 </ul>
 <hr />
 </div>
 <div id="before-the-course" class="section level3">
 <h3><u>Before the Course</u></h3>
-<p>Please do the following things before we meet for the first class.</p>
+<p>Please do the following things before we meet for the first
+class.</p>
 <ol style="list-style-type: decimal">
 <li><strong>Download and Install <em>R</em> </strong><br />
-Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> and follow directions for downloading and installing R. <em>Even if you already have R</em>, upgrade to the latest version. It will make things easier to have everyone on the same version.</li>
+Go to <a
+href="https://cran.r-project.org/">https://cran.r-project.org/</a> and
+follow directions for downloading and installing R. <em>Even if you
+already have R</em>, upgrade to the latest version. It will make things
+easier to have everyone on the same version.</li>
 <li><strong>Download and Install <em>R Studio</em> </strong><br />
-Go to <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a> and download the <strong>R Studio Desktop</strong> installer. Follow directions to install the program.</li>
+Go to <a
+href="https://www.rstudio.com/products/rstudio/download/">https://www.rstudio.com/products/rstudio/download/</a>
+and download the <strong>R Studio Desktop</strong> installer. Follow
+directions to install the program.</li>
 <li><strong>Bookmark the Course CryptPad</strong><br />
-<em>CryptPad</em> is a super useful way to follow along with the codes in real time. We will use this site in class. I have created a course “pad”. You should <a href="https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/" target="_blank">bookmark this link in your favorite browser</a></li>
+<em>CryptPad</em> is a super useful way to follow along with the codes
+in real time. We will use this site in class. I have created a course
+“pad”. You should <a
+href="https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/"
+target="_blank">bookmark this link in your favorite browser</a></li>
 </ol>
 </div>
 
@@ -312,7 +450,7 @@ Go to <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">h
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -320,6 +458,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
