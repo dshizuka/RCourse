@@ -45,17 +45,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Most weeks, we will start a task during the Thursday session, which will then turn into a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.
 
-* Three times during the semester, we will have project presentation sessions. in the **first session** near the beginning of the semester, each student will present a *brief* overview of their research theme. This can be very broad description of the theme or a detailed account of a specific project. In the **second session** in the middle of the semester, students will present a 'progress report'--a description of the project that they settled on, and where they are on the project. In the **third session**, the students will present their final products.
+* Three times during the semester, we will have project presentation sessions. See below for details.
 
 * The last part of the semester will mostly be dedicated to conducting independent research projects.
 
 ### <u>Evaluation</u>  
-Students will be evaluated based on 4 criteria. (1) Participation [25 points], (2) Take-home assignments [25 points], (2) Project proposal [15 points] (3) Write-up of independent project [35 points].
+Students will be evaluated based on 4 criteria. (1) Participation [15 points], (2) Presentations [15 points], (3) Take-home assignments [20 points], (4) Project proposal [15 points], (5) Write-up of independent project [35 points].
+
+Here are the basic expectations for each of the above categories:
+
+(1) **Participation:** Students are expected to attend in-person sessions, but accommodations will be made for illness (including illness of dependents), conflicts with research or teaching needs (e.g., field research trip), etc. Students are asked to notify the instructor of upcoming conflicts ahead of time. Conflicts that would require the student to miss more than 4 sessions over the course of the semester should be discussed with the instructor at the beginning of the semester.
+
+(2) **Presentations:** Three times during the semester, we will have project presentation sessions. In the **first session** near the beginning of the semester, each student will present a *brief* overview of their research theme. This can be very broad description of the theme or a detailed account of a specific project. In the **second session** in the middle of the semester, students will present a 'progress report'--a description of the project that they settled on, and where they are on the project. In the **third session**, the students will present their final products.
+
+(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture, and to prepare you towards the beginning of your independent project. You will have 5 or 7 days to complete the assignment.
+
+(4) 
 
 ### <u>Independent Project</u>
 You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions:
+
 (1)	Conduct new analyses of your own data
+
 (2)	Re-create models and/or figures from a publication in your field (I recommend this approach—it really helps you understand concepts at a new level).
+
 (3)	Conduct meta-analyses or re-analysis of publically available data. 
 
 You will submit a brief plan (< 2 pages) of your project on During the 5th week of the course. However, you can start your project earlier than that. You will submit a write-up (~5 pages, double-spaced including figures) at the end of the course. 
