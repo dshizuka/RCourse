@@ -24,6 +24,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Quick Links:
 
-- ####[Course Cryptpad page](https://cryptpad.fr/code/#/2/code/edit/2HTA5OzxqpIDW9RvkboNR445/){target="_blank"}
+- #### Course One Drive: (please see the Canvas page for the link because I don't want to make it publicly available)
 
-- ####Syllabus: click on the "Syllabus" tab above, or [download pdf version](pdfs/syllabus.pdf).
+- #### Syllabus: click on the "Syllabus" tab above, or [download pdf version](pdfs/syllabus.pdf).
