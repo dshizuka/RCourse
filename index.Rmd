@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ---
 
-##Quick Links:
+## Quick Links:
 
 - #### Course One Drive: (please see the Canvas page for the link because I don't want to make it publicly available)
 
