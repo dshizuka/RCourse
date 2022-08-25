@@ -17,7 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
-* 08/16/22: **Welcome to the R Course!** I will post announcements and updates on this page. I will send out the announcements via Canvas as well.
+
+* #### 08/23/22: In the first session of the course, we did quick intros and covered Module 1
+
+* #### 08/16/22: **Welcome to the R Course!** I will post announcements and updates on this page. I will send out the announcements via Canvas as well.
 
 
 ---

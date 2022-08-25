@@ -265,6 +265,34 @@ Now, save the script you have written so far by going to `File`--`Save` and givi
 
 ***
 
+## 1.8 Organizing your folders and setting up an R Studio Project
+
+As explained above, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses path names to arrange these files (as do all programming languages). But this can get cumbersome because your path names are defined relative to the entire organization of your computer. ***Wouldn't it be more convenient if you didn't have to type out path names for files all the time?***
+
+That's where file organization comes in. And RStudio Project makes it easier for you to do that. 
+
+Here is what I recommend for every project you start: 
+
+1. Create a folder that will be your main "project folder".
+  
+* Try this out be creating a "BIOS 967" Folder somewhere in your computer.
+
+2. Next, in R Studio, click on "File" > "New Project" 
+
+3. Click on "Existing Directory", click "Browse" and select the "BIOS 967" Folder you created, then click "Create Project"
+
+4. Now, you will see that there is a new "BIOS967.rproj" file in your folder.
+
+5. Open that .rproj file. This will open up a new RStudio window. 
+
+6. Run the command `getwd()` in your console. This should now give you the path to the folder. 
+
+7. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
+
+* Try this out by creating a new R Script file, name it something with the date on it, and save. It should automatically go into this folder. 
+
+***
+
 > <span style="color:purple">**Quick Review of Module 1:**</span>  
 >
 >* You can assign values to ***objects***, which you can manipulate using ***operators*** and ***functions***.
