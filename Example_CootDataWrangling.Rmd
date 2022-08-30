@@ -38,13 +38,19 @@ In Lyon & Shizuka (2020), we investigate the causes and consequences of variatio
 
 ### 2: The Data
 
-To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. We combine this data with various other measures for each chick, including the order in which they were laid as eggs, the size of egg, and the order in which they hatched.
+To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. This is provided in the "ChickColor_extracted.csv" file. 
+We also have a separate file of relevant (non-color) data for each chick, such "Egg ID", which brood they were released at (the same as the nest the egg was laid in for control treatment, but chicks were swapped across nests in some experiments), the experimental treatment of the brood, the nest it was laid in as an egg (Clutch), the date it was released in the nest, the order in which they hatched in the nest/were released at the nest, the wetland the nest is in, and whether or not the chick is a known brood parasite.
 
+Finally, we also have data for each chick as an egg, including nest, "Egg ID", "Chick ID", the volume of the egg, and the laying sequence of the egg (if known).
 
-
-Here is the [link to data](data/chickcolor_Rclass.csv). Save this in your course folder in the "data" subfolder.
+Here is the [link to data](data/coot_example/ChickMaster.csv). Save this in your course folder in the "data" subfolder.
 
 Then import this data to R:
+
+```{r}
+eggs=read.csv("data/coot_example/EggMaster.csv")
+chicks=read.csv("data/coot_example/ChickMaster.csv")
+```
 
 ```{r}
 dat=read.csv("data/chickcolor_Rclass.csv")

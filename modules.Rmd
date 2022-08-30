@@ -9,38 +9,39 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Learning Modules
+## Learning Modules
 
-* ###[01. Let's get started with R!](01.Intro.html)
+* ### [01. Let's get started with R!](01.Intro.html)
 
-* ###[02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
+* ### [02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
 
-* ###[03. Importing and Navigating Data](03.Data.html)
+* ### [03. Importing and Navigating Data](03.Data.html)
 
-* ###[04. Formatting Data for Analysis](04.DataFormat.html)
+* ### [04. Formatting Data for Analysis](04.DataFormat.html)
 
-* ###[05. Basics of Plots](05.Plots_1.html)
+* ### [05. Basics of Plots](05.Plots_1.html)
 
-* ###[06. Some Simple Statistics](06.Stats_1.html)
+* ### [06. Some Simple Statistics](06.Stats_1.html)
 
-* ###[Extra: Data Wrangling with `dplyr`](dplyr.html)
+* ### [07. Custom Functions (and if-else statements)](07.Functions.html)
 
-* ###[07. Custom Functions (and if-else statements)](07.Functions.html)
+* ### [08. Apply Fuctions and Loops](08.Apply.html)
 
-* ###[08. Apply Fuctions and Loops](08.Apply.html)
+    + #### [08.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
 
-    + ####[08.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
+* ### [09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
 
-* ###[09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
+* ### [Extra: Intro to ggplot2](ggplot2.html)
 
-* ###[Extra: Intro to ggplot2](ggplot2.html)
-
-* ###[What now? More resources for continuing to learn R](resources.html)
+* ### [What now? More resources for continuing to learn R](resources.html)
 ***
 
-##Worked Examples:
+## Worked Examples:
 
-####[Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
+#### [Worked Example: Data wrangling with coot chick color data](Example_CootDataWrangling.html)
 
-####[Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](E2_Wale.html)
+#### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
+
+#### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](E2_Wale.html)
+
     

@@ -403,13 +403,24 @@ measured color of juvenile ornaments using a spectrometer (which
 measures reflectance of light at different wavelengths) from ~1,500
 chicks. We have condensed data to several key color metrics, including
 the ‘red chroma’ (i.e., amount of light reflected at the red
-wavelengths: approx 600-700nm) of the feathers around the chin. We
-combine this data with various other measures for each chick, including
-the order in which they were laid as eggs, the size of egg, and the
-order in which they hatched.</p>
-<p>Here is the <a href="data/chickcolor_Rclass.csv">link to data</a>.
-Save this in your course folder in the “data” subfolder.</p>
+wavelengths: approx 600-700nm) of the feathers around the chin. This is
+provided in the “ChickColor_extracted.csv” file. We also have a separate
+file of relevant (non-color) data for each chick, such “Egg ID”, which
+brood they were released at (the same as the nest the egg was laid in
+for control treatment, but chicks were swapped across nests in some
+experiments), the experimental treatment of the brood, the nest it was
+laid in as an egg (Clutch), the date it was released in the nest, the
+order in which they hatched in the nest/were released at the nest, the
+wetland the nest is in, and whether or not the chick is a known brood
+parasite.</p>
+<p>Finally, we also have data for each chick as an egg, including nest,
+“Egg ID”, “Chick ID”, the volume of the egg, and the laying sequence of
+the egg (if known).</p>
+<p>Here is the <a href="data/coot_example/ChickMaster.csv">link to
+data</a>. Save this in your course folder in the “data” subfolder.</p>
 <p>Then import this data to R:</p>
+<pre class="r"><code>eggs=read.csv(&quot;data/coot_example/EggMaster.csv&quot;)
+chicks=read.csv(&quot;data/coot_example/ChickMaster.csv&quot;)</code></pre>
 <pre class="r"><code>dat=read.csv(&quot;data/chickcolor_Rclass.csv&quot;)
 head(dat)</code></pre>
 <pre><code>##   chick.id nest year egg.id is.parasite hatch.order  egg.vol egg.seq
