@@ -1,5 +1,5 @@
 ---
-title: "Data Wrangling with dplyr"
+title: "Data Wrangling with tidyverse packages"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -9,11 +9,13 @@ output:
     toc_float: true
 ---
 
-##1. Intro to `dplyr` and the 'tidyverse'
+## 1. Intro to the ['tidyverse'](https://www.tidyverse.org/)
 
 ```{r, out.width="10%", echo=F}
-knitr::include_graphics("images/hex-dplyr.png")
-knitr::include_graphics("images/hex-tidyr.png")
+knitr::include_graphics("images/icons/tidyr.png")
+knitr::include_graphics("images/icons/dplyr.png")
+knitr::include_graphics("images/icons/stringr.png")
+knitr::include_graphics("images/icons/ggplot2.png")
 ```
 
 Now that we have dipped our feet into plots and stats in R, I think you are getting a better sense of the fact that 'wrangling' or 'manipulating' data is one of the biggest steps to becoming proficient in R and all that it has to offer. 
@@ -25,16 +27,23 @@ These tasks are where the packages [dplyr](https://dplyr.tidyverse.org/), [tidyr
 The tidyverse packages are constructed by [Hadley Wickam](http://hadley.nz/). There are several books that cover how to use these packages, including *R for Data Science* [which is available for free as an online book](https://r4ds.had.co.nz/)
 
 ```{r, out.width="20%", echo=F}
-knitr::include_graphics("images/R_for_Data_Science_cover.png")
+knitr::include_graphics("images/icons/R_for_Data_Science_cover.png")
 ```
+
+In this module, we'll be learning some functions from the packages **dplyr** and **tidyr**. 
+
 
 ***
 
-##2. Working with `dplyr`
+## 2. Basic syntax of 'tidyverse'
+
+## 3. Using `tidyr` to reshape data
+
+## 4. Working with `dplyr`
 
 <br>
 
-###2.1 Main `dplyr` functions
+### 3.1 Main `dplyr` functions
 
 * `select()` select columns by criteria
 * `filter()` filter rows by criteria

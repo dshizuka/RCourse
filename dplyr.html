@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -13,14 +12,24 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Data Wrangling with dplyr</title>
+<title>Data Wrangling with tidyverse packages</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,12 +37,16 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -46,32 +59,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -81,10 +70,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -101,40 +86,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -162,7 +123,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -174,7 +135,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -185,10 +146,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -200,7 +174,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -236,6 +209,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -264,6 +238,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -319,7 +299,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -333,7 +313,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -359,67 +339,129 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">Data Wrangling with dplyr</h1>
+<h1 class="title toc-ignore">Data Wrangling with tidyverse packages</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/26/19</h4>
+<h4 class="date">updated 09/02/22</h4>
 
 </div>
 
 
-<div id="intro-to-dplyr-and-the-tidyverse" class="section level2">
-<h2>1. Intro to <code>dplyr</code> and the ‘tidyverse’</h2>
-<p><img src="images/hex-dplyr.png" width="10%" /><img src="images/hex-tidyr.png" width="10%" /></p>
-<p>Now that we have dipped our feet into plots and stats in R, I think you are getting a better sense of the fact that ‘wrangling’ or ‘manipulating’ data is one of the biggest steps to becoming proficient in R and all that it has to offer.</p>
-<p>For example, for any given analysis, you may have to subset data, filter out certain data that don’t meet some criteria, focus in on a select set of variables of interest, calculate means, and variance for different groups, etc. etc.</p>
-<p>These tasks are where the packages <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a> and other packages in the <a href="https://www.tidyverse.org/">tidyverse</a>–a series of packages designed for all kinds of data tasks. This also includes the popular <a href="https://ggplot2.tidyverse.org/">ggplot2</a> package for graphics.</p>
-<p>The tidyverse packages are constructed by <a href="http://hadley.nz/">Hadley Wickam</a>. There are several books that cover how to use these packages, including <em>R for Data Science</em> <a href="https://r4ds.had.co.nz/">which is available for free as an online book</a></p>
-<p><img src="images/R_for_Data_Science_cover.png" width="20%" /></p>
+<div id="intro-to-the-tidyverse" class="section level2">
+<h2>1. Intro to the <a
+href="https://www.tidyverse.org/">‘tidyverse’</a></h2>
+<p><img src="images/icons/tidyr.png" width="10%" /><img src="images/icons/dplyr.png" width="10%" /><img src="images/icons/stringr.png" width="10%" /><img src="images/icons/ggplot2.png" width="10%" /></p>
+<p>Now that we have dipped our feet into plots and stats in R, I think
+you are getting a better sense of the fact that ‘wrangling’ or
+‘manipulating’ data is one of the biggest steps to becoming proficient
+in R and all that it has to offer.</p>
+<p>For example, for any given analysis, you may have to subset data,
+filter out certain data that don’t meet some criteria, focus in on a
+select set of variables of interest, calculate means, and variance for
+different groups, etc. etc.</p>
+<p>These tasks are where the packages <a
+href="https://dplyr.tidyverse.org/">dplyr</a>, <a
+href="https://tidyr.tidyverse.org/">tidyr</a> and other packages in the
+<a href="https://www.tidyverse.org/">tidyverse</a>–a series of packages
+designed for all kinds of data tasks. This also includes the popular <a
+href="https://ggplot2.tidyverse.org/">ggplot2</a> package for
+graphics.</p>
+<p>The tidyverse packages are constructed by <a
+href="http://hadley.nz/">Hadley Wickam</a>. There are several books that
+cover how to use these packages, including <em>R for Data Science</em>
+<a href="https://r4ds.had.co.nz/">which is available for free as an
+online book</a></p>
+<p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
+<p>In this module, we’ll be learning some functions from the packages
+<strong>dplyr</strong> and <strong>tidyr</strong>.</p>
 <hr />
 </div>
+<div id="basic-syntax-of-tidyverse" class="section level2">
+<h2>2. Basic syntax of ‘tidyverse’</h2>
+</div>
+<div id="using-tidyr-to-reshape-data" class="section level2">
+<h2>3. Using <code>tidyr</code> to reshape data</h2>
+</div>
 <div id="working-with-dplyr" class="section level2">
-<h2>2. Working with <code>dplyr</code></h2>
+<h2>4. Working with <code>dplyr</code></h2>
 <p><br></p>
 <div id="main-dplyr-functions" class="section level3">
-<h3>2.1 Main <code>dplyr</code> functions</h3>
+<h3>3.1 Main <code>dplyr</code> functions</h3>
 <ul>
 <li><code>select()</code> select columns by criteria</li>
 <li><code>filter()</code> filter rows by criteria</li>
 <li><code>mutate()</code>: add new variable using functions</li>
-<li><code>summarise()</code>: calculate summary statistic for a given variable</li>
+<li><code>summarise()</code>: calculate summary statistic for a given
+variable</li>
 <li><code>arrange()</code>: change order of rows</li>
-<li><code>group_by()</code>: run any of above function ‘by group’ defined using criteria</li>
+<li><code>group_by()</code>: run any of above function ‘by group’
+defined using criteria</li>
 </ul>
 <p><br></p>
-</div>
-<div id="pipe-operator" class="section level3">
-<h3>2.2 Pipe Operator (<code>%&gt;%</code>)</h3>
-<p><code>dplyr</code> makes use of the pipe operator <code>%&gt;%</code>, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient.</p>
+<p>###2.2 Pipe Operator (<code>%&gt;%</code>)</p>
+<p><code>dplyr</code> makes use of the pipe operator
+<code>%&gt;%</code>, which allows you to carry over the output of one
+function to the next function. This can make series of data manipulation
+sequences much more efficient.</p>
 <p><br></p>
-</div>
-<div id="tibble" class="section level3">
-<h3>2.3 Tibble</h3>
-<p>The output of <code>dplyr</code> functions is a “tibble”, a special class of data frame. It is largely the same as a data.frame but it has some features (or rather, lack of features) that make for ‘defensive coding’. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow “partial matching”.</p>
-<p>To learn more about tibbles, start <a href="https://tibble.tidyverse.org/">here</a></p>
+<p>###2.3 Tibble</p>
+<p>The output of <code>dplyr</code> functions is a “tibble”, a special
+class of data frame. It is largely the same as a data.frame but it has
+some features (or rather, lack of features) that make for ‘defensive
+coding’. That is, it forces you to avoid dangerous operations, such as
+changing variable names or types (you have to explicitly do this) or
+allow “partial matching”.</p>
+<p>To learn more about tibbles, start <a
+href="https://tibble.tidyverse.org/">here</a></p>
 <ul>
 <li>tibble</li>
-<li>functions that have special syntax – but once you learn them, it’s hard to go back.</li>
+<li>functions that have special syntax – but once you learn them, it’s
+hard to go back.</li>
 </ul>
 <hr />
-</div>
-</div>
-<div id="an-example-using-data-on-chick-color-of-american-coots" class="section level2">
-<h2>3. An example using data on chick color of American coots</h2>
-<p>To demonstrate how <code>dplyr</code> functions work, we will use a dataset from a project on color variation in American coots (<em>Fulica americana</em>), a waterbird of the Rail family. Coots lay a relatively large number of eggs (6-12 eggs) in nests built out of old vegetation on top of water in wetlands across western North America.</p>
-<p>There are at least two very weird thing about coots: One weird thing is that they are ‘conspecific brood parasites’–i.e., they make their own nests, but they will also opportunistically lay eggs in their neighboring coot nests. Our research has shown that they can, under certain circumstances, tell which eggs and chicks in their nest are parasitic (Lyon 2003; Shizuka &amp; Lyon 2010).</p>
-<p>The other very weird thing is that they have <strong>extremely bright ornamental juvenile traits (red beaks, red head, orange plumes around the neck, etc.)</strong> when they hatch. They then lose these traits over the first few weeks of life. By the time they have fledged, they are black and gray with white beaks, and the only color they retain is a small patch or red on their forehead. Birds commonly have bright ornamental traits related to sexual selection, but it is relatively rare to have such bright ornaments as babies (probably because it could make them easy targets for predators).</p>
+<p>##3. An example using data on chick color of American coots</p>
+<p>To demonstrate how <code>dplyr</code> functions work, we will use a
+dataset from a project on color variation in American coots (<em>Fulica
+americana</em>), a waterbird of the Rail family. Coots lay a relatively
+large number of eggs (6-12 eggs) in nests built out of old vegetation on
+top of water in wetlands across western North America.</p>
+<p>There are at least two very weird thing about coots: One weird thing
+is that they are ‘conspecific brood parasites’–i.e., they make their own
+nests, but they will also opportunistically lay eggs in their
+neighboring coot nests. Our research has shown that they can, under
+certain circumstances, tell which eggs and chicks in their nest are
+parasitic (Lyon 2003; Shizuka &amp; Lyon 2010).</p>
+<p>The other very weird thing is that they have <strong>extremely bright
+ornamental juvenile traits (red beaks, red head, orange plumes around
+the neck, etc.)</strong> when they hatch. They then lose these traits
+over the first few weeks of life. By the time they have fledged, they
+are black and gray with white beaks, and the only color they retain is a
+small patch or red on their forehead. Birds commonly have bright
+ornamental traits related to sexual selection, but it is relatively rare
+to have such bright ornaments as babies (probably because it could make
+them easy targets for predators).</p>
 <p><img src="images/CootFeeding_lowres.jpg" width="40%" /><img src="images/cootnest.jpg" width="40%" /></p>
-<p>Past work (Lyon et al. 1994) has shown that, if you artificially remove some of these ornaments (i.e., the orange tips of feathers around neck), parents discriminate against these ‘dull’ chicks and preferentially feed chicks that retain the ornaments.</p>
-<p>In the present work (NOTE: <em>this is unpublished data (under review)</em>), we investigate the causes and consequences of variation in color (i.e., how ‘red’ the chicks are) within and between broods. To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the ‘red chroma’ (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. We combine this data with various other measures for each chick, including the order in which they were laid as eggs, the size of egg, and the order in which they hatched.</p>
-<p>Here is the <a href="data/chickcolor_Rclass.csv">link to data</a>. Save this in your course folder in the “data” subfolder.</p>
+<p>Past work (Lyon et al. 1994) has shown that, if you artificially
+remove some of these ornaments (i.e., the orange tips of feathers around
+neck), parents discriminate against these ‘dull’ chicks and
+preferentially feed chicks that retain the ornaments.</p>
+<p>In the present work (NOTE: <em>this is unpublished data (under
+review)</em>), we investigate the causes and consequences of variation
+in color (i.e., how ‘red’ the chicks are) within and between broods. To
+do this, we monitored nests and eggs until hatching, and then measured
+color of juvenile ornaments using a spectrometer (which measures
+reflectance of light at different wavelengths) from ~1,500 chicks. We
+have condensed data to several key color metrics, including the ‘red
+chroma’ (i.e., amount of light reflected at the red wavelengths: approx
+600-700nm) of the feathers around the chin. We combine this data with
+various other measures for each chick, including the order in which they
+were laid as eggs, the size of egg, and the order in which they
+hatched.</p>
+<p>Here is the <a href="data/chickcolor_Rclass.csv">link to data</a>.
+Save this in your course folder in the “data” subfolder.</p>
 <p>Then import this data to R:</p>
 <pre class="r"><code>dat=read.csv(&quot;data/chickcolor_Rclass.csv&quot;)
 head(dat)</code></pre>
@@ -437,18 +479,19 @@ head(dat)</code></pre>
 ## 4   0.6928042
 ## 5   0.6054178
 ## 6   0.6780352</code></pre>
-<p>Let’s also load the entire <code>tidyverse</code> series of packages</p>
+<p>Let’s also load the entire <code>tidyverse</code> series of
+packages</p>
 <pre class="r"><code>library(&#39;tidyverse&#39;)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div id="task-1-filter-out-parasite-chicks-and-then-calculate-mean-chick-color-for-each-brood" class="section level3">
-<h3>task 1: filter out parasite chicks and then calculate mean chick color for each brood</h3>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
+## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<p>###task 1: filter out parasite chicks and then calculate mean chick
+color for each brood</p>
 <pre class="r"><code>#old way
 dat.a=dat
 dat.b=dat.a[which(dat.a$is.parasite==F),]
@@ -467,7 +510,7 @@ x=filter(dat.a, is.parasite==FALSE)
 y=group_by(x, nest)
 z=summarise(y, mean(chin_chroma))
 z</code></pre>
-<pre><code>## # A tibble: 305 x 2
+<pre><code>## # A tibble: 305 × 2
 ##     nest `mean(chin_chroma)`
 ##    &lt;int&gt;               &lt;dbl&gt;
 ##  1  5001               0.692
@@ -483,7 +526,7 @@ z</code></pre>
 ## # … with 295 more rows</code></pre>
 <pre class="r"><code>#dplyr way, with piping
 dat %&gt;% filter(is.parasite==FALSE) %&gt;% group_by(nest) %&gt;% summarise(mean.col=mean(chin_chroma))</code></pre>
-<pre><code>## # A tibble: 305 x 2
+<pre><code>## # A tibble: 305 × 2
 ##     nest mean.col
 ##    &lt;int&gt;    &lt;dbl&gt;
 ##  1  5001    0.692
@@ -497,9 +540,8 @@ dat %&gt;% filter(is.parasite==FALSE) %&gt;% group_by(nest) %&gt;% summarise(mea
 ##  9  5010    0.723
 ## 10  5011    0.722
 ## # … with 295 more rows</code></pre>
-</div>
-<div id="task-2-standardize-each-chicks-color-measure-against-average-of-its-nest." class="section level3">
-<h3>task 2: standardize each chick’s color measure against average of its nest.</h3>
+<p>###task 2: standardize each chick’s color measure against average of
+its nest.</p>
 <pre class="r"><code>#old way
 dat.a$nest.mean.col=dat.c[match(dat.a$nest, dat.c$nest), 2]
 dat.a$std.col=dat.a$chin_chroma-dat.a$nest.mean.col
@@ -569,7 +611,7 @@ head(dat.a)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -587,7 +629,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -596,6 +638,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
@@ -608,7 +653,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
