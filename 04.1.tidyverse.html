@@ -377,10 +377,56 @@ online book</a></p>
 <p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
 <p>In this module, we’ll be learning some functions from the packages
 <strong>dplyr</strong> and <strong>tidyr</strong>.</p>
+<blockquote>
+<p><span style="color:purple"><strong><em>What is a “package” in
+R?</em></strong></span></p>
+<p>R packages are essentially a set of custom functions that R users
+have created and compiled, along with help files and vignettes, etc.
+Many of them are archived at CRAN–The Comprehensive R Archive
+Network–and available to install from the R console using the function
+<code>install.packages()</code>. There are still many other packages
+that users have not archived but are available from other sources, such
+as github. “Installing” the package means that the package is downloaded
+onto your computer. When you are ready to use them, you will have to
+load the package onto the environment by running the function
+<code>library()</code> or <code>require()</code>.</p>
+</blockquote>
+</div>
+<div id="some-things-to-know-about-getting-started-with-tidyverse"
+class="section level2">
+<h2>2. Some things to know about getting started with ‘tidyverse’</h2>
+<p><br></p>
+<div id="pipe-operator" class="section level3">
+<h3>2.1 Pipe Operator (<code>%&gt;%</code>)</h3>
+<p>tidyverse makes use of the pipe operator <code>%&gt;%</code>, which
+allows you to carry over the output of one function to the next
+function. This can make series of data manipulation sequences much more
+efficient.</p>
+<p><br></p>
+</div>
+<div id="tibbles" class="section level3">
+<h3>2.2 Tibbles</h3>
+<p>“tibble” is a special class of dataframe that is used in tidyverse.
+It is largely the same as a dataframe but it has some features (or
+rather, lack of features) that make for ‘defensive coding’. That is, it
+forces you to avoid dangerous operations, such as changing variable
+names or types (you have to explicitly do this) or allow “partial
+matching”.</p>
+<p>To learn more about tibbles, start <a
+href="https://tibble.tidyverse.org/">here</a></p>
+</div>
+<div id="installing-tidyverse-packages-and-packages-in-general"
+class="section level3">
+<h3>2.3 Installing tidyverse packages (and packages in general)</h3>
+<p>One can install each package separately, but you can also just
+install all “tidyverse” packages simply by running this command:</p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<p>Note that this simply downloads the packages onto your computer. When
+you are ready to use them, you will have to load the package onto the
+environment by running the function <code>library()</code> or
+<code>require()</code>. We will do this in the next section.</p>
 <hr />
 </div>
-<div id="basic-syntax-of-tidyverse" class="section level2">
-<h2>2. Basic syntax of ‘tidyverse’</h2>
 </div>
 <div id="using-tidyr-to-reshape-data" class="section level2">
 <h2>3. Using <code>tidyr</code> to reshape data</h2>
@@ -401,28 +447,11 @@ variable</li>
 defined using criteria</li>
 </ul>
 <p><br></p>
-<p>###2.2 Pipe Operator (<code>%&gt;%</code>)</p>
-<p><code>dplyr</code> makes use of the pipe operator
-<code>%&gt;%</code>, which allows you to carry over the output of one
-function to the next function. This can make series of data manipulation
-sequences much more efficient.</p>
-<p><br></p>
-<p>###2.3 Tibble</p>
-<p>The output of <code>dplyr</code> functions is a “tibble”, a special
-class of data frame. It is largely the same as a data.frame but it has
-some features (or rather, lack of features) that make for ‘defensive
-coding’. That is, it forces you to avoid dangerous operations, such as
-changing variable names or types (you have to explicitly do this) or
-allow “partial matching”.</p>
-<p>To learn more about tibbles, start <a
-href="https://tibble.tidyverse.org/">here</a></p>
-<ul>
-<li>tibble</li>
-<li>functions that have special syntax – but once you learn them, it’s
-hard to go back.</li>
-</ul>
-<hr />
-<p>##3. An example using data on chick color of American coots</p>
+</div>
+</div>
+<div id="an-example-using-data-on-chick-color-of-american-coots"
+class="section level2">
+<h2>3. An example using data on chick color of American coots</h2>
 <p>To demonstrate how <code>dplyr</code> functions work, we will use a
 dataset from a project on color variation in American coots (<em>Fulica
 americana</em>), a waterbird of the Rail family. Coots lay a relatively
@@ -596,7 +625,6 @@ head(dat.a)</code></pre>
 ## 6   0.6780352     0.6916427 -0.013607519 0.6916427  -0.013607519</code></pre>
 <div id="section" class="section level5">
 <h5></h5>
-</div>
 </div>
 </div>
 
