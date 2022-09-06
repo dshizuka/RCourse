@@ -37,23 +37,15 @@ In this module, we'll be learning some functions from the packages **dplyr** and
 >R packages are essentially a set of custom functions that R users have created and compiled, along with help files and vignettes, etc. Many of them are archived at CRAN--The Comprehensive R Archive Network--and available to install from the R console using the function `install.packages()`. There are still many other packages that users have not archived but are available from other sources, such as github. "Installing" the package means that the package is downloaded onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function `library()` or `require()`. 
 
 
-## 2. Some things to know about getting started with 'tidyverse'
+
+***
+
+
+## 2. Installing and loading the package
 
 <br>
 
-### 2.1 Pipe Operator (`%>%`)
-
-tidyverse makes use of the pipe operator `%>%`, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient. 
-
-<br>
-
-### 2.2 Tibbles
-
-"tibble" is a special class of dataframe that is used in tidyverse. It is largely the same as a dataframe but it has some features (or rather, lack of features) that make for 'defensive coding'. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow "partial matching".
-
-To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
-
-### 2.3 Installing tidyverse packages (and packages in general)
+### 2.1 Installing tidyverse packages (and packages in general)
 
 One can install each package separately, but you can also just install all "tidyverse" packages simply by running this command:
 
@@ -61,14 +53,11 @@ One can install each package separately, but you can also just install all "tidy
 install.packages("tidyverse")
 ```
 
-Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function `library()` or `require()`. We will do this in the next section.
+Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function
 
-***
+### 2.2 Loading the package
 
-
-### 2. Loading the package and getting oriented
-
-Let's start by loading the package and finding out a bit about what is in the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
+You now have the package downloaded on your computer, but to actually use it, you have to load the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
 
 ```{r}
 library(tidyverse)
@@ -76,9 +65,12 @@ library(tidyverse)
 
 **Two important thing to notice here.** First, the message tells you what packages were actually loaded as part of the tidyverse "metapackage". You see that this includes 8 packages: ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats. Second, the message tells you that there are two functions in the `dplyr` package that conflict with existing functions: `filter()` and `lag()`. This is sometimes very important to know! This means that the `filter()` function works differently before and after loading this package.
 
+### 2.3. Getting the package documentation
 
-Ok, let's now get started with `tidyr`.
-When I'm first learning a package, I often start by pulling up the documentation for it. You can do this by running `library(help="packagename")`, like this:
+When I'm first learning a package, I often start by pulling up the documentation for it. You can do this by running `library(help="packagename")`.
+
+Let's do this with the `tidyr` package:
+
 ```{r}
 library(help="tidyr")
 ```
@@ -95,9 +87,60 @@ You can learn about each function or object by using `?` in front of the name. T
 ?relig_income
 ```
 
-In this case, you will see that the package includes not only functions, but also sample datasets, which we will use to demonstrate some functions. 
+In this case, you will see that the package includes not only functions, but also sample datasets (`billboard` and `relig_income` being two of them). Get used to pulling up the documentation whenever you are learning to use a new package!
+
+***
+
+><span style="color:purple">***Some things to know about getting started with 'tidyverse'***</span>
+>
+>**Pipe Operator (`%>%`):**
+>tidyverse makes use of the pipe operator `%>%`, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient. 
+>
+>**Tibbles:**
+>"tibble" is a special class of dataframe that is used in tidyverse. It is largely the same as a dataframe but it has some features (or rather, lack of features) that make for 'defensive coding'. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow "partial matching".
+>
+>To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
+
+
+***
+
+```{r}
+
+pop=world_bank_pop %>% pivot_longer(-c(country,indicator), names_to="year") %>% mutate(year=as.numeric(year)) %>% dplyr::filter(country=="CAN" | country=="USA" | country=="MEX") %>% dplyr::filter(indicator=="SP.POP.GROW") %>% mutate(pop.growth=value)
+
+
+ggplot(pop, aes(x=year, y=pop.growth, color=country)) + 
+  geom_line() +
+  theme_classic() +
+  geom_hline(aes(yintercept=1), linetype=2) +
+  ylab("Population Growth Rate") +
+  xlab("Year")
+
+
+d1=world_bank_pop %>% dplyr::filter(indicator=="SP.URB.TOTL" | indicator=="SP.POP.TOTL") %>%
+  select(country, indicator, `2017`) %>%
+  pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
+
+ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
+  geom_point() +
+  scale_x_continuous(trans="log") +
+  scale_y_continuous(trans="log") +
+  xlab("Total Population Size") +
+  ylab("Urban Population Size") +
+  theme_bw()
+
+ggplot(iris, aes(x=Species, y=Petal.Length)) +
+  geom_boxplot()
+
+iris %>% group_by(Species) %>% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
+
+```
+
+
 
 ## 3. Using `tidyr` to reshape data
+
+
 
 ## 4. Working with `dplyr`
 
@@ -115,88 +158,3 @@ In this case, you will see that the package includes not only functions, but als
 <br>
 
 
-
-## 3. An example using data on chick color of American coots 
-
-
-
-To demonstrate how `dplyr` functions work, we will use a dataset from a project on color variation in American coots (*Fulica americana*), a waterbird of the Rail family. Coots lay a relatively large number of eggs (6-12 eggs) in nests built out of old vegetation on top of water in wetlands across western North America. 
-
-There are at least two very weird thing about coots: 
-One weird thing is that they are 'conspecific brood parasites'--i.e., they make their own nests, but they will also opportunistically lay eggs in their neighboring coot nests. Our research has shown that they can, under certain circumstances, tell which eggs and chicks in their nest are parasitic (Lyon 2003; Shizuka & Lyon 2010).
-
-The other very weird thing is that they have **extremely bright ornamental juvenile traits (red beaks, red head, orange plumes around the neck, etc.)** when they hatch. They then lose these traits over the first few weeks of life. By the time they have fledged, they are black and gray with white beaks, and the only color they retain is a small patch or red on their forehead. Birds commonly have bright ornamental traits related to sexual selection, but it is relatively rare to have such bright ornaments as babies (probably because it could make them easy targets for predators).
-
-```{r, out.width="40%", echo=F}
-knitr::include_graphics("images/CootFeeding_lowres.jpg")
-
-knitr::include_graphics("images/cootnest.jpg")
-```
-
-Past work (Lyon et al. 1994) has shown that, if you artificially remove some of these ornaments (i.e., the orange tips of feathers around neck), parents discriminate against these 'dull' chicks and preferentially feed chicks that retain the ornaments.
-
-In the present work (NOTE: *this is unpublished data (under review)*), we investigate the causes and consequences of variation in color (i.e., how 'red' the chicks are) within and between broods. To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. We combine this data with various other measures for each chick, including the order in which they were laid as eggs, the size of egg, and the order in which they hatched.
-
-Here is the [link to data](data/chickcolor_Rclass.csv). Save this in your course folder in the "data" subfolder.
-
-Then import this data to R:
-
-```{r}
-dat=read.csv("data/chickcolor_Rclass.csv")
-head(dat)
-```
-
-Let's also load the entire `tidyverse` series of packages
-```{r, eval=F, echo=F}
-install.packages('tidyverse')
-```
-```{r}
-library('tidyverse')
-```
-
-###task 1: filter out parasite chicks and then calculate mean chick color for each brood
-
-```{r}
-#old way
-dat.a=dat
-dat.b=dat.a[which(dat.a$is.parasite==F),]
-dat.c=aggregate(dat.b$chin_chroma, by=list(dat.b$nest), mean, na.rm=T)
-names(dat.c)=c("nest", "mean.col")
-head(dat.c)
-```
-
-```{r}
-#dplyr way, option 1
-x=filter(dat.a, is.parasite==FALSE)
-y=group_by(x, nest)
-z=summarise(y, mean(chin_chroma))
-z
-```
-
-```{r}
-#dplyr way, with piping
-dat %>% filter(is.parasite==FALSE) %>% group_by(nest) %>% summarise(mean.col=mean(chin_chroma))
-```
-
-
-###task 2: standardize each chick's color measure against average of its nest.
-
-```{r}
-#old way
-dat.a$nest.mean.col=dat.c[match(dat.a$nest, dat.c$nest), 2]
-dat.a$std.col=dat.a$chin_chroma-dat.a$nest.mean.col
-head(dat.a)
-```
-
-```{r}
-#with merge()
-dat.merge=merge(dat.a, dat.c, by="nest")
-head(dat.merge)
-```
-
-```{r}
-#with dyplr
-dat.a=left_join(dat.a, dat.c, by="nest") %>% mutate(std.chick.col=chin_chroma-mean.col)
-head(dat.a)
-```
-#####
