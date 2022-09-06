@@ -36,6 +36,7 @@ In this module, we'll be learning some functions from the packages **dplyr** and
 >
 >R packages are essentially a set of custom functions that R users have created and compiled, along with help files and vignettes, etc. Many of them are archived at CRAN--The Comprehensive R Archive Network--and available to install from the R console using the function `install.packages()`. There are still many other packages that users have not archived but are available from other sources, such as github. "Installing" the package means that the package is downloaded onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function `library()` or `require()`. 
 
+
 ## 2. Some things to know about getting started with 'tidyverse'
 
 <br>
@@ -63,9 +64,40 @@ install.packages("tidyverse")
 Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function `library()` or `require()`. We will do this in the next section.
 
 ***
+
+
+### 2. Loading the package and getting oriented
+
+Let's start by loading the package and finding out a bit about what is in the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
+
+```{r}
+library(tidyverse)
+```
+
+**Two important thing to notice here.** First, the message tells you what packages were actually loaded as part of the tidyverse "metapackage". You see that this includes 8 packages: ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats. Second, the message tells you that there are two functions in the `dplyr` package that conflict with existing functions: `filter()` and `lag()`. This is sometimes very important to know! This means that the `filter()` function works differently before and after loading this package.
+
+
+Ok, let's now get started with `tidyr`.
+When I'm first learning a package, I often start by pulling up the documentation for it. You can do this by running `library(help="packagename")`, like this:
+```{r}
+library(help="tidyr")
+```
+
+A new tab will open in the script editor window with the text documentation of the package, which includes info like version, authors, brief description, the homepage url, etc. Then, you will see the "index" section, which will list *all of the functions and other objects that are included in this package*. 
+
+You can learn about each function or object by using `?` in front of the name. Try it out:
+
+```{r}
+?replace_na
+?pivot_longer
+
+?billboard
+?relig_income
+```
+
+In this case, you will see that the package includes not only functions, but also sample datasets, which we will use to demonstrate some functions. 
+
 ## 3. Using `tidyr` to reshape data
-
-
 
 ## 4. Working with `dplyr`
 
