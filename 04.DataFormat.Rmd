@@ -5,7 +5,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 4
     toc_float: true
 ---
 
@@ -188,6 +188,8 @@ Step 2: Fix the spreadsheet so that you get the following:
 * The column called "weight" is numeric
 * The column called "X" is removed.
 
+See how to fix these errors in R [here](04.e.Fix_Data.html)
+
 ***
 
 ### Group Exercise 2: Improve my egg measurement data
@@ -200,36 +202,4 @@ Step 2: Fix the spreadsheet so that you get the following:
 
 * **Come up with as many recommendations as possible on how to improve this excel sheet.**
 
-***
-## 4.3. Wide- vs. Long-format data
-
-The most important thing to keep in mind is that your data should contain **each observation as a separate row**. For example, each subject should be a separate row. 
-What if you have repeated measurements from the same subject (e.g., individual)? Then, you have two different optoins, **wide-format** and **long-format**. 
-
-I won't say that wide- or long-format is the *right* way... THOUGH some people will tell you to never use wide-format. The reality is, in some cases it is easier to enter data and make sense of your data in a wide-format. However, in some cases, analysis and plotting will be easier when you have data in long-format. For practical purposes, I have found that knowing how to go back and forth between these formats helps you make the most out of your data. 
-
-For example, this is an example of a **wide-format** dataframe:  
-
-Subject|Time 1|Time 2|Time 3
-----|----|----|----
-A | 1.2 | 2.5 | 4.1
-B | 1.6 | 2.6 | 3.8
-C | 0.9 | 2.4 | 3.6
-
-Here is the same data, organized in a **long-format**
-
-Subject|Time|Value
--------|----|-----
-A|1|1.2
-A|2|2.5
-A|3|4.1
-B|1|1.6
-B|2|2.6
-B|3|3.8
-C|1|0.9
-C|2|2.4
-C|3|3.6
-
-The order of the rows is not relevant. The key is that each observation for a given individual shows up as separate rows. 
-
-For more on this distinction, see [Wickham (2014) paper](http://www.jstatsoft.org/v59/i10) on "Tidy Data"
+See the answers [here](04.e.Fix_Data.html)
