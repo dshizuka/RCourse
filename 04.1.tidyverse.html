@@ -346,7 +346,7 @@ div.tocify {
 <h1 class="title toc-ignore">Data Wrangling to plots with tidyverse
 packages</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/06/22</h4>
+<h4 class="date">updated 09/07/22</h4>
 
 </div>
 
@@ -473,6 +473,36 @@ allow “partial matching”.</p>
 href="https://tibble.tidyverse.org/">here</a></p>
 </blockquote>
 <hr />
+<pre class="r"><code>mean.dat=CO2 %&gt;% group_by(Type, Treatment, conc) %&gt;% summarise(mean.uptake=mean(uptake), sd.uptake=sd(uptake))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Type&#39;, &#39;Treatment&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>mean.dat</code></pre>
+<pre><code>## # A tibble: 28 × 5
+## # Groups:   Type, Treatment [4]
+##    Type   Treatment   conc mean.uptake sd.uptake
+##    &lt;fct&gt;  &lt;fct&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Quebec nonchilled    95        15.3      1.45
+##  2 Quebec nonchilled   175        30.0      2.57
+##  3 Quebec nonchilled   250        37.4      2.76
+##  4 Quebec nonchilled   350        40.4      2.75
+##  5 Quebec nonchilled   500        39.6      3.90
+##  6 Quebec nonchilled   675        41.5      2.35
+##  7 Quebec nonchilled  1000        43.2      3.06
+##  8 Quebec chilled       95        12.9      3.12
+##  9 Quebec chilled      175        24.1      3.15
+## 10 Quebec chilled      250        34.5      3.93
+## # … with 18 more rows</code></pre>
+<pre class="r"><code>ggplot(mean.dat, aes(x=conc, y=mean.uptake, color=Type)) +
+  geom_line() +
+  facet_wrap(~Treatment)</code></pre>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   Species    mean.sepal.length sd.sepal.length
+##   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt;
+## 1 setosa                  5.01           0.352
+## 2 versicolor              5.94           0.516
+## 3 virginica               6.59           0.636</code></pre>
 <pre class="r"><code>pop=world_bank_pop %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% mutate(year=as.numeric(year)) %&gt;% dplyr::filter(country==&quot;CAN&quot; | country==&quot;USA&quot; | country==&quot;MEX&quot;) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% mutate(pop.growth=value)
 
 
@@ -482,7 +512,7 @@ ggplot(pop, aes(x=year, y=pop.growth, color=country)) +
   geom_hline(aes(yintercept=1), linetype=2) +
   ylab(&quot;Population Growth Rate&quot;) +
   xlab(&quot;Year&quot;)</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>d1=world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.URB.TOTL&quot; | indicator==&quot;SP.POP.TOTL&quot;) %&gt;%
   select(country, indicator, `2017`) %&gt;%
   pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
@@ -495,17 +525,7 @@ ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
   ylab(&quot;Urban Population Size&quot;) +
   theme_bw()</code></pre>
 <pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(x=Species, y=Petal.Length)) +
-  geom_boxplot()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
-<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   Species    mean.sepal.length sd.sepal.length
-##   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt;
-## 1 setosa                  5.01           0.352
-## 2 versicolor              5.94           0.516
-## 3 virginica               6.59           0.636</code></pre>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 </div>
 </div>
 <div id="using-tidyr-to-reshape-data" class="section level2">
@@ -579,7 +599,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3,h4",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {

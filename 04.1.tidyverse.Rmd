@@ -5,7 +5,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 4
     toc_float: true
 ---
 
@@ -105,7 +105,7 @@ In this case, you will see that the package includes not only functions, but als
 ***
 
 ```{r}
-mean.dat=CO2 %>% group_by(Type, Treatment, conc) %>% summarise(mean.uptake=mean(uptake))
+mean.dat=CO2 %>% group_by(Type, Treatment, conc) %>% summarise(mean.uptake=mean(uptake), sd.uptake=sd(uptake))
 mean.dat
 ```
 

@@ -26,9 +26,11 @@ ggplot2 is much more ambitious and in some ways much more challenging than most 
 
 ggplot2 is part of the "tidyverse" suite of packages. There is a separate module on other major aspects of tidyverse, such as tidyr and dplyr.
 
-References:
+**Super Useful References:**
 
 ggplot2 website: https://r-graph-gallery.com/ggplot2-package.html
+
+The ggplot2 book (free online version): https://ggplot2-book.org/index.html
 
 The online 'tidyverse' book: https://r4ds.had.co.nz/data-visualisation.html
 
@@ -257,6 +259,9 @@ ggsave("scatterplot_w_legend.pdf", width=8, height=4, units="in")
 
 Here is a vignette for other aesthetic specifications: https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
 
+Here is the "themes" section in the ggplot2 book:
+https://ggplot2-book.org/polishing.html
+
 ***
 
 ## 7. A gallery of some other plot types:
@@ -340,3 +345,4 @@ Orange
 ggplot(Orange, aes(x=age, y=circumference, color=Tree)) +
   geom_line()
 ```
+
