@@ -11,15 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Learning Modules
 
-* ### [01. Let's get started with R!](01.Intro.html)
+* ### [1. Let's get started with R!](01.Intro.html)
 
-* ### [02. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
+* ### [2. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
 
-* ### [03. Importing and Navigating Data](03.Data.html)
+* ### [3. Importing and Navigating Data](03.Data.html)
 
-* ### [04. Formatting Data for Analysis](04.DataFormat.html)
+* ### [4. Formatting Data for Analysis](04.DataFormat.html)
 
-* ### [05. Basics of Plots](05.Plots_1.html)
+* ### 5. Plotting in R:
+
+    + ### [5.1 Basics of Plots](05.Plots_1.html)
+    
+    + ### [5.2 Intro to ggplot2](05.2_ggplot2_intro.html)
 
 * ### [06. Some Simple Statistics](06.Stats_1.html)
 

@@ -1,5 +1,5 @@
 ---
-title: "Extra: Intro to ggplot2"
+title: "Intro to ggplot2"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -21,7 +21,7 @@ library(dplyr)
 
 Key reference: https://r4ds.had.co.nz/data-visualisation.html
 
-##1. The basics of the ggplot2 syntax
+## 1. The basics of the ggplot2 syntax
 
 ggplot2 uses what is called *layered grammar of graphics*  
 

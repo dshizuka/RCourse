@@ -1,5 +1,5 @@
 ---
-title: "Data Wrangling with tidyverse packages"
+title: "Data Wrangling to plots with tidyverse packages"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -105,6 +105,23 @@ In this case, you will see that the package includes not only functions, but als
 ***
 
 ```{r}
+mean.dat=CO2 %>% group_by(Type, Treatment, conc) %>% summarise(mean.uptake=mean(uptake))
+mean.dat
+```
+
+```{r}
+ggplot(mean.dat, aes(x=conc, y=mean.uptake, color=Type)) +
+  geom_line() +
+  facet_wrap(~Treatment)
+
+```
+
+```{r}
+iris %>% group_by(Species) %>% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
+```
+
+
+```{r}
 
 pop=world_bank_pop %>% pivot_longer(-c(country,indicator), names_to="year") %>% mutate(year=as.numeric(year)) %>% dplyr::filter(country=="CAN" | country=="USA" | country=="MEX") %>% dplyr::filter(indicator=="SP.POP.GROW") %>% mutate(pop.growth=value)
 
@@ -128,11 +145,6 @@ ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
   xlab("Total Population Size") +
   ylab("Urban Population Size") +
   theme_bw()
-
-ggplot(iris, aes(x=Species, y=Petal.Length)) +
-  geom_boxplot()
-
-iris %>% group_by(Species) %>% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
 
 ```
 
