@@ -27,6 +27,23 @@ I expect that many, if not all of you are here to learn how to do statistical an
 
 * Factors (i.e., Categorical Data)
 
+### 1.2. Predictor vs. response variable
+
+Statistical analyses seek to determine the effect of the **predictor variable(s)** on a **response variable** (or, for multivariate analyses, multiple response variables).
+
+#### Here are some of the most common scenarios:
+
+***If you have a continuous predictor AND continuous response variable...*** Linear regression or Generalized Linear Model (GLM) with Gaussian distribution
+
+***If you have a continuous predictor AND binary response variable...*** GLM w/ "binomial" family (aka logistic regression)
+
+***If you have a continuous predictor AND counts as response variable...*** GLM w/ "Poisson" family (aka Poisson regression)
+
+***If you have a continuous predictor AND proportions as response variable...*** GLM w/ "binomial" or Quasi-binomial" family
+
+***If you have a categorical predictor AND continuous response variable...*** ANOVA (or t-test, if you are just comparing means), which can be run as linear model or GLM.
+
+
 
 ***
 

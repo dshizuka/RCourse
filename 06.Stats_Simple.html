@@ -356,17 +356,52 @@ that this is not a “Stats Class”, as I am not going over any principles
 of statistics. Nevertheless, I will go through some examples of simple
 statistical analyses that will get you familiar with the language and
 syntax of statistical functions in R.</p>
+<div id="types-of-statistical-tests-depend-on-types-of-data"
+class="section level2">
+<h2>1. Types of statistical tests depend on types of data</h2>
+<div id="what-kind-of-data-do-you-have" class="section level3">
+<h3>1.1. What kind of data do you have?</h3>
 <ul>
 <li><p>Numbers</p>
 <ul>
-<li><p>Continuous data</p></li>
-<li><p>Binary data</p></li>
-<li><p>Count data</p></li>
-<li><p>Proportion data</p></li>
+<li><p>Continuous data: Numbers that can take on any value.</p></li>
+<li><p>Binary data: Data that are 0/1 (e.g., death/survival, below/above
+a threshold, etc.)</p></li>
+<li><p>Count data: Integers (e.g., number of plants, number of hits,
+etc.)</p></li>
+<li><p>Proportion data: These can take a value between 0 and 1.</p></li>
 </ul></li>
-<li><p>Groups or Factors (i.e., Categorical Data)</p></li>
+<li><p>Factors (i.e., Categorical Data)</p></li>
 </ul>
+</div>
+<div id="predictor-vs.-response-variable" class="section level3">
+<h3>1.2. Predictor vs. response variable</h3>
+<p>Statistical analyses seek to determine the effect of the
+<strong>predictor variable(s)</strong> on a <strong>response
+variable</strong> (or, for multivariate analyses, multiple response
+variables).</p>
+<div id="here-are-some-of-the-most-common-scenarios"
+class="section level4">
+<h4>Here are some of the most common scenarios:</h4>
+<p><strong><em>If you have a continuous predictor AND continuous
+response variable…</em></strong> Linear regression or Generalized Linear
+Model (GLM) with Gaussian distribution</p>
+<p><strong><em>If you have a continuous predictor AND binary response
+variable…</em></strong> GLM w/ “binomial” family (aka logistic
+regression)</p>
+<p><strong><em>If you have a continuous predictor AND counts as response
+variable…</em></strong> GLM w/ “Poisson” family (aka Poisson
+regression)</p>
+<p><strong><em>If you have a continuous predictor AND proportions as
+response variable…</em></strong> GLM w/ “binomial” or Quasi-binomial”
+family</p>
+<p><strong><em>If you have a categorical predictor AND continuous
+response variable…</em></strong> ANOVA (or t-test, if you are just
+comparing means), which can be run as linear model or GLM.</p>
 <hr />
+</div>
+</div>
+</div>
 <div id="anova-comparing-a-continuous-variable-across-groups"
 class="section level2">
 <h2>2. ANOVA: Comparing a continuous variable across groups</h2>
@@ -396,7 +431,7 @@ head(chickwts)</code></pre>
 ## 6    168 horsebean</code></pre>
 <p>Now let’s try plotting the data.</p>
 <pre class="r"><code>plot(weight~feed,data=chickwts)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>We get the sense that there are some differences in chick weights
 based on feed supplement. Let’s test this hypothesis with ANOVA using
 the <code>aov()</code> function.</p>
@@ -415,7 +450,7 @@ difference between treatments.</p>
 <p>The second thing we’ll likely want to do is to test our assumptions.
 You can do this graphically:</p>
 <pre class="r"><code>plot(aov.mod)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-4-1.png" width="384" /><img src="06.Stats_1_files/figure-html/unnamed-chunk-4-2.png" width="384" /><img src="06.Stats_1_files/figure-html/unnamed-chunk-4-3.png" width="384" /><img src="06.Stats_1_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-4-1.png" width="384" /><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-4-2.png" width="384" /><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-4-3.png" width="384" /><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
 <p>The first plot looks at residual vs. fitted values—if there are weird
 patterns here, e.g., the points “fan out” towards the right side of the
 plot, then you might have heteroscedasticity (variance differs across
@@ -484,7 +519,7 @@ between:</p>
 </ul>
 <p>Look at the boxplot again and see if those results make sense:</p>
 <pre class="r"><code>plot(weight~feed,data=chickwts)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <table>
 <colgroup>
 <col width="29%" />
@@ -559,7 +594,7 @@ head(mtcars)</code></pre>
 <p>First, let’s plot something… like the relationship between the weight
 of the car and its fuel efficiency</p>
 <pre class="r"><code>plot(mpg~wt, data=mtcars, pch=19)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>You can see there is going to be some strong relationship here. Let’s
 investigate this as a linear regression using the function
 <code>lm()</code>:</p>
@@ -591,7 +626,7 @@ lm.mod=lm(mpg~wt, data=mtcars)
 xv=seq(min(mtcars$wt), max(mtcars$wt), length=2)
 yv=predict(lm.mod, data.frame(wt=xv))
 lines(xv, yv)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div
 id="ancova-testing-the-effects-of-a-continuous-variable-a-categorical-factor"
@@ -605,7 +640,7 @@ between car weight and fuel efficiency, but looking at automatic
 vs. manual transmission cars.</p>
 <pre class="r"><code>my.pal=c(&quot;tomato&quot;, &quot;slateblue&quot;)
 plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>The <code>mtcars$am</code> variable is 0 = automatic and 1 = manual
 (see help file <code>?mtcars</code>). So the above code will put the
 automatic transmission in “tomato” and manual transmission in
@@ -658,7 +693,7 @@ my.pal=c(&quot;tomato&quot;, &quot;slateblue&quot;)
 plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)
 abline(lm.auto, col=&quot;tomato&quot;, lwd=2)
 abline(lm.manu, col=&quot;slateblue&quot;, lwd=2)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>A more complicated routine, but a prettier plot:</p>
 <pre class="r"><code>my.pal=c(&quot;tomato&quot;, &quot;slateblue&quot;)
 plot(mpg~wt, data=mtcars, pch=19, col=my.pal[as.numeric(mtcars$am)+1], cex=2)
@@ -670,7 +705,7 @@ lines(xv0, yv0, col=&quot;tomato&quot;, lwd=2)
 xv1=seq(min(manu.dat$wt), max(manu.dat$wt), length=11)
 yv1=predict(lm.manu, data.frame(wt=xv1))
 lines(xv1, yv1, col=&quot;slateblue&quot;, lty=2, lwd=2)</code></pre>
-<p><img src="06.Stats_1_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <hr />
 </div>
 </div>
