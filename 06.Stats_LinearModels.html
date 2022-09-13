@@ -703,8 +703,9 @@ in the function (not displaying the plot here)</p>
 <p>… plotting with ggplot</p>
 <pre class="r"><code>ggplot(mtcars, aes(x=factor(vs), y=mpg)) +
   geom_boxplot()</code></pre>
-<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-18-1.png" width="50%" />
-#### Running ANOVA</p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-18-1.png" width="50%" /></p>
+<div id="running-anova" class="section level4">
+<h4>Running ANOVA</h4>
 <p>We get the sense that there are some differences in fuel efficiency
 based on engine shape. Let’s test this hypothesis with ANOVA using the
 <code>aov()</code> function. The basic syntax is the same as
@@ -719,6 +720,7 @@ summary(aov.mod)</code></pre>
 <p>The output answers are major question: Yes, there is a significant
 difference in fuel efficiency based on engine shape.</p>
 <p><br></p>
+</div>
 </div>
 <div id="anova-is-a-linear-model-which-is-a-glm" class="section level3">
 <h3>3.2. ANOVA is a Linear Model, which is a GLM…</h3>
@@ -917,9 +919,17 @@ id="glms-with-binary-count-and-proportion-data-as-response-variable"
 class="section level2">
 <h2>5. GLMs with binary, count and proportion data as response
 variable</h2>
+<p>GLMs extend the capability of Linear Models to data that are not
+distributed continuously. Here, I’ll briefly introduce how to handle
+those kinds of models with the <code>glm()</code> function.</p>
 <div id="binary-response-variable-logistic-regression"
 class="section level3">
 <h3>4.1 Binary response variable (Logistic regression)</h3>
+<p>Logistic regression is used when the response variable is a binary
+0/1.</p>
+<p>Let’s use the <code>diamonds</code> dataset included in the ggplot2
+package. This dataset shows the prices of over 50,000 diamonds with
+associated attributes.</p>
 <pre class="r"><code>diamonds</code></pre>
 <pre><code>## # A tibble: 53,940 × 10
 ##    carat cut       color clarity depth table price     x     y     z
@@ -935,9 +945,16 @@ class="section level3">
 ##  9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
 ## 10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
 ## # … with 53,930 more rows</code></pre>
-<p>Let’s make a new variable called “expensive”, which is TRUE if the
-diamond is priced at or above $10,000, and FALSE if not.</p>
+<p>Let’s say we want to predict when a diamond will cost above a certain
+threshold price (let’s say $10,000). To do this, let’s make a new
+variable called “expensive”, which is TRUE if the diamond is priced at
+or above $10,000, and FALSE if not.</p>
 <pre class="r"><code>diamonds$expensive=diamonds$price &gt;= 10000</code></pre>
+<p>We can actually run the logistic regression with this FALSE/TRUE
+logical variable, but let’s go ahead and convert this variable to 0/1.
+We can do this by adding 0 to the logical variable. This will convert
+FALSE to 0 and TRUE to 1:</p>
+<pre class="r"><code>diamonds$expensive = diamonds$expensive + 0</code></pre>
 <p>Now, we can test if the probability that a diamond is worth &gt;
 $10,000 is dependent on its “carat”, or unit weight.</p>
 <pre class="r"><code>glm.fit=glm(expensive~carat, data=diamonds)
@@ -964,143 +981,115 @@ summary(glm.fit)</code></pre>
 ## AIC: -8148.1
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
+<p>If we want an F statistic:</p>
+<pre class="r"><code>anova(glm.fit, test=&quot;F&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: gaussian, link: identity
+## 
+## Response: expensive
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##       Df Deviance Resid. Df Resid. Dev     F    Pr(&gt;F)    
+## NULL                  53939     4717.3                    
+## carat  1   2002.2     53938     2715.1 39775 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Here is how you can visualize this type of regression:</p>
 <pre class="r"><code>ggplot(diamonds, aes(x=carat, y=expensive+0))+
   geom_point() +
   geom_smooth(method=&quot;glm&quot;, method.args = list(family = &quot;binomial&quot;))</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-31-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-33-1.png" width="50%" /></p>
 </div>
-<div id="glm-with-proportion-data" class="section level3">
-<h3>4.2. GLM with proportion data</h3>
-<p>Here we will use the “snail” dataset from the “MASS” package</p>
-<pre class="r"><code>snails</code></pre>
-<pre><code>##    Species Exposure Rel.Hum Temp Deaths  N
-## 1        A        1    60.0   10      0 20
-## 2        A        1    60.0   15      0 20
-## 3        A        1    60.0   20      0 20
-## 4        A        1    65.8   10      0 20
-## 5        A        1    65.8   15      0 20
-## 6        A        1    65.8   20      0 20
-## 7        A        1    70.5   10      0 20
-## 8        A        1    70.5   15      0 20
-## 9        A        1    70.5   20      0 20
-## 10       A        1    75.8   10      0 20
-## 11       A        1    75.8   15      0 20
-## 12       A        1    75.8   20      0 20
-## 13       A        2    60.0   10      0 20
-## 14       A        2    60.0   15      1 20
-## 15       A        2    60.0   20      1 20
-## 16       A        2    65.8   10      0 20
-## 17       A        2    65.8   15      1 20
-## 18       A        2    65.8   20      0 20
-## 19       A        2    70.5   10      0 20
-## 20       A        2    70.5   15      0 20
-## 21       A        2    70.5   20      0 20
-## 22       A        2    75.8   10      0 20
-## 23       A        2    75.8   15      0 20
-## 24       A        2    75.8   20      0 20
-## 25       A        3    60.0   10      1 20
-## 26       A        3    60.0   15      4 20
-## 27       A        3    60.0   20      5 20
-## 28       A        3    65.8   10      0 20
-## 29       A        3    65.8   15      2 20
-## 30       A        3    65.8   20      4 20
-## 31       A        3    70.5   10      0 20
-## 32       A        3    70.5   15      2 20
-## 33       A        3    70.5   20      3 20
-## 34       A        3    75.8   10      0 20
-## 35       A        3    75.8   15      1 20
-## 36       A        3    75.8   20      2 20
-## 37       A        4    60.0   10      7 20
-## 38       A        4    60.0   15      7 20
-## 39       A        4    60.0   20      7 20
-## 40       A        4    65.8   10      4 20
-## 41       A        4    65.8   15      4 20
-## 42       A        4    65.8   20      7 20
-## 43       A        4    70.5   10      3 20
-## 44       A        4    70.5   15      3 20
-## 45       A        4    70.5   20      5 20
-## 46       A        4    75.8   10      2 20
-## 47       A        4    75.8   15      3 20
-## 48       A        4    75.8   20      3 20
-## 49       B        1    60.0   10      0 20
-## 50       B        1    60.0   15      0 20
-## 51       B        1    60.0   20      0 20
-## 52       B        1    65.8   10      0 20
-## 53       B        1    65.8   15      0 20
-## 54       B        1    65.8   20      0 20
-## 55       B        1    70.5   10      0 20
-## 56       B        1    70.5   15      0 20
-## 57       B        1    70.5   20      0 20
-## 58       B        1    75.8   10      0 20
-## 59       B        1    75.8   15      0 20
-## 60       B        1    75.8   20      0 20
-## 61       B        2    60.0   10      0 20
-## 62       B        2    60.0   15      3 20
-## 63       B        2    60.0   20      2 20
-## 64       B        2    65.8   10      0 20
-## 65       B        2    65.8   15      2 20
-## 66       B        2    65.8   20      1 20
-## 67       B        2    70.5   10      0 20
-## 68       B        2    70.5   15      0 20
-## 69       B        2    70.5   20      1 20
-## 70       B        2    75.8   10      1 20
-## 71       B        2    75.8   15      0 20
-## 72       B        2    75.8   20      1 20
-## 73       B        3    60.0   10      7 20
-## 74       B        3    60.0   15     11 20
-## 75       B        3    60.0   20     11 20
-## 76       B        3    65.8   10      4 20
-## 77       B        3    65.8   15      5 20
-## 78       B        3    65.8   20      9 20
-## 79       B        3    70.5   10      2 20
-## 80       B        3    70.5   15      4 20
-## 81       B        3    70.5   20      6 20
-## 82       B        3    75.8   10      2 20
-## 83       B        3    75.8   15      3 20
-## 84       B        3    75.8   20      5 20
-## 85       B        4    60.0   10     12 20
-## 86       B        4    60.0   15     14 20
-## 87       B        4    60.0   20     16 20
-## 88       B        4    65.8   10     10 20
-## 89       B        4    65.8   15     12 20
-## 90       B        4    65.8   20     12 20
-## 91       B        4    70.5   10      5 20
-## 92       B        4    70.5   15      7 20
-## 93       B        4    70.5   20      9 20
-## 94       B        4    75.8   10      4 20
-## 95       B        4    75.8   15      5 20
-## 96       B        4    75.8   20      7 20</code></pre>
-<pre class="r"><code>prop.fit=glm(Deaths~Temp, data=snails, family=&quot;poisson&quot;)
-summary(prop.fit)</code></pre>
+<div id="glm-with-count-and-proportional-data" class="section level3">
+<h3>4.2. GLM with count and proportional data</h3>
+<p>Here we will use the “snail” dataset from the “MASS” package. This
+dataset includes the results of an experiment in which snails were held
+for 1,2, 3, or 4 weeks under controlled temperature and relative
+humidity.</p>
+<pre class="r"><code>head(snails)</code></pre>
+<pre><code>##   Species Exposure Rel.Hum Temp Deaths  N
+## 1       A        1    60.0   10      0 20
+## 2       A        1    60.0   15      0 20
+## 3       A        1    60.0   20      0 20
+## 4       A        1    65.8   10      0 20
+## 5       A        1    65.8   15      0 20
+## 6       A        1    65.8   20      0 20</code></pre>
+<p>Notice that “Deaths” is count data. There is also the total number of
+snails exposed under each condition (N), so the death data can also be
+converted to proportions.</p>
+<p>Let’s fit the Poisson regression using the count of deaths as the
+response variable. I’m going to restrict the analysis to snails held for
+3 or 4 weeks because we expect the effect to be less apparent if the
+snails are kept in the experiment for a short amount of time. We can do
+that by using the <code>subset</code> argument within
+<code>glm()</code>. We also set <code>family="poisson</code>.</p>
+<pre class="r"><code>count.fit=glm(Deaths~Temp, data=snails, subset=which(Exposure&gt;=3), family=&quot;poisson&quot;)
+summary(count.fit)</code></pre>
 <pre><code>## 
 ## Call:
-## glm(formula = Deaths ~ Temp, family = &quot;poisson&quot;, data = snails)
+## glm(formula = Deaths ~ Temp, family = &quot;poisson&quot;, data = snails, 
+##     subset = which(Exposure &gt;= 3))
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -2.7324  -2.0380  -1.1089   0.7819   4.7740  
+## -2.8309  -1.1110  -0.4584   0.7083   3.2154  
 ## 
 ## Coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)  0.14432    0.24831   0.581 0.561093    
-## Temp         0.05864    0.01509   3.887 0.000102 ***
+## (Intercept)  0.82914    0.25375   3.268  0.00108 ** 
+## Temp         0.05589    0.01546   3.615  0.00030 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 448.08  on 95  degrees of freedom
-## Residual deviance: 432.65  on 94  degrees of freedom
-## AIC: 613.44
+##     Null deviance: 130.86  on 47  degrees of freedom
+## Residual deviance: 117.53  on 46  degrees of freedom
+## AIC: 276.11
 ## 
-## Number of Fisher Scoring iterations: 6</code></pre>
-<pre class="r"><code>ggplot(snails, aes(x=Temp, Deaths)) +
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>Here’s a way to visualize the results in ggplot. Since there are
+going to be multiple data points that overlap (common to see this in
+count data), we will use the <code>geom_count()</code> function, which
+makes a bubble plot with the size of bubbles corresponding to the number
+of overlapping data points.</p>
+<pre class="r"><code>ggplot(snails[which(snails$Exposure&gt;=3),], aes(x=Temp, Deaths)) +
   geom_count() +
   geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;poisson&quot;))</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-34-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-36-1.png" width="50%" />
+We can also run the model with the response variable as proportion of
+deaths / N (though in this case it should make little difference since N
+is the same across the board). Here is how I might do that:</p>
+<pre class="r"><code>prop.fit=glm(cbind(Deaths, N)~Temp, data=snails, subset=which(Exposure&gt;=3), family=binomial(link=&quot;logit&quot;))
+summary(prop.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Deaths, N) ~ Temp, family = binomial(link = &quot;logit&quot;), 
+##     data = snails, subset = which(Exposure &gt;= 3))
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.7016  -1.0290  -0.4111   0.6136   2.8184  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -2.16897    0.28286  -7.668 1.75e-14 ***
+## Temp         0.05604    0.01742   3.216   0.0013 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 104.606  on 47  degrees of freedom
+## Residual deviance:  94.093  on 46  degrees of freedom
+## AIC: 241.71
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 </div>
 

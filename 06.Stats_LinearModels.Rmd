@@ -244,6 +244,8 @@ plot(mpg~vs, data=mtcars)
 ggplot(mtcars, aes(x=factor(vs), y=mpg)) +
   geom_boxplot()
 ```
+
+
 #### Running ANOVA
 
 We get the sense that there are some differences in fuel efficiency based on engine shape. Let’s test this hypothesis with ANOVA using the `aov()` function. The basic syntax is the same as `lm()`
@@ -363,15 +365,29 @@ So, the take away is that there is a significant interaction between vehicle wei
 
 ## 5. GLMs with binary, count and proportion data as response variable
 
+GLMs extend the capability of Linear Models to data that are not distributed continuously. Here, I'll briefly introduce how to handle those kinds of models with the `glm()` function.
+
 ### 4.1 Binary response variable (Logistic regression)
 
+Logistic regression is used when the response variable is a binary 0/1. 
+
+Let's use the `diamonds` dataset included in  the ggplot2 package. This dataset shows the prices of over 50,000 diamonds with associated attributes. 
 
 ```{r}
 diamonds
 ```
-Let's make a new variable called "expensive", which is TRUE if the diamond is priced at or above $10,000, and FALSE if not.
+
+Let's say we want to predict when a diamond will cost above a certain threshold price (let's say $10,000). 
+To do this, let's make a new variable called "expensive", which is TRUE if the diamond is priced at or above $10,000, and FALSE if not.
+
 ```{r}
 diamonds$expensive=diamonds$price >= 10000
+```
+
+We can actually run the logistic regression with this FALSE/TRUE logical variable, but let's go ahead and convert this variable to 0/1. We can do this by adding 0 to the logical variable. This will convert FALSE to 0 and TRUE to 1:
+
+```{r}
+diamonds$expensive = diamonds$expensive + 0
 ```
 
 Now, we can test if the probability that a diamond is worth > $10,000 is dependent on its "carat", or unit weight.
@@ -381,6 +397,11 @@ glm.fit=glm(expensive~carat, data=diamonds)
 summary(glm.fit)
 ```
 
+If we want an F statistic:
+```{r}
+anova(glm.fit, test="F")
+```
+
 Here is how you can visualize this type of regression:
 ```{r}
 ggplot(diamonds, aes(x=carat, y=expensive+0))+
@@ -388,21 +409,32 @@ ggplot(diamonds, aes(x=carat, y=expensive+0))+
   geom_smooth(method="glm", method.args = list(family = "binomial"))
 ```
 
-### 4.2. GLM with proportion data
+### 4.2. GLM with count and proportional data
 
-Here we will use the "snail" dataset from the "MASS" package
+Here we will use the "snail" dataset from the "MASS" package. This dataset includes the results of an experiment in which snails were held for 1,2, 3, or 4 weeks under controlled temperature and relative humidity.
+
 ```{r}
-snails
+head(snails)
 ```
 
-```{r}
-prop.fit=glm(Deaths~Temp, data=snails, family="poisson")
-summary(prop.fit)
-```
+Notice that "Deaths" is count data. There is also the total number of snails exposed under each condition (N), so the death data can also be converted to proportions. 
+
+Let's fit the Poisson regression using the count of deaths as the response variable. I'm going to restrict the analysis to snails held for 3 or 4 weeks because we expect the effect to be less apparent if the snails are kept in the experiment for a short amount of time. We can do that by using the `subset` argument within `glm()`. We also set `family="poisson`.
 
 ```{r}
-ggplot(snails, aes(x=Temp, Deaths)) +
+count.fit=glm(Deaths~Temp, data=snails, subset=which(Exposure>=3), family="poisson")
+summary(count.fit)
+```
+
+Here's a way to visualize the results in ggplot. Since there are going to be multiple data points that overlap (common to see this in count data), we will use the `geom_count()` function, which makes a bubble plot with the size of bubbles corresponding to the number of overlapping data points.
+```{r}
+ggplot(snails[which(snails$Exposure>=3),], aes(x=Temp, Deaths)) +
   geom_count() +
   geom_smooth(method="glm", method.args=list(family="poisson"))
 
+```
+We can also run the model with the response variable as proportion of deaths / N (though in this case it should make little difference since N is the same across the board). Here is how I might do that:
+```{r}
+prop.fit=glm(cbind(Deaths, N)~Temp, data=snails, subset=which(Exposure>=3), family=binomial(link="logit"))
+summary(prop.fit)
 ```
