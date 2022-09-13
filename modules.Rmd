@@ -25,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
     
     + ### [5.2 Intro to ggplot2](05.2_ggplot2_intro.html)
 
-* ### [06. Some Simple Statistics](06.Stats_LinearModels.html)
+* ### 6. Stats in R:
+
+    + ### [6.1 Linear Models in R (including ANOVA, GLM)](06.Stats_LinearModels.html)
 
 * ### [07. Custom Functions (and if-else statements)](07.Functions.html)
 
