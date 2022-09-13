@@ -9,23 +9,27 @@ output:
     toc_float: true
 ---
 
-I expect that many, if not all of you are here to learn how to do statistical analyses in R. However, from the beginning, I have told you that this is not a "Stats Class", as I am not going over any principles of statistics. Nevertheless, I will go through some examples of simple statistical analyses that will get you familiar with the language and syntax of statistical functions in R. 
+Many, if not most users of R take advantage of the powerful set of statistical tools available in the programming language. Particularly powerful are the myriad of user-generated packages (over 18,000 as of September 2022). It is pretty much true that, if there is a package for any conceivable type of statistical analysis!
+
+There is no way that I can write modules to cover all of the types of statistical analyses out there. Here, my goal will be to outline the basics of how to conduct one of the most flexible and widely-used statistical analyses across biology: Linear Models. I will cover the basics of how to implement these in base R. Hopefully this will give you a baseline knowledge of how analyses work, and the basic syntax that is pretty common across most stats packages. I will also cover the basics of how to implement visualizations of statistical tests (where appropriate).
 
 ## 1. Types of statistical tests depend on types of data
 
+It is worth first considering what kind of data you have, and which one(s) is/are predictor variable(s) and which one is the response variable.
+
 ### 1.1. What kind of data do you have?
 
-* Numbers
+* **Numbers**
 
-  + Continuous data: Numbers that can take on any value. 
+  + *Continuous data*: Numbers that can take on any value. 
 
-  + Binary data: Data that are 0/1 (e.g., death/survival, below/above a threshold, etc.)
+  + *Binary data*: Data that are 0/1 (e.g., death/survival, below/above a threshold, etc.)
 
-  + Count data: Integers (e.g., number of plants, number of hits, etc.)
+  + *Count data*: Integers (e.g., number of plants, number of hits, etc.)
 
-  + Proportion data: These can take a value between 0 and 1.
+  + *Proportion data*: These can take a value between 0 and 1.
 
-* Factors (i.e., Categorical Data)
+* **Factors (i.e., Categorical Data)**
 
 ### 1.2. Predictor vs. response variable
 
@@ -33,19 +37,74 @@ Statistical analyses seek to determine the effect of the **predictor variable(s)
 
 #### Here are some of the most common scenarios:
 
-***If you have a continuous predictor AND continuous response variable...*** Linear regression or Generalized Linear Model (GLM) with Gaussian distribution
+* ***If you have a continuous predictor AND continuous response variable...*** use linear regression or Generalized Linear Model (GLM) with Gaussian distribution
 
-***If you have a continuous predictor AND binary response variable...*** GLM w/ "binomial" family (aka logistic regression)
+* ***If you have a continuous predictor AND binary response variable...*** use GLM w/ "binomial" family (aka logistic regression)
 
-***If you have a continuous predictor AND counts as response variable...*** GLM w/ "Poisson" family (aka Poisson regression)
+* ***If you have a continuous predictor AND counts as response variable...*** use GLM w/ "Poisson" family (aka Poisson regression)
 
-***If you have a continuous predictor AND proportions as response variable...*** GLM w/ "binomial" or Quasi-binomial" family
+* ***If you have a continuous predictor AND proportions as response variable...*** use GLM w/ "binomial" or Quasi-binomial" family
 
-***If you have a categorical predictor AND continuous response variable...*** ANOVA (or t-test, if you are just comparing means), which can be run as linear model or GLM.
+* ***If you have a categorical predictor AND continuous response variable...*** use ANOVA (or t-test, if you are just comparing means), which can be run as linear model or GLM.
+
+* ***If you have multiple predictors, with some continuous and some categorical variables...*** You can still use linear regression / GLM!
+
+><span style="color:purple">**Everything is a GLM!**</span>
+>
+> You will notice from above that everything I've listed falls under "GLM" or Generalized Linear Model. GLMs are super useful and flexible, and goes beyond a lot of the "parametric statistics" that you may first learn in basic stats class. It is one of the most common forms of statistical analyses in biology (I think... at least in my fields of ecology/evolution/behavior), so it is a good place to start!
+
 
 
 
 ***
+
+## 2. Conducting and visualizing statistical results
+
+Now, we will use some example data available from R packages to demonstrate how to implement different forms of GLMs. We will need the ggplot2 package for some of the datasets and for visualization, so let's go ahead and load that package:
+
+```{r}
+library(ggplot2)
+```
+
+<br>
+
+### 2.1 Linear Regression, or "GLM with Gaussian link"
+
+Let's start by exploring the effect  of one continuous variable on another continuous variable using a linear regression. 
+
+One easy way to think about linear regression is that it is appropriate whenever your predictor and response variables can be plotted as a scatterplot. 
+
+To demonstrate linear regression, we will use a dataset called `mtcars`. This is a dataset on the performance of car models from 1974 *Motor Trend US* magazine.
+
+```{r}
+?mtcars
+head(mtcars)
+```
+
+First, let's plot something... like the relationship between the weight of the car and its fuel efficiency
+
+```{r}
+plot(mpg~wt, data=mtcars, pch=19)
+```
+
+You can see there is going to be some strong relationship here. Let's investigate this as a linear regression using the function `lm()`:
+
+```{r}
+lm.mod=lm(mpg~wt, data=mtcars)
+summary(lm.mod)
+```
+
+You can see this is a very strong relationship, with $R^2 = 0.74$ and very low P-value.
+
+We can plot this relationship onto the scatterplot:
+
+```{r}
+plot(mpg~wt, data=mtcars, pch=19)
+lm.mod=lm(mpg~wt, data=mtcars)
+xv=seq(min(mtcars$wt), max(mtcars$wt), length=2)
+yv=predict(lm.mod, data.frame(wt=xv))
+lines(xv, yv)
+```
 
 ## 2. ANOVA: Comparing a continuous variable across groups
 
@@ -131,43 +190,6 @@ Paired t-test | Two-sample t-test for repeated measures | `t.test(paired=TRUE)`
 Wilcoxon signed-rank test | Nonparametric version of paired t | `Wilcox.test(paired=TRUE)`
 ---------------
 
-## 3. Linear Regression
-
-Now we are going to explore the relationship of one continuous variable to another continuous variable using a linear regression.
-
-Linear regression, ANOVA and other analysis (e.g., ANCOVA) are all part of a general technique referred to as General Linear Models, which allows for the analysis of continuous and categorical variables. This is different from Generalized Linear Models, which additionally allows for distributions to be other than normal. Very confusing, I know.
-
-To demonstrate linear regression and its extension, the ANCOVA, we will use a dataset called `mtcars`. This is a dataset on the performance of car models from 1974 *Motor Trend US* magazine.
-
-```{r}
-?mtcars
-head(mtcars)
-```
-
-First, let's plot something... like the relationship between the weight of the car and its fuel efficiency
-
-```{r}
-plot(mpg~wt, data=mtcars, pch=19)
-```
-
-You can see there is going to be some strong relationship here. Let's investigate this as a linear regression using the function `lm()`:
-
-```{r}
-lm.mod=lm(mpg~wt, data=mtcars)
-summary(lm.mod)
-```
-
-You can see this is a very strong relationship, with $R^2 = 0.74$ and very low P-value.
-
-We can plot this relationship onto the scatterplot:
-
-```{r}
-plot(mpg~wt, data=mtcars, pch=19)
-lm.mod=lm(mpg~wt, data=mtcars)
-xv=seq(min(mtcars$wt), max(mtcars$wt), length=2)
-yv=predict(lm.mod, data.frame(wt=xv))
-lines(xv, yv)
-```
 
 ## 4. ANCOVA: Testing the effects of a continuous variable & a categorical factor
 
