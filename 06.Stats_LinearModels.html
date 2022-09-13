@@ -583,51 +583,51 @@ different functions, the <code>lm()</code> function and
 include the argument that we want to use the “gaussian” family. This
 argument will become important later, when we use different forms of
 GLMs.</p>
-<pre class="r"><code>lm.fit=lm(mpg~hp, mtcars)
-glm.fit=glm(mpg~hp, mtcars, family=&quot;gaussian&quot;)</code></pre>
+<pre class="r"><code>lm.fit=lm(mpg~wt, mtcars)
+glm.fit=glm(mpg~wt, mtcars, family=&quot;gaussian&quot;)</code></pre>
 <p>Here is the output from the <code>lm()</code> function.</p>
 <pre class="r"><code>summary(lm.fit)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = mpg ~ hp, data = mtcars)
+## lm(formula = mpg ~ wt, data = mtcars)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.7121 -2.1122 -0.8854  1.5819  8.2360 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 30.09886    1.63392  18.421  &lt; 2e-16 ***
-## hp          -0.06823    0.01012  -6.742 1.79e-07 ***
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 3.863 on 30 degrees of freedom
-## Multiple R-squared:  0.6024, Adjusted R-squared:  0.5892 
-## F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07</code></pre>
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 <p>We get the exact same output from the <code>glm()</code>
 function!</p>
 <pre class="r"><code>summary(glm.fit)</code></pre>
 <pre><code>## 
 ## Call:
-## glm(formula = mpg ~ hp, family = &quot;gaussian&quot;, data = mtcars)
+## glm(formula = mpg ~ wt, family = &quot;gaussian&quot;, data = mtcars)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -5.7121  -2.1122  -0.8854   1.5819   8.2360  
+## -4.5432  -2.3647  -0.1252   1.4096   6.8727  
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 30.09886    1.63392  18.421  &lt; 2e-16 ***
-## hp          -0.06823    0.01012  -6.742 1.79e-07 ***
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 14.92248)
+## (Dispersion parameter for gaussian family taken to be 9.277398)
 ## 
 ##     Null deviance: 1126.05  on 31  degrees of freedom
-## Residual deviance:  447.67  on 30  degrees of freedom
-## AIC: 181.24
+## Residual deviance:  278.32  on 30  degrees of freedom
+## AIC: 166.03
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>This also means that we can use the glm function to plot the fit line
@@ -816,7 +816,7 @@ anova(glm.mod2, test=&quot;F&quot;)</code></pre>
 </div>
 <div id="multiple-predictor-variables-in-a-linear-model"
 class="section level2">
-<h2>5. Multiple predictor variables in a Linear Model</h2>
+<h2>4. Multiple predictor variables in a Linear Model</h2>
 <p>In many cases, you will be fitting a model in which you have multiple
 predictor variables. You can do this easily by adding variables to your
 formula.</p>
@@ -915,7 +915,7 @@ the two predictor variables)</p>
 <div
 id="glms-with-binary-count-and-proportion-data-as-response-variable"
 class="section level2">
-<h2>4. GLMs with binary, count and proportion data as response
+<h2>5. GLMs with binary, count and proportion data as response
 variable</h2>
 <div id="binary-response-variable-logistic-regression"
 class="section level3">
