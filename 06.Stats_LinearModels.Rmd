@@ -172,8 +172,8 @@ I mentioned in Section 1.2 above that linear regression is the same as GLM with 
 To demonstrate this, let's just fit the same model using two different functions, the `lm()` function and `glm()` function. For the `glm()` function, we include the argument that we want to use the "gaussian" family. This argument will become important later, when we use different forms of GLMs. 
 
 ```{r}
-lm.fit=lm(mpg~hp, mtcars)
-glm.fit=glm(mpg~hp, mtcars, family="gaussian")
+lm.fit=lm(mpg~wt, mtcars)
+glm.fit=glm(mpg~wt, mtcars, family="gaussian")
 ```
 
 Here is the output from the `lm()` function.
@@ -301,7 +301,7 @@ anova(glm.mod2, test="F")
 
 ***
 
-## 5. Multiple predictor variables in a Linear Model
+## 4. Multiple predictor variables in a Linear Model
 
 In many cases, you will be fitting a model in which you have multiple predictor variables. You can do this easily by adding variables to your formula. 
 
@@ -361,7 +361,7 @@ So, the take away is that there is a significant interaction between vehicle wei
 
 ***
 
-## 4. GLMs with binary, count and proportion data as response variable
+## 5. GLMs with binary, count and proportion data as response variable
 
 ### 4.1 Binary response variable (Logistic regression)
 
