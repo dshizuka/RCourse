@@ -473,36 +473,82 @@ allow “partial matching”.</p>
 href="https://tibble.tidyverse.org/">here</a></p>
 </blockquote>
 <hr />
-<pre class="r"><code>mean.dat=CO2 %&gt;% group_by(Type, Treatment, conc) %&gt;% summarise(mean.uptake=mean(uptake), sd.uptake=sd(uptake))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;Type&#39;, &#39;Treatment&#39;. You can override using
-## the `.groups` argument.</code></pre>
-<pre class="r"><code>mean.dat</code></pre>
-<pre><code>## # A tibble: 28 × 5
-## # Groups:   Type, Treatment [4]
-##    Type   Treatment   conc mean.uptake sd.uptake
-##    &lt;fct&gt;  &lt;fct&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
-##  1 Quebec nonchilled    95        15.3      1.45
-##  2 Quebec nonchilled   175        30.0      2.57
-##  3 Quebec nonchilled   250        37.4      2.76
-##  4 Quebec nonchilled   350        40.4      2.75
-##  5 Quebec nonchilled   500        39.6      3.90
-##  6 Quebec nonchilled   675        41.5      2.35
-##  7 Quebec nonchilled  1000        43.2      3.06
-##  8 Quebec chilled       95        12.9      3.12
-##  9 Quebec chilled      175        24.1      3.15
-## 10 Quebec chilled      250        34.5      3.93
-## # … with 18 more rows</code></pre>
-<pre class="r"><code>ggplot(mean.dat, aes(x=conc, y=mean.uptake, color=Type)) +
+</div>
+</div>
+<div id="dealing-with-complex-data" class="section level2">
+<h2>Dealing with complex data</h2>
+<p>World Bank Population Data up to 2017 (version included in tidyr
+package):</p>
+<pre class="r"><code>head(world_bank_pop)</code></pre>
+<pre><code>## # A tibble: 6 × 20
+##   country indicator       `2000`   `2001` `2002` `2003`  `2004`  `2005`   `2006`
+##   &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+## 1 ABW     SP.URB.TOTL   42444      4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4
+## 2 ABW     SP.URB.GROW       1.18   1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2
+## 3 ABW     SP.POP.TOTL   90853      9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5
+## 4 ABW     SP.POP.GROW       2.06   2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1
+## 5 AFG     SP.URB.TOTL 4436299      4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6
+## 6 AFG     SP.URB.GROW       3.91   4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0
+## # … with 11 more variables: `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
+<p>Just get the population growth rate data using
+<code>dplyr::filter()</code></p>
+<pre class="r"><code>world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;)</code></pre>
+<pre><code>## # A tibble: 264 × 20
+##    country indicator   `2000` `2001` `2002` `2003` `2004` `2005` `2006` `2007`
+##    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 ABW     SP.POP.GROW  2.06   2.23   2.23   2.11   1.76   1.30   0.798  0.384
+##  2 AFG     SP.POP.GROW  3.49   4.25   4.72   4.82   4.47   3.87   3.23   2.76 
+##  3 AGO     SP.POP.GROW  3.03   3.25   3.41   3.53   3.57   3.58   3.57   3.56 
+##  4 ALB     SP.POP.GROW -0.637 -0.938 -0.300 -0.374 -0.418 -0.512 -0.631 -0.756
+##  5 AND     SP.POP.GROW  1.57   2.94   3.94   4.38   4.10   3.38   2.66   2.07 
+##  6 ARB     SP.POP.GROW  2.11   2.12   2.13   2.16   2.22   2.30   2.37   2.43 
+##  7 ARE     SP.POP.GROW  5.43   5.28   5.30   6.48   8.84  11.4   13.5   14.2  
+##  8 ARG     SP.POP.GROW  1.11   1.11   1.11   1.10   1.09   1.07   1.05   1.03 
+##  9 ARM     SP.POP.GROW -0.631 -0.619 -0.551 -0.532 -0.571 -0.647 -0.766 -0.864
+## 10 ASM     SP.POP.GROW  1.31   1.13   0.951  0.655  0.248 -0.247 -0.795 -1.28 
+## # … with 254 more rows, and 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
+<p>Convert this data to “long-format”</p>
+<pre class="r"><code>world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;)</code></pre>
+<pre><code>## # A tibble: 4,752 × 4
+##    country indicator   year   value
+##    &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt;
+##  1 ABW     SP.POP.GROW 2000  2.06  
+##  2 ABW     SP.POP.GROW 2001  2.23  
+##  3 ABW     SP.POP.GROW 2002  2.23  
+##  4 ABW     SP.POP.GROW 2003  2.11  
+##  5 ABW     SP.POP.GROW 2004  1.76  
+##  6 ABW     SP.POP.GROW 2005  1.30  
+##  7 ABW     SP.POP.GROW 2006  0.798 
+##  8 ABW     SP.POP.GROW 2007  0.384 
+##  9 ABW     SP.POP.GROW 2008  0.131 
+## 10 ABW     SP.POP.GROW 2009  0.0986
+## # … with 4,742 more rows</code></pre>
+<p>Clean up and save as an object</p>
+<pre class="r"><code>df=world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% select(-indicator) %&gt;% mutate(pop.growth=value, .keep=&quot;unused&quot;) %&gt;% mutate(year=as.numeric(year))
+df</code></pre>
+<pre><code>## # A tibble: 4,752 × 3
+##    country  year pop.growth
+##    &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+##  1 ABW      2000     2.06  
+##  2 ABW      2001     2.23  
+##  3 ABW      2002     2.23  
+##  4 ABW      2003     2.11  
+##  5 ABW      2004     1.76  
+##  6 ABW      2005     1.30  
+##  7 ABW      2006     0.798 
+##  8 ABW      2007     0.384 
+##  9 ABW      2008     0.131 
+## 10 ABW      2009     0.0986
+## # … with 4,742 more rows</code></pre>
+<pre class="r"><code>ggplot(df, aes(x=year, y=pop.growth, color=country)) +
   geom_line() +
-  facet_wrap(~Treatment)</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   Species    mean.sepal.length sd.sepal.length
-##   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt;
-## 1 setosa                  5.01           0.352
-## 2 versicolor              5.94           0.516
-## 3 virginica               6.59           0.636</code></pre>
+  theme(legend.position=&quot;none&quot;)</code></pre>
+<pre><code>## Warning: Removed 24 row(s) containing missing values (geom_path).</code></pre>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>pop=world_bank_pop %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% mutate(year=as.numeric(year)) %&gt;% dplyr::filter(country==&quot;CAN&quot; | country==&quot;USA&quot; | country==&quot;MEX&quot;) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% mutate(pop.growth=value)
 
 
@@ -512,7 +558,7 @@ ggplot(pop, aes(x=year, y=pop.growth, color=country)) +
   geom_hline(aes(yintercept=1), linetype=2) +
   ylab(&quot;Population Growth Rate&quot;) +
   xlab(&quot;Year&quot;)</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre class="r"><code>d1=world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.URB.TOTL&quot; | indicator==&quot;SP.POP.TOTL&quot;) %&gt;%
   select(country, indicator, `2017`) %&gt;%
   pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
@@ -525,8 +571,7 @@ ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
   ylab(&quot;Urban Population Size&quot;) +
   theme_bw()</code></pre>
 <pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
-</div>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
 </div>
 <div id="using-tidyr-to-reshape-data" class="section level2">
 <h2>3. Using <code>tidyr</code> to reshape data</h2>
