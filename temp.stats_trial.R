@@ -23,12 +23,13 @@ mpg
 lm.fit=lm(hwy~displ, data=mpg)
 summary(lm.fit)
 
-glm.fit=glm(hwy~displ, data=mpg, family="gaussian")
+glm.fit=glm(hwy~displ + drv, data=mpg, family="gaussian")
 summary(glm.fit)
 
-lm.fit=lm(hwy~displ + drv, data=mpg, family="gaussian")
+lm.fit=lm(hwy~displ + drv, data=mpg)
 summary(lm.fit)
 anova(lm.fit)
+anova(glm.fit)
 
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point() +

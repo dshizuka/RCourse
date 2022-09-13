@@ -374,7 +374,11 @@ appropriate).</p>
 <div id="load-packages-you-will-need-for-this-module"
 class="section level2">
 <h2>Load packages you will need for this module:</h2>
-<pre class="r"><code>library(ggplot2)</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(MASS)</code></pre>
+<p><em>if you dont’ have the package installed on your computer,
+remember to run the <code>install.packages()</code> function (e.g.,
+`install.packages(“MASS”))</em></p>
 <p><br></p>
 <hr />
 </div>
@@ -471,7 +475,7 @@ head(mtcars)</code></pre>
 <p>First, let’s plot something… like the relationship between the weight
 of the car (variable “wt”) and its fuel efficiency (variable “mpg”)</p>
 <pre class="r"><code>plot(mpg~wt, data=mtcars, pch=19)</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
 <p>You can see there is going to be some strong relationship here. Let’s
 investigate this as a linear regression using the function
 <code>lm()</code>.</p>
@@ -544,7 +548,7 @@ geometric objects (i.e., <code>geom_point()</code> and
   geom_point() +
   geom_smooth(method=&quot;lm&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 <p>You will notice that ggplot adds the confidence interval (the shaded
 part) by default. If you don’t want that, you can remove it within the
 <code>geom_smooth()</code> function. Let’s do that and also clean up the
@@ -556,7 +560,7 @@ plot settings:</p>
   ylab(&quot;Miles Per Gallon&quot;) +
   xlab(&quot;Vehicle Weight&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
 <p>You can also do this in base R, though admittedly it’s a bit more
 complex. Basically, you Here’s a version in base R:</p>
 <pre class="r"><code>lm.mod=lm(mpg~wt, data=mtcars) # fit the linear model
@@ -565,7 +569,7 @@ yv=predict(lm.mod, data.frame(wt=xv)) # use predict() to get what the y-axis val
 
 plot(mpg~wt, data=mtcars, pch=19) #plot the scatterplot
 lines(xv, yv) #add the fit line </code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
 </div>
 <div id="linear-regression-as-a-form-of-glm" class="section level3">
 <h3>2.3. Linear regression as a form of GLM</h3>
@@ -634,7 +638,7 @@ a list:</p>
   geom_point() +
   geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;gaussian&quot;))</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
 <blockquote>
 <p><span style="color:purple"><strong>pssst… There ARE differences
 between the output of <code>lm()</code> and
@@ -692,14 +696,14 @@ actually use the formula synatx inside the generic <code>plot()</code>
 function, and R will know to plot it as a boxplot if we have a factor as
 the predictor variable:</p>
 <pre class="r"><code>plot(mpg~factor(vs), data=mtcars)</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-16-1.png" width="50%" />
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-16-1.png" width="50%" />
 *Note: contrast this with the case if we don’t use <code>factor()</code>
 in the function (not displaying the plot here)</p>
 <pre class="r"><code>plot(mpg~vs, data=mtcars)</code></pre>
 <p>… plotting with ggplot</p>
 <pre class="r"><code>ggplot(mtcars, aes(x=factor(vs), y=mpg)) +
   geom_boxplot()</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-18-1.png" width="50%" />
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-18-1.png" width="50%" />
 #### Running ANOVA</p>
 <p>We get the sense that there are some differences in fuel efficiency
 based on engine shape. Let’s test this hypothesis with ANOVA using the
@@ -831,7 +835,7 @@ the color scaling that the two levels for engine shape are “v-shape” and
   ylab(&quot;Miles per Gallon&quot;) +
   xlab(&quot;Vehicle Weight&quot;) +
   theme_bw()</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-24-1.png" width="50%" /></p>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-24-1.png" width="50%" /></p>
 <p>We can now actually add the fit lines using
 <code>geom_smooth()</code> on top of this, and you will get two lines:
 one for each engine shape. Note that this works because we’ve mapped the
@@ -846,7 +850,7 @@ default to <code>geom_smooth()</code> also).</p>
   theme_bw() +
   geom_smooth(method=&quot;lm&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-25-1.png" width="50%" />
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-25-1.png" width="50%" />
 Now, we actually see some interesting patterns here.</p>
 <ol style="list-style-type: decimal">
 <li><p>We see that there v-shaped engines are primarily used in heavy
@@ -905,133 +909,198 @@ continuous predictor and the continuour response variable is contingent
 on the categorical variable (i.e., whether there is covariance between
 the two predictor variables)</p>
 </blockquote>
+<p><br></p>
 <hr />
-</div>
-<div id="linear-mixed-models" class="section level2">
-<h2>Linear Mixed Models</h2>
-<p>Mixed effects models are often used to analyze ‘nested’ or
-‘hierarchical’ data. For example, in a repeated measures design, the
-same measurement is taken from a subject over different times and
-perhaps different treatments. If your objective is to understand the
-overall effects of time or treatment, then you want to account for
-variations among individuals.</p>
-<p>There are several packages for conducting mixed-effects models in R.
-Perhaps the most commonly used package is <code>lme4()</code>. Use the
-codes below to load the package, learn about one of the datasets that
-come with the package (called <code>sleepstudy</code>) and a simple use
-of the <code>lmer()</code> function to conduct a mixed model
-analysis.</p>
-<blockquote>
-<p><span style="color:purple"><strong>Downloading and installing
-packages</strong></span></p>
-<p>To do this part, you will need to download and install a stats
-package that can handle linear mixed-effects models. The one we will use
-here is <code>lme4</code>.</p>
-</blockquote>
-<blockquote>
-<p>You can install this package by running the command:
-<code>install.packages('lme4')</code> In addition, we will use the
-<code>lmerTest</code> package to generate a P-value from the linear
-mixed-effects model. To install that package, run
-<code>install.packages('lmerTest')</code></p>
-</blockquote>
-<pre class="r"><code>library(lme4) 
-library(lmerTest)
-?sleepstudy</code></pre>
-<pre class="r"><code>mix.mod1=lmer(Reaction~Days+ (Days|Subject), data=sleepstudy) #mixed effects model of Days, with Days nested in Subject as random effect summary(mix.mod1) #summary of lmer output does not give you p-values
-anova(mix.mod1)</code></pre>
-<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
-##      Sum Sq Mean Sq NumDF DenDF F value    Pr(&gt;F)    
-## Days  30031   30031     1    17  45.853 3.264e-06 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div
 id="glms-with-binary-count-and-proportion-data-as-response-variable"
 class="section level2">
-<h2>5. GLMs with binary, count and proportion data as response
+<h2>4. GLMs with binary, count and proportion data as response
 variable</h2>
-<div id="posthoc-tests" class="section level3">
-<h3>2.3 Posthoc tests</h3>
-<p>The above ANOVA analysis told us that there are differences among
-groups. However, that is not quite that useful. What we really want to
-know is which groups are different from each other? To ask this
-question, you need to conduct pairwise comparisons. You could do a
-series of two-sample t-tests, but this is not so robust when you do too
-many comparisons at once. A standard procedure for post-hoc multiple
-comparisons is the Tukey’s HSD (hostly significant difference) test. You
-can conduct that simply in R:</p>
-<pre class="r"><code>thsd=TukeyHSD(aov.mod) 
-thsd</code></pre>
-<pre><code>##   Tukey multiple comparisons of means
-##     95% family-wise confidence level
+<div id="binary-response-variable-logistic-regression"
+class="section level3">
+<h3>4.1 Binary response variable (Logistic regression)</h3>
+<pre class="r"><code>diamonds</code></pre>
+<pre><code>## # A tibble: 53,940 × 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # … with 53,930 more rows</code></pre>
+<p>Let’s make a new variable called “expensive”, which is TRUE if the
+diamond is priced at or above $10,000, and FALSE if not.</p>
+<pre class="r"><code>diamonds$expensive=diamonds$price &gt;= 10000</code></pre>
+<p>Now, we can test if the probability that a diamond is worth &gt;
+$10,000 is dependent on its “carat”, or unit weight.</p>
+<pre class="r"><code>glm.fit=glm(expensive~carat, data=diamonds)
+summary(glm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = expensive ~ carat, data = diamonds)
 ## 
-## Fit: aov(formula = mpg ~ factor(vs), data = mtcars)
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.03657  -0.17896   0.00801   0.09337   0.82104  
 ## 
-## $`factor(vs)`
-##         diff      lwr      upr    p adj
-## 1-0 7.940476 4.606732 11.27422 3.42e-05</code></pre>
-<p>This test suggests that there are significance difference
-between:</p>
-<ul>
-<li>linseed vs. casein</li>
-<li>soybean vs. casein</li>
-<li>meatmeal vs. horsebean</li>
-<li>soybean vs. horsebean</li>
-<li>sunflower vs. horsebean</li>
-<li>sunflower vs. linseed</li>
-<li>sunflower vs. soybean</li>
-</ul>
-<p>Look at the boxplot again and see if those results make sense:</p>
-<pre class="r"><code>plot(weight~feed,data=chickwts)</code></pre>
-<p><img src="06.Stats_Simple_files/figure-html/unnamed-chunk-31-1.png" width="50%" /></p>
-<table>
-<colgroup>
-<col width="29%" />
-<col width="39%" />
-<col width="31%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Test</th>
-<th>Description</th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Two-sample T-Test</td>
-<td>Parametric test of means of two groups</td>
-<td><code>t.test()</code></td>
-</tr>
-<tr class="even">
-<td>Mann-Whitney U-test</td>
-<td>Non-parametric version of two-sample t</td>
-<td><code>wilcox.test()</code></td>
-</tr>
-<tr class="odd">
-<td>Kruskall-Wallis test</td>
-<td>Non-parametric comparison of two or more groups</td>
-<td><code>kruskal.test()</code></td>
-</tr>
-<tr class="even">
-<td>Welch’s test</td>
-<td>ANOVA with relaxed assumption about heterogeneous variances</td>
-<td><code>oneway.test()</code></td>
-</tr>
-<tr class="odd">
-<td>Paired t-test</td>
-<td>Two-sample t-test for repeated measures</td>
-<td><code>t.test(paired=TRUE)</code></td>
-</tr>
-<tr class="even">
-<td>Wilcoxon signed-rank test</td>
-<td>Nonparametric version of paired t</td>
-<td><code>Wilcox.test(paired=TRUE)</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.227495   0.001891  -120.3   &lt;2e-16 ***
+## carat        0.406453   0.002038   199.4   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.05033729)
+## 
+##     Null deviance: 4717.3  on 53939  degrees of freedom
+## Residual deviance: 2715.1  on 53938  degrees of freedom
+## AIC: -8148.1
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>Here is how you can visualize this type of regression:</p>
+<pre class="r"><code>ggplot(diamonds, aes(x=carat, y=expensive+0))+
+  geom_point() +
+  geom_smooth(method=&quot;glm&quot;, method.args = list(family = &quot;binomial&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-31-1.png" width="50%" /></p>
+</div>
+<div id="glm-with-proportion-data" class="section level3">
+<h3>4.2. GLM with proportion data</h3>
+<p>Here we will use the “snail” dataset from the “MASS” package</p>
+<pre class="r"><code>snails</code></pre>
+<pre><code>##    Species Exposure Rel.Hum Temp Deaths  N
+## 1        A        1    60.0   10      0 20
+## 2        A        1    60.0   15      0 20
+## 3        A        1    60.0   20      0 20
+## 4        A        1    65.8   10      0 20
+## 5        A        1    65.8   15      0 20
+## 6        A        1    65.8   20      0 20
+## 7        A        1    70.5   10      0 20
+## 8        A        1    70.5   15      0 20
+## 9        A        1    70.5   20      0 20
+## 10       A        1    75.8   10      0 20
+## 11       A        1    75.8   15      0 20
+## 12       A        1    75.8   20      0 20
+## 13       A        2    60.0   10      0 20
+## 14       A        2    60.0   15      1 20
+## 15       A        2    60.0   20      1 20
+## 16       A        2    65.8   10      0 20
+## 17       A        2    65.8   15      1 20
+## 18       A        2    65.8   20      0 20
+## 19       A        2    70.5   10      0 20
+## 20       A        2    70.5   15      0 20
+## 21       A        2    70.5   20      0 20
+## 22       A        2    75.8   10      0 20
+## 23       A        2    75.8   15      0 20
+## 24       A        2    75.8   20      0 20
+## 25       A        3    60.0   10      1 20
+## 26       A        3    60.0   15      4 20
+## 27       A        3    60.0   20      5 20
+## 28       A        3    65.8   10      0 20
+## 29       A        3    65.8   15      2 20
+## 30       A        3    65.8   20      4 20
+## 31       A        3    70.5   10      0 20
+## 32       A        3    70.5   15      2 20
+## 33       A        3    70.5   20      3 20
+## 34       A        3    75.8   10      0 20
+## 35       A        3    75.8   15      1 20
+## 36       A        3    75.8   20      2 20
+## 37       A        4    60.0   10      7 20
+## 38       A        4    60.0   15      7 20
+## 39       A        4    60.0   20      7 20
+## 40       A        4    65.8   10      4 20
+## 41       A        4    65.8   15      4 20
+## 42       A        4    65.8   20      7 20
+## 43       A        4    70.5   10      3 20
+## 44       A        4    70.5   15      3 20
+## 45       A        4    70.5   20      5 20
+## 46       A        4    75.8   10      2 20
+## 47       A        4    75.8   15      3 20
+## 48       A        4    75.8   20      3 20
+## 49       B        1    60.0   10      0 20
+## 50       B        1    60.0   15      0 20
+## 51       B        1    60.0   20      0 20
+## 52       B        1    65.8   10      0 20
+## 53       B        1    65.8   15      0 20
+## 54       B        1    65.8   20      0 20
+## 55       B        1    70.5   10      0 20
+## 56       B        1    70.5   15      0 20
+## 57       B        1    70.5   20      0 20
+## 58       B        1    75.8   10      0 20
+## 59       B        1    75.8   15      0 20
+## 60       B        1    75.8   20      0 20
+## 61       B        2    60.0   10      0 20
+## 62       B        2    60.0   15      3 20
+## 63       B        2    60.0   20      2 20
+## 64       B        2    65.8   10      0 20
+## 65       B        2    65.8   15      2 20
+## 66       B        2    65.8   20      1 20
+## 67       B        2    70.5   10      0 20
+## 68       B        2    70.5   15      0 20
+## 69       B        2    70.5   20      1 20
+## 70       B        2    75.8   10      1 20
+## 71       B        2    75.8   15      0 20
+## 72       B        2    75.8   20      1 20
+## 73       B        3    60.0   10      7 20
+## 74       B        3    60.0   15     11 20
+## 75       B        3    60.0   20     11 20
+## 76       B        3    65.8   10      4 20
+## 77       B        3    65.8   15      5 20
+## 78       B        3    65.8   20      9 20
+## 79       B        3    70.5   10      2 20
+## 80       B        3    70.5   15      4 20
+## 81       B        3    70.5   20      6 20
+## 82       B        3    75.8   10      2 20
+## 83       B        3    75.8   15      3 20
+## 84       B        3    75.8   20      5 20
+## 85       B        4    60.0   10     12 20
+## 86       B        4    60.0   15     14 20
+## 87       B        4    60.0   20     16 20
+## 88       B        4    65.8   10     10 20
+## 89       B        4    65.8   15     12 20
+## 90       B        4    65.8   20     12 20
+## 91       B        4    70.5   10      5 20
+## 92       B        4    70.5   15      7 20
+## 93       B        4    70.5   20      9 20
+## 94       B        4    75.8   10      4 20
+## 95       B        4    75.8   15      5 20
+## 96       B        4    75.8   20      7 20</code></pre>
+<pre class="r"><code>prop.fit=glm(Deaths~Temp, data=snails, family=&quot;poisson&quot;)
+summary(prop.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Deaths ~ Temp, family = &quot;poisson&quot;, data = snails)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.7324  -2.0380  -1.1089   0.7819   4.7740  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  0.14432    0.24831   0.581 0.561093    
+## Temp         0.05864    0.01509   3.887 0.000102 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 448.08  on 95  degrees of freedom
+## Residual deviance: 432.65  on 94  degrees of freedom
+## AIC: 613.44
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<pre class="r"><code>ggplot(snails, aes(x=Temp, Deaths)) +
+  geom_count() +
+  geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;poisson&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="06.Stats_LinearModels_files/figure-html/unnamed-chunk-34-1.png" width="50%" /></p>
 </div>
 </div>
 

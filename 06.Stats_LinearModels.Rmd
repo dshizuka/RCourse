@@ -1,0 +1,408 @@
+---
+title: "Module 6: Intro to Stats in R: Linear Models (GLM), including ANOVA"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(out.width="50%")
+```
+Many, if not most users of R take advantage of the powerful set of statistical tools available in the programming language. Particularly powerful are the myriad of user-generated packages (over 18,000 as of September 2022). It is pretty much true that, if there is a package for any conceivable type of statistical analysis!
+
+There is no way that I can write modules to cover all of the types of statistical analyses out there. Here, my goal will be to outline the basics of how to conduct one of the most flexible and widely-used statistical analyses across biology: Linear Models. I will cover the basics of how to implement these in base R. Hopefully this will give you a baseline knowledge of how analyses work, and the basic syntax that is pretty common across most stats packages. I will also cover the basics of how to implement visualizations of statistical tests (where appropriate).
+
+<br>
+
+***
+
+## Load packages you will need for this module:
+
+```{r}
+library(ggplot2)
+library(MASS)
+```
+
+*if you dont' have the package installed on your computer, remember to run the `install.packages()` function (e.g., `install.packages("MASS"))*
+
+<br>
+
+***
+
+## 1. Choosing statistical models based on data properties
+
+It is worth first considering what kind of data you have, and which one(s) is/are predictor variable(s) and which one is the response variable.
+
+### 1.1. What kind of data do you have?
+
+* **Numbers**
+
+  + *Continuous data*: Numbers that can take on any value. 
+
+  + *Binary data*: Data that are 0/1 (e.g., death/survival, below/above a threshold, etc.)
+
+  + *Count data*: Integers (e.g., number of plants, number of hits, etc.)
+
+  + *Proportion data*: These can take a value between 0 and 1.
+
+* **Factors (i.e., Categorical Data)**
+
+### 1.2. Predictor vs. response variable
+
+Statistical analyses seek to determine the effect of the **predictor variable(s)** on a **response variable** (or, for multivariate analyses, multiple response variables).
+
+#### Here are some of the most common scenarios:
+
+* ***If you have a continuous predictor AND continuous response variable...*** use linear regression or Generalized Linear Model (GLM) with Gaussian distribution
+
+* ***If you have a continuous predictor AND binary response variable...*** use GLM w/ "binomial" family (aka logistic regression)
+
+* ***If you have a continuous predictor AND counts as response variable...*** use GLM w/ "Poisson" family (aka Poisson regression)
+
+* ***If you have a continuous predictor AND proportions as response variable...*** use GLM w/ "binomial" or Quasi-binomial" family
+
+* ***If you have a categorical predictor AND continuous response variable...*** use ANOVA (or t-test, if you are just comparing means), which can be run as linear model or GLM.
+
+* ***If you have multiple predictors, with some continuous and some categorical variables...*** You can still use linear regression / GLM!
+
+><span style="color:purple">**Everything is a GLM!**</span>
+>
+> You will notice from above that everything I've listed falls under "GLM" or Generalized Linear Model. GLMs are super useful and flexible, and goes beyond a lot of the "parametric statistics" that you may first learn in basic stats class. It is one of the most common forms of statistical analyses in biology (I think... at least in my fields of ecology/evolution/behavior), so it is a good place to start!
+
+
+
+
+***
+
+<br>
+
+## 2. Linear Regression, an example with `mtcars`
+
+### 2.1. Fitting a linear model and seeing the results
+
+Let's start by exploring the effect  of one continuous variable on another continuous variable using a linear regression. 
+
+One easy way to think about linear regression is that it is appropriate whenever your predictor and response variables can be plotted as a scatterplot. 
+
+To demonstrate linear regression, we will use a dataset called `mtcars`. This is a dataset on the performance of car models from 1974 *Motor Trend US* magazine.
+
+```{r}
+?mtcars
+head(mtcars)
+```
+
+First, let's plot something... like the relationship between the weight of the car (variable "wt") and its fuel efficiency (variable "mpg")
+
+```{r}
+plot(mpg~wt, data=mtcars, pch=19)
+```
+
+You can see there is going to be some strong relationship here. Let's investigate this as a linear regression using the function `lm()`.
+
+First, try just running the `lm()` function. Here, you are going to use the syntax `y~x` for the formula argument. This format where the response and predictor variables are linked with the tilde (~) is pretty much the default in statistical functions in R:
+
+```{r}
+lm(mpg~wt, data=mtcars)
+```
+You see that this function gives you pretty minimal output, with just the coefficients corresponding to the intercept value and the slope. This corresponds to `a` and `b` in the traditional equation for simple linear regression: 
+
+$y = a + bx$
+
+But to get other parameters such as $R^2$ and P-value, you need to use the `summary()` function. A typical way to do this is to assign the linear model to an object, and then get the summary for this object
+
+```{r}
+lm.mod=lm(mpg~wt, data=mtcars)
+
+summary(lm.mod)
+```
+
+You can see this is a very strong relationship, with $R^2 = 0.74$ and very low P-value.
+
+<br>
+
+### 2.2. Visualizing the results: Best fit line on a scatterplot
+
+We can plot this relationship onto the scatterplot.
+
+ggplot2 makes fitting the line quite easy for generic statistical models. The basic work flow is to:
+
+1. Assign the data and aesthetic mapping
+
+2. Plot scatterplot using `geom_point()`
+
+3. Add fit line using `geom_smooth()`. Here, you will use the argument `method=` to tell it that you want to use a linear model ("lm")
+
+*Note: you will need to assign the aesthetic mapping in the `ggplot()` function rather than the `geom_point()` function here, because you want to use the same mapping for two geometric objects (i.e., `geom_point()` and `geom_smooth()`)
+
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point() +
+  geom_smooth(method="lm")
+```
+
+You will notice that ggplot adds the confidence interval (the shaded part) by default. If you don't want that, you can remove it within the `geom_smooth()` function. Let's do that and also clean up the plot settings:
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point(size=4, color="tomato") +
+  geom_smooth(method="lm", se=FALSE, color="tomato") +
+  theme_classic() +
+  ylab("Miles Per Gallon") +
+  xlab("Vehicle Weight")
+```
+
+You can also do this in base R, though admittedly it's a bit more complex. Basically, you 
+Here's a version in base R:
+```{r}
+lm.mod=lm(mpg~wt, data=mtcars) # fit the linear model
+xv=seq(min(mtcars$wt), max(mtcars$wt), length=2) # set a series of values along the x-axis
+yv=predict(lm.mod, data.frame(wt=xv)) # use predict() to get what the y-axis value should be along each of those x-axis values
+
+plot(mpg~wt, data=mtcars, pch=19) #plot the scatterplot
+lines(xv, yv) #add the fit line 
+```
+
+### 2.3. Linear regression as a form of GLM
+
+I mentioned in Section 1.2 above that linear regression is the same as GLM with a "Gaussian" family (when we assume that the residuals are distributed in a "Gaussian" distribution -- i.e., normal distribution)
+
+To demonstrate this, let's just fit the same model using two different functions, the `lm()` function and `glm()` function. For the `glm()` function, we include the argument that we want to use the "gaussian" family. This argument will become important later, when we use different forms of GLMs. 
+
+```{r}
+lm.fit=lm(mpg~hp, mtcars)
+glm.fit=glm(mpg~hp, mtcars, family="gaussian")
+```
+
+Here is the output from the `lm()` function.
+```{r}
+summary(lm.fit)
+```
+
+We get the exact same output from the `glm()` function!
+```{r}
+summary(glm.fit)
+```
+
+This also means that we can use the glm function to plot the fit line (if you want).
+To do this, you can specify the argument inside the stats function using `method.args=` and specifying the arguments as a list:
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point() +
+  geom_smooth(method="glm", method.args=list(family="gaussian"))
+```
+
+
+><span style="color:purple">**pssst... There ARE differences between the output of `lm()` and `glm()`**</span>
+>
+> Ok, in this simple example with one predictor variable, we see that there is no difference between `lm()` and `glm()`. However, that's not the whole truth... While it is true that the model fit here are identical, there ARE subtle differences in how the output of the model is packaged when you run these two different functions. But we will cross that bridge when we come to it! 
+
+<br>
+
+***
+
+## 3. ANOVA: Comparing a continuous variable across groups
+
+### 3.1. Fitting an ANOVA
+
+Analysis of Variance (ANOVA) is a way to compare whether groups (e.g., different sites, different treatments, etc.) differ in some measured continuous variable. What ANOVA does is partition variation into within-group and across-group variation. We conclude that groups are different if the variation across groups is much larger than the variation within groups.
+
+Let's take another look at the `mtcars` data, but this time let's look at the effect of shape of the engine on fuel efficiency ("mpg").
+
+Engines come in two kinds of shapes: v-shape and straight (or inline)
+```{r, echo=FALSE, fig.align="center", out.width="50%", fig.cap="straigh engine and v-shaped engine"}
+knitr::include_graphics("images/engine_shape.jpg")
+```
+The help file for the mtcars dataset (get this with `?mtcars`) says that this variable is binary, with 0 = v-shape and 1 = straight.
+
+
+**IMPORTANT** thing to notice here before we delve in... Since this variable is coded as 0/1, R actually thinks it is a 'numeric' variable.
+```{r}
+class(mtcars$vs)
+```
+
+This means that we want to be careful about fitting ANOVAs using this variable. In this case, 0 and 1 are different categories, but we don't care that 0 < 1. This will matter later. For now, know that we can simply have R interpret this variable as a category (or 'factor') by using the `factor()` function:
+
+```{r}
+class(factor(mtcars$vs))
+```
+
+Ok, now let's visualize the pattern using a simple boxplot. Remember to use indicate that we want "vs" to be interpreted as factor. We can actually use the formula synatx inside the generic `plot()` function, and R will know to plot it as a boxplot if we have a factor as the predictor variable:
+
+```{r}
+plot(mpg~factor(vs), data=mtcars)
+```
+*Note: contrast this with the case if we don't use `factor()` in the function (not displaying the plot here)
+```{r, eval=F}
+plot(mpg~vs, data=mtcars)
+```
+
+... plotting with ggplot 
+```{r}
+ggplot(mtcars, aes(x=factor(vs), y=mpg)) +
+  geom_boxplot()
+```
+#### Running ANOVA
+
+We get the sense that there are some differences in fuel efficiency based on engine shape. Let’s test this hypothesis with ANOVA using the `aov()` function. The basic syntax is the same as `lm()`
+
+```{r}
+aov.mod=aov(mpg~factor(vs), data=mtcars) 
+summary(aov.mod)
+```
+
+The output answers are major question: Yes, there is a significant difference in fuel efficiency based on engine shape.
+
+<br>
+
+### 3.2. ANOVA is a Linear Model, which is a GLM...
+
+It turns out that ANOVAs are just a type of linear model in which the predictor variable is categorical. This means that we can actually run the ANOVA using the `lm()` function as well! However, there is a slight difference in how to get the results of test. 
+
+First, let's fit the model using `lm()`. We'll call is lm.mod2 to distinguish from the model we've already done above:
+
+```{r}
+lm.mod2=lm(mpg~factor(vs), data=mtcars) 
+lm.mod2
+```
+
+So far so good. Let's use the `summary()` function again:
+
+```{r}
+summary(lm.mod2)
+```
+
+I want you to notie two things. First, under "coefficients", you see the variable is listed as "eshapev" instead "eshape". Second, the test statistic is a 't-value' instead of 'F value' that we got when we ran the `aov()` function.
+
+This is because when you use the `summary()` function to test a linear model with categorical variables, it picks a 'reference value' of that variable, which is simply the first level (if you haven't set it manually, it would just be the first value based on alphabetical order), and then conducts pairwise comparisons between that reference value and other values to generate t-statistics. In this case, it matters little because there are only two values ("s" and "v"), but it becomes more complicated when there are more than two levels of a categorical variable (more examples below). To put it simply, it's doing a t-test.
+
+Ok, now contrast that with results we get when we test the model fit using a different function, `anova()`. 
+
+```{r}
+anova(lm.mod2)
+```
+
+Now, we get identical results as when we ran `aov()`, with F value as the test statistic. This is a proper ANOVA. 
+
+<br>
+
+#### ANOVA = LM = GLM
+
+Since ANOVA is a linear model/regression, then we ought to be able to do this whole thing in GLM also... and we can! The only difference is that, when we run the `anova()` function, we have to make sure we use the argument `test="F` to get the F statistic.
+
+```{r}
+glm.mod2=glm(mpg~factor(vs), data=mtcars, family="gaussian") 
+anova(glm.mod2, test="F")
+```
+
+<br>
+
+***
+
+## 5. Multiple predictor variables in a Linear Model
+
+In many cases, you will be fitting a model in which you have multiple predictor variables. You can do this easily by adding variables to your formula. 
+
+Since we have looked at the relationships between fuel efficiency and vehicle weight, as well as engine shape above, let's combine those into one model in which we look at how each of these variables contribute to explaining fuel efficiency of cars:
+
+Let's actually begin by visualizing these relationships. You can actually do this easily with ggplot. Here, we will plot mpg against weight, and then use engine shape as the point color. I'm adding info in the color scaling that the two levels for engine shape are "v-shape" and "straight" (in that order).
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg, color=factor(vs))) +
+  geom_point() +
+  scale_color_discrete(name="Engine Shape",labels=c("v-shape", "straight")) +
+  ylab("Miles per Gallon") +
+  xlab("Vehicle Weight") +
+  theme_bw()
+```
+
+We can now actually add the fit lines using `geom_smooth()` on top of this, and you will get two lines: one for each engine shape. Note that this works because we've mapped the aesthetics in the `ggplot()` function rather than the `geom_point()` function (thus, the aesthetics apply as default to `geom_smooth()` also).
+
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg, color=factor(vs))) +
+  geom_point() +
+  scale_color_discrete(name="Engine Shape",labels=c("v-shape", "straight")) +
+  ylab("Miles per Gallon") +
+  xlab("Vehicle Weight") +
+  theme_bw() +
+  geom_smooth(method="lm")
+```
+Now, we actually see some interesting patterns here. 
+
+1. We see that there v-shaped engines are primarily used in heavy cars... So is the difference we saw in mpg between the engine shapes actually driven by vehicle weight? 
+
+2. But it also seems like the mpg is systematically lower for v-shaped cars (the red line is below the teal line), so maybe there still is an effect after accounting for engine weight?
+
+3. Finally, it looks like the slope of the two lines is a bit difference. Does that mean that the relationship between weight and mpg contingent on engine shape?
+
+If we were just addressing the first two questions, we could run a model where we just add the two predictor variables in the formula:
+
+```{r}
+lm.mod3=lm(mpg~ wt + factor(vs), data=mtcars)
+anova(lm.mod3)
+```
+
+This model output suggests that most of the variation in mpg is explained by vehicle weight, but that there is also additional effect of engine shape. This is because the F value for weight is larger (and P-value is lower) than for engine shape.
+
+However, what about pattern #3? Is the relationship between weight & mpg contingent on the engine shape? To ask this question, we add what is called the "interaction term" for weight and engine shape. We do this by using `*` in the formula. This automatically each variable AND their interaction term to the model:
+```{r}
+lm.mod4=lm(mpg~ wt * factor(vs), data=mtcars)
+anova(lm.mod4)
+```
+
+So, the take away is that there is a significant interaction between vehicle weight and engine shape on their effect on fuel efficiency.
+
+><span style="color:purple">**What we did is called an ANCOVA**</span>
+>
+> ANCOVA (Analysis of Covariance) is a linear model in which you have one continuous predictor variable and one categorical predictor variable, and you analyze whether the relationship between the continuous predictor and the continuour response variable is contingent on the categorical variable (i.e., whether there is covariance between the two predictor variables)
+
+<br>
+
+***
+
+## 4. GLMs with binary, count and proportion data as response variable
+
+### 4.1 Binary response variable (Logistic regression)
+
+
+```{r}
+diamonds
+```
+Let's make a new variable called "expensive", which is TRUE if the diamond is priced at or above $10,000, and FALSE if not.
+```{r}
+diamonds$expensive=diamonds$price >= 10000
+```
+
+Now, we can test if the probability that a diamond is worth > $10,000 is dependent on its "carat", or unit weight.
+
+```{r}
+glm.fit=glm(expensive~carat, data=diamonds)
+summary(glm.fit)
+```
+
+Here is how you can visualize this type of regression:
+```{r}
+ggplot(diamonds, aes(x=carat, y=expensive+0))+
+  geom_point() +
+  geom_smooth(method="glm", method.args = list(family = "binomial"))
+```
+
+### 4.2. GLM with proportion data
+
+Here we will use the "snail" dataset from the "MASS" package
+```{r}
+snails
+```
+
+```{r}
+prop.fit=glm(Deaths~Temp, data=snails, family="poisson")
+summary(prop.fit)
+```
+
+```{r}
+ggplot(snails, aes(x=Temp, Deaths)) +
+  geom_count() +
+  geom_smooth(method="glm", method.args=list(family="poisson"))
+
+```
