@@ -32,7 +32,7 @@ knitr::include_graphics("images/icons/R_for_Data_Science_cover.png")
 
 In this module, we'll be learning some functions from the packages **dplyr** and **tidyr**. 
 
-We will do this by playing with data from the World Bank and World Health Organization (WHO)!
+We will do this by playing with data from the World Bank.
 
 ***
 
@@ -68,6 +68,53 @@ library(tidyverse)
 >
 >To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
 
+
+***
+
+## 2. Working with *dplyr* and *tidyr*
+
+*dplyr* is a package that helps you wrangle your data into shape to aid you in the process of visualization and analysis. 
+
+Here is a link to the `dplyr` cheat sheet: https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+
+### 3.1 Main *dplyr* functions
+
+* `select()` select columns by criteria
+* `filter()` filter rows by criteria
+* `mutate()`: add new variable using functions
+* `summarise()`: calculate summary statistic for a given variable
+* `arrange()`: change order of rows
+* `group_by()`: run any of above function 'by group' defined using criteria
+* `left_join()`, `right_join()`, `inner_join()`, `full_join()`: set of functions to help merge data tables.
+* `nest_join()`: create nested datasets (advanced... I don't know how to use this yet)
+
+<br>
+
+I use *tidyr* mostly for reshaping data to move between "long-format" and "wide-format" data. 
+
+Here is link to the *tidyr* cheat sheet: https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf
+
+### 3.2 Main *tidyr* functions
+
+* `pivot_longer()`: "lengthen" data by collapsing several columns into two.
+* `pivot_wider()`: "widen" data by expanding two columns into multiple columns
+
+***
+
+## 3. Demonstrating the basic functions
+
+```{r}
+head(Loblolly)
+```
+
+Now let's say we want to reformat this data so that we have one row for each individual (seed), with heights at different ages across different columns. Here's how we'd do it with `pivot_wider()`. 
+The minimal arguments that are required in here are: 
+* `data: (self explanatory)
+* `id_cols`: The column 
+
+```{r}
+pivot_wider(Loblolly, id_cols=Seed, names_from=age, values_from=height)
+```
 
 ***
 
@@ -135,7 +182,36 @@ Let's pull the country metadata and save it as an object called "metadata":
 
 ```{r}
 metadata=wb_countries()
+```
+
+```{r}
 metadata
+```
+
+```{r}
+head(metadata$region)
+```
+So this column shows us the "Aggregates". 
+
+```{r}
+metadata %>% dplyr::filter(region != "Aggregates")
+```
+
+```{r}
+metadata %>% 
+  dplyr::filter(region != "Aggregates") %>%
+  select(iso3c, iso2c, country, region)
+```
+```{r}
+countries=metadata %>% 
+  dplyr::filter(region != "Aggregates") %>%
+  select(iso3c, iso2c, country.name=country, region, income_level) %>%
+  mutate(income_level=factor(income_level, levels=c("Low income", "Lower middle income", "Upper middle income", "High income")))
+```
+
+```{r}
+popdat_countries=inner_join(world_bank_pop, countries, by=c("country" = "iso3c"))
+popdat_countries
 ```
 
 
@@ -152,101 +228,80 @@ As mentioned above (Section 1.1), each row is a country x indicator combination,
 
 * SP.URB.TOTL = total urban population
 
-
-
-
-## 4. Moving between wide- and long-format data with `pivot_longer()` and `pivot_wider()`
-
-## Dealing with complex data
-
-World Bank Population Data up to 2017 (version included in tidyr package):
-
 ```{r}
-head(world_bank_pop)
+popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.TOTL") 
 ```
-First, restrict the data to countries with large populations--let's say those above 75 percentile in population size over 2020-2017
-
 ```{r}
-upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(`2017`) 
+pop_totals=popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.TOTL") 
 ```
 
-```{r}
-#calculate average population size for all countries
-upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(`2017`) %>% quantile(., probs=0.9, na.rm=T)
-upper.pop
-
-upper.countries=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% dplyr::filter(`2017` > upper.pop) %>% select(country)
-```
-
-Just get the population growth rate data using `dplyr::filter()`
 
 ```{r}
-left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW")
-```
-
-Convert this data to "long-format"
-
-```{r}
-left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW") %>% pivot_longer(-c(country,indicator), names_to="year")
-```
-Clean up and save as an object
-
-```{r}
-df=left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW") %>% pivot_longer(-c(country,indicator), names_to="year") %>% select(-indicator) %>% mutate(pop.growth=value, .keep="unused") %>% mutate(year=as.numeric(year))
-df
+upper_pop=pop_totals %>%
+  pull(`2017`) %>% 
+  quantile(., probs=0.90, na.rm=T)
+upper_pop
 ```
 
 ```{r}
-ggplot(df, aes(x=year, y=pop.growth, color=country)) +
-  geom_line()
+large_countries=pop_totals %>% 
+  dplyr::filter(`2017` > upper_pop) %>% 
+  select(country)
+large_countries
 ```
 
 ```{r}
+popgrowth_large=popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.GROW") %>%
+  right_join(., large_countries, keep=FALSE) 
+```
 
-pop=world_bank_pop %>% pivot_longer(-c(country,indicator), names_to="year") %>% mutate(year=as.numeric(year)) %>% dplyr::filter(country=="CAN" | country=="USA" | country=="MEX") %>% dplyr::filter(indicator=="SP.POP.GROW") %>% mutate(pop.growth=value)
+```{r}
+popgrowth_large %>% select(-indicator, -country.name, -iso2c, -region, -income_level) %>% pivot_longer(!country, names_to="year", values_to="growth_rate")
+```
+```{r}
+popgrowth_plot=popgrowth_large %>% 
+  select(-indicator, -country.name, -iso2c, -region, -income_level) %>% 
+  pivot_longer(!country, names_to="year", values_to="growth_rate")
 
-
-ggplot(pop, aes(x=year, y=pop.growth, color=country)) + 
+ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
   geom_line() +
-  theme_classic() +
-  geom_hline(aes(yintercept=1), linetype=2) +
-  ylab("Population Growth Rate") +
-  xlab("Year")
-
-
-d1=world_bank_pop %>% dplyr::filter(indicator=="SP.URB.TOTL" | indicator=="SP.POP.TOTL") %>%
-  select(country, indicator, `2017`) %>%
-  pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
-
-ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
-  geom_point() +
-  scale_x_continuous(trans="log") +
-  scale_y_continuous(trans="log") +
-  xlab("Total Population Size") +
-  ylab("Urban Population Size") +
   theme_bw()
+```
 
+```{r}
+popgrowth_income=popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.GROW") %>%
+  dplyr::filter(is.na(income_level)==F) %>%
+  select(-indicator, -country.name, -iso2c, -region) %>% 
+  pivot_longer(cols=-c(country, income_level), names_to="year", values_to="growth_rate") %>%
+  group_by(income_level, year) %>%
+  summarise(mean_se(growth_rate))
+
+ggplot(popgrowth_income, aes(x=as.numeric(year), y=y, group=income_level)) +
+  geom_line(aes(color=income_level)) +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax), alpha=0.3, fill="gray") +
+  theme_bw()
+```
+
+```{r}
+popdat_anova=popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.GROW") %>%
+  select(country, `2017`, region, income_level) %>%
+  dplyr::filter(income_level!="Not classified")
+
+ggplot(popdat_anova, aes(x=income_level, y=`2017`)) +
+  geom_boxplot(aes(color=income_level)) +
+  facet_wrap(~region, nrow=3)
+```
+```{r}
+lm.fit=lm(`2017`~region*income_level, data=popdat_anova)
+summary(lm.fit)
+anova(lm.fit)
 ```
 
 
-
-## 3. Using `tidyr` to reshape data
-
-
-
-## 4. Working with `dplyr`
-
-<br>
-
-### 3.1 Main `dplyr` functions
-
-* `select()` select columns by criteria
-* `filter()` filter rows by criteria
-* `mutate()`: add new variable using functions
-* `summarise()`: calculate summary statistic for a given variable
-* `arrange()`: change order of rows
-* `group_by()`: run any of above function 'by group' defined using criteria
-
-<br>
 
 

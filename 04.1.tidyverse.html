@@ -438,8 +438,49 @@ href="https://tibble.tidyverse.org/">here</a></p>
 </blockquote>
 <hr />
 </div>
-<div id="introduction-to-the-datasets" class="section level2">
-<h2>1. Introduction to the datasets</h2>
+<div id="working-with-dplyr-and-tidyr" class="section level2">
+<h2>4. Working with <em>dplyr</em> and <em>tidyr</em></h2>
+<p><em>dplyr</em> is a package that helps you wrangle your data into
+shape to aid you in the process of visualization and analysis.</p>
+<p>Here is a link to the <code>dplyr</code> cheat sheet: <a
+href="https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf"
+class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf</a></p>
+<div id="main-dplyr-functions" class="section level3">
+<h3>3.1 Main <em>dplyr</em> functions</h3>
+<ul>
+<li><code>select()</code> select columns by criteria</li>
+<li><code>filter()</code> filter rows by criteria</li>
+<li><code>mutate()</code>: add new variable using functions</li>
+<li><code>summarise()</code>: calculate summary statistic for a given
+variable</li>
+<li><code>arrange()</code>: change order of rows</li>
+<li><code>group_by()</code>: run any of above function ‘by group’
+defined using criteria</li>
+<li><code>left_join()</code>, <code>right_join()</code>,
+<code>inner_join()</code>, <code>full_join()</code>: set of functions to
+help merge data tables.</li>
+<li><code>nest_join()</code>: create nested datasets (advanced… I don’t
+know how to use this yet)</li>
+</ul>
+<p><br></p>
+</div>
+<div id="main-tidyr-functions" class="section level3">
+<h3>3.2 Main <em>tidyr</em> functions</h3>
+<ul>
+<li><code>pivot_longer()</code>: “lengthen” data by collapsing several
+columns into two.</li>
+<li><code>pivot_wider()</code>: “widen” data by expanding two columns
+into multiple columns</li>
+</ul>
+<p>Here is link to the <em>tidyr</em> cheat sheet: <a
+href="https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf"
+class="uri">https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf</a></p>
+<hr />
+</div>
+</div>
+<div id="population-growth-trends-across-the-world"
+class="section level2">
+<h2>1. Population growth trends across the world</h2>
 <p>The World Bank actually makes it very easy to download a huge amount
 of data very easily. You could just go to the <a
 href="https://data.worldbank.org/">World Bankd Open Data site</a> and
@@ -489,40 +530,6 @@ work…</p>
 <p>…but this will work</p>
 <pre class="r"><code>world_bank_pop$`2001`</code></pre>
 <p><br></p>
-</div>
-<div id="who-world-health-organization-tb-data-1980---2013"
-class="section level3">
-<h3>1.3. <code>who</code>: World Health Organization TB data (1980 -
-2013)</h3>
-<p>The last dataset we will use in this module is the WHO Global
-Tuberculosis Report from 1980 to 2013, which is included in the tidyr
-package as <code>who</code></p>
-<pre class="r"><code>?who</code></pre>
-<pre class="r"><code>who</code></pre>
-<pre><code>## # A tibble: 7,240 × 60
-##    country     iso2  iso3   year new_s…¹ new_s…² new_s…³ new_s…⁴ new_s…⁵ new_s…⁶
-##    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
-##  1 Afghanistan AF    AFG    1980      NA      NA      NA      NA      NA      NA
-##  2 Afghanistan AF    AFG    1981      NA      NA      NA      NA      NA      NA
-##  3 Afghanistan AF    AFG    1982      NA      NA      NA      NA      NA      NA
-##  4 Afghanistan AF    AFG    1983      NA      NA      NA      NA      NA      NA
-##  5 Afghanistan AF    AFG    1984      NA      NA      NA      NA      NA      NA
-##  6 Afghanistan AF    AFG    1985      NA      NA      NA      NA      NA      NA
-##  7 Afghanistan AF    AFG    1986      NA      NA      NA      NA      NA      NA
-##  8 Afghanistan AF    AFG    1987      NA      NA      NA      NA      NA      NA
-##  9 Afghanistan AF    AFG    1988      NA      NA      NA      NA      NA      NA
-## 10 Afghanistan AF    AFG    1989      NA      NA      NA      NA      NA      NA
-## # … with 7,230 more rows, 50 more variables: new_sp_m65 &lt;int&gt;,
-## #   new_sp_f014 &lt;int&gt;, new_sp_f1524 &lt;int&gt;, new_sp_f2534 &lt;int&gt;,
-## #   new_sp_f3544 &lt;int&gt;, new_sp_f4554 &lt;int&gt;, new_sp_f5564 &lt;int&gt;,
-## #   new_sp_f65 &lt;int&gt;, new_sn_m014 &lt;int&gt;, new_sn_m1524 &lt;int&gt;,
-## #   new_sn_m2534 &lt;int&gt;, new_sn_m3544 &lt;int&gt;, new_sn_m4554 &lt;int&gt;,
-## #   new_sn_m5564 &lt;int&gt;, new_sn_m65 &lt;int&gt;, new_sn_f014 &lt;int&gt;,
-## #   new_sn_f1524 &lt;int&gt;, new_sn_f2534 &lt;int&gt;, new_sn_f3544 &lt;int&gt;, …</code></pre>
-<p>This is yet another massive dataset, with 7,240 rows, and 60 columns
-with very weird names. We will figure out what to do with these later
-on.</p>
-<p><br></p>
 <hr />
 </div>
 </div>
@@ -566,9 +573,96 @@ some of the “countries” include “aggregates” like “Arab World” or
 “High-income Countries”.</p>
 <p>Unfortunately, the <code>world_bank_pop</code> dataset does not
 include any variables that allow us to differentiate the countries from
-the aggregates!</p>
-<p>So, here is where we are going to use the <em>countrycode</em>
-package. The data in this package</p>
+the aggregates! However, we can solve this problem by pulling the
+metadata for countries from the World Bank. We can do this by using the
+<code>wb_countries()</code> function from the <em>wbstats</em>
+package.</p>
+<p>Let’s pull the country metadata and save it as an object called
+“metadata”:</p>
+<pre class="r"><code>metadata=wb_countries()</code></pre>
+<pre class="r"><code>metadata</code></pre>
+<pre><code>## # A tibble: 299 × 18
+##    iso3c iso2c country    capit…¹ longi…² latit…³ regio…⁴ regio…⁵ region admin…⁶
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 ABW   AW    Aruba      Oranje…  -70.0    12.5  LCN     ZJ      Latin… &lt;NA&gt;   
+##  2 AFE   ZH    Africa Ea… &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
+##  3 AFG   AF    Afghanist… Kabul     69.2    34.5  SAS     8S      South… SAS    
+##  4 AFR   A9    Africa     &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
+##  5 AFW   ZI    Africa We… &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
+##  6 AGO   AO    Angola     Luanda    13.2    -8.81 SSF     ZG      Sub-S… SSA    
+##  7 ALB   AL    Albania    Tirane    19.8    41.3  ECS     Z7      Europ… ECA    
+##  8 AND   AD    Andorra    Andorr…    1.52   42.5  ECS     Z7      Europ… &lt;NA&gt;   
+##  9 ARB   1A    Arab World &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
+## 10 ARE   AE    United Ar… Abu Dh…   54.4    24.5  MEA     ZQ      Middl… &lt;NA&gt;   
+## # … with 289 more rows, 8 more variables: admin_region_iso2c &lt;chr&gt;,
+## #   admin_region &lt;chr&gt;, income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;,
+## #   income_level &lt;chr&gt;, lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;,
+## #   lending_type &lt;chr&gt;, and abbreviated variable names ¹​capital_city,
+## #   ²​longitude, ³​latitude, ⁴​region_iso3c, ⁵​region_iso2c, ⁶​admin_region_iso3c</code></pre>
+<pre class="r"><code>head(metadata$region)</code></pre>
+<pre><code>## [1] &quot;Latin America &amp; Caribbean&quot; &quot;Aggregates&quot;               
+## [3] &quot;South Asia&quot;                &quot;Aggregates&quot;               
+## [5] &quot;Aggregates&quot;                &quot;Sub-Saharan Africa&quot;</code></pre>
+<p>So this column shows us the “Aggregates”.</p>
+<pre class="r"><code>metadata %&gt;% dplyr::filter(region != &quot;Aggregates&quot;)</code></pre>
+<pre><code>## # A tibble: 218 × 18
+##    iso3c iso2c country    capit…¹ longi…² latit…³ regio…⁴ regio…⁵ region admin…⁶
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 ABW   AW    Aruba      Oranje…  -70.0    12.5  LCN     ZJ      Latin… &lt;NA&gt;   
+##  2 AFG   AF    Afghanist… Kabul     69.2    34.5  SAS     8S      South… SAS    
+##  3 AGO   AO    Angola     Luanda    13.2    -8.81 SSF     ZG      Sub-S… SSA    
+##  4 ALB   AL    Albania    Tirane    19.8    41.3  ECS     Z7      Europ… ECA    
+##  5 AND   AD    Andorra    Andorr…    1.52   42.5  ECS     Z7      Europ… &lt;NA&gt;   
+##  6 ARE   AE    United Ar… Abu Dh…   54.4    24.5  MEA     ZQ      Middl… &lt;NA&gt;   
+##  7 ARG   AR    Argentina  Buenos…  -58.4   -34.6  LCN     ZJ      Latin… LAC    
+##  8 ARM   AM    Armenia    Yerevan   44.5    40.2  ECS     Z7      Europ… ECA    
+##  9 ASM   AS    American … Pago P… -171.    -14.3  EAS     Z4      East … EAP    
+## 10 ATG   AG    Antigua a… Saint …  -61.8    17.1  LCN     ZJ      Latin… &lt;NA&gt;   
+## # … with 208 more rows, 8 more variables: admin_region_iso2c &lt;chr&gt;,
+## #   admin_region &lt;chr&gt;, income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;,
+## #   income_level &lt;chr&gt;, lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;,
+## #   lending_type &lt;chr&gt;, and abbreviated variable names ¹​capital_city,
+## #   ²​longitude, ³​latitude, ⁴​region_iso3c, ⁵​region_iso2c, ⁶​admin_region_iso3c</code></pre>
+<pre class="r"><code>metadata %&gt;% 
+  dplyr::filter(region != &quot;Aggregates&quot;) %&gt;%
+  select(iso3c, iso2c, country, region)</code></pre>
+<pre><code>## # A tibble: 218 × 4
+##    iso3c iso2c country              region                    
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;                     
+##  1 ABW   AW    Aruba                Latin America &amp; Caribbean 
+##  2 AFG   AF    Afghanistan          South Asia                
+##  3 AGO   AO    Angola               Sub-Saharan Africa        
+##  4 ALB   AL    Albania              Europe &amp; Central Asia     
+##  5 AND   AD    Andorra              Europe &amp; Central Asia     
+##  6 ARE   AE    United Arab Emirates Middle East &amp; North Africa
+##  7 ARG   AR    Argentina            Latin America &amp; Caribbean 
+##  8 ARM   AM    Armenia              Europe &amp; Central Asia     
+##  9 ASM   AS    American Samoa       East Asia &amp; Pacific       
+## 10 ATG   AG    Antigua and Barbuda  Latin America &amp; Caribbean 
+## # … with 208 more rows</code></pre>
+<pre class="r"><code>countries=metadata %&gt;% 
+  dplyr::filter(region != &quot;Aggregates&quot;) %&gt;%
+  select(iso3c, iso2c, country.name=country, region, income_level) %&gt;%
+  mutate(income_level=factor(income_level, levels=c(&quot;Low income&quot;, &quot;Lower middle income&quot;, &quot;Upper middle income&quot;, &quot;High income&quot;)))</code></pre>
+<pre class="r"><code>popdat_countries=inner_join(world_bank_pop, countries, by=c(&quot;country&quot; = &quot;iso3c&quot;))
+popdat_countries</code></pre>
+<pre><code>## # A tibble: 868 × 24
+##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
+##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
+##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
+##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
+##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
+##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
+##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
+##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
+##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
+##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
+## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
+## # … with 858 more rows, 14 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;, country.name &lt;chr&gt;,
+## #   region &lt;chr&gt;, income_level &lt;fct&gt;, and abbreviated variable name ¹​indicator</code></pre>
 </div>
 <div id="filtering-and-selecting-data-with-filter-and-select"
 class="section level2">
@@ -582,141 +676,247 @@ combination, with 4 different indicators. The indicators are:</p>
 <li><p>SP.URB.GROW = urban population growth</p></li>
 <li><p>SP.URB.TOTL = total urban population</p></li>
 </ul>
-</div>
-<div
-id="moving-between-wide--and-long-format-data-with-pivot_longer-and-pivot_wider"
-class="section level2">
-<h2>4. Moving between wide- and long-format data with
-<code>pivot_longer()</code> and <code>pivot_wider()</code></h2>
-</div>
-<div id="dealing-with-complex-data" class="section level2">
-<h2>Dealing with complex data</h2>
-<p>World Bank Population Data up to 2017 (version included in tidyr
-package):</p>
-<pre class="r"><code>head(world_bank_pop)</code></pre>
-<pre><code>## # A tibble: 6 × 20
-##   country indica…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 ABW     SP.URB.… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
-## 2 ABW     SP.URB.… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
-## 3 ABW     SP.POP.… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
-## 4 ABW     SP.POP.… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
-## 5 AFG     SP.URB.… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
-## 6 AFG     SP.URB.… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
-## # … with 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;,
-## #   `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;,
-## #   `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name ¹​indicator</code></pre>
-<p>First, restrict the data to countries with large populations–let’s
-say those above 75 percentile in population size over 2020-2017</p>
-<pre class="r"><code>upper.pop=world_bank_pop %&gt;% dplyr::filter(indicator == &quot;SP.POP.TOTL&quot;) %&gt;% pull(`2017`) </code></pre>
-<pre class="r"><code>#calculate average population size for all countries
-upper.pop=world_bank_pop %&gt;% dplyr::filter(indicator == &quot;SP.POP.TOTL&quot;) %&gt;% pull(`2017`) %&gt;% quantile(., probs=0.9, na.rm=T)
-upper.pop</code></pre>
-<pre><code>##       90% 
-## 890471085</code></pre>
-<pre class="r"><code>upper.countries=world_bank_pop %&gt;% dplyr::filter(indicator == &quot;SP.POP.TOTL&quot;) %&gt;% dplyr::filter(`2017` &gt; upper.pop) %&gt;% select(country)</code></pre>
-<p>Just get the population growth rate data using
-<code>dplyr::filter()</code></p>
-<pre class="r"><code>left_join(upper.countries, world_bank_pop) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;)</code></pre>
-<pre><code>## Joining, by = &quot;country&quot;</code></pre>
-<pre><code>## # A tibble: 27 × 20
-##    country indicator   `2000` `2001` `2002` `2003` `2004` `2005` `2006` `2007`
-##    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-##  1 CHN     SP.POP.GROW  0.788  0.726  0.670  0.623  0.594  0.588  0.558  0.522
-##  2 EAP     SP.POP.GROW  0.994  0.940  0.891  0.849  0.819  0.805  0.775  0.741
-##  3 EAR     SP.POP.GROW  1.82   1.77   1.73   1.69   1.66   1.63   1.61   1.59 
-##  4 EAS     SP.POP.GROW  0.940  0.897  0.844  0.797  0.763  0.747  0.735  0.702
-##  5 ECS     SP.POP.GROW  0.107  0.152  0.183  0.261  0.297  0.302  0.307  0.357
-##  6 HIC     SP.POP.GROW  0.632  0.684  0.683  0.677  0.705  0.714  0.758  0.795
-##  7 IBD     SP.POP.GROW  1.19   1.15   1.12   1.10   1.08   1.06   1.04   1.02 
-##  8 IBT     SP.POP.GROW  1.45   1.43   1.40   1.38   1.37   1.36   1.34   1.32 
-##  9 IDA     SP.POP.GROW  2.43   2.43   2.41   2.40   2.39   2.37   2.36   2.35 
-## 10 IDX     SP.POP.GROW  2.50   2.50   2.50   2.49   2.46   2.43   2.40   2.37 
-## # … with 17 more rows, and 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+<pre class="r"><code>popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.TOTL&quot;) </code></pre>
+<pre><code>## # A tibble: 217 × 24
+##    country indicator     `2000` `2001` `2002` `2003` `2004` `2005` `2006` `2007`
+##    &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 ABW     SP.POP.TOTL    90853 9.29e4 9.50e4 9.70e4 9.87e4 1.00e5 1.01e5 1.01e5
+##  2 AFG     SP.POP.TOTL 20093756 2.10e7 2.20e7 2.31e7 2.41e7 2.51e7 2.59e7 2.66e7
+##  3 AGO     SP.POP.TOTL 16440924 1.70e7 1.76e7 1.82e7 1.89e7 1.96e7 2.03e7 2.10e7
+##  4 ALB     SP.POP.TOTL  3089027 3.06e6 3.05e6 3.04e6 3.03e6 3.01e6 2.99e6 2.97e6
+##  5 AND     SP.POP.TOTL    65390 6.73e4 7.00e4 7.32e4 7.62e4 7.89e4 8.10e4 8.27e4
+##  6 ARE     SP.POP.TOTL  3154925 3.33e6 3.51e6 3.74e6 4.09e6 4.58e6 5.24e6 6.04e6
+##  7 ARG     SP.POP.TOTL 37057452 3.75e7 3.79e7 3.83e7 3.87e7 3.91e7 3.96e7 4.00e7
+##  8 ARM     SP.POP.TOTL  3069588 3.05e6 3.03e6 3.02e6 3.00e6 2.98e6 2.96e6 2.93e6
+##  9 ASM     SP.POP.TOTL    57521 5.82e4 5.87e4 5.91e4 5.93e4 5.91e4 5.86e4 5.79e4
+## 10 ATG     SP.POP.TOTL    83584 8.51e4 8.63e4 8.73e4 8.83e4 8.93e4 9.03e4 9.14e4
+## # … with 207 more rows, and 14 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
 ## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
-## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
-<p>Convert this data to “long-format”</p>
-<pre class="r"><code>left_join(upper.countries, world_bank_pop) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;)</code></pre>
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;, country.name &lt;chr&gt;,
+## #   region &lt;chr&gt;, income_level &lt;fct&gt;</code></pre>
+<pre class="r"><code>pop_totals=popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.TOTL&quot;) </code></pre>
+<pre class="r"><code>upper_pop=pop_totals %&gt;%
+  pull(`2017`) %&gt;% 
+  quantile(., probs=0.90, na.rm=T)
+upper_pop</code></pre>
+<pre><code>##      90% 
+## 63286844</code></pre>
+<pre class="r"><code>large_countries=pop_totals %&gt;% 
+  dplyr::filter(`2017` &gt; upper_pop) %&gt;% 
+  select(country)
+large_countries</code></pre>
+<pre><code>## # A tibble: 22 × 1
+##    country
+##    &lt;chr&gt;  
+##  1 BGD    
+##  2 BRA    
+##  3 CHN    
+##  4 COD    
+##  5 DEU    
+##  6 EGY    
+##  7 ETH    
+##  8 FRA    
+##  9 GBR    
+## 10 IDN    
+## # … with 12 more rows</code></pre>
+<pre class="r"><code>popgrowth_large=popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
+  right_join(., large_countries, keep=FALSE) </code></pre>
 <pre><code>## Joining, by = &quot;country&quot;</code></pre>
-<pre><code>## # A tibble: 486 × 4
-##    country indicator   year  value
-##    &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;
-##  1 CHN     SP.POP.GROW 2000  0.788
-##  2 CHN     SP.POP.GROW 2001  0.726
-##  3 CHN     SP.POP.GROW 2002  0.670
-##  4 CHN     SP.POP.GROW 2003  0.623
-##  5 CHN     SP.POP.GROW 2004  0.594
-##  6 CHN     SP.POP.GROW 2005  0.588
-##  7 CHN     SP.POP.GROW 2006  0.558
-##  8 CHN     SP.POP.GROW 2007  0.522
-##  9 CHN     SP.POP.GROW 2008  0.512
-## 10 CHN     SP.POP.GROW 2009  0.497
-## # … with 476 more rows</code></pre>
-<p>Clean up and save as an object</p>
-<pre class="r"><code>df=left_join(upper.countries, world_bank_pop) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% select(-indicator) %&gt;% mutate(pop.growth=value, .keep=&quot;unused&quot;) %&gt;% mutate(year=as.numeric(year))</code></pre>
-<pre><code>## Joining, by = &quot;country&quot;</code></pre>
-<pre class="r"><code>df</code></pre>
-<pre><code>## # A tibble: 486 × 3
-##    country  year pop.growth
-##    &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;
-##  1 CHN      2000      0.788
-##  2 CHN      2001      0.726
-##  3 CHN      2002      0.670
-##  4 CHN      2003      0.623
-##  5 CHN      2004      0.594
-##  6 CHN      2005      0.588
-##  7 CHN      2006      0.558
-##  8 CHN      2007      0.522
-##  9 CHN      2008      0.512
-## 10 CHN      2009      0.497
-## # … with 476 more rows</code></pre>
-<pre class="r"><code>ggplot(df, aes(x=year, y=pop.growth, color=country)) +
-  geom_line()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<pre class="r"><code>pop=world_bank_pop %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% mutate(year=as.numeric(year)) %&gt;% dplyr::filter(country==&quot;CAN&quot; | country==&quot;USA&quot; | country==&quot;MEX&quot;) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% mutate(pop.growth=value)
+<pre class="r"><code>popgrowth_large %&gt;% select(-indicator, -country.name, -iso2c, -region, -income_level) %&gt;% pivot_longer(!country, names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;)</code></pre>
+<pre><code>## # A tibble: 396 × 3
+##    country year  growth_rate
+##    &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 BGD     2000         1.96
+##  2 BGD     2001         1.90
+##  3 BGD     2002         1.84
+##  4 BGD     2003         1.75
+##  5 BGD     2004         1.63
+##  6 BGD     2005         1.49
+##  7 BGD     2006         1.34
+##  8 BGD     2007         1.21
+##  9 BGD     2008         1.13
+## 10 BGD     2009         1.10
+## # … with 386 more rows</code></pre>
+<pre class="r"><code>popgrowth_plot=popgrowth_large %&gt;% 
+  select(-indicator, -country.name, -iso2c, -region, -income_level) %&gt;% 
+  pivot_longer(!country, names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;)
 
-
-ggplot(pop, aes(x=year, y=pop.growth, color=country)) + 
+ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
   geom_line() +
-  theme_classic() +
-  geom_hline(aes(yintercept=1), linetype=2) +
-  ylab(&quot;Population Growth Rate&quot;) +
-  xlab(&quot;Year&quot;)</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<pre class="r"><code>d1=world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.URB.TOTL&quot; | indicator==&quot;SP.POP.TOTL&quot;) %&gt;%
-  select(country, indicator, `2017`) %&gt;%
-  pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
-
-ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
-  geom_point() +
-  scale_x_continuous(trans=&quot;log&quot;) +
-  scale_y_continuous(trans=&quot;log&quot;) +
-  xlab(&quot;Total Population Size&quot;) +
-  ylab(&quot;Urban Population Size&quot;) +
   theme_bw()</code></pre>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
-</div>
-<div id="using-tidyr-to-reshape-data" class="section level2">
-<h2>3. Using <code>tidyr</code> to reshape data</h2>
-</div>
-<div id="working-with-dplyr" class="section level2">
-<h2>4. Working with <code>dplyr</code></h2>
-<p><br></p>
-<div id="main-dplyr-functions" class="section level3">
-<h3>3.1 Main <code>dplyr</code> functions</h3>
-<ul>
-<li><code>select()</code> select columns by criteria</li>
-<li><code>filter()</code> filter rows by criteria</li>
-<li><code>mutate()</code>: add new variable using functions</li>
-<li><code>summarise()</code>: calculate summary statistic for a given
-variable</li>
-<li><code>arrange()</code>: change order of rows</li>
-<li><code>group_by()</code>: run any of above function ‘by group’
-defined using criteria</li>
-</ul>
-<p><br></p>
-</div>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre class="r"><code>popgrowth_income=popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
+  dplyr::filter(is.na(income_level)==F) %&gt;%
+  select(-indicator, -country.name, -iso2c, -region) %&gt;% 
+  pivot_longer(cols=-c(country, income_level), names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;) %&gt;%
+  group_by(income_level, year) %&gt;%
+  summarise(mean_se(growth_rate))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;income_level&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(popgrowth_income, aes(x=as.numeric(year), y=y, group=income_level)) +
+  geom_line(aes(color=income_level)) +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax), alpha=0.3, fill=&quot;gray&quot;) +
+  theme_bw()</code></pre>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>popdat_anova=popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
+  select(country, `2017`, region, income_level) %&gt;%
+  dplyr::filter(income_level!=&quot;Not classified&quot;)
+
+ggplot(popdat_anova, aes(x=income_level, y=`2017`)) +
+  geom_boxplot(aes(color=income_level)) +
+  facet_wrap(~region, nrow=3)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>lm.fit=lm(`2017`~region*income_level, data=popdat_anova)
+summary(lm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = `2017` ~ region * income_level, data = popdat_anova)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.8376 -0.4021  0.0016  0.3416  3.2863 
+## 
+## Coefficients: (6 not defined because of singularities)
+##                                                                  Estimate
+## (Intercept)                                                        0.4811
+## regionEurope &amp; Central Asia                                       -0.8591
+## regionLatin America &amp; Caribbean                                   -0.4282
+## regionMiddle East &amp; North Africa                                   0.2746
+## regionNorth America                                               -0.5154
+## regionSouth Asia                                                   2.0097
+## regionSub-Saharan Africa                                           2.2767
+## income_levelLower middle income                                    0.9778
+## income_levelUpper middle income                                    0.1715
+## income_levelHigh income                                            0.7281
+## regionEurope &amp; Central Asia:income_levelLower middle income        0.7481
+## regionLatin America &amp; Caribbean:income_levelLower middle income    0.1674
+## regionMiddle East &amp; North Africa:income_levelLower middle income  -0.1244
+## regionNorth America:income_levelLower middle income                    NA
+## regionSouth Asia:income_levelLower middle income                  -2.2031
+## regionSub-Saharan Africa:income_levelLower middle income          -1.3331
+## regionEurope &amp; Central Asia:income_levelUpper middle income        0.5305
+## regionLatin America &amp; Caribbean:income_levelUpper middle income    0.6975
+## regionMiddle East &amp; North Africa:income_levelUpper middle income   1.3060
+## regionNorth America:income_levelUpper middle income                    NA
+## regionSouth Asia:income_levelUpper middle income                  -0.6777
+## regionSub-Saharan Africa:income_levelUpper middle income          -1.0472
+## regionEurope &amp; Central Asia:income_levelHigh income                    NA
+## regionLatin America &amp; Caribbean:income_levelHigh income                NA
+## regionMiddle East &amp; North Africa:income_levelHigh income           1.2067
+## regionNorth America:income_levelHigh income                            NA
+## regionSouth Asia:income_levelHigh income                               NA
+## regionSub-Saharan Africa:income_levelHigh income                  -2.2619
+##                                                                  Std. Error
+## (Intercept)                                                          0.7844
+## regionEurope &amp; Central Asia                                          0.2520
+## regionLatin America &amp; Caribbean                                      0.2890
+## regionMiddle East &amp; North Africa                                     0.9607
+## regionNorth America                                                  0.5024
+## regionSouth Asia                                                     1.1093
+## regionSub-Saharan Africa                                             0.8013
+## income_levelLower middle income                                      0.8119
+## income_levelUpper middle income                                      0.8268
+## income_levelHigh income                                              0.8140
+## regionEurope &amp; Central Asia:income_levelLower middle income          0.5112
+## regionLatin America &amp; Caribbean:income_levelLower middle income      0.5005
+## regionMiddle East &amp; North Africa:income_levelLower middle income     1.0216
+## regionNorth America:income_levelLower middle income                      NA
+## regionSouth Asia:income_levelLower middle income                     1.1735
+## regionSub-Saharan Africa:income_levelLower middle income             0.8498
+## regionEurope &amp; Central Asia:income_levelUpper middle income          0.4127
+## regionLatin America &amp; Caribbean:income_levelUpper middle income      0.4293
+## regionMiddle East &amp; North Africa:income_levelUpper middle income     1.0938
+## regionNorth America:income_levelUpper middle income                      NA
+## regionSouth Asia:income_levelUpper middle income                     1.3835
+## regionSub-Saharan Africa:income_levelUpper middle income             0.9016
+## regionEurope &amp; Central Asia:income_levelHigh income                      NA
+## regionLatin America &amp; Caribbean:income_levelHigh income                  NA
+## regionMiddle East &amp; North Africa:income_levelHigh income             1.0233
+## regionNorth America:income_levelHigh income                              NA
+## regionSouth Asia:income_levelHigh income                                 NA
+## regionSub-Saharan Africa:income_levelHigh income                     1.1422
+##                                                                  t value
+## (Intercept)                                                        0.613
+## regionEurope &amp; Central Asia                                       -3.409
+## regionLatin America &amp; Caribbean                                   -1.482
+## regionMiddle East &amp; North Africa                                   0.286
+## regionNorth America                                               -1.026
+## regionSouth Asia                                                   1.812
+## regionSub-Saharan Africa                                           2.841
+## income_levelLower middle income                                    1.204
+## income_levelUpper middle income                                    0.207
+## income_levelHigh income                                            0.894
+## regionEurope &amp; Central Asia:income_levelLower middle income        1.463
+## regionLatin America &amp; Caribbean:income_levelLower middle income    0.334
+## regionMiddle East &amp; North Africa:income_levelLower middle income  -0.122
+## regionNorth America:income_levelLower middle income                   NA
+## regionSouth Asia:income_levelLower middle income                  -1.877
+## regionSub-Saharan Africa:income_levelLower middle income          -1.569
+## regionEurope &amp; Central Asia:income_levelUpper middle income        1.285
+## regionLatin America &amp; Caribbean:income_levelUpper middle income    1.625
+## regionMiddle East &amp; North Africa:income_levelUpper middle income   1.194
+## regionNorth America:income_levelUpper middle income                   NA
+## regionSouth Asia:income_levelUpper middle income                  -0.490
+## regionSub-Saharan Africa:income_levelUpper middle income          -1.161
+## regionEurope &amp; Central Asia:income_levelHigh income                   NA
+## regionLatin America &amp; Caribbean:income_levelHigh income               NA
+## regionMiddle East &amp; North Africa:income_levelHigh income           1.179
+## regionNorth America:income_levelHigh income                           NA
+## regionSouth Asia:income_levelHigh income                              NA
+## regionSub-Saharan Africa:income_levelHigh income                  -1.980
+##                                                                  Pr(&gt;|t|)    
+## (Intercept)                                                      0.540359    
+## regionEurope &amp; Central Asia                                      0.000794 ***
+## regionLatin America &amp; Caribbean                                  0.140096    
+## regionMiddle East &amp; North Africa                                 0.775333    
+## regionNorth America                                              0.306226    
+## regionSouth Asia                                                 0.071588 .  
+## regionSub-Saharan Africa                                         0.004973 ** 
+## income_levelLower middle income                                  0.229959    
+## income_levelUpper middle income                                  0.835899    
+## income_levelHigh income                                          0.372207    
+## regionEurope &amp; Central Asia:income_levelLower middle income      0.144967    
+## regionLatin America &amp; Caribbean:income_levelLower middle income  0.738416    
+## regionMiddle East &amp; North Africa:income_levelLower middle income 0.903186    
+## regionNorth America:income_levelLower middle income                    NA    
+## regionSouth Asia:income_levelLower middle income                 0.061960 .  
+## regionSub-Saharan Africa:income_levelLower middle income         0.118347    
+## regionEurope &amp; Central Asia:income_levelUpper middle income      0.200181    
+## regionLatin America &amp; Caribbean:income_levelUpper middle income  0.105822    
+## regionMiddle East &amp; North Africa:income_levelUpper middle income 0.233935    
+## regionNorth America:income_levelUpper middle income                    NA    
+## regionSouth Asia:income_levelUpper middle income                 0.624806    
+## regionSub-Saharan Africa:income_levelUpper middle income         0.246888    
+## regionEurope &amp; Central Asia:income_levelHigh income                    NA    
+## regionLatin America &amp; Caribbean:income_levelHigh income                NA    
+## regionMiddle East &amp; North Africa:income_levelHigh income         0.239757    
+## regionNorth America:income_levelHigh income                            NA    
+## regionSouth Asia:income_levelHigh income                               NA    
+## regionSub-Saharan Africa:income_levelHigh income                 0.049090 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7844 on 193 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.5674, Adjusted R-squared:  0.5204 
+## F-statistic: 12.06 on 21 and 193 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>anova(lm.fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: 2017
+##                      Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## region                6 131.828 21.9713 35.7109 &lt; 2.2e-16 ***
+## income_level          3   2.949  0.9830  1.5977  0.191299    
+## region:income_level  12  20.996  1.7497  2.8438  0.001279 ** 
+## Residuals           193 118.744  0.6153                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 
 

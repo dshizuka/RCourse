@@ -1,0 +1,150 @@
+---
+title: "WHO data"
+author: "Dai Shizuka"
+date: "2022-09-14"
+output: html_document
+---
+
+
+##
+
+***
+```{r}
+who
+```
+
+```{r}
+who_long=who %>% dplyr::filter(year>=2000) %>% right_join(., large_countries, by=c("iso3" = "country"), keep=FALSE)  %>% select(-country, -iso2) %>% pivot_longer(cols=c(-iso3, -year), names_to="record_type", values_to="value")
+```
+
+```{r}
+who_long = who %>% 
+  dplyr::filter(year>=2000) %>% 
+  select(-country, -iso2) %>% 
+  pivot_longer(cols=c(-iso3, -year), names_to="record_type", values_to="value") %>% 
+  mutate(positive=str_detect(record_type, "sp")) %>% 
+  mutate(sex=str_sub(record_type, start=8, end=8)) %>%
+  mutate(age=str_sub(record_type, start=9)) %>%
+  mutate(age=recode(age, "014"="0-14", "1524"="15-24", "2534"="25-34", "3544" = "35-44", "4554" = "45-54", "5564"="55-64", "65" = "65+")) %>%
+  mutate(age=forcats::as_factor(age)) %>%
+  mutate(year=as.numeric(year))
+```
+
+```{r}
+TB_0=who_long %>% dplyr::filter(is.na(value)==F) %>% dplyr::filter(positive==TRUE) %>% group_by(iso3, year, age) %>% summarise(positives=sum(value, na.rm=T)) %>% dplyr::filter(age=="0-14")
+TB_0
+```
+
+```{r}
+#ggplot(TB_0, aes(x=year, y=positives, color=iso3)) +
+#  geom_line()
+```
+
+```{r}
+df=popdat_countries %>% 
+  dplyr::filter(indicator=="SP.POP.TOTL") %>%
+  select(-iso2c, -country.name, -region, -indicator) %>%
+  pivot_longer(-country, names_to="year", values_to="pop_size") %>%
+  mutate(year=as.numeric(year)) %>%
+  inner_join(., TB_0, by=c("country"="iso3", "year" = "year")) %>% mutate(TB_0_rate=positives/pop_size)
+df
+```
+
+```{r}
+# ggplot(df, aes(x=year, y=TB_0_rate, color=country)) +
+#   geom_line()
+```
+```{r}
+df2 = df %>% 
+  left_join(.,metadata, by=c("country" = "iso3c")) %>%
+  mutate(income_level = factor(income_level, levels=c("Low income", "Lower middle income", "Upper middle income", "High income")))
+```
+
+```{r}
+ggplot(df2 %>% dplyr::filter(year==2000), mapping=aes(x=income_level, y=TB_0_rate)) +
+  geom_boxplot()
+```
+```{r}
+ggplot(df2 %>% dplyr::filter(year==2000), mapping=aes(x=log(pop_size), y=TB_0_rate, color=income_level)) +
+  geom_point() +
+  geom_smooth(method="lm")
+```
+```{r}
+lm.fit=lm(TB_0_rate ~ log(pop_size)*income_level, data=df2)
+anova(lm.fit)
+summary(lm.fit)
+```
+
+## 4. Moving between wide- and long-format data with `pivot_longer()` and `pivot_wider()`
+
+## Dealing with complex data
+
+World Bank Population Data up to 2017 (version included in tidyr package):
+
+```{r}
+head(world_bank_pop)
+```
+First, restrict the data to countries with large populations--let's say those above 75 percentile in population size over 2020-2017
+
+```{r}
+upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(`2017`) 
+```
+
+```{r}
+#calculate average population size for all countries
+upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(`2017`) %>% quantile(., probs=0.9, na.rm=T)
+upper.pop
+
+upper.countries=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% dplyr::filter(`2017` > upper.pop) %>% select(country)
+```
+
+Just get the population growth rate data using `dplyr::filter()`
+
+```{r}
+left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW")
+```
+
+Convert this data to "long-format"
+
+```{r}
+left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW") %>% pivot_longer(-c(country,indicator), names_to="year")
+```
+Clean up and save as an object
+
+```{r}
+df=left_join(upper.countries, world_bank_pop) %>% dplyr::filter(indicator=="SP.POP.GROW") %>% pivot_longer(-c(country,indicator), names_to="year") %>% select(-indicator) %>% mutate(pop.growth=value, .keep="unused") %>% mutate(year=as.numeric(year))
+df
+```
+
+```{r}
+ggplot(df, aes(x=year, y=pop.growth, color=country)) +
+  geom_line()
+```
+
+```{r}
+
+pop=world_bank_pop %>% pivot_longer(-c(country,indicator), names_to="year") %>% mutate(year=as.numeric(year)) %>% dplyr::filter(country=="CAN" | country=="USA" | country=="MEX") %>% dplyr::filter(indicator=="SP.POP.GROW") %>% mutate(pop.growth=value)
+
+
+ggplot(pop, aes(x=year, y=pop.growth, color=country)) + 
+  geom_line() +
+  theme_classic() +
+  geom_hline(aes(yintercept=1), linetype=2) +
+  ylab("Population Growth Rate") +
+  xlab("Year")
+
+
+d1=world_bank_pop %>% dplyr::filter(indicator=="SP.URB.TOTL" | indicator=="SP.POP.TOTL") %>%
+  select(country, indicator, `2017`) %>%
+  pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
+
+ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
+  geom_point() +
+  scale_x_continuous(trans="log") +
+  scale_y_continuous(trans="log") +
+  xlab("Total Population Size") +
+  ylab("Urban Population Size") +
+  theme_bw()
+
+```
+
