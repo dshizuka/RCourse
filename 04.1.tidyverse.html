@@ -14,7 +14,7 @@
 
 <title>Data Wrangling to plots with tidyverse packages</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -346,13 +350,13 @@ div.tocify {
 <h1 class="title toc-ignore">Data Wrangling to plots with tidyverse
 packages</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/13/22</h4>
+<h4 class="date">updated 09/14/22</h4>
 
 </div>
 
 
 <div id="intro-to-the-tidyverse" class="section level2">
-<h2>1. Intro to the <a
+<h2>Intro to the <a
 href="https://www.tidyverse.org/">‘tidyverse’</a></h2>
 <p><img src="images/icons/tidyr.png" width="10%" /><img src="images/icons/dplyr.png" width="10%" /><img src="images/icons/stringr.png" width="10%" /><img src="images/icons/ggplot2.png" width="10%" /></p>
 <p>Now that we have dipped our feet into plots and stats in R, I think
@@ -378,48 +382,32 @@ online book</a></p>
 <p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
 <p>In this module, we’ll be learning some functions from the packages
 <strong>dplyr</strong> and <strong>tidyr</strong>.</p>
-<blockquote>
-<p><span style="color:purple"><strong><em>What is a “package” in
-R?</em></strong></span></p>
-<p>R packages are essentially a set of custom functions that R users
-have created and compiled, along with help files and vignettes, etc.
-Many of them are archived at CRAN–The Comprehensive R Archive
-Network–and available to install from the R console using the function
-<code>install.packages()</code>. There are still many other packages
-that users have not archived but are available from other sources, such
-as github. “Installing” the package means that the package is downloaded
-onto your computer. When you are ready to use them, you will have to
-load the package onto the environment by running the function
-<code>library()</code> or <code>require()</code>.</p>
-</blockquote>
+<p>We will do this by playing with data from the World Bank and World
+Health Organization (WHO)!</p>
 <hr />
 </div>
-<div id="installing-and-loading-the-package" class="section level2">
-<h2>2. Installing and loading the package</h2>
-<p><br></p>
-<div id="installing-tidyverse-packages-and-packages-in-general"
-class="section level3">
-<h3>2.1 Installing tidyverse packages (and packages in general)</h3>
+<div id="installing-and-loading-packages-we-need-for-this-module"
+class="section level2">
+<h2>Installing and loading packages we need for this module</h2>
 <p>One can install each package separately, but you can also just
 install all “tidyverse” packages simply by running this command:</p>
-<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)
+install.packages(&quot;wbstats&quot;)</code></pre>
 <p>Note that this simply downloads the packages onto your computer. When
 you are ready to use them, you will have to load the package onto the
 environment by running the function</p>
-</div>
-<div id="loading-the-package" class="section level3">
-<h3>2.2 Loading the package</h3>
 <p>You now have the package downloaded on your computer, but to actually
 use it, you have to load the package. We can load the entire
 <code>tidyverse</code> package (or, if you prefer, you can just load the
 <code>tidyr</code> package).</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-## ✔ tibble  3.1.7     ✔ dplyr   1.0.8
-## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-## ✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+<pre class="r"><code>library(wbstats)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.2      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <p><strong>Two important thing to notice here.</strong> First, the
@@ -431,30 +419,6 @@ Second, the message tells you that there are two functions in the
 <code>filter()</code> and <code>lag()</code>. This is sometimes very
 important to know! This means that the <code>filter()</code> function
 works differently before and after loading this package.</p>
-</div>
-<div id="getting-the-package-documentation" class="section level3">
-<h3>2.3. Getting the package documentation</h3>
-<p>When I’m first learning a package, I often start by pulling up the
-documentation for it. You can do this by running
-<code>library(help="packagename")</code>.</p>
-<p>Let’s do this with the <code>tidyr</code> package:</p>
-<pre class="r"><code>library(help=&quot;tidyr&quot;)</code></pre>
-<p>A new tab will open in the script editor window with the text
-documentation of the package, which includes info like version, authors,
-brief description, the homepage url, etc. Then, you will see the “index”
-section, which will list <em>all of the functions and other objects that
-are included in this package</em>.</p>
-<p>You can learn about each function or object by using <code>?</code>
-in front of the name. Try it out:</p>
-<pre class="r"><code>?replace_na
-?pivot_longer
-
-?billboard
-?relig_income</code></pre>
-<p>In this case, you will see that the package includes not only
-functions, but also sample datasets (<code>billboard</code> and
-<code>relig_income</code> being two of them). Get used to pulling up the
-documentation whenever you are learning to use a new package!</p>
 <hr />
 <blockquote>
 <p><span style="color:purple"><strong><em>Some things to know about
@@ -474,6 +438,156 @@ href="https://tibble.tidyverse.org/">here</a></p>
 </blockquote>
 <hr />
 </div>
+<div id="introduction-to-the-datasets" class="section level2">
+<h2>1. Introduction to the datasets</h2>
+<p>The World Bank actually makes it very easy to download a huge amount
+of data very easily. You could just go to the <a
+href="https://data.worldbank.org/">World Bankd Open Data site</a> and
+search for data and download them in a few clicks. There are even
+packages such as <code>WDI</code> and <code>wbstats</code> that allow
+you to query and pull data from this site from within R.</p>
+<p>However, for the purposes of this exercise, we will deal with several
+datasets that are included in the packages we have loaded above.</p>
+<p><br></p>
+<div id="world_bank_pop-population-data-from-world-bank-2000-2017"
+class="section level3">
+<h3>1.1. <code>world_bank_pop</code>: Population data from World Bank
+(2000-2017)</h3>
+<p>First is the <code>world_bank_pop</code> dataset that is included in
+the <code>tidyr</code> package (which is part of the the tidyverse
+suite). Start by pulling up the help file for the dataset</p>
+<pre class="r"><code>?world_bank_pop</code></pre>
+<p>Let’s take a peak at the data, which is in “tibble” format:</p>
+<pre class="r"><code>world_bank_pop</code></pre>
+<pre><code>## # A tibble: 1,056 × 20
+##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
+##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
+##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
+##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
+##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
+##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
+##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
+##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
+##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
+##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
+## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
+## # … with 1,046 more rows, 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name
+## #   ¹​indicator</code></pre>
+<p>Notice that each country is repeated across 4 rows. This is because
+there are actually 4 different “indicators” for each country, and so
+each country x indicator combination takes up a row. The rest of the
+columns are years, from 2000 to 2017.</p>
+<p>Also notice that the numbers in the column names have a backquote, or
+“`” around them. In R, this allows numbers to be interpreted as text
+(and column names have to be text).</p>
+<p>So, if you wanted to pull up the “2001” column, this will NOT
+work…</p>
+<pre class="r"><code>world_bank_pop$2001</code></pre>
+<p>…but this will work</p>
+<pre class="r"><code>world_bank_pop$`2001`</code></pre>
+<p><br></p>
+</div>
+<div id="who-world-health-organization-tb-data-1980---2013"
+class="section level3">
+<h3>1.3. <code>who</code>: World Health Organization TB data (1980 -
+2013)</h3>
+<p>The last dataset we will use in this module is the WHO Global
+Tuberculosis Report from 1980 to 2013, which is included in the tidyr
+package as <code>who</code></p>
+<pre class="r"><code>?who</code></pre>
+<pre class="r"><code>who</code></pre>
+<pre><code>## # A tibble: 7,240 × 60
+##    country     iso2  iso3   year new_s…¹ new_s…² new_s…³ new_s…⁴ new_s…⁵ new_s…⁶
+##    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+##  1 Afghanistan AF    AFG    1980      NA      NA      NA      NA      NA      NA
+##  2 Afghanistan AF    AFG    1981      NA      NA      NA      NA      NA      NA
+##  3 Afghanistan AF    AFG    1982      NA      NA      NA      NA      NA      NA
+##  4 Afghanistan AF    AFG    1983      NA      NA      NA      NA      NA      NA
+##  5 Afghanistan AF    AFG    1984      NA      NA      NA      NA      NA      NA
+##  6 Afghanistan AF    AFG    1985      NA      NA      NA      NA      NA      NA
+##  7 Afghanistan AF    AFG    1986      NA      NA      NA      NA      NA      NA
+##  8 Afghanistan AF    AFG    1987      NA      NA      NA      NA      NA      NA
+##  9 Afghanistan AF    AFG    1988      NA      NA      NA      NA      NA      NA
+## 10 Afghanistan AF    AFG    1989      NA      NA      NA      NA      NA      NA
+## # … with 7,230 more rows, 50 more variables: new_sp_m65 &lt;int&gt;,
+## #   new_sp_f014 &lt;int&gt;, new_sp_f1524 &lt;int&gt;, new_sp_f2534 &lt;int&gt;,
+## #   new_sp_f3544 &lt;int&gt;, new_sp_f4554 &lt;int&gt;, new_sp_f5564 &lt;int&gt;,
+## #   new_sp_f65 &lt;int&gt;, new_sn_m014 &lt;int&gt;, new_sn_m1524 &lt;int&gt;,
+## #   new_sn_m2534 &lt;int&gt;, new_sn_m3544 &lt;int&gt;, new_sn_m4554 &lt;int&gt;,
+## #   new_sn_m5564 &lt;int&gt;, new_sn_m65 &lt;int&gt;, new_sn_f014 &lt;int&gt;,
+## #   new_sn_f1524 &lt;int&gt;, new_sn_f2534 &lt;int&gt;, new_sn_f3544 &lt;int&gt;, …</code></pre>
+<p>This is yet another massive dataset, with 7,240 rows, and 60 columns
+with very weird names. We will figure out what to do with these later
+on.</p>
+<p><br></p>
+<hr />
+</div>
+</div>
+<div
+id="problem-1-countries-that-are-not-countries-merging-datasets-with-join-functions"
+class="section level2">
+<h2>2. Problem 1: “Countries” that are not countries: Merging datasets
+with <code>join</code> functions</h2>
+<p>We are going to start by diving into the <code>world_bank_pop</code>
+dataset.</p>
+<p>Let’s take a peek at the dataset again and see what we have…</p>
+<pre class="r"><code>world_bank_pop</code></pre>
+<pre><code>## # A tibble: 1,056 × 20
+##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
+##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
+##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
+##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
+##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
+##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
+##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
+##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
+##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
+##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
+## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
+## # … with 1,046 more rows, 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name
+## #   ¹​indicator</code></pre>
+<p>I want to start by looking at how many unique countries we actually
+have here.</p>
+<pre class="r"><code>length(unique(world_bank_pop$country)) #this gives us the number of unique values in the &quot;country&quot; column</code></pre>
+<pre><code>## [1] 264</code></pre>
+<p>You can see that there are way more “countries” here than there are
+in the world. As of 2022, there are 193 countries in the United Nations,
+though if we add soverign states that are not recognized by UN (e.g.,
+Taiwan, Kosovo, etc.), the list is about 206… and there are more if we
+include disputed territories.</p>
+<p>The reason the World Bank data has even more than that is because
+some of the “countries” include “aggregates” like “Arab World” or
+“High-income Countries”.</p>
+<p>Unfortunately, the <code>world_bank_pop</code> dataset does not
+include any variables that allow us to differentiate the countries from
+the aggregates!</p>
+<p>So, here is where we are going to use the <em>countrycode</em>
+package. The data in this package</p>
+</div>
+<div id="filtering-and-selecting-data-with-filter-and-select"
+class="section level2">
+<h2>3. Filtering and selecting data with <code>filter()</code> and
+<code>select()</code></h2>
+<p>As mentioned above (Section 1.1), each row is a country x indicator
+combination, with 4 different indicators. The indicators are:</p>
+<ul>
+<li><p>SP.POP.GROW = population growth</p></li>
+<li><p>SP.POP.TOTL = total population</p></li>
+<li><p>SP.URB.GROW = urban population growth</p></li>
+<li><p>SP.URB.TOTL = total urban population</p></li>
+</ul>
+</div>
+<div
+id="moving-between-wide--and-long-format-data-with-pivot_longer-and-pivot_wider"
+class="section level2">
+<h2>4. Moving between wide- and long-format data with
+<code>pivot_longer()</code> and <code>pivot_wider()</code></h2>
 </div>
 <div id="dealing-with-complex-data" class="section level2">
 <h2>Dealing with complex data</h2>
@@ -481,17 +595,17 @@ href="https://tibble.tidyverse.org/">here</a></p>
 package):</p>
 <pre class="r"><code>head(world_bank_pop)</code></pre>
 <pre><code>## # A tibble: 6 × 20
-##   country indicator       `2000`   `2001` `2002` `2003`  `2004`  `2005`   `2006`
-##   &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
-## 1 ABW     SP.URB.TOTL   42444      4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4
-## 2 ABW     SP.URB.GROW       1.18   1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2
-## 3 ABW     SP.POP.TOTL   90853      9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5
-## 4 ABW     SP.POP.GROW       2.06   2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1
-## 5 AFG     SP.URB.TOTL 4436299      4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6
-## 6 AFG     SP.URB.GROW       3.91   4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0
-## # … with 11 more variables: `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
-## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
-## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
+##   country indica…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 ABW     SP.URB.… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
+## 2 ABW     SP.URB.… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
+## 3 ABW     SP.POP.… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
+## 4 ABW     SP.POP.… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
+## 5 AFG     SP.URB.… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
+## 6 AFG     SP.URB.… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
+## # … with 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;,
+## #   `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;,
+## #   `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name ¹​indicator</code></pre>
 <p>First, restrict the data to countries with large populations–let’s
 say those above 75 percentile in population size over 2020-2017</p>
 <pre class="r"><code>upper.pop=world_bank_pop %&gt;% dplyr::filter(indicator == &quot;SP.POP.TOTL&quot;) %&gt;% pull(`2017`) </code></pre>
@@ -558,7 +672,7 @@ upper.pop</code></pre>
 ## # … with 476 more rows</code></pre>
 <pre class="r"><code>ggplot(df, aes(x=year, y=pop.growth, color=country)) +
   geom_line()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <pre class="r"><code>pop=world_bank_pop %&gt;% pivot_longer(-c(country,indicator), names_to=&quot;year&quot;) %&gt;% mutate(year=as.numeric(year)) %&gt;% dplyr::filter(country==&quot;CAN&quot; | country==&quot;USA&quot; | country==&quot;MEX&quot;) %&gt;% dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;% mutate(pop.growth=value)
 
 
@@ -568,7 +682,7 @@ ggplot(pop, aes(x=year, y=pop.growth, color=country)) +
   geom_hline(aes(yintercept=1), linetype=2) +
   ylab(&quot;Population Growth Rate&quot;) +
   xlab(&quot;Year&quot;)</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre class="r"><code>d1=world_bank_pop %&gt;% dplyr::filter(indicator==&quot;SP.URB.TOTL&quot; | indicator==&quot;SP.POP.TOTL&quot;) %&gt;%
   select(country, indicator, `2017`) %&gt;%
   pivot_wider(., id_cols=country, names_from=indicator, values_from=`2017`)
@@ -581,7 +695,7 @@ ggplot(d1, aes(x=SP.POP.TOTL, y=SP.URB.TOTL)) +
   ylab(&quot;Urban Population Size&quot;) +
   theme_bw()</code></pre>
 <pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
 </div>
 <div id="using-tidyr-to-reshape-data" class="section level2">
 <h2>3. Using <code>tidyr</code> to reshape data</h2>

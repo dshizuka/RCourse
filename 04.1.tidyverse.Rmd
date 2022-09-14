@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 
-## 1. Intro to the ['tidyverse'](https://www.tidyverse.org/)
+## Intro to the ['tidyverse'](https://www.tidyverse.org/)
 
 ```{r, out.width="10%", echo=F}
 knitr::include_graphics("images/icons/tidyr.png")
@@ -32,62 +32,29 @@ knitr::include_graphics("images/icons/R_for_Data_Science_cover.png")
 
 In this module, we'll be learning some functions from the packages **dplyr** and **tidyr**. 
 
-><span style="color:purple">***What is a "package" in R?***</span>
->
->R packages are essentially a set of custom functions that R users have created and compiled, along with help files and vignettes, etc. Many of them are archived at CRAN--The Comprehensive R Archive Network--and available to install from the R console using the function `install.packages()`. There are still many other packages that users have not archived but are available from other sources, such as github. "Installing" the package means that the package is downloaded onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function `library()` or `require()`. 
-
-
+We will do this by playing with data from the World Bank and World Health Organization (WHO)!
 
 ***
 
-
-## 2. Installing and loading the package
-
-<br>
-
-### 2.1 Installing tidyverse packages (and packages in general)
+## Installing and loading packages we need for this module
 
 One can install each package separately, but you can also just install all "tidyverse" packages simply by running this command:
 
 ```{r, eval=FALSE}
 install.packages("tidyverse")
+install.packages("wbstats")
 ```
 
 Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function
 
-### 2.2 Loading the package
-
 You now have the package downloaded on your computer, but to actually use it, you have to load the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
 
 ```{r}
+library(wbstats)
 library(tidyverse)
 ```
 
 **Two important thing to notice here.** First, the message tells you what packages were actually loaded as part of the tidyverse "metapackage". You see that this includes 8 packages: ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats. Second, the message tells you that there are two functions in the `dplyr` package that conflict with existing functions: `filter()` and `lag()`. This is sometimes very important to know! This means that the `filter()` function works differently before and after loading this package.
-
-### 2.3. Getting the package documentation
-
-When I'm first learning a package, I often start by pulling up the documentation for it. You can do this by running `library(help="packagename")`.
-
-Let's do this with the `tidyr` package:
-
-```{r}
-library(help="tidyr")
-```
-
-A new tab will open in the script editor window with the text documentation of the package, which includes info like version, authors, brief description, the homepage url, etc. Then, you will see the "index" section, which will list *all of the functions and other objects that are included in this package*. 
-
-You can learn about each function or object by using `?` in front of the name. Try it out:
-
-```{r}
-?replace_na
-?pivot_longer
-
-?billboard
-?relig_income
-```
-
-In this case, you will see that the package includes not only functions, but also sample datasets (`billboard` and `relig_income` being two of them). Get used to pulling up the documentation whenever you are learning to use a new package!
 
 ***
 
@@ -103,6 +70,92 @@ In this case, you will see that the package includes not only functions, but als
 
 
 ***
+
+## 1. Population growth trends across the world
+
+The World Bank actually makes it very easy to download a huge amount of data very easily. You could just go to the [World Bankd Open Data site](https://data.worldbank.org/) and search for data and download them in a few clicks. There are even packages such as `WDI` and `wbstats` that allow you to query and pull data from this site from within R. 
+
+However, for the purposes of this exercise, we will deal with several datasets that are included in the packages we have loaded above.
+
+<br>
+
+### 1.1. `world_bank_pop`: Population data from World Bank (2000-2017)
+First is the `world_bank_pop` dataset that is included in the `tidyr` package (which is part of the the tidyverse suite). Start by pulling up the help file for the dataset
+
+```{r, eval=F}
+?world_bank_pop
+```
+
+Let's take a peak at the data, which is in "tibble" format:
+
+```{r}
+world_bank_pop
+```
+
+Notice that each country is repeated across 4 rows. This is because there are actually 4 different "indicators" for each country, and so each country x indicator combination takes up a row. The rest of the columns are years, from 2000 to 2017. 
+
+Also notice that the numbers in the column names have a backquote, or "`" around them. In R, this allows numbers to be interpreted as text (and column names have to be text). 
+
+So, if you wanted to pull up the "2001" column, this will NOT work...
+```{r, eval=F}
+world_bank_pop$2001
+```
+
+...but this will work
+```{r, eval=F}
+world_bank_pop$`2001`
+```
+
+<br>
+
+
+***
+## 2. Problem 1: "Countries" that are not countries: Merging datasets with `join` functions
+
+We are going to start by diving into the `world_bank_pop` dataset. 
+
+Let's take a peek at the dataset again and see what we have...
+```{r}
+world_bank_pop
+```
+
+I want to start by looking at how many unique countries we actually have here.
+
+```{r}
+length(unique(world_bank_pop$country)) #this gives us the number of unique values in the "country" column
+```
+
+You can see that there are way more "countries" here than there are in the world. As of 2022, there are 193 countries in the United Nations, though if we add soverign states that are not recognized by UN (e.g., Taiwan, Kosovo, etc.), the list is about 206... and there are more if we include disputed territories.
+
+The reason the World Bank data has even more than that is because some of the "countries" include "aggregates" like "Arab World" or "High-income Countries". 
+
+Unfortunately, the `world_bank_pop` dataset does not include any variables that allow us to differentiate the countries from the aggregates! However, we can solve this problem by pulling the metadata for countries from the World Bank. We can do this by using the `wb_countries()` function from the *wbstats* package. 
+
+Let's pull the country metadata and save it as an object called "metadata":
+
+```{r}
+metadata=wb_countries()
+metadata
+```
+
+
+## 3. Filtering and selecting data with `filter()` and `select()`
+
+
+As mentioned above (Section 1.1), each row is a country x indicator combination, with 4 different indicators. The indicators are:
+
+* SP.POP.GROW = population growth
+
+* SP.POP.TOTL = total population
+
+* SP.URB.GROW = urban population growth
+
+* SP.URB.TOTL = total urban population
+
+
+
+
+## 4. Moving between wide- and long-format data with `pivot_longer()` and `pivot_wider()`
 
 ## Dealing with complex data
 
