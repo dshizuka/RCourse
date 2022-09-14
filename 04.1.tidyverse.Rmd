@@ -122,7 +122,7 @@ upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(
 upper.pop=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% pull(`2017`) %>% quantile(., probs=0.9, na.rm=T)
 upper.pop
 
-upper.countries=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% dplyr::filter(`2017` > upper.pop) %>% pull(country)
+upper.countries=world_bank_pop %>% dplyr::filter(indicator == "SP.POP.TOTL") %>% dplyr::filter(`2017` > upper.pop) %>% select(country)
 ```
 
 Just get the population growth rate data using `dplyr::filter()`
