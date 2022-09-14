@@ -71,13 +71,27 @@ library(tidyverse)
 
 ***
 
-## 2. Working with *dplyr* and *tidyr*
+## 2. Working with *tidyr* and *dplyr*
+
+### 2.1. *tidyr*
+
+I use *tidyr* mostly for reshaping data to move between "long-format" and "wide-format" data. 
+
+Here is link to the *tidyr* cheat sheet: https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf
+
+#### Main *tidyr* functions
+
+* `pivot_longer()`: "lengthen" data by collapsing several columns into two.
+* `pivot_wider()`: "widen" data by expanding two columns into multiple columns
+
+
+### 2.2. *dplyr*
 
 *dplyr* is a package that helps you wrangle your data into shape to aid you in the process of visualization and analysis. 
 
 Here is a link to the `dplyr` cheat sheet: https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
 
-### 3.1 Main *dplyr* functions
+#### Main *dplyr* functions
 
 * `select()` select columns by criteria
 * `filter()` filter rows by criteria
@@ -90,33 +104,117 @@ Here is a link to the `dplyr` cheat sheet: https://github.com/rstudio/cheatsheet
 
 <br>
 
-I use *tidyr* mostly for reshaping data to move between "long-format" and "wide-format" data. 
 
-Here is link to the *tidyr* cheat sheet: https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf
-
-### 3.2 Main *tidyr* functions
-
-* `pivot_longer()`: "lengthen" data by collapsing several columns into two.
-* `pivot_wider()`: "widen" data by expanding two columns into multiple columns
 
 ***
 
 ## 3. Demonstrating the basic functions
 
+<br>
+
+### 3.1  Converting long-format data to wide-format data with `pivot_wider()`
+
+Data come in all kinds of formats. A "long-format" data is where you have multiple rows of measures for a given subject/entity. 
+
+Let's say you measured the height of individual trees repeatedly at different ages. This is what the `Loblolly` data set (in base R) shows:
 ```{r}
 head(Loblolly)
 ```
 
 Now let's say we want to reformat this data so that we have one row for each individual (seed), with heights at different ages across different columns. Here's how we'd do it with `pivot_wider()`. 
-The minimal arguments that are required in here are: 
-* `data: (self explanatory)
-* `id_cols`: The column 
+
 
 ```{r}
 pivot_wider(Loblolly, id_cols=Seed, names_from=age, values_from=height)
 ```
+So, what happened here? 
+The minimal arguments that are required in here are: 
+
+* `data`: (self explanatory)
+* `id_cols`: The column that contains the "ID", or the variable you want to assign as rows in the wide-format (i.e., each unique value of this variable will be separate rows). In this case, this is "Seed"
+* `names_from`: The column that you want to expand into different columns. In this case, it is "age" because you want to see the heights of each tree at different ages as different columns.
+* `values_from`: The column that will have the values for each ID x names_from combination. In this case, this is "height"
 
 ***
+
+### 3.2 Converting wide-format data to long-format data with `pivot_longer()`
+
+"Wide-format" data is one in which each row is a subject/entity that is measured repeatedly, and each measurement appears on different columns. 
+
+Take for example the `billboard` dataset, which is part of the *tidyr* package. It contains data on rankings of songs on the Billboard Top 100 in the year 2000. It is in wide-format:
+
+```{r}
+billboard
+```
+Let's now convert this into a long-format, in which we have a column for "week" and then the rank of that song for that week in a column called "rank":
+
+```{r}
+pivot_longer(billboard, cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+What happened here? 
+
+The minimal arguments that are required in here are: 
+
+* `data`: (self explanatory)
+* `cols`: The columns that we want to collapse into a single column. Here, we want all the columns that start with "wk", which contain the ranking of that song in that week. tidyverse has a friendly function called `starts_with()` that we use here. An alternative way to do this would be to *exclude* all the other columns, which we could do with `-c(artist, track, date.entered)`
+* `names_to`: The name of a new column that will contain names of the columns that you collapsed. Here, naming this "week" makes sense.
+* `values_to`: The name of a new column that will have the values for each ID x names_from combination. In this case, this is "rank"
+
+
+**Note that you will more often want to organize your data in long-format because it tends to be easier to make plots in ggplot and conduct statistical analyses in this format. But sometimes wide-format is easier for data collection... There are pros and cons to both, so the best thing to do is to be familiar with how to move between the formats.**
+
+### 3.3. Using pipes (`%>%`) to chain together sequence of actions!
+
+Here, I'm going to introduce the "pipe"--perhapsthe most useful part of the tidyverse grammar (which actually comes from another amazing package called `magrittr`, if you care...).
+
+Basically, piping is when the `%>%` operator is used to forward a value, or the result of an expression, into the next function call/expression.
+
+So, let's try the `pivot_longer()` function above, but with a pipe:
+
+```{r}
+billboard %>% pivot_longer(., cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+What this does is tell R: "Take `billboard`. Then, apply `pivot_longer()` to it. And in this case, the `pivot_longer(., )` says that the forwarded value should be used in place of ".".
+
+... but you actually don't even need to include the "." here--tidyverse automatically applies the forwarded value as the first entry in the function, so you can just do: 
+
+```{r}
+billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+
+Right now, this seems a bit puzzling and not that useful... but, you will quickly see how the `%>%` operator can help you build nice pipelines (pun intended) for data wrangling!
+
+### 3.4. Filter by row values
+
+You will often want to filter the data to rows that meet certain criteria. You can use the `filter()` function in *dplyr* to do this. 
+
+Recall that there is a conflict over the function name `filter()`--there is another `filter()` function in base R that is separate from the tidyverse version. To make sure you are using the version from the *dplyr* package, I always use `dplyr::filter()` when I run this function.
+
+Let's say you want to look at only the billboard data for songs that entered the chart before the midway point of the year: June 30th.
+
+```{r}
+billboard %>% dplyr::filter(date.entered < as.Date("2000-06-30"))
+```
+### 3.5. Select columns
+
+Sometimes, you don't need all of the data. Let's say we just want to see what position each song started at--so we just want the artist, track, date entered and the week 1 rank. You can do this with `select()`
+
+```{r}
+billboard %>% select(artist, track, date.entered, wk1)
+```
+The nice thing about the select function is that you don't need to put the column names in quotes or anything--just type in the columns you want. 
+
+or, type in the columns you DON'T want:
+```{r}
+billboard %>% select(-track, -date.entered)
+```
+
+### 3.7. Mutate
+
+### 3.8. Group and Summarize data
+
+### 3.9. Join two different data
+
 
 ## 1. Population growth trends across the world
 

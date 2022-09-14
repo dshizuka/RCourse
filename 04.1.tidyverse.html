@@ -382,8 +382,7 @@ online book</a></p>
 <p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
 <p>In this module, we’ll be learning some functions from the packages
 <strong>dplyr</strong> and <strong>tidyr</strong>.</p>
-<p>We will do this by playing with data from the World Bank and World
-Health Organization (WHO)!</p>
+<p>We will do this by playing with data from the World Bank.</p>
 <hr />
 </div>
 <div id="installing-and-loading-packages-we-need-for-this-module"
@@ -438,15 +437,34 @@ href="https://tibble.tidyverse.org/">here</a></p>
 </blockquote>
 <hr />
 </div>
-<div id="working-with-dplyr-and-tidyr" class="section level2">
-<h2>4. Working with <em>dplyr</em> and <em>tidyr</em></h2>
+<div id="working-with-tidyr-and-dplyr" class="section level2">
+<h2>2. Working with <em>tidyr</em> and <em>dplyr</em></h2>
+<div id="tidyr" class="section level3">
+<h3>2.1. <em>tidyr</em></h3>
+<p>I use <em>tidyr</em> mostly for reshaping data to move between
+“long-format” and “wide-format” data.</p>
+<p>Here is link to the <em>tidyr</em> cheat sheet: <a
+href="https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf"
+class="uri">https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf</a></p>
+<div id="main-tidyr-functions" class="section level4">
+<h4>Main <em>tidyr</em> functions</h4>
+<ul>
+<li><code>pivot_longer()</code>: “lengthen” data by collapsing several
+columns into two.</li>
+<li><code>pivot_wider()</code>: “widen” data by expanding two columns
+into multiple columns</li>
+</ul>
+</div>
+</div>
+<div id="dplyr" class="section level3">
+<h3>2.2. <em>dplyr</em></h3>
 <p><em>dplyr</em> is a package that helps you wrangle your data into
 shape to aid you in the process of visualization and analysis.</p>
 <p>Here is a link to the <code>dplyr</code> cheat sheet: <a
 href="https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf"
 class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf</a></p>
-<div id="main-dplyr-functions" class="section level3">
-<h3>3.1 Main <em>dplyr</em> functions</h3>
+<div id="main-dplyr-functions" class="section level4">
+<h4>Main <em>dplyr</em> functions</h4>
 <ul>
 <li><code>select()</code> select columns by criteria</li>
 <li><code>filter()</code> filter rows by criteria</li>
@@ -463,19 +481,133 @@ help merge data tables.</li>
 know how to use this yet)</li>
 </ul>
 <p><br></p>
-</div>
-<div id="main-tidyr-functions" class="section level3">
-<h3>3.2 Main <em>tidyr</em> functions</h3>
-<ul>
-<li><code>pivot_longer()</code>: “lengthen” data by collapsing several
-columns into two.</li>
-<li><code>pivot_wider()</code>: “widen” data by expanding two columns
-into multiple columns</li>
-</ul>
-<p>Here is link to the <em>tidyr</em> cheat sheet: <a
-href="https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf"
-class="uri">https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf</a></p>
 <hr />
+</div>
+</div>
+</div>
+<div id="demonstrating-the-basic-functions" class="section level2">
+<h2>3. Demonstrating the basic functions</h2>
+<div
+id="converting-long-format-data-to-wide-format-data-with-pivot_wider"
+class="section level3">
+<h3>3.1 Converting long-format data to wide-format data with
+<code>pivot_wider()</code></h3>
+<p>Data come in all kinds of formats. A “long-format” data is where you
+have multiple rows of measures for a given subject/entity.</p>
+<p>Let’s say you measured the height of individual trees repeatedly at
+different ages. This is what the <code>Loblolly</code> data set (in base
+R) shows:</p>
+<pre class="r"><code>head(Loblolly)</code></pre>
+<pre><code>##    height age Seed
+## 1    4.51   3  301
+## 15  10.89   5  301
+## 29  28.72  10  301
+## 43  41.74  15  301
+## 57  52.70  20  301
+## 71  60.92  25  301</code></pre>
+<p>Now let’s say we want to reformat this data so that we have one row
+for each individual (seed), with heights at different ages across
+different columns. Here’s how we’d do it with
+<code>pivot_wider()</code>.</p>
+<pre class="r"><code>pivot_wider(Loblolly, id_cols=Seed, names_from=age, values_from=height)</code></pre>
+<pre><code>## # A tibble: 14 × 7
+##    Seed    `3`   `5`  `10`  `15`  `20`  `25`
+##    &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 301    4.51 10.9   28.7  41.7  52.7  60.9
+##  2 303    4.55 10.9   29.1  42.8  53.9  63.4
+##  3 305    4.79 11.4   30.2  44.4  55.8  64.1
+##  4 307    3.91  9.48  25.7  39.1  50.8  59.1
+##  5 309    4.81 11.2   28.7  41.7  53.3  63.0
+##  6 311    3.88  9.4   26.0  39.6  51.5  59.6
+##  7 315    4.32 10.4   27.2  40.8  51.3  60.1
+##  8 319    4.57 10.6   27.9  41.1  52.4  60.7
+##  9 321    3.77  9.03  25.4  39.0  49.8  60.3
+## 10 323    4.33 10.8   29.0  42.4  53.2  61.6
+## 11 325    4.38 10.5   27.9  40.2  50.1  58.5
+## 12 327    4.12  9.92  26.5  37.8  48.4  56.8
+## 13 329    3.93  9.34  26.1  37.8  48.3  56.4
+## 14 331    3.46  9.05  25.8  39.2  49.1  59.5</code></pre>
+<p>So, what happened here? The minimal arguments that are required in
+here are:</p>
+<ul>
+<li><code>data</code>: (self explanatory)</li>
+<li><code>id_cols</code>: The column that contains the “ID”, or the
+variable you want to assign as rows in the wide-format (i.e., each
+unique value of this variable will be separate rows). In this case, this
+is “Seed”</li>
+<li><code>names_from</code>: The column that you want to expand into
+different columns. In this case, it is “age” because you want to see the
+heights of each tree at different ages as different columns.</li>
+<li><code>values_from</code>: The column that will have the values for
+each ID x names_from combination. In this case, this is “height”</li>
+</ul>
+<hr />
+</div>
+<div
+id="converting-wide-format-data-to-long-format-data-with-pivot_longer"
+class="section level3">
+<h3>3.2 Converting wide-format data to long-format data with
+<code>pivot_longer()</code></h3>
+<p>“Wide-format” data is one in which each row is a subject/entity that
+is measured repeatedly, and each measurement appears on different
+columns.</p>
+<p>Take for example the <code>billboard</code> dataset, which is part of
+the <em>tidyr</em> package. It contains data on rankings of songs on the
+Billboard Top 100 in the year 2000. It is in wide-format:</p>
+<pre class="r"><code>billboard</code></pre>
+<pre><code>## # A tibble: 317 × 79
+##    artist track date.ent…¹   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9
+##    &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac  Baby… 2000-02-26    87    82    72    77    87    94    99    NA    NA
+##  2 2Ge+h… The … 2000-09-02    91    87    92    NA    NA    NA    NA    NA    NA
+##  3 3 Doo… Kryp… 2000-04-08    81    70    68    67    66    57    54    53    51
+##  4 3 Doo… Loser 2000-10-21    76    76    72    69    67    65    55    59    62
+##  5 504 B… Wobb… 2000-04-15    57    34    25    17    17    31    36    49    53
+##  6 98^0   Give… 2000-08-19    51    39    34    26    26    19     2     2     3
+##  7 A*Tee… Danc… 2000-07-08    97    97    96    95   100    NA    NA    NA    NA
+##  8 Aaliy… I Do… 2000-01-29    84    62    51    41    38    35    35    38    38
+##  9 Aaliy… Try … 2000-03-18    59    53    38    28    21    18    16    14    12
+## 10 Adams… Open… 2000-08-26    76    76    74    69    68    67    61    58    57
+## # … with 307 more rows, 67 more variables: wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>pivot_longer(billboard, cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
+<pre><code>## # A tibble: 24,092 × 5
+##    artist track                   date.entered week   rank
+##    &lt;chr&gt;  &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
+##  1 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk1      87
+##  2 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk2      82
+##  3 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk3      72
+##  4 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk4      77
+##  5 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk5      87
+##  6 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk6      94
+##  7 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk7      99
+##  8 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk8      NA
+##  9 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk9      NA
+## 10 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk10     NA
+## # … with 24,082 more rows</code></pre>
+<p>What happened here?</p>
+<p>The minimal arguments that are required in here are:</p>
+<ul>
+<li><code>data</code>: (self explanatory)</li>
+<li><code>cols</code>: The columns that we want to collapse into a
+single column. Here, we want all the columns that start with “wk”, which
+contain the ranking of that song in that week. tidyverse has a friendly
+function called <code>starts_with()</code> that we use here. An
+alternative way to do this would be to <em>exclude</em> all the other
+columns, which we could do with
+<code>-c(artist, track, date.entered)</code></li>
+<li><code>names_to</code>: The name of a new column that will contain
+names of the columns that you collapsed. Here, naming this “week” makes
+sense.</li>
+<li><code>values_to</code>: The name of a new column that will have the
+values for each ID x names_from combination. In this case, this is
+“rank”</li>
+</ul>
 </div>
 </div>
 <div id="population-growth-trends-across-the-world"
@@ -747,7 +879,7 @@ large_countries</code></pre>
 ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
   geom_line() +
   theme_bw()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <pre class="r"><code>popgrowth_income=popdat_countries %&gt;% 
   dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
   dplyr::filter(is.na(income_level)==F) %&gt;%
@@ -761,7 +893,7 @@ ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
   geom_line(aes(color=income_level)) +
   geom_ribbon(aes(ymin=ymin, ymax=ymax), alpha=0.3, fill=&quot;gray&quot;) +
   theme_bw()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <pre class="r"><code>popdat_anova=popdat_countries %&gt;% 
   dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
   select(country, `2017`, region, income_level) %&gt;%
@@ -771,7 +903,7 @@ ggplot(popdat_anova, aes(x=income_level, y=`2017`)) +
   geom_boxplot(aes(color=income_level)) +
   facet_wrap(~region, nrow=3)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <pre class="r"><code>lm.fit=lm(`2017`~region*income_level, data=popdat_anova)
 summary(lm.fit)</code></pre>
 <pre><code>## 
