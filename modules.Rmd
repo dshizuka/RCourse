@@ -45,6 +45,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Worked Examples:
 
+#### [Worked Example: Wrangling World Bank Data](Ex_WorldBank.html)
+
 #### Worked Example: Data wrangling with coot chick color data (soon to come: page being rebuilt)
 
 #### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
