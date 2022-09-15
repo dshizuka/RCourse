@@ -150,6 +150,8 @@ Right now, this seems a bit puzzling and not that useful... but, you will quickl
 
 <br>
 
+***
+
 ### 3.2. Filter by row values
 
 As I've shown already, you can use the `filter()` function in *dplyr* to select rows based on some criteria. 
@@ -164,6 +166,10 @@ Recall that there is a conflict over the function name `filter()`--there is anot
 ```{r}
 billboard %>% dplyr::filter(artist=="Backstreet Boys, The" | artist=="N'Sync")
 ```
+
+<br>
+
+***
 
 ### 3.3. Select columns
 
@@ -187,6 +193,8 @@ billboard %>% dplyr::filter(artist=="Backstreet Boys, The") %>% select(artist, t
 
 <br>
 
+***
+
 ### 3.4. Converting wide-format data to long-format data with `pivot_longer()`
 
 "Wide-format" data is one in which each row is a subject/entity that is measured repeatedly, and each measurement appears on different columns. The `billboard` data is a prime example of wide-format data because it lists the rankings of a song for each week in separate columns.
@@ -205,6 +213,9 @@ The minimal arguments that are required in here are:
 * `names_to`: The name of a new column that will contain names of the columns that you collapsed. Here, naming this "week" makes sense.
 * `values_to`: The name of a new column that will have the values for each ID x names_from combination. In this case, this is "rank"
 
+<br>
+
+***
 
 ### 3.5.  Converting long-format data to wide-format data with `pivot_wider()`
 
@@ -267,6 +278,11 @@ artist_dat=billboard %>%
 
 artist_dat
 ```
+
+<br>
+
+***
+
 ### 3.7. Add new variables using `mutate()`
 
 You can make new variables (columns). You'll often do this if want to calculate some new variable based on existing variables.
@@ -275,6 +291,10 @@ artist_dat %>%
   mutate(top5= artist.best <=5) %>% #TRUE if artist's song was ever in Top 5
   mutate(weeks.prop = artist.weeks/max(artist.weeks)) #weeks on list as proportion of maximum value
 ```
+
+<br>
+
+***
 
 ### 3.8. Join two different data
 
@@ -297,215 +317,8 @@ left_join(billboard, artist_dat) %>%
 
 You can see that whenever the artist has multiple songs on the list, the "artist.weeks" and "artist.best" variables are repeated (because these are the stats for the artist).
 
-
-## 4. Population growth trends across the world
-
-The World Bank actually makes it very easy to download a huge amount of data very easily. You could just go to the [World Bankd Open Data site](https://data.worldbank.org/) and search for data and download them in a few clicks. There are even packages such as `WDI` and `wbstats` that allow you to query and pull data from this site from within R. 
-
-However, for the purposes of this exercise, we will deal with several datasets that are included in the packages we have loaded above.
-
 <br>
 
-### 4.1. `world_bank_pop`: Population data from World Bank (2000-2017)
-First is the `world_bank_pop` dataset that is included in the `tidyr` package (which is part of the the tidyverse suite). Start by pulling up the help file for the dataset
+## Get more practice with Worked Examples
 
-```{r, eval=F}
-?world_bank_pop
-```
-
-Let's take a peak at the data, which is in "tibble" format:
-
-```{r}
-world_bank_pop
-```
-
-Notice that each country is repeated across 4 rows. This is because there are actually 4 different "indicators" for each country, and so each country x indicator combination takes up a row. The rest of the columns are years, from 2000 to 2017. 
-
-Also notice that the numbers in the column names have a backquote, or "`" around them. In R, this allows numbers to be interpreted as text (and column names have to be text). 
-
-So, if you wanted to pull up the "2001" column, this will NOT work...
-```{r, eval=F}
-world_bank_pop$2001
-```
-
-...but this will work
-```{r, eval=F}
-world_bank_pop$`2001`
-```
-
-<br>
-
-
-***
-### 4.2. Problem 1: "Countries" that are not countries: Merging datasets with `join` functions
-
-We are going to start by diving into the `world_bank_pop` dataset. 
-
-Let's take a peek at the dataset again and see what we have...
-```{r}
-world_bank_pop
-```
-
-I want to start by looking at how many unique countries we actually have here.
-
-```{r}
-length(unique(world_bank_pop$country)) #this gives us the number of unique values in the "country" column
-```
-
-You can see that there are way more "countries" here than there are in the world. As of 2022, there are 193 countries in the United Nations, though if we add soverign states that are not recognized by UN (e.g., Taiwan, Kosovo, etc.), the list is about 206... and there are more if we include disputed territories.
-
-The reason the World Bank data has even more than that is because some of the "countries" include "aggregates" like "Arab World" or "High-income Countries". 
-
-Unfortunately, the `world_bank_pop` dataset does not include any variables that allow us to differentiate the countries from the aggregates! However, we can solve this problem by pulling the metadata for countries from the World Bank. We can do this by using the `wb_countries()` function from the *wbstats* package. 
-
-Let's pull the country metadata and save it as an object called "metadata":
-
-```{r}
-metadata=wb_countries()
-```
-
-```{r}
-metadata
-```
-
-```{r}
-head(metadata$region)
-```
-So this column shows us the "Aggregates". 
-
-So, we can use this to filter the metadata to exclude the Aggregate codes. 
-```{r}
-metadata %>% dplyr::filter(region != "Aggregates")
-```
-
-Let's also pare down the data to a few variables we might be interested in, including region and income level:
-```{r}
-metadata %>% 
-  dplyr::filter(region != "Aggregates") %>%
-  select(iso3c, iso2c, country, region, income_level)
-```
-
-Ok, this looks useful. Let's save it as a data table called `countries`
-```{r}
-countries=metadata %>% 
-  dplyr::filter(region != "Aggregates") %>%
-  select(iso3c, iso2c, country.name=country, region, income_level) %>%
-  mutate(income_level=factor(income_level, levels=c("Low income", "Lower middle income", "Upper middle income", "High income")))
-```
-
-Now, we are going to use the `inner_join()` function to make a version of the world bank population data that is only for actual countries (not aggregates):
-```{r}
-popdat_countries=inner_join(world_bank_pop, countries, by=c("country" = "iso3c"))
-popdat_countries
-```
-
-
-### 4.3. Narrow down the data to large countries
-
-As mentioned above (Section 1.1), each row is a country x indicator combination, with 4 different indicators. The indicators are:
-
-* SP.POP.GROW = population growth
-
-* SP.POP.TOTL = total population
-
-* SP.URB.GROW = urban population growth
-
-* SP.URB.TOTL = total urban population
-
-
-So, we will create a data table called `pop_totals` that is just the "total population" data.
-```{r}
-pop_totals=popdat_countries %>% 
-  dplyr::filter(indicator=="SP.POP.TOTL") 
-
-pop_totals
-```
-
-From this population size data, let's figure out what is the 90th percentile in population size in 2017. We are going to get this number by doing `pull()` to get the 2017 population sizes as a vector, and use `quantile()` to get the 90th percentile. Save that value as `upper_pop`.
-
-```{r}
-upper_pop=pop_totals %>%
-  pull(`2017`) %>% 
-  quantile(., probs=0.90, na.rm=T) # this function allows us to find the value at #th percentile
-upper_pop
-```
-
-Now, we can use this 90th percentile value to filter the population size data to just the top 10% largest countries. We will create a one-column tibble called `large_countries()` to save this list of country bodes.
-```{r}
-large_countries=pop_totals %>% 
-  dplyr::filter(`2017` > upper_pop) %>% 
-  select(country)
-large_countries
-```
-### 4.4. Now get the population **growth** data for the largest countries
-
-We will now go back to the population data from countries (excluding aggregates), and then filter the data to just the population growth values, then use `right_join()` to keep only the largest 10% of countries
-```{r}
-popgrowth_large=popdat_countries %>% 
-  dplyr::filter(indicator=="SP.POP.GROW") %>%
-  right_join(., large_countries, keep=FALSE) 
-
-popgrowth_large
-```
-
-We can convert this data into long-format. First, remove some of the variables we don't need right now, and then convert to long-format.
-```{r}
-popgrowth_large %>% 
-  select(-indicator, -country.name, -iso2c, -region, -income_level) %>%
-  pivot_longer(!country, names_to="year", values_to="growth_rate")
-```
-Ok, so now we can use this population growth data from large countries and plot the change over time for each country:
-```{r}
-popgrowth_plot=popgrowth_large %>% 
-  select(-indicator, -country.name, -iso2c, -region, -income_level) %>% 
-  pivot_longer(!country, names_to="year", values_to="growth_rate")
-
-ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
-  geom_line() +
-  theme_bw()
-```
-
-### 4.4. Exploring the relationships between income level, region, and population growth
-
-Now, let's create a tibble that contains the population growth data, by also the income level designation for each country. We will then get the average annual population growth rate across each of the four income levels.
-```{r}
-popgrowth_income=popdat_countries %>% 
-  dplyr::filter(indicator=="SP.POP.GROW") %>%
-  dplyr::filter(is.na(income_level)==F) %>% #skip if income level is missing
-  select(-indicator, -country.name, -iso2c, -region) %>% #pare down the data a bit & pivot longer
-  pivot_longer(cols=-c(country, income_level), names_to="year", values_to="growth_rate") %>%
-  group_by(income_level, year) %>%
-  summarise(mean_se(growth_rate)) #calculates mean + standard error of the mean.
-popgrowth_income
-```
-
-Let's plot this. We can draw the line, and then draw a ribbon around the line to indicate confidence interval
-```{r}
-ggplot(popgrowth_income, aes(x=as.numeric(year), y=y, group=income_level)) +
-  geom_line(aes(color=income_level)) +
-  geom_ribbon(aes(ymin=ymin, ymax=ymax), alpha=0.3, fill="gray") +
-  theme_bw()
-```
-We can also create a plot showing how income levels have different effects on population growth rates depending on the region of the world.
-```{r}
-popdat_anova=popdat_countries %>% 
-  dplyr::filter(indicator=="SP.POP.GROW") %>%
-  select(country, `2017`, region, income_level) %>%
-  dplyr::filter(income_level!="Not classified")
-
-ggplot(popdat_anova, aes(x=income_level, y=`2017`)) +
-  geom_boxplot(aes(color=income_level)) +
-  facet_wrap(~region, nrow=3)
-```
-Lower income countries have higher population growth rate than those with high income in some regions (sub-Saharan Africa), while in others growth rate is bigger for high earners.
-
-### 4.6. Stats
-```{r}
-lm.fit=lm(`2017`~region*income_level, data=popdat_anova)
-summary(lm.fit)
-anova(lm.fit)
-```
-
-
-
-
+Go to the Worked Example on ["Wrangling World Bank Data"](Ex_WorldBank.html)
