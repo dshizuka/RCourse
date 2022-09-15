@@ -1,5 +1,5 @@
 ---
-title: "Data Wrangling to plots with tidyverse packages"
+title: "Data Wrangling  with *dplyr* and *tidyr*"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
