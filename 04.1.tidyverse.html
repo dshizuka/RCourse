@@ -14,7 +14,7 @@
 
 <title>Data Wrangling to plots with tidyverse packages</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,15 +145,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -350,7 +346,7 @@ div.tocify {
 <h1 class="title toc-ignore">Data Wrangling to plots with tidyverse
 packages</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/14/22</h4>
+<h4 class="date">updated 09/15/22</h4>
 
 </div>
 
@@ -401,12 +397,12 @@ use it, you have to load the package. We can load the entire
 <code>tidyr</code> package).</p>
 <pre class="r"><code>library(wbstats)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-## ✔ readr   2.1.2      ✔ forcats 0.5.2 
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+## ✔ tibble  3.1.7     ✔ dplyr   1.0.8
+## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+## ✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <p><strong>Two important thing to notice here.</strong> First, the
@@ -453,6 +449,10 @@ class="uri">https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf</a></p>
 columns into two.</li>
 <li><code>pivot_wider()</code>: “widen” data by expanding two columns
 into multiple columns</li>
+<li><code>drop_na()</code>: remove rows that contain NA</li>
+<li><code>separate()</code>: separate values in a column into multiple
+columns</li>
+<li><code>unite()</code>: paste together values in two columns</li>
 </ul>
 </div>
 </div>
@@ -466,14 +466,15 @@ class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-transformation
 <div id="main-dplyr-functions" class="section level4">
 <h4>Main <em>dplyr</em> functions</h4>
 <ul>
-<li><code>select()</code> select columns by criteria</li>
-<li><code>filter()</code> filter rows by criteria</li>
+<li><code>pull()</code>: select one column and save as a vector.</li>
+<li><code>select()</code>: select columns by criteria</li>
+<li><code>filter()</code>: filter rows by criteria</li>
 <li><code>mutate()</code>: add new variable using functions</li>
+<li><code>group_by()</code>: group the data together based on a given
+variable (or variables). Often used when calculating summary stats.</li>
 <li><code>summarise()</code>: calculate summary statistic for a given
 variable</li>
 <li><code>arrange()</code>: change order of rows</li>
-<li><code>group_by()</code>: run any of above function ‘by group’
-defined using criteria</li>
 <li><code>left_join()</code>, <code>right_join()</code>,
 <code>inner_join()</code>, <code>full_join()</code>: set of functions to
 help merge data tables.</li>
@@ -487,95 +488,220 @@ know how to use this yet)</li>
 </div>
 <div id="demonstrating-the-basic-functions" class="section level2">
 <h2>3. Demonstrating the basic functions</h2>
-<div
-id="converting-long-format-data-to-wide-format-data-with-pivot_wider"
+<p><br></p>
+<div id="using-pipes-to-chain-together-sequence-of-actions"
 class="section level3">
-<h3>3.1 Converting long-format data to wide-format data with
-<code>pivot_wider()</code></h3>
-<p>Data come in all kinds of formats. A “long-format” data is where you
-have multiple rows of measures for a given subject/entity.</p>
-<p>Let’s say you measured the height of individual trees repeatedly at
-different ages. This is what the <code>Loblolly</code> data set (in base
-R) shows:</p>
-<pre class="r"><code>head(Loblolly)</code></pre>
-<pre><code>##    height age Seed
-## 1    4.51   3  301
-## 15  10.89   5  301
-## 29  28.72  10  301
-## 43  41.74  15  301
-## 57  52.70  20  301
-## 71  60.92  25  301</code></pre>
-<p>Now let’s say we want to reformat this data so that we have one row
-for each individual (seed), with heights at different ages across
-different columns. Here’s how we’d do it with
-<code>pivot_wider()</code>.</p>
-<pre class="r"><code>pivot_wider(Loblolly, id_cols=Seed, names_from=age, values_from=height)</code></pre>
-<pre><code>## # A tibble: 14 × 7
-##    Seed    `3`   `5`  `10`  `15`  `20`  `25`
-##    &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 301    4.51 10.9   28.7  41.7  52.7  60.9
-##  2 303    4.55 10.9   29.1  42.8  53.9  63.4
-##  3 305    4.79 11.4   30.2  44.4  55.8  64.1
-##  4 307    3.91  9.48  25.7  39.1  50.8  59.1
-##  5 309    4.81 11.2   28.7  41.7  53.3  63.0
-##  6 311    3.88  9.4   26.0  39.6  51.5  59.6
-##  7 315    4.32 10.4   27.2  40.8  51.3  60.1
-##  8 319    4.57 10.6   27.9  41.1  52.4  60.7
-##  9 321    3.77  9.03  25.4  39.0  49.8  60.3
-## 10 323    4.33 10.8   29.0  42.4  53.2  61.6
-## 11 325    4.38 10.5   27.9  40.2  50.1  58.5
-## 12 327    4.12  9.92  26.5  37.8  48.4  56.8
-## 13 329    3.93  9.34  26.1  37.8  48.3  56.4
-## 14 331    3.46  9.05  25.8  39.2  49.1  59.5</code></pre>
-<p>So, what happened here? The minimal arguments that are required in
-here are:</p>
-<ul>
-<li><code>data</code>: (self explanatory)</li>
-<li><code>id_cols</code>: The column that contains the “ID”, or the
-variable you want to assign as rows in the wide-format (i.e., each
-unique value of this variable will be separate rows). In this case, this
-is “Seed”</li>
-<li><code>names_from</code>: The column that you want to expand into
-different columns. In this case, it is “age” because you want to see the
-heights of each tree at different ages as different columns.</li>
-<li><code>values_from</code>: The column that will have the values for
-each ID x names_from combination. In this case, this is “height”</li>
-</ul>
-<hr />
-</div>
-<div
-id="converting-wide-format-data-to-long-format-data-with-pivot_longer"
-class="section level3">
-<h3>3.2 Converting wide-format data to long-format data with
-<code>pivot_longer()</code></h3>
-<p>“Wide-format” data is one in which each row is a subject/entity that
-is measured repeatedly, and each measurement appears on different
-columns.</p>
+<h3>3.1 Using pipes (<code>%&gt;%</code>) to chain together sequence of
+actions!</h3>
+<p>First, I’m going to introduce the “pipe”–perhaps the most useful part
+of the tidyverse grammar (which actually comes from another amazing
+package called <code>magrittr</code>, if you care…).</p>
+<p>Basically, piping is when the <code>%&gt;%</code> operator is used to
+forward a value, or the result of an expression, into the next function
+call/expression.</p>
 <p>Take for example the <code>billboard</code> dataset, which is part of
 the <em>tidyr</em> package. It contains data on rankings of songs on the
-Billboard Top 100 in the year 2000. It is in wide-format:</p>
+Billboard Top 100 in the year 2000.</p>
 <pre class="r"><code>billboard</code></pre>
 <pre><code>## # A tibble: 317 × 79
-##    artist track date.ent…¹   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9
-##    &lt;chr&gt;  &lt;chr&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 2 Pac  Baby… 2000-02-26    87    82    72    77    87    94    99    NA    NA
-##  2 2Ge+h… The … 2000-09-02    91    87    92    NA    NA    NA    NA    NA    NA
-##  3 3 Doo… Kryp… 2000-04-08    81    70    68    67    66    57    54    53    51
-##  4 3 Doo… Loser 2000-10-21    76    76    72    69    67    65    55    59    62
-##  5 504 B… Wobb… 2000-04-15    57    34    25    17    17    31    36    49    53
-##  6 98^0   Give… 2000-08-19    51    39    34    26    26    19     2     2     3
-##  7 A*Tee… Danc… 2000-07-08    97    97    96    95   100    NA    NA    NA    NA
-##  8 Aaliy… I Do… 2000-01-29    84    62    51    41    38    35    35    38    38
-##  9 Aaliy… Try … 2000-03-18    59    53    38    28    21    18    16    14    12
-## 10 Adams… Open… 2000-08-26    76    76    74    69    68    67    61    58    57
-## # … with 307 more rows, 67 more variables: wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##    &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
+##  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
+##  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
+##  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
+##  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
+##  6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
+##  7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
+##  8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
+##  9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
+## 10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
+## # … with 307 more rows, and 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;,
+## #   wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;, wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;,
+## #   wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;, wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;,
+## #   wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;, wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;,
+## #   wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;, wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;,
+## #   wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;, wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;,
+## #   wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, …</code></pre>
+<p>You can use the <code>filter()</code> function (see more below) to
+show just the data for songs by The Backstreet Boys.</p>
+<pre class="r"><code>filter(billboard, artist==&quot;Backstreet Boys, The&quot;)</code></pre>
+<pre><code>## # A tibble: 3 × 79
+##   artist      track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##   &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Backstreet… Shap… 2000-10-14      39    25    24    15    12    12    10     9
+## 2 Backstreet… Show… 2000-01-01      74    62    55    25    16    14    12    10
+## 3 Backstreet… The … 2000-05-27      58    50    43    37    31    30    39    47
+## # … with 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
 ## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
 ## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
 ## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
 ## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
 ## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
 ## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
-<pre class="r"><code>pivot_longer(billboard, cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
+<p>But you can run the same code by using <code>%&gt;%</code>, like
+this:</p>
+<pre class="r"><code>billboard %&gt;% filter(artist==&quot;Backstreet Boys, The&quot;)</code></pre>
+<pre><code>## # A tibble: 3 × 79
+##   artist      track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##   &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Backstreet… Shap… 2000-10-14      39    25    24    15    12    12    10     9
+## 2 Backstreet… Show… 2000-01-01      74    62    55    25    16    14    12    10
+## 3 Backstreet… The … 2000-05-27      58    50    43    37    31    30    39    47
+## # … with 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
+<p>What this does is tell R: “Take <code>billboard</code>. Then, filter
+the data to show just the songs by The Backstreet Boys. And in this
+case, the <code>filter(., )</code> says that the forwarded value should
+be used in place of”.”.</p>
+<p>… but you actually don’t even need to include the “.” here–tidyverse
+automatically applies the forwarded value as the first entry in the
+function, so you can just do:</p>
+<pre class="r"><code>billboard %&gt;% filter(artist==&quot;Backstreet Boys, The&quot;)</code></pre>
+<pre><code>## # A tibble: 3 × 79
+##   artist      track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##   &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Backstreet… Shap… 2000-10-14      39    25    24    15    12    12    10     9
+## 2 Backstreet… Show… 2000-01-01      74    62    55    25    16    14    12    10
+## 3 Backstreet… The … 2000-05-27      58    50    43    37    31    30    39    47
+## # … with 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
+<p>Right now, this seems a bit puzzling and not that useful… but, you
+will quickly see how the <code>%&gt;%</code> operator can help you build
+nice pipelines (pun intended) for data wrangling!</p>
+<p><strong>From here on out, I will build the codes using pipes as a
+default.</strong></p>
+<p><br></p>
+</div>
+<div id="filter-by-row-values" class="section level3">
+<h3>3.2. Filter by row values</h3>
+<p>As I’ve shown already, you can use the <code>filter()</code> function
+in <em>dplyr</em> to select rows based on some criteria.</p>
+<p>I can actually use multiple criteria to filter data. Let’s say I now
+want to see the data for songs by either The Backstreet Boys or
+N’Sync:</p>
+<pre class="r"><code>billboard %&gt;% filter(artist==&quot;Backstreet Boys, The&quot; | artist==&quot;N&#39;Sync&quot;)</code></pre>
+<pre><code>## # A tibble: 6 × 79
+##   artist      track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##   &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Backstreet… Shap… 2000-10-14      39    25    24    15    12    12    10     9
+## 2 Backstreet… Show… 2000-01-01      74    62    55    25    16    14    12    10
+## 3 Backstreet… The … 2000-05-27      58    50    43    37    31    30    39    47
+## 4 N&#39;Sync      Bye … 2000-01-29      42    20    19    14    13     7     6     5
+## 5 N&#39;Sync      It&#39;s… 2000-05-06      82    70    51    39    26    19    15     9
+## 6 N&#39;Sync      This… 2000-09-30      68    31    19    15    11     6     7     7
+## # … with 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
+<p>Recall that there is a conflict over the function name
+<code>filter()</code>–there is another <code>filter()</code> function in
+base R that is separate from the tidyverse version. To make sure you are
+using the version from the <em>dplyr</em> package, I often use
+<code>dplyr::filter()</code> when I run this function.</p>
+<pre class="r"><code>billboard %&gt;% dplyr::filter(artist==&quot;Backstreet Boys, The&quot; | artist==&quot;N&#39;Sync&quot;)</code></pre>
+<pre><code>## # A tibble: 6 × 79
+##   artist      track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##   &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Backstreet… Shap… 2000-10-14      39    25    24    15    12    12    10     9
+## 2 Backstreet… Show… 2000-01-01      74    62    55    25    16    14    12    10
+## 3 Backstreet… The … 2000-05-27      58    50    43    37    31    30    39    47
+## 4 N&#39;Sync      Bye … 2000-01-29      42    20    19    14    13     7     6     5
+## 5 N&#39;Sync      It&#39;s… 2000-05-06      82    70    51    39    26    19    15     9
+## 6 N&#39;Sync      This… 2000-09-30      68    31    19    15    11     6     7     7
+## # … with 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,
+## #   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</code></pre>
+</div>
+<div id="select-columns" class="section level3">
+<h3>3.3. Select columns</h3>
+<p>Sometimes, you don’t need all of the data. Let’s say we just want to
+see what position each song started at–so we just want the artist,
+track, date entered and the week 1 rank. You can do this with
+<code>select()</code></p>
+<pre class="r"><code>billboard %&gt;% select(artist, track, date.entered, wk1)</code></pre>
+<pre><code>## # A tibble: 317 × 4
+##    artist         track                   date.entered   wk1
+##    &lt;chr&gt;          &lt;chr&gt;                   &lt;date&gt;       &lt;dbl&gt;
+##  1 2 Pac          Baby Don&#39;t Cry (Keep... 2000-02-26      87
+##  2 2Ge+her        The Hardest Part Of ... 2000-09-02      91
+##  3 3 Doors Down   Kryptonite              2000-04-08      81
+##  4 3 Doors Down   Loser                   2000-10-21      76
+##  5 504 Boyz       Wobble Wobble           2000-04-15      57
+##  6 98^0           Give Me Just One Nig... 2000-08-19      51
+##  7 A*Teens        Dancing Queen           2000-07-08      97
+##  8 Aaliyah        I Don&#39;t Wanna           2000-01-29      84
+##  9 Aaliyah        Try Again               2000-03-18      59
+## 10 Adams, Yolanda Open My Heart           2000-08-26      76
+## # … with 307 more rows</code></pre>
+<p>The nice thing about the select function is that you don’t need to
+put the column names in quotes or anything–just type in the columns you
+want.</p>
+<p>or, type in the columns you DON’T want:</p>
+<pre class="r"><code>billboard %&gt;% select(-track, -date.entered)</code></pre>
+<pre><code>## # A tibble: 317 × 77
+##    artist        wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9  wk10  wk11
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac          87    82    72    77    87    94    99    NA    NA    NA    NA
+##  2 2Ge+her        91    87    92    NA    NA    NA    NA    NA    NA    NA    NA
+##  3 3 Doors Do…    81    70    68    67    66    57    54    53    51    51    51
+##  4 3 Doors Do…    76    76    72    69    67    65    55    59    62    61    61
+##  5 504 Boyz       57    34    25    17    17    31    36    49    53    57    64
+##  6 98^0           51    39    34    26    26    19     2     2     3     6     7
+##  7 A*Teens        97    97    96    95   100    NA    NA    NA    NA    NA    NA
+##  8 Aaliyah        84    62    51    41    38    35    35    38    38    36    37
+##  9 Aaliyah        59    53    38    28    21    18    16    14    12    10     9
+## 10 Adams, Yol…    76    76    74    69    68    67    61    58    57    59    66
+## # … with 307 more rows, and 65 more variables: wk12 &lt;dbl&gt;, wk13 &lt;dbl&gt;,
+## #   wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;, wk19 &lt;dbl&gt;,
+## #   wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;, wk25 &lt;dbl&gt;,
+## #   wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;, wk31 &lt;dbl&gt;,
+## #   wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;, wk37 &lt;dbl&gt;,
+## #   wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, wk43 &lt;dbl&gt;,
+## #   wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, wk49 &lt;dbl&gt;, …</code></pre>
+<p>Combining the <code>filter()</code> and <code>select()</code>
+functions allow you to manage the data in flexible ways. And piping
+makes it easy to do this:</p>
+<pre class="r"><code>billboard %&gt;% dplyr::filter(artist==&quot;Backstreet Boys, The&quot;) %&gt;% select(artist, track, date.entered, wk1)</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   artist               track                   date.entered   wk1
+##   &lt;chr&gt;                &lt;chr&gt;                   &lt;date&gt;       &lt;dbl&gt;
+## 1 Backstreet Boys, The Shape Of My Heart       2000-10-14      39
+## 2 Backstreet Boys, The Show Me The Meaning ... 2000-01-01      74
+## 3 Backstreet Boys, The The One                 2000-05-27      58</code></pre>
+<p><br></p>
+</div>
+<div
+id="converting-wide-format-data-to-long-format-data-with-pivot_longer"
+class="section level3">
+<h3>3.4. Converting wide-format data to long-format data with
+<code>pivot_longer()</code></h3>
+<p>“Wide-format” data is one in which each row is a subject/entity that
+is measured repeatedly, and each measurement appears on different
+columns. The <code>billboard</code> data is a prime example of
+wide-format data because it lists the rankings of a song for each week
+in separate columns.</p>
+<p>Let’s now convert this into a long-format, in which we have a column
+for “week” and then the rank of that song for that week in a column
+called “rank”:</p>
+<pre class="r"><code>billboard %&gt;% pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
 <pre><code>## # A tibble: 24,092 × 5
 ##    artist track                   date.entered week   rank
 ##    &lt;chr&gt;  &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
@@ -609,10 +735,216 @@ values for each ID x names_from combination. In this case, this is
 “rank”</li>
 </ul>
 </div>
+<div
+id="converting-long-format-data-to-wide-format-data-with-pivot_wider"
+class="section level3">
+<h3>3.5. Converting long-format data to wide-format data with
+<code>pivot_wider()</code></h3>
+<p>Let’s save the long-format version of the billboard data:</p>
+<pre class="r"><code>bb_long=billboard %&gt;% pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
+<p>We can then revert back to the wide-format version this way:</p>
+<pre class="r"><code>bb_long %&gt;% pivot_wider(names_from = &quot;week&quot;, values_from = &quot;rank&quot;)</code></pre>
+<pre><code>## # A tibble: 317 × 79
+##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##    &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
+##  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
+##  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
+##  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
+##  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
+##  6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
+##  7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
+##  8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
+##  9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
+## 10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
+## # … with 307 more rows, and 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;,
+## #   wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;, wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;,
+## #   wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;, wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;,
+## #   wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;, wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;,
+## #   wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;, wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;,
+## #   wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;, wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;,
+## #   wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, …</code></pre>
+<p>So, what happened here? The minimal arguments that are required in
+here are:</p>
+<ul>
+<li><code>data</code>: is <code>bb_long</code>, forwarded by the
+%&gt;%</li>
+<li><code>names_from</code>: The column that you want to expand into
+different columns. In this case, it is “age” because you want to see the
+heights of each tree at different ages as different columns.</li>
+<li><code>values_from</code>: The column that will have the values for
+each ID x names_from combination. In this case, this is “height”</li>
+</ul>
+<hr />
+</div>
+<div id="group-and-summarize-data" class="section level3">
+<h3>3.6. Group and Summarize data</h3>
+<p><em>dplyr</em> makes the craft of summarizing data much easier… if
+you get comfortable with the grammar. Here, I will show you how to use
+<code>group_by()</code> and <code>summarise()</code> functions to get
+summary data by artist, like their best ranking and how many weeks they
+spent on the Top 100 chart.</p>
+<p>Let’s go back to the code that created the long-format version of the
+billboard data, but let’s drop the rows that contain NAs using
+<code>drop_na()</code></p>
+<pre class="r"><code>billboard %&gt;% 
+  pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;) %&gt;%
+  drop_na() </code></pre>
+<pre><code>## # A tibble: 5,307 × 5
+##    artist  track                   date.entered week   rank
+##    &lt;chr&gt;   &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
+##  1 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk1      87
+##  2 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk2      82
+##  3 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk3      72
+##  4 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk4      77
+##  5 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk5      87
+##  6 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk6      94
+##  7 2 Pac   Baby Don&#39;t Cry (Keep... 2000-02-26   wk7      99
+##  8 2Ge+her The Hardest Part Of ... 2000-09-02   wk1      91
+##  9 2Ge+her The Hardest Part Of ... 2000-09-02   wk2      87
+## 10 2Ge+her The Hardest Part Of ... 2000-09-02   wk3      92
+## # … with 5,297 more rows</code></pre>
+<p>Now, we can calculate the “best rank” of each artist by grouping the
+data by “artist”, and finding the minimum ranking that the artist
+had:</p>
+<pre class="r"><code>billboard %&gt;% 
+  pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;) %&gt;%
+  drop_na() %&gt;%
+  group_by(artist) %&gt;%
+  summarise(artist.best=min(rank, na.rm=T))</code></pre>
+<pre><code>## # A tibble: 228 × 2
+##    artist              artist.best
+##    &lt;chr&gt;                     &lt;dbl&gt;
+##  1 2 Pac                        72
+##  2 2Ge+her                      87
+##  3 3 Doors Down                  3
+##  4 504 Boyz                     17
+##  5 98^0                          2
+##  6 A*Teens                      95
+##  7 Aaliyah                       1
+##  8 Adams, Yolanda               57
+##  9 Adkins, Trace                65
+## 10 Aguilera, Christina           1
+## # … with 218 more rows</code></pre>
+<p>Let’s try another one: we can calculate the number of weeks that an
+artist spent on Top 100 by simply counting the number of rows that the
+artist shows up in (after having dropped all of the rows containing NAs,
+that should be what is left).</p>
+<pre class="r"><code>billboard %&gt;% 
+  pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;) %&gt;%
+  drop_na() %&gt;%
+  group_by(artist) %&gt;%
+  summarise(artist.weeks=n())</code></pre>
+<pre><code>## # A tibble: 228 × 2
+##    artist              artist.weeks
+##    &lt;chr&gt;                      &lt;int&gt;
+##  1 2 Pac                          7
+##  2 2Ge+her                        3
+##  3 3 Doors Down                  73
+##  4 504 Boyz                      18
+##  5 98^0                          20
+##  6 A*Teens                        5
+##  7 Aaliyah                       52
+##  8 Adams, Yolanda                20
+##  9 Adkins, Trace                 11
+## 10 Aguilera, Christina           67
+## # … with 218 more rows</code></pre>
+<p>We can also do both summary functions in one go. Let’s do that and
+save the table as artist_dat:</p>
+<pre class="r"><code>artist_dat=billboard %&gt;% 
+  pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;) %&gt;%
+  drop_na() %&gt;%
+  group_by(artist) %&gt;%
+  summarise(artist.weeks=n(), artist.best=min(rank))
+
+artist_dat</code></pre>
+<pre><code>## # A tibble: 228 × 3
+##    artist              artist.weeks artist.best
+##    &lt;chr&gt;                      &lt;int&gt;       &lt;dbl&gt;
+##  1 2 Pac                          7          72
+##  2 2Ge+her                        3          87
+##  3 3 Doors Down                  73           3
+##  4 504 Boyz                      18          17
+##  5 98^0                          20           2
+##  6 A*Teens                        5          95
+##  7 Aaliyah                       52           1
+##  8 Adams, Yolanda                20          57
+##  9 Adkins, Trace                 11          65
+## 10 Aguilera, Christina           67           1
+## # … with 218 more rows</code></pre>
+</div>
+<div id="add-new-variables-using-mutate" class="section level3">
+<h3>3.7. Add new variables using <code>mutate()</code></h3>
+<p>You can make new variables (columns). You’ll often do this if want to
+calculate some new variable based on existing variables.</p>
+<pre class="r"><code>artist_dat %&gt;%
+  mutate(top5= artist.best &lt;=5) %&gt;% #TRUE if artist&#39;s song was ever in Top 5
+  mutate(weeks.prop = artist.weeks/max(artist.weeks)) #weeks on list as proportion of maximum value</code></pre>
+<pre><code>## # A tibble: 228 × 5
+##    artist              artist.weeks artist.best top5  weeks.prop
+##    &lt;chr&gt;                      &lt;int&gt;       &lt;dbl&gt; &lt;lgl&gt;      &lt;dbl&gt;
+##  1 2 Pac                          7          72 FALSE     0.0673
+##  2 2Ge+her                        3          87 FALSE     0.0288
+##  3 3 Doors Down                  73           3 TRUE      0.702 
+##  4 504 Boyz                      18          17 FALSE     0.173 
+##  5 98^0                          20           2 TRUE      0.192 
+##  6 A*Teens                        5          95 FALSE     0.0481
+##  7 Aaliyah                       52           1 TRUE      0.5   
+##  8 Adams, Yolanda                20          57 FALSE     0.192 
+##  9 Adkins, Trace                 11          65 FALSE     0.106 
+## 10 Aguilera, Christina           67           1 TRUE      0.644 
+## # … with 218 more rows</code></pre>
+</div>
+<div id="join-two-different-data" class="section level3">
+<h3>3.8. Join two different data</h3>
+<p>The four main join functions all seek to merge data using matching
+columns (either matching column names, or manually designated using the
+<code>by=</code> argument). But they differ in which rows they will
+keep:</p>
+<ul>
+<li><p><code>left_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep all rows in x. NAs show up when a value is
+present in x but not y.</p></li>
+<li><p><code>right_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep all rows in y. NAs show up when a value is
+present in y but not x.</p></li>
+<li><p><code>inner_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep only rows in which x and y values matched.
+No NAs show up.</p></li>
+<li><p>`full_join(x, y): match up the values in designated columns of x
+and y, and keep all rows in x and y, even if they don’t match. NAs
+whenever value in one table doesn’t have a match in the other.</p></li>
+</ul>
+<p>Let’s demonstrate this by comparing the <code>billboard</code> data
+with the <code>artist_dat</code> table that we created above. The
+<code>billboard</code> data has more rows than <code>artist_dat</code>
+because some artists show up in multiple rows (if they have multiple
+songs in the charts). We will remove the columns with “wk” so we can see
+the results more easily.</p>
+<pre class="r"><code>left_join(billboard, artist_dat) %&gt;%
+  select(-starts_with(&quot;wk&quot;), -date.entered)</code></pre>
+<pre><code>## # A tibble: 317 × 4
+##    artist         track                   artist.weeks artist.best
+##    &lt;chr&gt;          &lt;chr&gt;                          &lt;int&gt;       &lt;dbl&gt;
+##  1 2 Pac          Baby Don&#39;t Cry (Keep...            7          72
+##  2 2Ge+her        The Hardest Part Of ...            3          87
+##  3 3 Doors Down   Kryptonite                        73           3
+##  4 3 Doors Down   Loser                             73           3
+##  5 504 Boyz       Wobble Wobble                     18          17
+##  6 98^0           Give Me Just One Nig...           20           2
+##  7 A*Teens        Dancing Queen                      5          95
+##  8 Aaliyah        I Don&#39;t Wanna                     52           1
+##  9 Aaliyah        Try Again                         52           1
+## 10 Adams, Yolanda Open My Heart                     20          57
+## # … with 307 more rows</code></pre>
+<p>You can see that whenever the artist has multiple songs on the list,
+the “artist.weeks” and “artist.best” variables are repeated (because
+these are the stats for the artist).</p>
+</div>
 </div>
 <div id="population-growth-trends-across-the-world"
 class="section level2">
-<h2>1. Population growth trends across the world</h2>
+<h2>4. Population growth trends across the world</h2>
 <p>The World Bank actually makes it very easy to download a huge amount
 of data very easily. You could just go to the <a
 href="https://data.worldbank.org/">World Bankd Open Data site</a> and
@@ -624,7 +956,7 @@ datasets that are included in the packages we have loaded above.</p>
 <p><br></p>
 <div id="world_bank_pop-population-data-from-world-bank-2000-2017"
 class="section level3">
-<h3>1.1. <code>world_bank_pop</code>: Population data from World Bank
+<h3>4.1. <code>world_bank_pop</code>: Population data from World Bank
 (2000-2017)</h3>
 <p>First is the <code>world_bank_pop</code> dataset that is included in
 the <code>tidyr</code> package (which is part of the the tidyverse
@@ -633,22 +965,21 @@ suite). Start by pulling up the help file for the dataset</p>
 <p>Let’s take a peak at the data, which is in “tibble” format:</p>
 <pre class="r"><code>world_bank_pop</code></pre>
 <pre><code>## # A tibble: 1,056 × 20
-##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
-##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
-##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
-##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
-##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
-##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
-##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
-##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
-##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
-##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
-## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
-## # … with 1,046 more rows, 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
-## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
-## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name
-## #   ¹​indicator</code></pre>
+##    country indicator        `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`
+##    &lt;chr&gt;   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB.TOTL    42444    4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4
+##  2 ABW     SP.URB.GROW        1.18 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2
+##  3 ABW     SP.POP.TOTL    90853    9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5
+##  4 ABW     SP.POP.GROW        2.06 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1
+##  5 AFG     SP.URB.TOTL  4436299    4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6
+##  6 AFG     SP.URB.GROW        3.91 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0
+##  7 AFG     SP.POP.TOTL 20093756    2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7
+##  8 AFG     SP.POP.GROW        3.49 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0
+##  9 AGO     SP.URB.TOTL  8234766    8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7
+## 10 AGO     SP.URB.GROW        5.44 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0
+## # … with 1,046 more rows, and 11 more variables: `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;,
+## #   `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;,
+## #   `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
 <p>Notice that each country is repeated across 4 rows. This is because
 there are actually 4 different “indicators” for each country, and so
 each country x indicator combination takes up a row. The rest of the
@@ -664,33 +995,31 @@ work…</p>
 <p><br></p>
 <hr />
 </div>
-</div>
 <div
 id="problem-1-countries-that-are-not-countries-merging-datasets-with-join-functions"
-class="section level2">
-<h2>2. Problem 1: “Countries” that are not countries: Merging datasets
-with <code>join</code> functions</h2>
+class="section level3">
+<h3>4.2. Problem 1: “Countries” that are not countries: Merging datasets
+with <code>join</code> functions</h3>
 <p>We are going to start by diving into the <code>world_bank_pop</code>
 dataset.</p>
 <p>Let’s take a peek at the dataset again and see what we have…</p>
 <pre class="r"><code>world_bank_pop</code></pre>
 <pre><code>## # A tibble: 1,056 × 20
-##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
-##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
-##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
-##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
-##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
-##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
-##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
-##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
-##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
-##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
-## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
-## # … with 1,046 more rows, 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
-## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
-## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name
-## #   ¹​indicator</code></pre>
+##    country indicator        `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`
+##    &lt;chr&gt;   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB.TOTL    42444    4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4
+##  2 ABW     SP.URB.GROW        1.18 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2
+##  3 ABW     SP.POP.TOTL    90853    9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5
+##  4 ABW     SP.POP.GROW        2.06 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1
+##  5 AFG     SP.URB.TOTL  4436299    4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6
+##  6 AFG     SP.URB.GROW        3.91 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0
+##  7 AFG     SP.POP.TOTL 20093756    2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7
+##  8 AFG     SP.POP.GROW        3.49 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0
+##  9 AGO     SP.URB.TOTL  8234766    8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7
+## 10 AGO     SP.URB.GROW        5.44 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0
+## # … with 1,046 more rows, and 11 more variables: `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;,
+## #   `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;,
+## #   `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;</code></pre>
 <p>I want to start by looking at how many unique countries we actually
 have here.</p>
 <pre class="r"><code>length(unique(world_bank_pop$country)) #this gives us the number of unique values in the &quot;country&quot; column</code></pre>
@@ -714,92 +1043,98 @@ package.</p>
 <pre class="r"><code>metadata=wb_countries()</code></pre>
 <pre class="r"><code>metadata</code></pre>
 <pre><code>## # A tibble: 299 × 18
-##    iso3c iso2c country    capit…¹ longi…² latit…³ regio…⁴ regio…⁵ region admin…⁶
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
-##  1 ABW   AW    Aruba      Oranje…  -70.0    12.5  LCN     ZJ      Latin… &lt;NA&gt;   
-##  2 AFE   ZH    Africa Ea… &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
-##  3 AFG   AF    Afghanist… Kabul     69.2    34.5  SAS     8S      South… SAS    
-##  4 AFR   A9    Africa     &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
-##  5 AFW   ZI    Africa We… &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
-##  6 AGO   AO    Angola     Luanda    13.2    -8.81 SSF     ZG      Sub-S… SSA    
-##  7 ALB   AL    Albania    Tirane    19.8    41.3  ECS     Z7      Europ… ECA    
-##  8 AND   AD    Andorra    Andorr…    1.52   42.5  ECS     Z7      Europ… &lt;NA&gt;   
-##  9 ARB   1A    Arab World &lt;NA&gt;      NA      NA    &lt;NA&gt;    &lt;NA&gt;    Aggre… &lt;NA&gt;   
-## 10 ARE   AE    United Ar… Abu Dh…   54.4    24.5  MEA     ZQ      Middl… &lt;NA&gt;   
-## # … with 289 more rows, 8 more variables: admin_region_iso2c &lt;chr&gt;,
-## #   admin_region &lt;chr&gt;, income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;,
-## #   income_level &lt;chr&gt;, lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;,
-## #   lending_type &lt;chr&gt;, and abbreviated variable names ¹​capital_city,
-## #   ²​longitude, ³​latitude, ⁴​region_iso3c, ⁵​region_iso2c, ⁶​admin_region_iso3c</code></pre>
+##    iso3c iso2c country capital_city longitude latitude region_iso3c region_iso2c
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;       
+##  1 ABW   AW    Aruba   Oranjestad      -70.0     12.5  LCN          ZJ          
+##  2 AFE   ZH    Africa… &lt;NA&gt;             NA       NA    &lt;NA&gt;         &lt;NA&gt;        
+##  3 AFG   AF    Afghan… Kabul            69.2     34.5  SAS          8S          
+##  4 AFR   A9    Africa  &lt;NA&gt;             NA       NA    &lt;NA&gt;         &lt;NA&gt;        
+##  5 AFW   ZI    Africa… &lt;NA&gt;             NA       NA    &lt;NA&gt;         &lt;NA&gt;        
+##  6 AGO   AO    Angola  Luanda           13.2     -8.81 SSF          ZG          
+##  7 ALB   AL    Albania Tirane           19.8     41.3  ECS          Z7          
+##  8 AND   AD    Andorra Andorra la …      1.52    42.5  ECS          Z7          
+##  9 ARB   1A    Arab W… &lt;NA&gt;             NA       NA    &lt;NA&gt;         &lt;NA&gt;        
+## 10 ARE   AE    United… Abu Dhabi        54.4     24.5  MEA          ZQ          
+## # … with 289 more rows, and 10 more variables: region &lt;chr&gt;,
+## #   admin_region_iso3c &lt;chr&gt;, admin_region_iso2c &lt;chr&gt;, admin_region &lt;chr&gt;,
+## #   income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;, income_level &lt;chr&gt;,
+## #   lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;, lending_type &lt;chr&gt;</code></pre>
 <pre class="r"><code>head(metadata$region)</code></pre>
 <pre><code>## [1] &quot;Latin America &amp; Caribbean&quot; &quot;Aggregates&quot;               
 ## [3] &quot;South Asia&quot;                &quot;Aggregates&quot;               
 ## [5] &quot;Aggregates&quot;                &quot;Sub-Saharan Africa&quot;</code></pre>
 <p>So this column shows us the “Aggregates”.</p>
+<p>So, we can use this to filter the metadata to exclude the Aggregate
+codes.</p>
 <pre class="r"><code>metadata %&gt;% dplyr::filter(region != &quot;Aggregates&quot;)</code></pre>
 <pre><code>## # A tibble: 218 × 18
-##    iso3c iso2c country    capit…¹ longi…² latit…³ regio…⁴ regio…⁵ region admin…⁶
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
-##  1 ABW   AW    Aruba      Oranje…  -70.0    12.5  LCN     ZJ      Latin… &lt;NA&gt;   
-##  2 AFG   AF    Afghanist… Kabul     69.2    34.5  SAS     8S      South… SAS    
-##  3 AGO   AO    Angola     Luanda    13.2    -8.81 SSF     ZG      Sub-S… SSA    
-##  4 ALB   AL    Albania    Tirane    19.8    41.3  ECS     Z7      Europ… ECA    
-##  5 AND   AD    Andorra    Andorr…    1.52   42.5  ECS     Z7      Europ… &lt;NA&gt;   
-##  6 ARE   AE    United Ar… Abu Dh…   54.4    24.5  MEA     ZQ      Middl… &lt;NA&gt;   
-##  7 ARG   AR    Argentina  Buenos…  -58.4   -34.6  LCN     ZJ      Latin… LAC    
-##  8 ARM   AM    Armenia    Yerevan   44.5    40.2  ECS     Z7      Europ… ECA    
-##  9 ASM   AS    American … Pago P… -171.    -14.3  EAS     Z4      East … EAP    
-## 10 ATG   AG    Antigua a… Saint …  -61.8    17.1  LCN     ZJ      Latin… &lt;NA&gt;   
-## # … with 208 more rows, 8 more variables: admin_region_iso2c &lt;chr&gt;,
-## #   admin_region &lt;chr&gt;, income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;,
-## #   income_level &lt;chr&gt;, lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;,
-## #   lending_type &lt;chr&gt;, and abbreviated variable names ¹​capital_city,
-## #   ²​longitude, ³​latitude, ⁴​region_iso3c, ⁵​region_iso2c, ⁶​admin_region_iso3c</code></pre>
+##    iso3c iso2c country capital_city longitude latitude region_iso3c region_iso2c
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;       
+##  1 ABW   AW    Aruba   Oranjestad      -70.0     12.5  LCN          ZJ          
+##  2 AFG   AF    Afghan… Kabul            69.2     34.5  SAS          8S          
+##  3 AGO   AO    Angola  Luanda           13.2     -8.81 SSF          ZG          
+##  4 ALB   AL    Albania Tirane           19.8     41.3  ECS          Z7          
+##  5 AND   AD    Andorra Andorra la …      1.52    42.5  ECS          Z7          
+##  6 ARE   AE    United… Abu Dhabi        54.4     24.5  MEA          ZQ          
+##  7 ARG   AR    Argent… Buenos Aires    -58.4    -34.6  LCN          ZJ          
+##  8 ARM   AM    Armenia Yerevan          44.5     40.2  ECS          Z7          
+##  9 ASM   AS    Americ… Pago Pago      -171.     -14.3  EAS          Z4          
+## 10 ATG   AG    Antigu… Saint John&#39;s    -61.8     17.1  LCN          ZJ          
+## # … with 208 more rows, and 10 more variables: region &lt;chr&gt;,
+## #   admin_region_iso3c &lt;chr&gt;, admin_region_iso2c &lt;chr&gt;, admin_region &lt;chr&gt;,
+## #   income_level_iso3c &lt;chr&gt;, income_level_iso2c &lt;chr&gt;, income_level &lt;chr&gt;,
+## #   lending_type_iso3c &lt;chr&gt;, lending_type_iso2c &lt;chr&gt;, lending_type &lt;chr&gt;</code></pre>
+<p>Let’s also pare down the data to a few variables we might be
+interested in, including region and income level:</p>
 <pre class="r"><code>metadata %&gt;% 
   dplyr::filter(region != &quot;Aggregates&quot;) %&gt;%
-  select(iso3c, iso2c, country, region)</code></pre>
-<pre><code>## # A tibble: 218 × 4
-##    iso3c iso2c country              region                    
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;                     
-##  1 ABW   AW    Aruba                Latin America &amp; Caribbean 
-##  2 AFG   AF    Afghanistan          South Asia                
-##  3 AGO   AO    Angola               Sub-Saharan Africa        
-##  4 ALB   AL    Albania              Europe &amp; Central Asia     
-##  5 AND   AD    Andorra              Europe &amp; Central Asia     
-##  6 ARE   AE    United Arab Emirates Middle East &amp; North Africa
-##  7 ARG   AR    Argentina            Latin America &amp; Caribbean 
-##  8 ARM   AM    Armenia              Europe &amp; Central Asia     
-##  9 ASM   AS    American Samoa       East Asia &amp; Pacific       
-## 10 ATG   AG    Antigua and Barbuda  Latin America &amp; Caribbean 
+  select(iso3c, iso2c, country, region, income_level)</code></pre>
+<pre><code>## # A tibble: 218 × 5
+##    iso3c iso2c country              region                     income_level     
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;                      &lt;chr&gt;            
+##  1 ABW   AW    Aruba                Latin America &amp; Caribbean  High income      
+##  2 AFG   AF    Afghanistan          South Asia                 Low income       
+##  3 AGO   AO    Angola               Sub-Saharan Africa         Lower middle inc…
+##  4 ALB   AL    Albania              Europe &amp; Central Asia      Upper middle inc…
+##  5 AND   AD    Andorra              Europe &amp; Central Asia      High income      
+##  6 ARE   AE    United Arab Emirates Middle East &amp; North Africa High income      
+##  7 ARG   AR    Argentina            Latin America &amp; Caribbean  Upper middle inc…
+##  8 ARM   AM    Armenia              Europe &amp; Central Asia      Upper middle inc…
+##  9 ASM   AS    American Samoa       East Asia &amp; Pacific        Upper middle inc…
+## 10 ATG   AG    Antigua and Barbuda  Latin America &amp; Caribbean  High income      
 ## # … with 208 more rows</code></pre>
+<p>Ok, this looks useful. Let’s save it as a data table called
+<code>countries</code></p>
 <pre class="r"><code>countries=metadata %&gt;% 
   dplyr::filter(region != &quot;Aggregates&quot;) %&gt;%
   select(iso3c, iso2c, country.name=country, region, income_level) %&gt;%
   mutate(income_level=factor(income_level, levels=c(&quot;Low income&quot;, &quot;Lower middle income&quot;, &quot;Upper middle income&quot;, &quot;High income&quot;)))</code></pre>
+<p>Now, we are going to use the <code>inner_join()</code> function to
+make a version of the world bank population data that is only for actual
+countries (not aggregates):</p>
 <pre class="r"><code>popdat_countries=inner_join(world_bank_pop, countries, by=c(&quot;country&quot; = &quot;iso3c&quot;))
 popdat_countries</code></pre>
 <pre><code>## # A tibble: 868 × 24
-##    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`
-##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 ABW     SP.URB… 4.24e4 4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4  4.47e+4
-##  2 ABW     SP.URB… 1.18e0 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2 -4.35e-1
-##  3 ABW     SP.POP… 9.09e4 9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5  1.01e+5
-##  4 ABW     SP.POP… 2.06e0 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1  3.84e-1
-##  5 AFG     SP.URB… 4.44e6 4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6  6.15e+6
-##  6 AFG     SP.URB… 3.91e0 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0  3.65e+0
-##  7 AFG     SP.POP… 2.01e7 2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7  2.66e+7
-##  8 AFG     SP.POP… 3.49e0 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0  2.76e+0
-##  9 AGO     SP.URB… 8.23e6 8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7  1.21e+7
-## 10 AGO     SP.URB… 5.44e0 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0  4.89e+0
-## # … with 858 more rows, 14 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
-## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
-## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;, country.name &lt;chr&gt;,
-## #   region &lt;chr&gt;, income_level &lt;fct&gt;, and abbreviated variable name ¹​indicator</code></pre>
+##    country indicator        `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`
+##    &lt;chr&gt;   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 ABW     SP.URB.TOTL    42444    4.30e4 4.37e4 4.42e4 4.47e+4 4.49e+4  4.49e+4
+##  2 ABW     SP.URB.GROW        1.18 1.41e0 1.43e0 1.31e0 9.51e-1 4.91e-1 -1.78e-2
+##  3 ABW     SP.POP.TOTL    90853    9.29e4 9.50e4 9.70e4 9.87e+4 1.00e+5  1.01e+5
+##  4 ABW     SP.POP.GROW        2.06 2.23e0 2.23e0 2.11e0 1.76e+0 1.30e+0  7.98e-1
+##  5 AFG     SP.URB.TOTL  4436299    4.65e6 4.89e6 5.16e6 5.43e+6 5.69e+6  5.93e+6
+##  6 AFG     SP.URB.GROW        3.91 4.66e0 5.13e0 5.23e0 5.12e+0 4.77e+0  4.12e+0
+##  7 AFG     SP.POP.TOTL 20093756    2.10e7 2.20e7 2.31e7 2.41e+7 2.51e+7  2.59e+7
+##  8 AFG     SP.POP.GROW        3.49 4.25e0 4.72e0 4.82e0 4.47e+0 3.87e+0  3.23e+0
+##  9 AGO     SP.URB.TOTL  8234766    8.71e6 9.22e6 9.77e6 1.03e+7 1.09e+7  1.15e+7
+## 10 AGO     SP.URB.GROW        5.44 5.59e0 5.70e0 5.76e0 5.75e+0 5.69e+0  4.92e+0
+## # … with 858 more rows, and 15 more variables: `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;,
+## #   `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;,
+## #   `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;,
+## #   country.name &lt;chr&gt;, region &lt;chr&gt;, income_level &lt;fct&gt;</code></pre>
 </div>
-<div id="filtering-and-selecting-data-with-filter-and-select"
-class="section level2">
-<h2>3. Filtering and selecting data with <code>filter()</code> and
-<code>select()</code></h2>
+<div id="narrow-down-the-data-to-large-countries"
+class="section level3">
+<h3>4.3. Narrow down the data to large countries</h3>
 <p>As mentioned above (Section 1.1), each row is a country x indicator
 combination, with 4 different indicators. The indicators are:</p>
 <ul>
@@ -808,8 +1143,12 @@ combination, with 4 different indicators. The indicators are:</p>
 <li><p>SP.URB.GROW = urban population growth</p></li>
 <li><p>SP.URB.TOTL = total urban population</p></li>
 </ul>
-<pre class="r"><code>popdat_countries %&gt;% 
-  dplyr::filter(indicator==&quot;SP.POP.TOTL&quot;) </code></pre>
+<p>So, we will create a data table called <code>pop_totals</code> that
+is just the “total population” data.</p>
+<pre class="r"><code>pop_totals=popdat_countries %&gt;% 
+  dplyr::filter(indicator==&quot;SP.POP.TOTL&quot;) 
+
+pop_totals</code></pre>
 <pre><code>## # A tibble: 217 × 24
 ##    country indicator     `2000` `2001` `2002` `2003` `2004` `2005` `2006` `2007`
 ##    &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -827,14 +1166,21 @@ combination, with 4 different indicators. The indicators are:</p>
 ## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
 ## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;, country.name &lt;chr&gt;,
 ## #   region &lt;chr&gt;, income_level &lt;fct&gt;</code></pre>
-<pre class="r"><code>pop_totals=popdat_countries %&gt;% 
-  dplyr::filter(indicator==&quot;SP.POP.TOTL&quot;) </code></pre>
+<p>From this population size data, let’s figure out what is the 90th
+percentile in population size in 2017. We are going to get this number
+by doing <code>pull()</code> to get the 2017 population sizes as a
+vector, and use <code>quantile()</code> to get the 90th percentile. Save
+that value as <code>upper_pop</code>.</p>
 <pre class="r"><code>upper_pop=pop_totals %&gt;%
   pull(`2017`) %&gt;% 
-  quantile(., probs=0.90, na.rm=T)
+  quantile(., probs=0.90, na.rm=T) # this function allows us to find the value at #th percentile
 upper_pop</code></pre>
 <pre><code>##      90% 
 ## 63286844</code></pre>
+<p>Now, we can use this 90th percentile value to filter the population
+size data to just the top 10% largest countries. We will create a
+one-column tibble called <code>large_countries()</code> to save this
+list of country bodes.</p>
 <pre class="r"><code>large_countries=pop_totals %&gt;% 
   dplyr::filter(`2017` &gt; upper_pop) %&gt;% 
   select(country)
@@ -853,11 +1199,42 @@ large_countries</code></pre>
 ##  9 GBR    
 ## 10 IDN    
 ## # … with 12 more rows</code></pre>
+</div>
+<div id="now-get-the-population-growth-data-for-the-largest-countries"
+class="section level3">
+<h3>4.4. Now get the population <strong>growth</strong> data for the
+largest countries</h3>
+<p>We will now go back to the population data from countries (excluding
+aggregates), and then filter the data to just the population growth
+values, then use <code>right_join()</code> to keep only the largest 10%
+of countries</p>
 <pre class="r"><code>popgrowth_large=popdat_countries %&gt;% 
   dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
   right_join(., large_countries, keep=FALSE) </code></pre>
 <pre><code>## Joining, by = &quot;country&quot;</code></pre>
-<pre class="r"><code>popgrowth_large %&gt;% select(-indicator, -country.name, -iso2c, -region, -income_level) %&gt;% pivot_longer(!country, names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;)</code></pre>
+<pre class="r"><code>popgrowth_large</code></pre>
+<pre><code>## # A tibble: 22 × 24
+##    country indicator   `2000` `2001` `2002` `2003`  `2004`  `2005` `2006` `2007`
+##    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 BGD     SP.POP.GROW  1.96   1.90   1.84  1.75    1.63    1.49    1.34   1.21 
+##  2 BRA     SP.POP.GROW  1.45   1.40   1.34  1.29    1.23    1.17    1.11   1.06 
+##  3 CHN     SP.POP.GROW  0.788  0.726  0.670 0.623   0.594   0.588   0.558  0.522
+##  4 COD     SP.POP.GROW  2.53   2.76   2.93  3.07    3.15    3.19    3.22   3.26 
+##  5 DEU     SP.POP.GROW  0.135  0.168  0.168 0.0554 -0.0217 -0.0568 -0.113 -0.134
+##  6 EGY     SP.POP.GROW  1.85   1.87   1.90  1.90    1.87    1.84    1.78   1.75 
+##  7 ETH     SP.POP.GROW  2.89   2.90   2.89  2.86    2.83    2.78    2.73   2.69 
+##  8 FRA     SP.POP.GROW  0.685  0.728  0.727 0.709   0.736   0.754   0.697  0.619
+##  9 GBR     SP.POP.GROW  0.357  0.385  0.423 0.466   0.569   0.687   0.735  0.779
+## 10 IDN     SP.POP.GROW  1.39   1.39   1.39  1.39    1.38    1.38    1.37   1.36 
+## # … with 12 more rows, and 14 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,
+## #   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,
+## #   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, iso2c &lt;chr&gt;, country.name &lt;chr&gt;,
+## #   region &lt;chr&gt;, income_level &lt;fct&gt;</code></pre>
+<p>We can convert this data into long-format. First, remove some of the
+variables we don’t need right now, and then convert to long-format.</p>
+<pre class="r"><code>popgrowth_large %&gt;% 
+  select(-indicator, -country.name, -iso2c, -region, -income_level) %&gt;%
+  pivot_longer(!country, names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;)</code></pre>
 <pre><code>## # A tibble: 396 × 3
 ##    country year  growth_rate
 ##    &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
@@ -872,6 +1249,8 @@ large_countries</code></pre>
 ##  9 BGD     2008         1.13
 ## 10 BGD     2009         1.10
 ## # … with 386 more rows</code></pre>
+<p>Ok, so now we can use this population growth data from large
+countries and plot the change over time for each country:</p>
 <pre class="r"><code>popgrowth_plot=popgrowth_large %&gt;% 
   select(-indicator, -country.name, -iso2c, -region, -income_level) %&gt;% 
   pivot_longer(!country, names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;)
@@ -879,21 +1258,52 @@ large_countries</code></pre>
 ggplot(popgrowth_plot, aes(x=as.numeric(year), y=growth_rate, color=country)) +
   geom_line() +
   theme_bw()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+</div>
+<div
+id="exploring-the-relationships-between-income-level-region-and-population-growth"
+class="section level3">
+<h3>4.4. Exploring the relationships between income level, region, and
+population growth</h3>
+<p>Now, let’s create a tibble that contains the population growth data,
+by also the income level designation for each country. We will then get
+the average annual population growth rate across each of the four income
+levels.</p>
 <pre class="r"><code>popgrowth_income=popdat_countries %&gt;% 
   dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
-  dplyr::filter(is.na(income_level)==F) %&gt;%
-  select(-indicator, -country.name, -iso2c, -region) %&gt;% 
+  dplyr::filter(is.na(income_level)==F) %&gt;% #skip if income level is missing
+  select(-indicator, -country.name, -iso2c, -region) %&gt;% #pare down the data a bit &amp; pivot longer
   pivot_longer(cols=-c(country, income_level), names_to=&quot;year&quot;, values_to=&quot;growth_rate&quot;) %&gt;%
   group_by(income_level, year) %&gt;%
-  summarise(mean_se(growth_rate))</code></pre>
+  summarise(mean_se(growth_rate)) #calculates mean + standard error of the mean.</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;income_level&#39;. You can override using the
 ## `.groups` argument.</code></pre>
+<pre class="r"><code>popgrowth_income</code></pre>
+<pre><code>## # A tibble: 72 × 5
+## # Groups:   income_level [4]
+##    income_level year      y  ymin  ymax
+##    &lt;fct&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Low income   2000   2.96  2.78  3.15
+##  2 Low income   2001   2.91  2.77  3.05
+##  3 Low income   2002   2.88  2.73  3.03
+##  4 Low income   2003   2.85  2.69  3.02
+##  5 Low income   2004   2.85  2.70  3.01
+##  6 Low income   2005   2.87  2.73  3.00
+##  7 Low income   2006   2.88  2.75  3.01
+##  8 Low income   2007   2.88  2.74  3.03
+##  9 Low income   2008   2.85  2.70  3.00
+## 10 Low income   2009   2.78  2.64  2.93
+## # … with 62 more rows</code></pre>
+<p>Let’s plot this. We can draw the line, and then draw a ribbon around
+the line to indicate confidence interval</p>
 <pre class="r"><code>ggplot(popgrowth_income, aes(x=as.numeric(year), y=y, group=income_level)) +
   geom_line(aes(color=income_level)) +
   geom_ribbon(aes(ymin=ymin, ymax=ymax), alpha=0.3, fill=&quot;gray&quot;) +
   theme_bw()</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+We can also create a plot showing how income levels have different
+effects on population growth rates depending on the region of the
+world.</p>
 <pre class="r"><code>popdat_anova=popdat_countries %&gt;% 
   dplyr::filter(indicator==&quot;SP.POP.GROW&quot;) %&gt;%
   select(country, `2017`, region, income_level) %&gt;%
@@ -903,7 +1313,13 @@ ggplot(popdat_anova, aes(x=income_level, y=`2017`)) +
   geom_boxplot(aes(color=income_level)) +
   facet_wrap(~region, nrow=3)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="04.1.tidyverse_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+Lower income countries have higher population growth rate than those
+with high income in some regions (sub-Saharan Africa), while in others
+growth rate is bigger for high earners.</p>
+</div>
+<div id="stats" class="section level3">
+<h3>4.6. Stats</h3>
 <pre class="r"><code>lm.fit=lm(`2017`~region*income_level, data=popdat_anova)
 summary(lm.fit)</code></pre>
 <pre><code>## 
@@ -1049,6 +1465,7 @@ summary(lm.fit)</code></pre>
 ## Residuals           193 118.744  0.6153                      
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
 </div>
 
 
