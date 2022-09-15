@@ -14,7 +14,7 @@
 
 <title>Modules</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -142,15 +142,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -289,33 +285,34 @@ href="02.ObjectTypes.html">2. Types of Objects (vectors, strings,
 matrices, dataframes, lists)</a></h3></li>
 <li><h3 id="importing-and-navigating-data"><a href="03.Data.html">3.
 Importing and Navigating Data</a></h3></li>
-<li><h3 id="formatting-data-for-analysis"><a
-href="04.DataFormat.html">4. Formatting Data for Analysis</a></h3></li>
-<li><h3 id="plotting-in-r">5. Plotting in R:</h3>
+<li><h3 id="plotting-in-r">4. Plotting in R:</h3>
 <ul>
-<li><h3 id="basics-of-plots"><a href="05.Plots_1.html">5.1 Basics of
+<li><h3 id="basics-of-plots"><a href="04.1.Plots_1.html">4.1 Basics of
 Plots</a></h3></li>
-<li><h3 id="intro-to-ggplot2"><a href="05.2_ggplot2_intro.html">5.2
+<li><h3 id="intro-to-ggplot2"><a href="04.2.ggplot2_intro.html">4.2
 Intro to ggplot2</a></h3></li>
 </ul></li>
-<li><h3 id="stats-in-r">6. Stats in R:</h3>
+<li><h3 id="stats-in-r">5. Stats in R:</h3>
 <ul>
 <li><h3 id="linear-models-in-r-including-anova-glm"><a
-href="06.Stats_LinearModels.html">6.1 Linear Models in R (including
+href="05.1.Stats_LinearModels.html">5.1 Linear Models in R (including
 ANOVA, GLM)</a></h3></li>
 </ul></li>
+<li><h3 id="data-wrangling-with-tidyverse-packages"><a
+href="06.tidyverse.html">6. Data Wrangling with Tidyverse
+Packages</a></h3></li>
 <li><h3 id="custom-functions-and-if-else-statements"><a
-href="07.Functions.html">07. Custom Functions (and if-else
+href="07.Functions.html">7. Custom Functions (and if-else
 statements)</a></h3></li>
-<li><h3 id="apply-fuctions-and-loops"><a href="08.Apply.html">08. Apply
+<li><h3 id="apply-fuctions-and-loops"><a href="08.Apply.html">8. Apply
 Fuctions and Loops</a></h3>
 <ul>
 <li><h4 id="apply-loops-example-population-growth-models"><a
-href="08.1.PopGrowth.html">08.1 Apply &amp; Loops example: Population
+href="08.1.PopGrowth.html">8.1 Apply &amp; Loops example: Population
 Growth Models</a></h4></li>
 </ul></li>
 <li><h3 id="batch-processing-example-using-flack-et-al.-2014"><a
-href="09.batch.html">09. Batch Processing (Example using Flack et
+href="09.batch.html">9. Batch Processing (Example using Flack et
 al. 2014)</a></h3></li>
 <li><h3 id="extra-intro-to-ggplot2"><a href="ggplot2.html">Extra: Intro
 to ggplot2</a></h3></li>

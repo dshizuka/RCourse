@@ -5,7 +5,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
@@ -13,14 +13,14 @@ output:
 library(knitr)
 #knitr::opts_chunk$set(out.width="3.5in")
 ```
-##Overview
+## Overview
 Most of you are looking to use R for data analysis, which of course requires learning how to import your data into R. This is maybe the big leap for people who are not used to programming.  
 
 To import data into R, you will create an object that points to a dataset somewhere on your computer. R will then import that data as a **dataframe** object ([see Module 2](02.ObjectTypes.html)). 
 
 ***
 
-##3.1 Importing Data: Overview
+## 1. Importing Data: Overview
 
 <br>
 
@@ -33,7 +33,7 @@ To import data into R, you will create an object that points to a dataset somewh
 >* Save these files into a subfolder called "data" inside your working directory (i.e., the folder where you are keeping all of your course materials)
 >
 
-###3.1.1 File Formats: Use .csv (or .txt)
+### 1.1 File Formats: Use .csv (or .txt)
 
 Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While we have all likely had headaches associated with Excel, it's undeniable that it is still the predominant way to compile our data.  
 
@@ -46,13 +46,13 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 ***
 
-##3.2 Five ways to import data from .csv (or .txt) files
+## 2. Five ways to import data from .csv (or .txt) files
 
 No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
 
 ***
 
-###3.2.1. RStudio Project (recommended)
+### 2.1. RStudio Project (recommended)
 
 ***RStudio Project*** is a convenient way to organize your projects. When you have your folder organized as a **project directory**, this creates a file called "<yourprojectname>.Rproj" in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).
 
@@ -76,7 +76,7 @@ One of the biggest benefits of this method is that the pathname is relative to t
 
 ***
 
-###3.2.2. Entering the full path name
+### 2.2. Entering the full path name
 You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data. 
 
 
@@ -113,7 +113,7 @@ dat=read.csv("data/SampleData.csv")
 
 ***
 
-###3.2.3. Use a url (recommended for data downloadable from the web)
+### 2.3. Use a url (recommended for data downloadable from the web)
 
 Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name. 
 
@@ -130,7 +130,7 @@ Super useful! But **note:** only use this if you know that the url is going to b
 
 ***
 
-###3.2.4. Call 'choose file' prompt. 
+### 2.4. Call 'choose file' prompt. 
 You can also call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not *reproducible*.
 ```{r, eval=FALSE}
 dat=read.csv(file.choose())
@@ -138,7 +138,7 @@ dat=read.csv(file.choose())
 
 ***
 
-###3.2.5. Using RStudio GUI
+### 2.5. Using RStudio GUI
 In RStudio, select `[File]`--`[Import Dataset]`--`[From CSV...]`
 The first time you do this, you may be asked to install the `readr` package. 
 
@@ -153,11 +153,7 @@ The first time you do this, you may be asked to install the `readr` package.
 
 ***
 
-##3.3 Working with imported data
-
-<br>
-
-###3.3.1 Looking at the data
+## 3. Looking at the data
 
 
 Now that you have the data imported as an object called `dat`, let's look at it! You can do this simply by calling the object:
@@ -172,157 +168,193 @@ This data only has 13 rows, so it's manageable. But sometimes you have a much la
 head(dat)
 ```
 
-Sometimes, you also want to double check that your data imported as the correct file type. To do this, you can use the function `class()` to look up the object class:
+You can also use the `str()` function to get the structure of the data frame, including summary stats for numeric variables:
 ```{r}
-class(dat)
+str(dat)
 ```
-
-Good. This is a data frame.
 
 ***
 
-###3.3.2 Subsets and Subtotals
+## 4. Formatting spreadsheets to keep data for analysis
 
-Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.  
-We already covered how to look at specific columns using either the `[]` or `$` operators. For example, let's try using the `$` operator to look at the sex of individuals in the sample data.
+This  part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.
+
+Before I start, I highly recommend this free online resource from datacarpentry.org: ["Data Organization in Spreadsheets for Ecologists"](https://datacarpentry.org/spreadsheet-ecology-lesson/)
+
+One of the reasons that many formatting problems arise while keeping data in spreadsheets is that the common software (e.g., Excel) is actually used for many different purposes. For example, people often use excel to generate templates for forms (e.g., purchasing forms). Best practices for those uses of Excel are completely different from what you should do when using spreadsheets for entering data. 
+
+Similarly, you might use spreadsheets with formatting for purposes other than keeping data for analysis (e.g., using it as a way to track progress on a project). The formatting for that kind of use is different than for storing data. 
+
+
+```{r, echo=FALSE, fig.align="center", fig.cap="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set.", out.width="50%"}
+knitr::include_graphics("images/excel_form.png")
+```
+
+***
+
+### 4.1 Basic structure of a spreadsheet
+
+1. First line (Header) are names of variables. Each variable is one column. Do not use values as column names.
+
+2. Each subject (animal, plant, cell, etc.) should have an ID. This is useful if you have multiple spreadsheet where you have different information about the subject--if you have a common ID, you can link together datasets more easily.
+
+3. Each row should be an observation. If you are observing a subject multiple times (e.g., repeated measures design), each observation should be a separate line, with the measurment time/place/trial/etc. as a separate column. 
+
+4. Don't add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data. 
+
+```{r, echo=FALSE, fig.align="center", fig.cap="Example spreadsheet of data on egg size of American Coots", out.width="100%"}
+knitr::include_graphics("images/eggdata_image.png")
+```
+
+<br>
+
+***
+
+### 4.2 Spreadsheet dos and don'ts!
+
+<br>
+
+#### 1. **Don't** keep multiple tables in one sheet
+This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.
+
+```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"}
+knitr::include_graphics("images/multitable.png")
+```
+
+
+***Solution:*** Just keep one sheet. If you have multiple plots, treatments, etc., make that a column in your data. Example in 4.1.1***
+
+<br>
+
+#### 2. **Don't** include title/metadata/table caption at the top (or bottom) of your data.
+
+*The first row of your dataset should always be your column names (header). Don't add extra information at the top of your dataset. If you need to add extra information about the data, put it in your readme file.
+
+*Similarly, the last line of your dataset should be the last set of observations. Don't include column totals/subtotals, etc. at the end of your dataset. This will cause problems when reading the data into R. 
+
+#### 3. **Don't** use special characters or commas. 
+
+Excel is capable of handling special characters that other software cannot. For example, if you have the 'degree' symbol (C$^\circ$) or 'em dash' (where "--" gets converted to one long dash), these will not be read correctly when you import data in R. Do NOT use these special characters in your data. 
+
+Also, commas cause problems when you are saving data in .csv files because the commas are designated for separating columns. If you like to write notes in your data, just make sure you don't use commas! (e.g., if need be, you could use semi-colons)
+
+
+***Solution:*** Always think about whether your inputs will be read correctly by R or other stats program. Default to non-proprietary formats. 
+
+
+<br>
+
+#### 4. **Don't** use formatting (i.e., highlighting) to convey information or make spreadsheets look pretty by merging cells.
+
+This is a common mistake that comes from using Excel as forms. 
+
+If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.
+
+```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes", out.width="100%"}
+knitr::include_graphics("images/highlighting.png")
+```
+
+<br>
+
+#### 5. **Do** use good 'null values'
+
+* **Always put in 0 if the observed vaule is 0** (i.e., don't skip the cell just because it's 0). If you don't it becomes indistinguishable from unknown or unobserved data.
+
+* **Don't use other numbers (e.g., 999 or -999).** This used to be common practice for some stats software. But this can cause problems because it may be inadvertently used in calculations.
+
+* **Don't use other symbols (-, ., ?).** Again, this used to be common practice for some people, but this can cause problems because R won't know how to interpret it.
+
+* ***Good options include:*** 
+    + **Blank cells.** But only if you are careful to always put 0 when the correct value is 0.
+    + **Consistent, conventional abbreviation (e.g., NA, NULL).** But note that "NA" may be used as abbreviations for other things, like "North America". But if used in a column that is otherwise numeric, R can automatically interpret this as null value.
+
+If you are using consistent null value designations, you can specify these values as null using the `na.string=` argument within the `read.csv()` function. For example,
+
+```{r, eval=F}
+dat=read.csv("data/SampleData.csv", na.string=c("NA", "#N/A"))
+```
+The above code will tell R that cells with either "NA" or "#N/A" should be interpreted as missing data.
+
+<br>
+
+#### 6. **Do** use good column names (variable names)
+
+* Avoid using special characters or spaces in your column names. These will automatically converted to "." when you import to R. Removing spaces or using "_" or "." instead will make your life easier.
+
+* Use relatively short but informative column names. But keep a readme.txt file associated with your data where you store detailed information on how each variable was measured.
+
+
+
+<br>
+
+#### 7. **Avoid** keeping summary data along with raw data (i.e., don't make a "group means" column in your dataset). 
+
+This is more of a suggestion than a rule. When you use formulas within Excel to calculate summary values, those formulas do not carry over when you convert the spreadsheet to .csv. This means that if you need to do any recalculations, or if you realize there are any errors in values, those summary values will become outdated. It is much easier (and better) to calculate summary values within R anyway.
+
+***
+
+><span style="color:purple">***Key rule in reproducible research: Try not to mess with raw data! ***</span>
+>
+>Once you have collected data, it is best to try to keep that raw data ***raw***. If you find coding errors or you need to subset data for your analyses, it is best to do that with R once the data has been imported. This is because data-cleaning in R is reproducible. But once you start messing with raw data, it is way too easy to lose track of what you "fixed" and what you did not. Also, there are times when you later realize that you "fixed" the data incorrectly. If you have done all of that in excel, it is difficult to go back. But if you have done everything in script, everything is reversible. 
+
+***
+
+## 5. Troubleshooting Data Import
+
+Even when you have taken care to follow the above dos and don'ts, you will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 
+
+#### Some common problems:  
+
+* **File won't import**
+    + Are you sure you saved the file as a .csv file? 
+    + Is the path and file name correct?
+    + Is the path and file name inside quotes?
+    
+* **I get a weird column that has a bunch of `NA`**
+    + You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.
+    
+* **I have a weird column at the bottom of my data that is just a bunch of `NA`**
+    + You probably have a cell at the bottom of your spreadsheet with "hidden spaces".
+    + Fix: In excel, do a "Find and Replace" to replace blank space with some character (e.g., a *) and then go and find and erase those characters.
+
+* **Column is supposed to be numeric but it is showing up as factors.**
+    + You probably have a cell value in the column that is non-numeric, e.g., "#N/A" or 'hidden space'
+    + Fix: You can specify what kind of characters should be interpreted as `NA` using the `na.string=` argument (see above).
+
+
+***
+
+
+
+## Group Exercise 1: Troubleshoot data import
+
+Step 1: Import the `SampleData_w_errors.csv` file and look at its data structure:
 
 ```{r, eval=T}
-dat$sex
-```
-So this gives us just the column named "sex" as a character string
-
-You can do the equivalent by using the `[]` operator.
-```{r, eval=F}
-dat[,2]
-dat[,"sex"]
+errdat=read.csv("data/SampleData_w_errors.csv") #assuming your working directory is set to the sample data folder
+errdat
 ```
 
-In contrast, there is no equivalent of the `$` for selecting rows. But we can specify the rows we want to look at using the first element within `[]`:
-```{r, eval=F}
-dat[2,] #get the second row of the dataset
-```
+Step 2: Fix the spreadsheet so that you get the following:
 
-If we want to look at all rows that fulfill some criteria, we can use the `==` operator. For example, let's look at all of the data for males:
-```{r, eval=T}
-dat[dat$sex=="male", ]
-```
-In this case, R interprets this command to pick out rows in the data where the answer to `dat$sex=="male"` is TRUE.  
+* The column called "sex" only has "female" and "male".
+* The column called "size" is numeric
+* The column called "weight" is numeric
+* The column called "X" is removed.
 
-You can use multiple criteria to subset the data. Use the `|` to mean "or" and the `&` operator to mean "and". For example:
-```{r}
-dat[dat$sex=="male"|dat$weight<60,] #give me the data for rows where sex is male OR weight is less than 60. This gives you all but two records. 
-```
-```{r}
-dat[dat$sex=="male"&dat$weight<60,] #give me the data for rows where sex is male AND weight is less than 60. This gives you just one record of the male that is less than 60g. 
-```
-
-If you want to EXCLUDE data for certain rows, you can use the `!=` operator:
-```{r}
-dat[dat$sex!="male",] #this will give you the records for individuals that are NOT male (i.e., females)
-```
-
-####Using the `which()` function:
-
-Another way to subset the data is to use the `which()` function, which is extremely useful. We will be using this function a lot as we go forward.  
-Basically, `which()` allows you to get the element number of a vector that fits certain criteria. For example, these are the row numbers for males in the dataset:
-```{r}
-which(dat$sex=="male")
-```
-So you can use this command to subset the data in a similar way as above:
-```{r}
-dat[which(dat$sex=="male"), ] #don't forget the comma!
-```
-
-
-You can also look at a particular variable within a particular subset. Here are two ways to do the same thing--get the body size of males.
-```{r}
-dat[dat$sex=="male","size"]
-dat$size[dat$sex=="male"]
-```
+See how to fix these errors in R [here](03.e.Fix_Data.html)
 
 ***
 
-###3.3.3 Summary data
+## Group Exercise 2: Improve my egg measurement data
 
-Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let's look at the mean size of males vs. females using the function `mean()`
+* Click on [this link](data/EggMeasurements_example.csv) to download some real data I collected on egg sizes of American Coots (*Fulica americana*) *before* I knew anything about R or programming. 
 
-```{r}
-mean(dat$size[dat$sex=="male"])
-mean(dat$size[dat$sex=="female"])
-```
+* Save the data in the "data" subfolder within your course folder.
 
-A more elegant way to do this is to use either the `tapply()` or `aggregate()` functions.
-For both of these functions, the first argument is the column to apply the calculation to, second argument is the categorical variable (in list format), and the third argument is the function name for the calculation you want to apply. Try these out for calculating the mean body size by sex:
-```{r}
-tapply(dat$size,dat$sex,mean)
-```
+* Try importing the data to R and also look at the spreadsheet in Excel. 
 
-```{r}
-aggregate(dat$size,by=list(Sex=dat$sex),mean)
-```
+* **Come up with as many recommendations as possible on how to improve this excel sheet.**
 
-Note that the tapply() and aggregate() uses different formats as outputs—-`tapply()` returns an array, while `aggregate()` returns a dataframe.  
-You can see this better when you calculate the means while splitting up the data by two different factors, like sex and age:
-```{r}
-tap=tapply(dat$size,list(dat$sex,dat$age),mean)
-agg=aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),mean)
-class(tap)
-class(agg)
-tap
-agg
-```
-You can see that the output of `tapply` is a matrix, and the output of `aggregate()` is a dataframe. So you can use one or other function depending on what you want to do with the output of the calculation you want to do. 
-
-For example, you can use the same set of functions to calculate the sums of sizes for each sex x age combination:
-```{r}
-tapply(dat$size,list(dat$sex,dat$age),sum)
-aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),sum)
-```
-
-***
-
-##3.4 Linking two data sets
-
-There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. 
-	You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. 
-	Let’s start by importing two different sets of data (one of them is the same as what we have been using so far). To get started, we will now import a second dataset called `sex_chromo.csv`, which should already be saved in your "data" subfolder.
-	
-```{r}
-chromo=read.csv("data/sex_chromo.csv")
-```
-
-We now have two dataframes—dat and sex. This second dataframe has information of sex chromosomes that we have identified for each individual using molecular methods. 
-	We now use a match() function to look up which rows correspond to the same individual:
-
-```{r}
-match(dat$Indiv.ID,chromo$Indiv.ID)
-```
-Here, the first value indicates which row in the dataframe chromo corresponds to the first row in dat? Remember that the order of the elements within the parentheses matter. You can confirm this by looking at both dataframes. 
-	You can use this to lookup the sex chromosomes for each individual in the dataframe dat. 
-
-```{r}
-sex.chromo=chromo[match(dat$Indiv.ID,chromo$Indiv.ID),"chromosomes"]
-sex.chromo
-```
-
-You can append this new vector, sex.chromo, to the dataframe dat using the function cbind():
-```{r}
-merged.dat=cbind(dat,sex.chromo)
-merged.dat
-```
-
-Ok, now that I have shown you the hard way to do this, here is the easy way, using the function merge():
-```{r}
-merged.dat2=merge(dat,chromo,by="Indiv.ID")
-merged.dat2
-```
-Note that you have to make sure that the variable names are identical in both dataframes for this to work! 
-
-
-Lastly, try this code to see that (in this hypothetical dataset), the sex chromosomes match up with the gender scored in the field.
-```{r}
-table(merged.dat2$sex,merged.dat2$chromosomes)
-```
-
-***
+See the answers [here](03.e.Fix_Data.html)
 

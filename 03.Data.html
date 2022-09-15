@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Dai Shizuka" />
@@ -14,12 +14,22 @@
 
 <title>Module 3: Working With Data</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -27,12 +37,16 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -45,37 +59,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
 
-</head>
 
-<body>
+
+
 
 <style type = "text/css">
 .main-container {
@@ -83,58 +71,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -145,54 +146,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -206,6 +238,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -241,8 +279,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -252,8 +288,18 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -267,7 +313,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,117 +339,217 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Module 3: Working With Data</h1>
-<h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 09/03/19</em></h4>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 09/15/22</h4>
 
 </div>
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Most of you are looking to use R for data analysis, which of course requires learning how to import your data into R. This is maybe the big leap for people who are not used to programming.</p>
-<p>To import data into R, you will create an object that points to a dataset somewhere on your computer. R will then import that data as a <strong>dataframe</strong> object (<a href="02.ObjectTypes.html">see Module 2</a>).</p>
+<p>Most of you are looking to use R for data analysis, which of course
+requires learning how to import your data into R. This is maybe the big
+leap for people who are not used to programming.</p>
+<p>To import data into R, you will create an object that points to a
+dataset somewhere on your computer. R will then import that data as a
+<strong>dataframe</strong> object (<a href="02.ObjectTypes.html">see
+Module 2</a>).</p>
 <hr />
 </div>
 <div id="importing-data-overview" class="section level2">
-<h2>3.1 Importing Data: Overview</h2>
+<h2>1. Importing Data: Overview</h2>
 <p><br></p>
 <blockquote>
-<p><span style="color:purple"><strong>Do this before you start this section!</strong></span></p>
+<p><span style="color:purple"><strong>Do this before you start this
+section!</strong></span></p>
 <ul>
 <li>Click on the following links to download three files:</li>
 </ul>
 <ol style="list-style-type: decimal">
 <li><a href="data/SampleData.csv">SampleData.csv</a></li>
-<li><a href="data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
+<li><a
+href="data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
 <li><a href="data/sex_chromo.csv">sex_chromo.csv</a></li>
 </ol>
 <ul>
-<li>Save these files into a subfolder called “data” inside your working directory (i.e., the folder where you are keeping all of your course materials)</li>
+<li>Save these files into a subfolder called “data” inside your working
+directory (i.e., the folder where you are keeping all of your course
+materials)</li>
 </ul>
 </blockquote>
 <div id="file-formats-use-.csv-or-.txt" class="section level3">
-<h3>3.1.1 File Formats: Use .csv (or .txt)</h3>
-<p>Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While we have all likely had headaches associated with Excel, it’s undeniable that it is still the predominant way to compile our data.</p>
-<p>R can read several file formats, but the popular excel format (.xlsor .xlsx) is NOT one of them (unless you use a specialized package, e.g., <code>xlsx</code>). Instead, you will most often convert your excel sheet into one of two formats: <strong><em>tab-delimited files (saved as .txt)</em></strong> or <strong><em>comma-separated-values files (.csv)</em></strong>. These are simple text files in which each entry is separated by a tab or comma (respectively). The huge advantage of these formats is that they are non-proprietary file formats that can be read by any text editor. One potential drawback is that you cannot keep any type of formatting (like highlighting of cells on a spread sheet) or special characters.</p>
-<p>If you use Excel or any other spreadsheet for data storage, you can easily convert those into one of these formats using <code>[Save as...]</code></p>
-<p><strong><em>In this class, I will be using .csv files for almost all data importing tasks.</em></strong></p>
+<h3>1.1 File Formats: Use .csv (or .txt)</h3>
+<p>Many of us manage data by entering them into a spreadsheet using
+common software like Microsoft Excel. While we have all likely had
+headaches associated with Excel, it’s undeniable that it is still the
+predominant way to compile our data.</p>
+<p>R can read several file formats, but the popular excel format (.xlsor
+.xlsx) is NOT one of them (unless you use a specialized package, e.g.,
+<code>xlsx</code>). Instead, you will most often convert your excel
+sheet into one of two formats: <strong><em>tab-delimited files (saved as
+.txt)</em></strong> or <strong><em>comma-separated-values files
+(.csv)</em></strong>. These are simple text files in which each entry is
+separated by a tab or comma (respectively). The huge advantage of these
+formats is that they are non-proprietary file formats that can be read
+by any text editor. One potential drawback is that you cannot keep any
+type of formatting (like highlighting of cells on a spread sheet) or
+special characters.</p>
+<p>If you use Excel or any other spreadsheet for data storage, you can
+easily convert those into one of these formats using
+<code>[Save as...]</code></p>
+<p><strong><em>In this class, I will be using .csv files for almost all
+data importing tasks.</em></strong></p>
 <hr />
 </div>
 </div>
-<div id="five-ways-to-import-data-from-.csv-or-.txt-files" class="section level2">
-<h2>3.2 Five ways to import data from .csv (or .txt) files</h2>
-<p>No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called <code>dat</code>. (tip: I would not use “data” as an object name because <code>data()</code> is a function name). Try out each of the following methods for importing a sample data set called “SampleData_1.csv”.</p>
+<div id="five-ways-to-import-data-from-.csv-or-.txt-files"
+class="section level2">
+<h2>2. Five ways to import data from .csv (or .txt) files</h2>
+<p>No matter how you import the data, the final goal is the same: assign
+the imported data as an object. Here, we will assign the data into an
+object called <code>dat</code>. (tip: I would not use “data” as an
+object name because <code>data()</code> is a function name). Try out
+each of the following methods for importing a sample data set called
+“SampleData_1.csv”.</p>
 <hr />
 <div id="rstudio-project-recommended" class="section level3">
-<h3>3.2.1. RStudio Project (recommended)</h3>
-<p><strong><em>RStudio Project</em></strong> is a convenient way to organize your projects. When you have your folder organized as a <strong>project directory</strong>, this creates a file called “<yourprojectname>.Rproj” in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).</p>
-<p>Here is an image of how I might organize my course folder: <img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
-<p>In this case, my data files are inside a subfolder called “data”, so the pathname is <code>data/SampleData.csv</code> Using this, I can read in the .csv file using a function called <code>read.csv()</code>, with the path name. <strong><em>Note that the path name needs to be inside quotes</em></strong>.</p>
+<h3>2.1. RStudio Project (recommended)</h3>
+<p><strong><em>RStudio Project</em></strong> is a convenient way to
+organize your projects. When you have your folder organized as a
+<strong>project directory</strong>, this creates a file called
+“<yourprojectname>.Rproj” in that folder. Then, if you open that file,
+it automatically sets that folder as the working directory. This makes
+the job of finding and importing data much easier than it would be
+otherwise (i.e., step 2).</p>
+<p>Here is an image of how I might organize my course folder:
+<img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>In this case, my data files are inside a subfolder called “data”, so
+the pathname is <code>data/SampleData.csv</code> Using this, I can read
+in the .csv file using a function called <code>read.csv()</code>, with
+the path name. <strong><em>Note that the path name needs to be inside
+quotes</em></strong>.</p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
-<p>One of the biggest benefits of this method is that the pathname is relative to the folder that the .Rproj file is in, which means that as long as the folder is organized in the same way, you can just transfer all the codes to someone else’s computer and it will still work. In contrast, if you are using the full path name, you will always have to edit this for the computer that you are running the code on. This means that, if you simply share the entire folder including the .Rproj file, your collaborator can run your code seamlessly without having to alter the pathname or resetting the working directory.</p>
+<p>One of the biggest benefits of this method is that the pathname is
+relative to the folder that the .Rproj file is in, which means that as
+long as the folder is organized in the same way, you can just transfer
+all the codes to someone else’s computer and it will still work. In
+contrast, if you are using the full path name, you will always have to
+edit this for the computer that you are running the code on. This means
+that, if you simply share the entire folder including the .Rproj file,
+your collaborator can run your code seamlessly without having to alter
+the pathname or resetting the working directory.</p>
 <hr />
 </div>
 <div id="entering-the-full-path-name" class="section level3">
-<h3>3.2.2. Entering the full path name</h3>
-<p>You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data.</p>
-<p><strong><em>Finding the path to a file</em></strong> Here is how to get the path to the .csv file on your computer.</p>
+<h3>2.2. Entering the full path name</h3>
+<p>You can also use the full path name to import the data. This might be
+helpful if you are not using Rstudio Projects and/or saving your script
+in a folder separate from your data.</p>
+<p><strong><em>Finding the path to a file</em></strong> Here is how to
+get the path to the .csv file on your computer.</p>
 <ul>
-<li><strong><em>For Windows</em></strong>, you can get the path name of the file or folder by right-clicking it and click “Copy as Path”</li>
-<li><strong><em>For Mac (or Windows)</em></strong>, you can look for the file/folder in Finder, and then drag and drop the icon into the “Go to file/function” bar at the top of the RStudio window.</li>
+<li><strong><em>For Windows</em></strong>, you can get the path name of
+the file or folder by right-clicking it and click “Copy as Path”</li>
+<li><strong><em>For Mac (or Windows)</em></strong>, you can look for the
+file/folder in Finder, and then drag and drop the icon into the “Go to
+file/function” bar at the top of the RStudio window.</li>
 </ul>
-<p>As an example, say I made folder on my <strong>desktop</strong> called <strong>Rcourse</strong> and inside that folder, I made another folder called <strong>Week_2</strong>. If my data folder is inside that, this would be the path: <code>/Users/dshizuka/Desktop/Rcourse/Week_2/data</code><br />
-In turn, the path to a file inside that folder might be: <code>/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv</code></p>
+<p>As an example, say I made folder on my <strong>desktop</strong>
+called <strong>Rcourse</strong> and inside that folder, I made another
+folder called <strong>Week_2</strong>. If my data folder is inside that,
+this would be the path:
+<code>/Users/dshizuka/Desktop/Rcourse/Week_2/data</code><br />
+In turn, the path to a file inside that folder might be:
+<code>/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv</code></p>
 <p>So in this case, your line of code to import the data would be:</p>
 <pre class="r"><code>dat=read.csv(&quot;/Users/dshizuka/Desktop/Rcourse/Week_2/data/SampleData.csv&quot;)</code></pre>
-<p><strong><em>Alternatively</em></strong>, you can use <code>setwd()</code> to set your working directory, and then enter a simpler path name. This essentially breaks up the process into two lines:</p>
+<p><strong><em>Alternatively</em></strong>, you can use
+<code>setwd()</code> to set your working directory, and then enter a
+simpler path name. This essentially breaks up the process into two
+lines:</p>
 <pre class="r"><code>setwd(&quot;/Users/dshizuka/Desktop/Rcourse/Week_2&quot;)
 dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
-<p><strong><em>Remember: You will have to change the path inside the lines of code here to be where the file resides in your computer.</em></strong></p>
+<p><strong><em>Remember: You will have to change the path inside the
+lines of code here to be where the file resides in your
+computer.</em></strong></p>
 <blockquote>
-<p><span style="color:purple"><strong>Difference between options 1 and 2:</strong></span></p>
-<p>Options 1 and 2 (using RStudio Project and Entering Full Path Name) are essentially the same thing in that you are telling R how to find the file on your computer that you want to import. It’s just that RStudio Projects makes this much more straightforward and transferable because the pathname becomes relative to your working directory automatically.</p>
+<p><span style="color:purple"><strong>Difference between options 1 and
+2:</strong></span></p>
+<p>Options 1 and 2 (using RStudio Project and Entering Full Path Name)
+are essentially the same thing in that you are telling R how to find the
+file on your computer that you want to import. It’s just that RStudio
+Projects makes this much more straightforward and transferable because
+the pathname becomes relative to your working directory
+automatically.</p>
 </blockquote>
 <hr />
 </div>
-<div id="use-a-url-recommended-for-data-downloadable-from-the-web" class="section level3">
-<h3>3.2.3. Use a url (recommended for data downloadable from the web)</h3>
-<p>Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name.</p>
-<p>For example, if you right-click on the link up above to download the “SampleData.csv” file (under 3.1: Importing Data), you can “copy link address” and get this url: <code>https://dshizuka.github.io/RCourse/data/SampleData.csv</code></p>
-<p>So, you can simply download that file using this url instead of the path name:</p>
+<div id="use-a-url-recommended-for-data-downloadable-from-the-web"
+class="section level3">
+<h3>2.3. Use a url (recommended for data downloadable from the web)</h3>
+<p>Sometimes, you will be downloading a dataset that is accessible
+online, from a static website, a github page, a data repository (like
+Dryad or Figshare), or even a dropbox folder. In fact, if you can get a
+url of a data file, you can import it directly into R without having to
+first downloading it to your computer, saving it and then getting a path
+name.</p>
+<p>For example, if you right-click on the link up above to download the
+“SampleData.csv” file (under 3.1: Importing Data), you can “copy link
+address” and get this url:
+<code>https://dshizuka.github.io/RCourse/data/SampleData.csv</code></p>
+<p>So, you can simply download that file using this url instead of the
+path name:</p>
 <pre class="r"><code>dat=read.csv(&quot;https://dshizuka.github.io/RCourse/data/SampleData.csv&quot;)</code></pre>
-<p>Super useful! But <strong>note:</strong> only use this if you know that the url is going to be stable for a long time! If you need to be able to reproduce your analysis in the long term, it may pay off to download the data and save it on your computer and use Option 1.</p>
+<p>Super useful! But <strong>note:</strong> only use this if you know
+that the url is going to be stable for a long time! If you need to be
+able to reproduce your analysis in the long term, it may pay off to
+download the data and save it on your computer and use Option 1.</p>
 <hr />
 </div>
 <div id="call-choose-file-prompt." class="section level3">
-<h3>3.2.4. Call ‘choose file’ prompt.</h3>
-<p>You can also call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not <em>reproducible</em>.</p>
+<h3>2.4. Call ‘choose file’ prompt.</h3>
+<p>You can also call a prompt that will let you choose the file. You can
+then find and choose the file you want to import. This is a convenient
+and quick way to import data. However, it is limiting because it takes
+time to click around to find the file, and more importantly, this step
+is not <em>reproducible</em>.</p>
 <pre class="r"><code>dat=read.csv(file.choose())</code></pre>
 <hr />
 </div>
 <div id="using-rstudio-gui" class="section level3">
-<h3>3.2.5. Using RStudio GUI</h3>
-<p>In RStudio, select <code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code> The first time you do this, you may be asked to install the <code>readr</code> package.</p>
-<p><strong>Note:</strong> I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).</p>
+<h3>2.5. Using RStudio GUI</h3>
+<p>In RStudio, select
+<code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code>
+The first time you do this, you may be asked to install the
+<code>readr</code> package.</p>
+<p><strong>Note:</strong> I actually do NOT recommend using this method
+for a variety of reasons (irreproducibility, takes time, saves the
+object as a special format).</p>
 <hr />
 <blockquote>
-<p><span style="color:purple"><strong>Importing from .txt files:</strong></span></p>
-<p>A more generic function is <code>read.table()</code>. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files <code>dat=read.table(file.choose(), sep=&quot;,&quot;)</code>, or tab-delimited files <code>dat=read.table(file.choose(), sep=&quot;\t&quot;)</code>. So the <code>read.table()</code> function is more flexible in many ways.</p>
+<p><span style="color:purple"><strong>Importing from .txt
+files:</strong></span></p>
+<p>A more generic function is <code>read.table()</code>. This function
+allows you to read any kind of text file (including .csv files) while
+specifying the data is delimited. So, for example, you can use this
+function to import comma-separated files
+<code>dat=read.table(file.choose(), sep=",")</code>, or tab-delimited
+files <code>dat=read.table(file.choose(), sep="\t")</code>. So the
+<code>read.table()</code> function is more flexible in many ways.</p>
 </blockquote>
 <hr />
 </div>
 </div>
-<div id="working-with-imported-data" class="section level2">
-<h2>3.3 Working with imported data</h2>
-<p><br></p>
-<div id="looking-at-the-data" class="section level3">
-<h3>3.3.1 Looking at the data</h3>
-<p>Now that you have the data imported as an object called <code>dat</code>, let’s look at it! You can do this simply by calling the object:</p>
+<div id="looking-at-the-data" class="section level2">
+<h2>3. Looking at the data</h2>
+<p>Now that you have the data imported as an object called
+<code>dat</code>, let’s look at it! You can do this simply by calling
+the object:</p>
 <pre class="r"><code>dat</code></pre>
 <pre><code>##    Indiv.ID    sex      age size weight
 ## 1     20-01   male    adult 29.5   66.5
@@ -419,7 +565,11 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 ## 11    20-11   male    adult 25.5   62.0
 ## 12    20-12 female    adult 27.0   59.0
 ## 13    20-13 female    adult 26.5   60.0</code></pre>
-<p>This data only has 13 rows, so it’s manageable. But sometimes you have a much larger dataset, and you don’t really want to see all of it, but you want to check that the correct data was imported. In that case, you can use a function called <code>head()</code> which will show you just the first 6 lines of an object.</p>
+<p>This data only has 13 rows, so it’s manageable. But sometimes you
+have a much larger dataset, and you don’t really want to see all of it,
+but you want to check that the correct data was imported. In that case,
+you can use a function called <code>head()</code> which will show you
+just the first 6 lines of an object.</p>
 <pre class="r"><code>head(dat)</code></pre>
 <pre><code>##   Indiv.ID    sex      age size weight
 ## 1    20-01   male    adult 29.5   66.5
@@ -428,216 +578,308 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 ## 4    20-04 female    adult 25.0   55.5
 ## 5    20-05 female juvenile 25.0   62.0
 ## 6    20-06   male juvenile 28.0   61.0</code></pre>
-<p>Sometimes, you also want to double check that your data imported as the correct file type. To do this, you can use the function <code>class()</code> to look up the object class:</p>
-<pre class="r"><code>class(dat)</code></pre>
-<pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<p>Good. This is a data frame.</p>
+<p>You can also use the <code>str()</code> function to get the structure
+of the data frame, including summary stats for numeric variables:</p>
+<pre class="r"><code>str(dat)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    13 obs. of  5 variables:
+##  $ Indiv.ID: chr  &quot;20-01&quot; &quot;20-02&quot; &quot;20-03&quot; &quot;20-04&quot; ...
+##  $ sex     : chr  &quot;male&quot; &quot;male&quot; &quot;female&quot; &quot;female&quot; ...
+##  $ age     : chr  &quot;adult&quot; &quot;juvenile&quot; &quot;adult&quot; &quot;adult&quot; ...
+##  $ size    : num  29.5 28 26 25 25 28 26 28.5 27.5 26 ...
+##  $ weight  : num  66.5 58.5 57 55.5 62 61 58 65 60 59 ...</code></pre>
 <hr />
 </div>
-<div id="subsets-and-subtotals" class="section level3">
-<h3>3.3.2 Subsets and Subtotals</h3>
-<p>Many times, you will want to just look at subsets of the data: i.e., certain columns or rows that satisfy some condition.<br />
-We already covered how to look at specific columns using either the <code>[]</code> or <code>$</code> operators. For example, let’s try using the <code>$</code> operator to look at the sex of individuals in the sample data.</p>
-<pre class="r"><code>dat$sex</code></pre>
-<pre><code>##  [1] male   male   female female female male   female male   male   female
-## [11] male   female female
-## Levels: female male</code></pre>
-<p>So this gives us just the column named “sex” as a character string</p>
-<p>You can do the equivalent by using the <code>[]</code> operator.</p>
-<pre class="r"><code>dat[,2]
-dat[,&quot;sex&quot;]</code></pre>
-<p>In contrast, there is no equivalent of the <code>$</code> for selecting rows. But we can specify the rows we want to look at using the first element within <code>[]</code>:</p>
-<pre class="r"><code>dat[2,] #get the second row of the dataset</code></pre>
-<p>If we want to look at all rows that fulfill some criteria, we can use the <code>==</code> operator. For example, let’s look at all of the data for males:</p>
-<pre class="r"><code>dat[dat$sex==&quot;male&quot;, ]</code></pre>
-<pre><code>##    Indiv.ID  sex      age size weight
-## 1     20-01 male    adult 29.5   66.5
-## 2     20-02 male juvenile 28.0   58.5
-## 6     20-06 male juvenile 28.0   61.0
-## 8     20-08 male    adult 28.5   65.0
-## 9     20-09 male juvenile 27.5   60.0
-## 11    20-11 male    adult 25.5   62.0</code></pre>
-<p>In this case, R interprets this command to pick out rows in the data where the answer to <code>dat$sex==&quot;male&quot;</code> is TRUE.</p>
-<p>You can use multiple criteria to subset the data. Use the <code>|</code> to mean “or” and the <code>&amp;</code> operator to mean “and”. For example:</p>
-<pre class="r"><code>dat[dat$sex==&quot;male&quot;|dat$weight&lt;60,] #give me the data for rows where sex is male OR weight is less than 60. This gives you all but two records. </code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight
-## 1     20-01   male    adult 29.5   66.5
-## 2     20-02   male juvenile 28.0   58.5
-## 3     20-03 female    adult 26.0   57.0
-## 4     20-04 female    adult 25.0   55.5
-## 6     20-06   male juvenile 28.0   61.0
-## 7     20-07 female    adult 26.0   58.0
-## 8     20-08   male    adult 28.5   65.0
-## 9     20-09   male juvenile 27.5   60.0
-## 10    20-10 female juvenile 26.0   59.0
-## 11    20-11   male    adult 25.5   62.0
-## 12    20-12 female    adult 27.0   59.0</code></pre>
-<pre class="r"><code>dat[dat$sex==&quot;male&quot;&amp;dat$weight&lt;60,] #give me the data for rows where sex is male AND weight is less than 60. This gives you just one record of the male that is less than 60g. </code></pre>
-<pre><code>##   Indiv.ID  sex      age size weight
-## 2    20-02 male juvenile   28   58.5</code></pre>
-<p>If you want to EXCLUDE data for certain rows, you can use the <code>!=</code> operator:</p>
-<pre class="r"><code>dat[dat$sex!=&quot;male&quot;,] #this will give you the records for individuals that are NOT male (i.e., females)</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight
-## 3     20-03 female    adult 26.0   57.0
-## 4     20-04 female    adult 25.0   55.5
-## 5     20-05 female juvenile 25.0   62.0
-## 7     20-07 female    adult 26.0   58.0
-## 10    20-10 female juvenile 26.0   59.0
-## 12    20-12 female    adult 27.0   59.0
-## 13    20-13 female    adult 26.5   60.0</code></pre>
-<div id="using-the-which-function" class="section level4">
-<h4>Using the <code>which()</code> function:</h4>
-<p>Another way to subset the data is to use the <code>which()</code> function, which is extremely useful. We will be using this function a lot as we go forward.<br />
-Basically, <code>which()</code> allows you to get the element number of a vector that fits certain criteria. For example, these are the row numbers for males in the dataset:</p>
-<pre class="r"><code>which(dat$sex==&quot;male&quot;)</code></pre>
-<pre><code>## [1]  1  2  6  8  9 11</code></pre>
-<p>So you can use this command to subset the data in a similar way as above:</p>
-<pre class="r"><code>dat[which(dat$sex==&quot;male&quot;), ] #don&#39;t forget the comma!</code></pre>
-<pre><code>##    Indiv.ID  sex      age size weight
-## 1     20-01 male    adult 29.5   66.5
-## 2     20-02 male juvenile 28.0   58.5
-## 6     20-06 male juvenile 28.0   61.0
-## 8     20-08 male    adult 28.5   65.0
-## 9     20-09 male juvenile 27.5   60.0
-## 11    20-11 male    adult 25.5   62.0</code></pre>
-<p>You can also look at a particular variable within a particular subset. Here are two ways to do the same thing–get the body size of males.</p>
-<pre class="r"><code>dat[dat$sex==&quot;male&quot;,&quot;size&quot;]</code></pre>
-<pre><code>## [1] 29.5 28.0 28.0 28.5 27.5 25.5</code></pre>
-<pre class="r"><code>dat$size[dat$sex==&quot;male&quot;]</code></pre>
-<pre><code>## [1] 29.5 28.0 28.0 28.5 27.5 25.5</code></pre>
+<div id="formatting-spreadsheets-to-keep-data-for-analysis"
+class="section level2">
+<h2>4. Formatting spreadsheets to keep data for analysis</h2>
+<p>This part is not necessarily about R. It is about managing your Excel
+sheet in a way that facilitates data analysis outside of Excel.</p>
+<p>Before I start, I highly recommend this free online resource from
+datacarpentry.org: <a
+href="https://datacarpentry.org/spreadsheet-ecology-lesson/">“Data
+Organization in Spreadsheets for Ecologists”</a></p>
+<p>One of the reasons that many formatting problems arise while keeping
+data in spreadsheets is that the common software (e.g., Excel) is
+actually used for many different purposes. For example, people often use
+excel to generate templates for forms (e.g., purchasing forms). Best
+practices for those uses of Excel are completely different from what you
+should do when using spreadsheets for entering data.</p>
+<p>Similarly, you might use spreadsheets with formatting for purposes
+other than keeping data for analysis (e.g., using it as a way to track
+progress on a project). The formatting for that kind of use is different
+than for storing data.</p>
+<div class="figure" style="text-align: center">
+<img src="images/excel_form.png" alt="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set." width="50%" />
+<p class="caption">
+Spreadsheets are used for many different purposes, which explains many
+common formatting mistakes in data. This is a <em>form</em> made in
+Excel. NOT a good example of a data set.
+</p>
+</div>
+<hr />
+<div id="basic-structure-of-a-spreadsheet" class="section level3">
+<h3>4.1 Basic structure of a spreadsheet</h3>
+<ol style="list-style-type: decimal">
+<li><p>First line (Header) are names of variables. Each variable is one
+column. Do not use values as column names.</p></li>
+<li><p>Each subject (animal, plant, cell, etc.) should have an ID. This
+is useful if you have multiple spreadsheet where you have different
+information about the subject–if you have a common ID, you can link
+together datasets more easily.</p></li>
+<li><p>Each row should be an observation. If you are observing a subject
+multiple times (e.g., repeated measures design), each observation should
+be a separate line, with the measurment time/place/trial/etc. as a
+separate column.</p></li>
+<li><p>Don’t add totals on the last line of the data. Also, avoid
+calculating group averages, etc. to your data.</p></li>
+</ol>
+<div class="figure" style="text-align: center">
+<img src="images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
+<p class="caption">
+Example spreadsheet of data on egg size of American Coots
+</p>
+</div>
+<p><br></p>
 <hr />
 </div>
+<div id="spreadsheet-dos-and-donts" class="section level3">
+<h3>4.2 Spreadsheet dos and don’ts!</h3>
+<p><br></p>
+<div id="dont-keep-multiple-tables-in-one-sheet" class="section level4">
+<h4>1. <strong>Don’t</strong> keep multiple tables in one sheet</h4>
+<p>This is one common way people have used excel sheets when your data
+comes from multiple sources (e.g., multiple plots). It also makes you
+feel like you have maximum information in the sheet. But in reality,
+this makes it impossible to do any global analysis. And R cannot read in
+this type of spreadsheet.</p>
+<div class="figure" style="text-align: center">
+<img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="482" />
+<p class="caption">
+example from <a
+href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"
+class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
+</p>
 </div>
-<div id="summary-data" class="section level3">
-<h3>3.3.3 Summary data</h3>
-<p>Now that you know how to select variables and subset data you can, use this to calculate summary statistics. For example, let’s look at the mean size of males vs. females using the function <code>mean()</code></p>
-<pre class="r"><code>mean(dat$size[dat$sex==&quot;male&quot;])</code></pre>
-<pre><code>## [1] 27.83333</code></pre>
-<pre class="r"><code>mean(dat$size[dat$sex==&quot;female&quot;])</code></pre>
-<pre><code>## [1] 25.92857</code></pre>
-<p>A more elegant way to do this is to use either the <code>tapply()</code> or <code>aggregate()</code> functions. For both of these functions, the first argument is the column to apply the calculation to, second argument is the categorical variable (in list format), and the third argument is the function name for the calculation you want to apply. Try these out for calculating the mean body size by sex:</p>
-<pre class="r"><code>tapply(dat$size,dat$sex,mean)</code></pre>
-<pre><code>##   female     male 
-## 25.92857 27.83333</code></pre>
-<pre class="r"><code>aggregate(dat$size,by=list(Sex=dat$sex),mean)</code></pre>
-<pre><code>##      Sex        x
-## 1 female 25.92857
-## 2   male 27.83333</code></pre>
-<p>Note that the tapply() and aggregate() uses different formats as outputs—-<code>tapply()</code> returns an array, while <code>aggregate()</code> returns a dataframe.<br />
-You can see this better when you calculate the means while splitting up the data by two different factors, like sex and age:</p>
-<pre class="r"><code>tap=tapply(dat$size,list(dat$sex,dat$age),mean)
-agg=aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),mean)
-class(tap)</code></pre>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
-<pre class="r"><code>class(agg)</code></pre>
-<pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<pre class="r"><code>tap</code></pre>
-<pre><code>##           adult juvenile
-## female 26.10000 25.50000
-## male   27.83333 27.83333</code></pre>
-<pre class="r"><code>agg</code></pre>
-<pre><code>##      Sex      Age        x
-## 1 female    adult 26.10000
-## 2   male    adult 27.83333
-## 3 female juvenile 25.50000
-## 4   male juvenile 27.83333</code></pre>
-<p>You can see that the output of <code>tapply</code> is a matrix, and the output of <code>aggregate()</code> is a dataframe. So you can use one or other function depending on what you want to do with the output of the calculation you want to do.</p>
-<p>For example, you can use the same set of functions to calculate the sums of sizes for each sex x age combination:</p>
-<pre class="r"><code>tapply(dat$size,list(dat$sex,dat$age),sum)</code></pre>
-<pre><code>##        adult juvenile
-## female 130.5     51.0
-## male    83.5     83.5</code></pre>
-<pre class="r"><code>aggregate(dat$size,by=list(Sex=dat$sex, Age=dat$age),sum)</code></pre>
-<pre><code>##      Sex      Age     x
-## 1 female    adult 130.5
-## 2   male    adult  83.5
-## 3 female juvenile  51.0
-## 4   male juvenile  83.5</code></pre>
-<hr />
+<p><strong><em>Solution:</em></strong> Just keep one sheet. If you have
+multiple plots, treatments, etc., make that a column in your data.
+Example in 4.1.1***</p>
+<p><br></p>
 </div>
+<div
+id="dont-include-titlemetadatatable-caption-at-the-top-or-bottom-of-your-data."
+class="section level4">
+<h4>2. <strong>Don’t</strong> include title/metadata/table caption at
+the top (or bottom) of your data.</h4>
+<p>*The first row of your dataset should always be your column names
+(header). Don’t add extra information at the top of your dataset. If you
+need to add extra information about the data, put it in your readme
+file.</p>
+<p>*Similarly, the last line of your dataset should be the last set of
+observations. Don’t include column totals/subtotals, etc. at the end of
+your dataset. This will cause problems when reading the data into R.</p>
 </div>
-<div id="linking-two-data-sets" class="section level2">
-<h2>3.4 Linking two data sets</h2>
-<p>There are a many instances in which you have two different datasets for the same subjects. For example, I might have one dataset from capturing and measuring a bunch of individual birds. At that point, I take a blood or tissue sample from each individual and I might later use loci linked to sex chromosomes to confirm sex the individual is (many birds are monomorphic and it can be difficult to tell the sexes apart). I now have two different spreadsheets containing different pieces of information about the same subjects, and I might want to combine this information. You may have done something like this in the past using “lookup functions” in excel or database software (e.g., Microsoft Access, FileMaker, etc.). Now we will learn how to do this in R. Let’s start by importing two different sets of data (one of them is the same as what we have been using so far). To get started, we will now import a second dataset called <code>sex_chromo.csv</code>, which should already be saved in your “data” subfolder.</p>
-<pre class="r"><code>chromo=read.csv(&quot;data/sex_chromo.csv&quot;)</code></pre>
-<p>We now have two dataframes—dat and sex. This second dataframe has information of sex chromosomes that we have identified for each individual using molecular methods. We now use a match() function to look up which rows correspond to the same individual:</p>
-<pre class="r"><code>match(dat$Indiv.ID,chromo$Indiv.ID)</code></pre>
-<pre><code>##  [1]  8  9  1  2  3 10  4 11 12  5 13  6  7</code></pre>
-<p>Here, the first value indicates which row in the dataframe chromo corresponds to the first row in dat? Remember that the order of the elements within the parentheses matter. You can confirm this by looking at both dataframes. You can use this to lookup the sex chromosomes for each individual in the dataframe dat.</p>
-<pre class="r"><code>sex.chromo=chromo[match(dat$Indiv.ID,chromo$Indiv.ID),&quot;chromosomes&quot;]
-sex.chromo</code></pre>
-<pre><code>##  [1] XY XY XX XX XX XY XX XY XY XX XY XX XX
-## Levels: XX XY</code></pre>
-<p>You can append this new vector, sex.chromo, to the dataframe dat using the function cbind():</p>
-<pre class="r"><code>merged.dat=cbind(dat,sex.chromo)
-merged.dat</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight sex.chromo
-## 1     20-01   male    adult 29.5   66.5         XY
-## 2     20-02   male juvenile 28.0   58.5         XY
-## 3     20-03 female    adult 26.0   57.0         XX
-## 4     20-04 female    adult 25.0   55.5         XX
-## 5     20-05 female juvenile 25.0   62.0         XX
-## 6     20-06   male juvenile 28.0   61.0         XY
-## 7     20-07 female    adult 26.0   58.0         XX
-## 8     20-08   male    adult 28.5   65.0         XY
-## 9     20-09   male juvenile 27.5   60.0         XY
-## 10    20-10 female juvenile 26.0   59.0         XX
-## 11    20-11   male    adult 25.5   62.0         XY
-## 12    20-12 female    adult 27.0   59.0         XX
-## 13    20-13 female    adult 26.5   60.0         XX</code></pre>
-<p>Ok, now that I have shown you the hard way to do this, here is the easy way, using the function merge():</p>
-<pre class="r"><code>merged.dat2=merge(dat,chromo,by=&quot;Indiv.ID&quot;)
-merged.dat2</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight chromosomes
-## 1     20-01   male    adult 29.5   66.5          XY
-## 2     20-02   male juvenile 28.0   58.5          XY
-## 3     20-03 female    adult 26.0   57.0          XX
-## 4     20-04 female    adult 25.0   55.5          XX
-## 5     20-05 female juvenile 25.0   62.0          XX
-## 6     20-06   male juvenile 28.0   61.0          XY
-## 7     20-07 female    adult 26.0   58.0          XX
-## 8     20-08   male    adult 28.5   65.0          XY
-## 9     20-09   male juvenile 27.5   60.0          XY
-## 10    20-10 female juvenile 26.0   59.0          XX
-## 11    20-11   male    adult 25.5   62.0          XY
-## 12    20-12 female    adult 27.0   59.0          XX
-## 13    20-13 female    adult 26.5   60.0          XX</code></pre>
-<p>Note that you have to make sure that the variable names are identical in both dataframes for this to work!</p>
-<p>Lastly, try this code to see that (in this hypothetical dataset), the sex chromosomes match up with the gender scored in the field.</p>
-<pre class="r"><code>table(merged.dat2$sex,merged.dat2$chromosomes)</code></pre>
-<pre><code>##         
-##          XX XY
-##   female  7  0
-##   male    0  6</code></pre>
+<div id="dont-use-special-characters-or-commas." class="section level4">
+<h4>3. <strong>Don’t</strong> use special characters or commas.</h4>
+<p>Excel is capable of handling special characters that other software
+cannot. For example, if you have the ‘degree’ symbol (C<span
+class="math inline">\(^\circ\)</span>) or ‘em dash’ (where “–” gets
+converted to one long dash), these will not be read correctly when you
+import data in R. Do NOT use these special characters in your data.</p>
+<p>Also, commas cause problems when you are saving data in .csv files
+because the commas are designated for separating columns. If you like to
+write notes in your data, just make sure you don’t use commas! (e.g., if
+need be, you could use semi-colons)</p>
+<p><strong><em>Solution:</em></strong> Always think about whether your
+inputs will be read correctly by R or other stats program. Default to
+non-proprietary formats.</p>
+<p><br></p>
 </div>
-<div id="troubleshootingcleaning-data-in-r" class="section level2">
-<h2>3.5 Troubleshooting/Cleaning Data in R</h2>
-<p>You will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs.</p>
-<p>Some common problems:</p>
+<div
+id="dont-use-formatting-i.e.-highlighting-to-convey-information-or-make-spreadsheets-look-pretty-by-merging-cells."
+class="section level4">
+<h4>4. <strong>Don’t</strong> use formatting (i.e., highlighting) to
+convey information or make spreadsheets look pretty by merging
+cells.</h4>
+<p>This is a common mistake that comes from using Excel as forms.</p>
+<p>If you are using highlighting to indicate some information, it you
+can almost always just add another column to include that information as
+another variable (see example figure). Merged cells will make R unable
+to import the file.</p>
+<div class="figure" style="text-align: center">
+<img src="images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
+<p class="caption">
+example from <a
+href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"
+class="uri">https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes</a>
+</p>
+</div>
+<p><br></p>
+</div>
+<div id="do-use-good-null-values" class="section level4">
+<h4>5. <strong>Do</strong> use good ‘null values’</h4>
 <ul>
-<li><strong>It won’t import</strong>
+<li><p><strong>Always put in 0 if the observed vaule is 0</strong>
+(i.e., don’t skip the cell just because it’s 0). If you don’t it becomes
+indistinguishable from unknown or unobserved data.</p></li>
+<li><p><strong>Don’t use other numbers (e.g., 999 or -999).</strong>
+This used to be common practice for some stats software. But this can
+cause problems because it may be inadvertently used in
+calculations.</p></li>
+<li><p><strong>Don’t use other symbols (-, ., ?).</strong> Again, this
+used to be common practice for some people, but this can cause problems
+because R won’t know how to interpret it.</p></li>
+<li><p><strong><em>Good options include:</em></strong></p>
+<ul>
+<li><strong>Blank cells.</strong> But only if you are careful to always
+put 0 when the correct value is 0.</li>
+<li><strong>Consistent, conventional abbreviation (e.g., NA,
+NULL).</strong> But note that “NA” may be used as abbreviations for
+other things, like “North America”. But if used in a column that is
+otherwise numeric, R can automatically interpret this as null
+value.</li>
+</ul></li>
+</ul>
+<p>If you are using consistent null value designations, you can specify
+these values as null using the <code>na.string=</code> argument within
+the <code>read.csv()</code> function. For example,</p>
+<pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;, na.string=c(&quot;NA&quot;, &quot;#N/A&quot;))</code></pre>
+<p>The above code will tell R that cells with either “NA” or “#N/A”
+should be interpreted as missing data.</p>
+<p><br></p>
+</div>
+<div id="do-use-good-column-names-variable-names"
+class="section level4">
+<h4>6. <strong>Do</strong> use good column names (variable names)</h4>
+<ul>
+<li><p>Avoid using special characters or spaces in your column names.
+These will automatically converted to “.” when you import to R. Removing
+spaces or using “_” or “.” instead will make your life easier.</p></li>
+<li><p>Use relatively short but informative column names. But keep a
+readme.txt file associated with your data where you store detailed
+information on how each variable was measured.</p></li>
+</ul>
+<p><br></p>
+</div>
+<div
+id="avoid-keeping-summary-data-along-with-raw-data-i.e.-dont-make-a-group-means-column-in-your-dataset."
+class="section level4">
+<h4>7. <strong>Avoid</strong> keeping summary data along with raw data
+(i.e., don’t make a “group means” column in your dataset).</h4>
+<p>This is more of a suggestion than a rule. When you use formulas
+within Excel to calculate summary values, those formulas do not carry
+over when you convert the spreadsheet to .csv. This means that if you
+need to do any recalculations, or if you realize there are any errors in
+values, those summary values will become outdated. It is much easier
+(and better) to calculate summary values within R anyway.</p>
+<hr />
+<blockquote>
+<p><span style="color:purple"><strong><em>Key rule in reproducible
+research: Try not to mess with raw data! </em></strong></span></p>
+<p>Once you have collected data, it is best to try to keep that raw data
+<strong><em>raw</em></strong>. If you find coding errors or you need to
+subset data for your analyses, it is best to do that with R once the
+data has been imported. This is because data-cleaning in R is
+reproducible. But once you start messing with raw data, it is way too
+easy to lose track of what you “fixed” and what you did not. Also, there
+are times when you later realize that you “fixed” the data incorrectly.
+If you have done all of that in excel, it is difficult to go back. But
+if you have done everything in script, everything is reversible.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+</div>
+<div id="troubleshooting-data-import" class="section level2">
+<h2>5. Troubleshooting Data Import</h2>
+<p>Even when you have taken care to follow the above dos and don’ts, you
+will often have some kind of problem reading in files. One of the big
+roadblocks to using R is dealing with these bugs.</p>
+<div id="some-common-problems" class="section level4">
+<h4>Some common problems:</h4>
+<ul>
+<li><strong>File won’t import</strong>
 <ul>
 <li>Are you sure you saved the file as a .csv file?</li>
 <li>Is the path and file name correct?</li>
 <li>Is the path and file name inside quotes?</li>
 </ul></li>
-<li><strong>I get a weird column that has a bunch of <code>NA</code></strong>
+<li><strong>I get a weird column that has a bunch of
+<code>NA</code></strong>
 <ul>
-<li>You probably have a column in your spreadsheet that has a value in one of the cells that you forgot about.</li>
+<li>You probably have a column in your spreadsheet that has a value in
+one of the cells that you forgot about.</li>
 </ul></li>
-<li><strong>I have a weird column at the bottom of my data that is just a bunch of <code>NA</code></strong>
+<li><strong>I have a weird column at the bottom of my data that is just
+a bunch of <code>NA</code></strong>
 <ul>
-<li>You probably have a cell at the bottom of your spreadsheet with “hidden spaces”.</li>
-<li>Fix: In excel, do a “Find and Replace” to replace blank space with some character (e.g., a *) and then go and find and erase those characters.</li>
+<li>You probably have a cell at the bottom of your spreadsheet with
+“hidden spaces”.</li>
+<li>Fix: In excel, do a “Find and Replace” to replace blank space with
+some character (e.g., a *) and then go and find and erase those
+characters.</li>
 </ul></li>
-<li><strong>Column is supposed to be numeric but it is showing up as factors.</strong>
+<li><strong>Column is supposed to be numeric but it is showing up as
+factors.</strong>
 <ul>
-<li>You probably have a cell value in the column that is non-numeric, e.g., “#N/A” or ‘hidden space’</li>
-<li>Fix: You can specify what kind of characters should be interpreted as <code>NA</code> using the <code>na.string=</code> argument (see above).</li>
+<li>You probably have a cell value in the column that is non-numeric,
+e.g., “#N/A” or ‘hidden space’</li>
+<li>Fix: You can specify what kind of characters should be interpreted
+as <code>NA</code> using the <code>na.string=</code> argument (see
+above).</li>
 </ul></li>
 </ul>
-<p>We will deal with some of these issues as well as how to prevent them in a separate section on best practices in data management.</p>
 <hr />
+</div>
+</div>
+<div id="group-exercise-1-troubleshoot-data-import"
+class="section level2">
+<h2>Group Exercise 1: Troubleshoot data import</h2>
+<p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look
+at its data structure:</p>
+<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) #assuming your working directory is set to the sample data folder
+errdat</code></pre>
+<pre><code>##    Indiv_ID    sex      age size weight  X
+## 1     20-01   male    adult 29.5   66.5  1
+## 2     20-02   male juvenile   28   58.5 NA
+## 3     20-03 female    adult   26  #N/A! NA
+## 4     20-04 female    adult   25   55.5 NA
+## 5     20-05 female juvenile   25     62 NA
+## 6     20-06   male juvenile   28     61 NA
+## 7     20-07 female    adult   26     58 NA
+## 8     20-08   male    adult 28.5     65 NA
+## 9     20-09   male juvenile 27.5     60 NA
+## 10    20-10 female juvenile   26     59 NA
+## 11    20-11   male    adult 25.5     62 NA
+## 12    20-12 female    adult   27     59 NA
+## 13    20-13 female    adult 26.5     60 NA
+## 14                            **        NA</code></pre>
+<p>Step 2: Fix the spreadsheet so that you get the following:</p>
+<ul>
+<li>The column called “sex” only has “female” and “male”.</li>
+<li>The column called “size” is numeric</li>
+<li>The column called “weight” is numeric</li>
+<li>The column called “X” is removed.</li>
+</ul>
+<p>See how to fix these errors in R <a
+href="03.e.Fix_Data.html">here</a></p>
+<hr />
+</div>
+<div id="group-exercise-2-improve-my-egg-measurement-data"
+class="section level2">
+<h2>Group Exercise 2: Improve my egg measurement data</h2>
+<ul>
+<li><p>Click on <a href="data/EggMeasurements_example.csv">this link</a>
+to download some real data I collected on egg sizes of American Coots
+(<em>Fulica americana</em>) <em>before</em> I knew anything about R or
+programming.</p></li>
+<li><p>Save the data in the “data” subfolder within your course
+folder.</p></li>
+<li><p>Try importing the data to R and also look at the spreadsheet in
+Excel.</p></li>
+<li><p><strong>Come up with as many recommendations as possible on how
+to improve this excel sheet.</strong></p></li>
+</ul>
+<p>See the answers <a href="03.e.Fix_Data.html">here</a></p>
 </div>
 
 
@@ -651,13 +893,59 @@ merged.dat2</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

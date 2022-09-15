@@ -17,25 +17,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ### [3. Importing and Navigating Data](03.Data.html)
 
-* ### [4. Formatting Data for Analysis](04.DataFormat.html)
+* ### 4. Plotting in R:
 
-* ### 5. Plotting in R:
-
-    + ### [5.1 Basics of Plots](05.Plots_1.html)
+    + ### [4.1 Basics of Plots](04.1.Plots_1.html)
     
-    + ### [5.2 Intro to ggplot2](05.2_ggplot2_intro.html)
+    + ### [4.2 Intro to ggplot2](04.2.ggplot2_intro.html)
 
-* ### 6. Stats in R:
+* ### 5. Stats in R:
 
-    + ### [6.1 Linear Models in R (including ANOVA, GLM)](06.Stats_LinearModels.html)
+    + ### [5.1 Linear Models in R (including ANOVA, GLM)](05.1.Stats_LinearModels.html)
 
-* ### [07. Custom Functions (and if-else statements)](07.Functions.html)
+* ### [6. Data Wrangling with Tidyverse Packages](06.tidyverse.html)
 
-* ### [08. Apply Fuctions and Loops](08.Apply.html)
+* ### [7. Custom Functions (and if-else statements)](07.Functions.html)
 
-    + #### [08.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
+* ### [8. Apply Fuctions and Loops](08.Apply.html)
 
-* ### [09. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
+    + #### [8.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
+
+* ### [9. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
 
 * ### [Extra: Intro to ggplot2](ggplot2.html)
 
