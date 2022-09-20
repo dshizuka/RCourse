@@ -2,16 +2,16 @@
 title: 'Exercise: Make this document'
 author: "YOUR NAME"
 date: "TODAY'S DATE"
-output: pdf_document
+output: html_document
 ---
 
 ***
 
-Let's see if you can make a document that looks *exactly like this* using **R Markdown.** Try to copy this document verbatum. Set the output to "pdf_document"
+Let's see if you can make a document that looks *exactly like this* using **R Markdown.** Try to copy this document verbatum. Set the output to "html_document"
 
 ***
 
-###1. Insert this plot from the `iris` dataset
+### 1. Insert this plot from the `iris` dataset
 
 Here, I want you to insert a plot of three species of iris from the `iris` dataset. I have suppressed the printing of the code here. 
 Some clues:
@@ -27,7 +27,7 @@ plot(Sepal.Length~Species, data=iris, col=c("gray100", "gray75", "gray50"), main
 ```
 
 
-###2. Conduct and report the results of an analysis
+### 2. Conduct and report the results of an analysis
 We can conduct a linear regression between the speed of a car and the distance it takes for the car to stop. This data is available in a dataset called `cars` that is pre-installed in R. 
 
 ```{r}
@@ -47,13 +47,18 @@ summary(fit.cars)
 ```
 
 
-###3. Create a table to present results
+### 3. Create a table to present results
 Let's organize the results as a table:
 
 
 Slope | *F* (d.f.) | Adjusted *R^2^* | *P* 
------ | -----------| ----------------| ----
+----- | -----------| ----------------| ------
 3.93  |89.6 (1,48) |   0.64          | <0.001
 
 
 There are other ways to make pretty tables, but we'll just go with the simple markdown format presented in the Reference Guide. 
+
+---
+
+#### When you are ready for the answer: 
+You can download the .Rmd document by *right-clicking* [here](10.e.RMDExercise.Rmd) and selecting "Save Link as..."

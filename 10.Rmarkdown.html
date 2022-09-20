@@ -11,11 +11,11 @@
 
 <meta name="author" content="Dai Shizuka" />
 
-<meta name="date" content="2022-09-15" />
+<meta name="date" content="2022-09-20" />
 
 <title>Module 10: RMarkdown</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -31,6 +31,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -143,15 +146,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -228,6 +227,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -235,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -274,36 +346,25 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Module 10: RMarkdown</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">September 15, 2022</h4>
+<h4 class="date">September 20, 2022</h4>
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#why-r-markdown" id="toc-why-r-markdown">6.1 Why R
-Markdown?</a></li>
-<li><a href="#components-of-r-markdown"
-id="toc-components-of-r-markdown">6.2 Components of R Markdown</a>
-<ul>
-<li><a href="#yaml-header" id="toc-yaml-header">6.2.1 YAML
-Header</a></li>
-</ul></li>
-<li><a href="#including-plots-images"
-id="toc-including-plots-images">6.3 Including Plots &amp; Images</a>
-<ul>
-<li><a href="#embedding-plots-generated-from-r-code"
-id="toc-embedding-plots-generated-from-r-code">6.3.2 Embedding plots
-generated from R code</a></li>
-</ul></li>
-</ul>
-</div>
 
 <hr />
-<p>##Before we start: 1. You will need to make sure your computer can
-run a LaTex engine:</p>
-<pre><code>* For Windows: Go to &lt;https://miktex.org/howto/install-miktex&gt; and follow directions to install MikTex.
-* For Mac: Go to &lt;https://tug.org/mactex/mactex-download.html&gt; and follow directions to install MacTex.</code></pre>
-<ol start="2" style="list-style-type: decimal">
+<div id="before-we-start" class="section level2">
+<h2>Before we start:</h2>
+<ol style="list-style-type: decimal">
+<li><p>You will need to make sure your computer can run a LaTex
+engine:</p>
+<ul>
+<li>For Windows: Go to <a href="https://miktex.org/howto/install-miktex"
+class="uri">https://miktex.org/howto/install-miktex</a> and follow
+directions to install MikTex.</li>
+<li>For Mac: Go to <a href="https://tug.org/mactex/mactex-download.html"
+class="uri">https://tug.org/mactex/mactex-download.html</a> and follow
+directions to install MacTex.</li>
+</ul></li>
 <li><p>You should download this “R Markdown Reference Guide” <a
 href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf"
 class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf</a></p></li>
@@ -311,6 +372,7 @@ class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-referen
 Output Preview in” to <strong>Viewer Pane</strong>.</p></li>
 </ol>
 <hr />
+</div>
 <div id="why-r-markdown" class="section level2">
 <h2>6.1 Why R Markdown?</h2>
 <p><strong><em>R Markdown</em></strong> is a formatting syntax that
@@ -321,12 +383,25 @@ href="http://rmarkdown.rstudio.com"
 class="uri">http://rmarkdown.rstudio.com</a>)</p>
 <p>The main reason to use R Markdown is that it allows you to produce
 <strong>reproducible reports</strong> using plain text. That is, someone
-else could take your code and re-create the report exactly.Moreover, you
-can flexibly <em>render</em> these reports in different formats
+else could take your code and re-create the report exactly. Moreover,
+you can flexibly <em>render</em> these reports in different formats
 including html, pdf and word documents. You can also use it to make
 websites or slides for presentations. This can all accomplished without
 using any special formatting from proprietary software. What R Studio
 does is facilitate the production of this text.</p>
+<p>Download a couple of examples of this here:</p>
+<ol style="list-style-type: decimal">
+<li><p><a
+href="rmd_examples/Shizuka_Hudson_supplemental_materials.html">A
+reproducibility document from Shizuka &amp; Hudson (2020) in which we
+used a model to describe how the threshold of species recognition
+evolves. Look at it</a></p></li>
+<li><p><a
+href="rmd_examples/Shizuka_etal_2022_Telemetry_AppendixS1.html">Supplemental
+Materials from Shizuka et al. (2022), which describes the complete
+workflow for a creating social networks from automated telemetry
+data.</a></p></li>
+</ol>
 <p>To render HTML documents, R Markdown uses Markdown, a simple
 formatting syntax (aka <em>markup language</em>) that can then be
 converted to HTML. To render PDF documents, R Markdown will use LaTex, a
@@ -335,9 +410,9 @@ different markup language used to format manuscripts.</p>
 RStudio. <strong>Go to
 <code>File-&gt;New File-&gt;R Markdown</code>.</strong> Give the
 document a title, and Select “HTML” as the output option. When you open
-a new .Rmd file, you will get a document that looks like this:</p>
-<p><img src="images/rmd_example.png" style="width:50.0%" /><br />
-<br />
+a new .Rmd file, you will get a document that has the basic format of
+the document started for you.</p>
+<p><br />
 Now, press <strong><code>Command-Shift-K</code></strong> or the
 <strong>“Knit”</strong> button at the top of the R Studio window to
 generate an HTML document. You see that the document includes formatted
@@ -388,8 +463,11 @@ author: &quot;Dai Shizuka&quot;
 date: &quot;2/4/2017&quot;
 output: html_notebook
 ---</code></pre>
-<p>###6.2.2 Text Now look below the header. You will see text that looks
-like this:</p>
+</div>
+<div id="text" class="section level3">
+<h3>6.2.2 Text</h3>
+<p>Now look below the header. You will see text that looks like
+this:</p>
 <pre><code>## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;http://rmarkdown.rstudio.com&gt;.
@@ -407,11 +485,14 @@ by R Studio (which is called Pandoc). You can get most of the formatting
 syntax from the R Markdown Reference Guide you downloaded. You can get
 even more detail <a
 href="http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html#pandoc_markdown">here</a>.</p>
-<p>###6.2.3 Code Chunks <strong>R code chunks</strong> can be embedded
-within the document. These lines of code will be run, and the outputs of
-the code can be displayed or hidden. This means that you can generate
-plots within the .Rmd file using code and the output code will show up
-in the rendered document.</p>
+</div>
+<div id="code-chunks" class="section level3">
+<h3>6.2.3 Code Chunks</h3>
+<p><strong>R code chunks</strong> can be embedded within the document.
+These lines of code will be run, and the outputs of the code can be
+displayed or hidden. This means that you can generate plots within the
+.Rmd file using code and the output code will show up in the rendered
+document.</p>
 <p>R code chunks are delimited by three backticks: “```”, like so:</p>
 <pre><code>```{r, echo=TRUE}
 summary(cars)  
@@ -500,10 +581,10 @@ size</em></p>
 <p><br />
 </p>
 <p>You can also embed images straight from a url:</p>
-<pre><code>![*This is the image downloaded from the internet*](https://www.rstudio.com/wp-content/uploads/2014/07/RStudio-Logo-Blue-Gradient.png){width=30%}</code></pre>
+<pre><code>![*This is the image downloaded from the internet*](https://d33wubrfki0l68.cloudfront.net/3099a8a5ab437c8cca2446dfb08383ecfca761ec/0377b/wp-content/uploads/2014/06/rstudio-ball.png){width=30%}</code></pre>
 <div class="figure">
 <img
-src="https://www.rstudio.com/wp-content/uploads/2014/07/RStudio-Logo-Blue-Gradient.png"
+src="https://d33wubrfki0l68.cloudfront.net/3099a8a5ab437c8cca2446dfb08383ecfca761ec/0377b/wp-content/uploads/2014/06/rstudio-ball.png"
 style="width:30.0%" alt="" />
 <p class="caption"><em>This is the image downloaded from the
 internet</em></p>
@@ -517,8 +598,10 @@ plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 ```</code></pre>
 <p>Will give you:</p>
 <pre class="r"><code>plot(cars$speed, cars$dist, xlab=&quot;Speed&quot;, ylab=&quot;Distance traveled until stop&quot;)</code></pre>
-<p><img src="10.-Rmarkdown_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<p>####Adjusting the plot dimensions versus the output size</p>
+<p><img src="10.Rmarkdown_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div id="adjusting-the-plot-dimensions-versus-the-output-size"
+class="section level4">
+<h4>Adjusting the plot dimensions versus the output size</h4>
 <p>You can change the size of the figure output in a couple of
 ways.<br />
 First, you can adjust the size of the plotting region using
@@ -527,19 +610,29 @@ First, you can adjust the size of the plotting region using
 plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 ```</code></pre>
 <pre class="r"><code>plot(cars$speed, cars$dist, xlab=&quot;Speed&quot;, ylab=&quot;Distance traveled until stop&quot;)</code></pre>
-<p><img src="10.-Rmarkdown_files/figure-html/unnamed-chunk-7-1.png" width="288" /></p>
+<p><img src="10.Rmarkdown_files/figure-html/unnamed-chunk-7-1.png" width="288" /></p>
 Or, you can change the size of the output using <code>out.width</code>
 or <code>out.height</code>. This preserves the aspect ratio by default.
 <pre><code>```{r carsplot, echo=TRUE, out.width='50%'}
 plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 ```</code></pre>
 <pre class="r"><code>plot(cars$speed, cars$dist, xlab=&quot;Speed&quot;, ylab=&quot;Distance traveled until stop&quot;)</code></pre>
-<p><img src="10.-Rmarkdown_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+<p><img src="10.Rmarkdown_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
 </div>
 </div>
+</div>
+<div id="group-exercise" class="section level2">
+<h2>Group Exercise</h2>
+<ul>
+<li>Go to <a href="10.e.RMDExercise.html">this page</a> and try to
+recreate this page using RMarkdown!</li>
+</ul>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -572,6 +665,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

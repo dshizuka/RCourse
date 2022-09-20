@@ -5,7 +5,7 @@ output:
     html_document:
       toc: true
       toc_depth: 3
-      toc_float: false
+      toc_float: true
     pdf_document:
       toc: true
       latex_engine: xelatex
@@ -22,13 +22,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ***
 
-##Before we start:
+## Before we start:
+
 1. You will need to make sure your computer can run a LaTex engine:
 
     * For Windows: Go to <https://miktex.org/howto/install-miktex> and follow directions to install MikTex.
     * For Mac: Go to <https://tug.org/mactex/mactex-download.html> and follow directions to install MacTex.
 
+
 2. You should download this "R Markdown Reference Guide" <https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf>
+
 
 3. In your R Studio preferences, go to "R Markdown", and set "Show Output Preview in" to **Viewer Pane**.
   
@@ -39,13 +42,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ***R Markdown*** is a formatting syntax that allows you to use plain text to combine text + R codes and apply custom formatting to generate reproducible reports. R Markdown can be implemented in R Studio. 
 (For more details on using R Markdown see <http://rmarkdown.rstudio.com>)
 
-The main reason to use R Markdown is that it allows you to produce **reproducible reports** using plain text. That is, someone else could take your code and re-create the report exactly.Moreover, you can flexibly *render* these reports in different formats including html, pdf and word documents. You can also use it to make websites or slides for presentations. This can all accomplished without using any special formatting from proprietary software. What R Studio does is facilitate the production of this text.
+The main reason to use R Markdown is that it allows you to produce **reproducible reports** using plain text. That is, someone else could take your code and re-create the report exactly. Moreover, you can flexibly *render* these reports in different formats including html, pdf and word documents. You can also use it to make websites or slides for presentations. This can all accomplished without using any special formatting from proprietary software. What R Studio does is facilitate the production of this text.
+
+Download a couple of examples of this here:
+
+1. [A reproducibility document from Shizuka & Hudson (2020) in which we used a model to describe how the threshold of species recognition evolves. Look at it](rmd_examples/Shizuka_Hudson_supplemental_materials.html)
+
+2. [Supplemental Materials from Shizuka et al. (2022), which describes the complete workflow for a creating social networks from automated telemetry data.](rmd_examples/Shizuka_etal_2022_Telemetry_AppendixS1.html)
 
 To render HTML documents, R Markdown uses Markdown, a simple formatting syntax (aka *markup language*) that can then be converted to HTML. To render PDF documents, R Markdown will use LaTex, a different markup language used to format manuscripts. 
 
-To use R Markdown, you will open a new **.Rmd** file in RStudio. **Go to `File->New File->R Markdown`.** Give the document a title, and Select "HTML" as the output option. When you open a new .Rmd file, you will get a document that looks like this:
+To use R Markdown, you will open a new **.Rmd** file in RStudio. **Go to `File->New File->R Markdown`.** Give the document a title, and Select "HTML" as the output option. When you open a new .Rmd file, you will get a document that has the basic format of the document started for you.
 
-![](images/rmd_example.png){ width=50% }\
 \
 Now, press **`Command-Shift-K`** or the **"Knit"** button at the top of the R Studio window to generate an HTML document. You see that the document includes formatted text, codes and plot. 
 \
@@ -97,7 +105,7 @@ output: html_notebook
 ---
 ```
 
-###6.2.2 Text
+### 6.2.2 Text
 Now look below the header. You will see text that looks like this:
 ```
 ## R Markdown
@@ -113,7 +121,7 @@ This is main text that will appear in your document. The text formatting has bee
 The text formatting follows *Pandoc Markdown*, i.e., a version of the "Markdown" syntax that is used by the document converter employed by R Studio (which is called Pandoc). You can get most of the formatting syntax from the R Markdown Reference Guide you downloaded. You can get even more detail [here](http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html#pandoc_markdown).
 
 
-###6.2.3 Code Chunks
+### 6.2.3 Code Chunks
 **R code chunks** can be embedded within the document. These lines of code will be run, and the outputs of the code can be displayed or hidden. This means that you can generate plots within the .Rmd file using code and the output code will show up in the rendered document. 
 
 R code chunks are delimited by three backticks: "```", like so:
@@ -208,10 +216,10 @@ You can control the size of the image like this:
 
 You can also embed images straight from a url:
 ```
-![*This is the image downloaded from the internet*](https://www.rstudio.com/wp-content/uploads/2014/07/RStudio-Logo-Blue-Gradient.png){width=30%}
+![*This is the image downloaded from the internet*](https://d33wubrfki0l68.cloudfront.net/3099a8a5ab437c8cca2446dfb08383ecfca761ec/0377b/wp-content/uploads/2014/06/rstudio-ball.png){width=30%}
 ```
 
-![*This is the image downloaded from the internet*](https://www.rstudio.com/wp-content/uploads/2014/07/RStudio-Logo-Blue-Gradient.png){width=30%}
+![*This is the image downloaded from the internet*](https://d33wubrfki0l68.cloudfront.net/3099a8a5ab437c8cca2446dfb08383ecfca761ec/0377b/wp-content/uploads/2014/06/rstudio-ball.png){width=30%}
 
 ### 6.3.2 Embedding plots generated from R code
 You can also embed plots that you produce using R code, for example:
@@ -225,7 +233,7 @@ Will give you:
 plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 ```
 
-####Adjusting the plot dimensions versus the output size
+#### Adjusting the plot dimensions versus the output size
 
 You can change the size of the figure output in a couple of ways.  
 First, you can adjust the size of the plotting region using `fig.height=` and `fig.width`:
@@ -246,4 +254,6 @@ plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 ```
 
+## Group Exercise
 
+* Go to [this page](10.e.RMDExercise.html) and try to recreate this page using RMarkdown! 
