@@ -27,7 +27,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
     + ### [5.1 Linear Models in R (including ANOVA, GLM)](05.1.Stats_LinearModels.html)
 
-* ### [6. Data Wrangling with Tidyverse Packages](06.tidyverse.html)
+* ### 6. Wrangling data in R:
+
+    + ### [6. Data Wrangling with Tidyverse Packages](06.1.tidyverse.html)
 
 * ### [7. Custom Functions (and if-else statements)](07.Functions.html)
 
