@@ -1,5 +1,5 @@
 ---
-title: "Parsing data from text: Example with WHO data"
+title: "Parsing text: Example with WHO data"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -9,18 +9,51 @@ output:
     toc_float: true
 ---
 
+Load the tidyverse library:
+
+```{r, message=F}
+library(tidyverse)
+library(lubridate)
+```
+
 ## Data coded into text
 
 There are many cases with large datasets where important data is stored in column names or file names. There are many cases in which your analysis pipeline needs to include steps to extract that data from the characters, rather than having to code it manually yourself. In other cases, you might also conduct "text mining" analyses where you look for particular words and codes inside large amounts of documents, websites, etc. This is made possible in R with functions geared towards character splitting or pattern matching. 
 
-Here, I will demonstrate some cases in which we can do this with 
+As a hypothetical example, I might name my data files with the date:
 
-```{r, message=F}
-library(tidyverse)
+```{r}
+filename="data_20220927.csv"
 ```
+
+Now, let's say I wanted to extract the dates from file names as part of my analyses. The basic way I might do this is through "text parsing"--i.e., extracting parts of text to get useful data. Here, I know that my file name has useful information (i.e., the year, month and date). 
+
+```{r}
+strsplit(filename, split=c("_"))
+```
+
+```{r}
+strsplit(filename, split=c("\\."))
+```
+
+```{r}
+str_split(filename, pattern="_")
+```
+
+```{r}
+str_sub(filename, 6,13)
+```
+
+```{r}
+ymd(str_sub(filename, 6,13))
+```
+
+
+
 ## 
 
 Get the stringr cheatsheet [here](https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf)
+
 ***
 ```{r}
 who

@@ -11,11 +11,10 @@
 
 <meta name="author" content="Dai Shizuka" />
 
-<meta name="date" content="2022-09-14" />
 
-<title>WHO data</title>
+<title>Parsing text: Example with WHO data</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -31,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -143,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -224,6 +230,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -231,6 +300,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -268,40 +347,74 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">WHO data</h1>
+<h1 class="title toc-ignore">Parsing text: Example with WHO data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">2022-09-14</h4>
+<h4 class="date">updated 09/27/22</h4>
 
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
+<p>Load the tidyverse library:</p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)</code></pre>
+<div id="data-coded-into-text" class="section level2">
+<h2>Data coded into text</h2>
+<p>There are many cases with large datasets where important data is
+stored in column names or file names. There are many cases in which your
+analysis pipeline needs to include steps to extract that data from the
+characters, rather than having to code it manually yourself. In other
+cases, you might also conduct “text mining” analyses where you look for
+particular words and codes inside large amounts of documents, websites,
+etc. This is made possible in R with functions geared towards character
+splitting or pattern matching.</p>
+<p>As a hypothetical example, I might name my data files with the
+date:</p>
+<pre class="r"><code>filename=&quot;data_20220927.csv&quot;</code></pre>
+<p>Now, let’s say I wanted to extract the dates from file names as part
+of my analyses. The basic way I might do this is through “text
+parsing”–i.e., extracting parts of text to get useful data. Here, I know
+that my file name has useful information (i.e., the year, month and
+date).</p>
+<pre class="r"><code>strsplit(filename, split=c(&quot;_&quot;))</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;data&quot;         &quot;20220927.csv&quot;</code></pre>
+<pre class="r"><code>strsplit(filename, split=c(&quot;\\.&quot;))</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;data_20220927&quot; &quot;csv&quot;</code></pre>
+<pre class="r"><code>str_split(filename, pattern=&quot;_&quot;)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;data&quot;         &quot;20220927.csv&quot;</code></pre>
+<pre class="r"><code>str_sub(filename, 6,13)</code></pre>
+<pre><code>## [1] &quot;20220927&quot;</code></pre>
+<pre class="r"><code>ymd(str_sub(filename, 6,13))</code></pre>
+<pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
+</div>
 <div id="section" class="section level2">
 <h2></h2>
 <p>Get the stringr cheatsheet <a
-href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf">here</a>
-***</p>
+href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf">here</a></p>
+<hr />
 <pre class="r"><code>who</code></pre>
 <pre><code>## # A tibble: 7,240 × 60
-##    country  iso2  iso3   year new_sp_m014 new_sp_m1524 new_sp_m2534 new_sp_m3544
-##    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;int&gt;       &lt;int&gt;        &lt;int&gt;        &lt;int&gt;        &lt;int&gt;
-##  1 Afghani… AF    AFG    1980          NA           NA           NA           NA
-##  2 Afghani… AF    AFG    1981          NA           NA           NA           NA
-##  3 Afghani… AF    AFG    1982          NA           NA           NA           NA
-##  4 Afghani… AF    AFG    1983          NA           NA           NA           NA
-##  5 Afghani… AF    AFG    1984          NA           NA           NA           NA
-##  6 Afghani… AF    AFG    1985          NA           NA           NA           NA
-##  7 Afghani… AF    AFG    1986          NA           NA           NA           NA
-##  8 Afghani… AF    AFG    1987          NA           NA           NA           NA
-##  9 Afghani… AF    AFG    1988          NA           NA           NA           NA
-## 10 Afghani… AF    AFG    1989          NA           NA           NA           NA
-## # … with 7,230 more rows, and 52 more variables: new_sp_m4554 &lt;int&gt;,
-## #   new_sp_m5564 &lt;int&gt;, new_sp_m65 &lt;int&gt;, new_sp_f014 &lt;int&gt;,
-## #   new_sp_f1524 &lt;int&gt;, new_sp_f2534 &lt;int&gt;, new_sp_f3544 &lt;int&gt;,
-## #   new_sp_f4554 &lt;int&gt;, new_sp_f5564 &lt;int&gt;, new_sp_f65 &lt;int&gt;,
-## #   new_sn_m014 &lt;int&gt;, new_sn_m1524 &lt;int&gt;, new_sn_m2534 &lt;int&gt;,
-## #   new_sn_m3544 &lt;int&gt;, new_sn_m4554 &lt;int&gt;, new_sn_m5564 &lt;int&gt;,
-## #   new_sn_m65 &lt;int&gt;, new_sn_f014 &lt;int&gt;, new_sn_f1524 &lt;int&gt;, …</code></pre>
+##    country     iso2  iso3   year new_s…¹ new_s…² new_s…³ new_s…⁴ new_s…⁵ new_s…⁶
+##    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+##  1 Afghanistan AF    AFG    1980      NA      NA      NA      NA      NA      NA
+##  2 Afghanistan AF    AFG    1981      NA      NA      NA      NA      NA      NA
+##  3 Afghanistan AF    AFG    1982      NA      NA      NA      NA      NA      NA
+##  4 Afghanistan AF    AFG    1983      NA      NA      NA      NA      NA      NA
+##  5 Afghanistan AF    AFG    1984      NA      NA      NA      NA      NA      NA
+##  6 Afghanistan AF    AFG    1985      NA      NA      NA      NA      NA      NA
+##  7 Afghanistan AF    AFG    1986      NA      NA      NA      NA      NA      NA
+##  8 Afghanistan AF    AFG    1987      NA      NA      NA      NA      NA      NA
+##  9 Afghanistan AF    AFG    1988      NA      NA      NA      NA      NA      NA
+## 10 Afghanistan AF    AFG    1989      NA      NA      NA      NA      NA      NA
+## # … with 7,230 more rows, 50 more variables: new_sp_m65 &lt;int&gt;,
+## #   new_sp_f014 &lt;int&gt;, new_sp_f1524 &lt;int&gt;, new_sp_f2534 &lt;int&gt;,
+## #   new_sp_f3544 &lt;int&gt;, new_sp_f4554 &lt;int&gt;, new_sp_f5564 &lt;int&gt;,
+## #   new_sp_f65 &lt;int&gt;, new_sn_m014 &lt;int&gt;, new_sn_m1524 &lt;int&gt;,
+## #   new_sn_m2534 &lt;int&gt;, new_sn_m3544 &lt;int&gt;, new_sn_m4554 &lt;int&gt;,
+## #   new_sn_m5564 &lt;int&gt;, new_sn_m65 &lt;int&gt;, new_sn_f014 &lt;int&gt;,
+## #   new_sn_f1524 &lt;int&gt;, new_sn_f2534 &lt;int&gt;, new_sn_f3544 &lt;int&gt;, …</code></pre>
 <pre class="r"><code>who %&gt;% pivot_longer(c(-country, -iso2, -iso3, -year))</code></pre>
 <pre><code>## # A tibble: 405,440 × 6
 ##    country     iso2  iso3   year name         value
@@ -387,6 +500,8 @@ of age, 65 = 65 years of age or older</li>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -419,6 +534,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
