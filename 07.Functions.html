@@ -542,20 +542,37 @@ calculating the standar error:</p>
   else if (na.rm==T) sqrt(var(x[is.na(x)==F])/length(x[is.na(x)==F]))
 }</code></pre>
 <p>Now we can calculate standard error and mean from some continuous
-variable. Let’s take Petal Length from the <code>iris</code>
-dataset:</p>
-<pre class="r"><code>means=tapply(iris$Petal.Length, iris$Species, mean)
-ses=tapply(iris$Petal.Length, iris$Species, se)
-means</code></pre>
-<pre><code>##     setosa versicolor  virginica 
-##      1.462      4.260      5.552</code></pre>
-<pre class="r"><code>ses</code></pre>
-<pre><code>##     setosa versicolor  virginica 
-## 0.02455980 0.06645545 0.07804970</code></pre>
+variable. Let’s take Sepal Width from the <code>iris</code> dataset. We
+can use the <code>group_by()</code> and <code>summarise()</code>
+functions from <em>dplyr</em></p>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   Species    mean.SW  se.SW
+##   &lt;fct&gt;        &lt;dbl&gt;  &lt;dbl&gt;
+## 1 setosa        3.43 0.0536
+## 2 versicolor    2.77 0.0444
+## 3 virginica     2.97 0.0456</code></pre>
 <p>Let’s use this to make barplots with error bars:</p>
-<pre class="r"><code>p=barplot(means, ylim=c(0,6), las=1, ylab=&quot;Petal Length&quot;)
-arrows(p, means+ses, p, means-ses, code=3, angle=90)</code></pre>
-<p><img src="07.Functions_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>library(ggplot2)
+summary.dat=iris %&gt;% group_by(Species) %&gt;% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
+
+ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
+  geom_bar(stat=&quot;identity&quot;)</code></pre>
+<p><img src="07.Functions_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+Now add the error bars as mean +/- standard error.</p>
+<pre class="r"><code>ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  geom_errorbar(aes(ymin=mean.SW-se.SW, ymax=mean.SW+se.SW), width=0.2)</code></pre>
+<p><img src="07.Functions_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 
 

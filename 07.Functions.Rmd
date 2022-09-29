@@ -214,6 +214,7 @@ Now we can calculate standard error and mean from some continuous variable. Let'
 
 
 ```{r}
+library(dplyr)
 iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
 ```
 
@@ -221,6 +222,7 @@ iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sep
 Let's use this to make barplots with error bars:
 
 ```{r}
+library(ggplot2)
 summary.dat=iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
 
 ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
