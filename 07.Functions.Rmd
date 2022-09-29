@@ -1,15 +1,19 @@
 ---
 title: "Module 7: Custom Functions (and If-Else statements)"
 author: "Dai Shizuka"
-date: "9/26/2019"
-output: html_document
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##1. Intro to making your own functions
+## 1. Intro to making your own functions
 
 Today we will learn a little bit about functions. This may be one of the most useful things you learn about R. Once you learn how to write your own functions, the world is your oyster. You will no longer be limited in your work by software—if no software does what you want or you don’t want to pay money for a piece of software, then just learn to write your own functions.
 
@@ -34,9 +38,9 @@ mean.custom(1:10)
 
 ***
 
-##2. Using If-Else statements to add arguments inside functions
+## 2. Using If-Else statements to add arguments inside functions
 
-###2.1 What are arguments?
+### 2.1 What are arguments?
 You will notice that many R functions have a set of arguments that you use to control how the function is executed. Take, for example the `plot()` function--it has a lot of arguments that can be used to change the output. 
 
 Let's try plotting the change in atmospheric concentration of CO2 in two different ways. We know that this can be done with a simple argument, `type=`.
@@ -51,7 +55,7 @@ plot(co2, type="l") #with a line
 
 To add arguments to your custom function, you can add an input variable that will act as your argument, and then you need to include if-else statements inside your function to control the output.
 
-###2.2 A digression into If-else statements
+### 2.2 A digression into If-else statements
 
 So, to include arguments into your custom functions, you will need to know a little bit about if-else statements. 
 Let's start with the simple "If Statment". This follows a structure like this:
@@ -102,8 +106,25 @@ answer=5
 if (answer==mean(1:10)) print("you are correct") else print("you are incorrect")
 ```
 
+***
+
+### 2.3. The `ifelse()` function
+
+Often, you can simplify the if-else syntax using the `ifelse()` function. 
+This function takes the format: `ifelse(<a logical test>, <value if yes>, <value if no>)`. So, if I take the if-else statement from above, I can use this function to save the answer as an object:
+```{r}
+answer=5
+response=ifelse(answer==mean(1:10), "you are correct", "you are incorrect")
+response
+```
+
+***
+
+### 2.4. Create a function with the if else statement
+
 Now, you can actually make this into a function:
 
+You can do this with the full if()... else format:
 ```{r}
 mean.1to10=function(answer) {if (answer==mean(1:10)) print("you are correct") else print("you are incorrect")}
 ```
@@ -113,9 +134,20 @@ mean.1to10(answer=5.5)
 mean.1to10(answer=5)
 ```
 
-###2.3 Custom function with arguments
+Or, you can do this with the `ifelse()` function:
 
-Ok, so now you kind of know how if-else statements work. Let's now build a better function for calculating averages. Let's say we want to be able to calculate the **geometric mean**, which is the *n*th root of the product of *n* numbers, as well as the arithmetic mean.
+```{r}
+mean.1to10_alt=function(answer) ifelse(answer==mean(1:10), "you are correct", "you are incorrect")
+```
+
+```{r}
+mean.1to10_alt(answer=5.5)
+mean.1to10_alt(answer=5)
+```
+
+## 3. Custom function for calculating averages in different ways
+
+Ok, so now you know how if-else statements work. Let's now build a better function for calculating averages. Let's say we want to be able to calculate the **geometric mean**, which is the *n*th root of the product of *n* numbers, as well as the arithmetic mean.
 
 ```{r}
 average=function(x, type="arithmetic"){
@@ -158,7 +190,7 @@ Now:
 average(1:10, type="median")
 ```
 
-##3. Building a custom function for measuring standard error of the mean
+## 4. Building a custom function for measuring standard error of the mean
 
 A common thing people find out about R is that there is no built-in function for calculating standard error of the mean, a pretty common statistic. There are probably a lot of theoretical reasons for that ('standard error' can mean different things to different people), but we won't delve into that. 
 
@@ -178,20 +210,27 @@ se=function(x, na.rm=F) {
 }
 ```
 
-Now we can calculate standard error and mean from some continuous variable. Let's take Petal Length from the `iris` dataset:
+Now we can calculate standard error and mean from some continuous variable. Let's take Sepal Width from the `iris` dataset. We can use the `group_by()` and `summarise()` functions from *dplyr*
+
 
 ```{r}
-means=tapply(iris$Petal.Length, iris$Species, mean)
-ses=tapply(iris$Petal.Length, iris$Species, se)
-means
-ses
+iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
 ```
 
 
 Let's use this to make barplots with error bars:
 
 ```{r}
-p=barplot(means, ylim=c(0,6), las=1, ylab="Petal Length")
-arrows(p, means+ses, p, means-ses, code=3, angle=90)
-```
+summary.dat=iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
 
+ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
+  geom_bar(stat="identity")
+  
+```
+Now add the error bars as mean +/- standard error.
+
+```{r}
+ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
+  geom_bar(stat="identity") +
+  geom_errorbar(aes(ymin=mean.SW-se.SW, ymax=mean.SW+se.SW), width=0.2)
+```
