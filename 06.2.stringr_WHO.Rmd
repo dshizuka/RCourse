@@ -1,0 +1,197 @@
+---
+title: "Parsing text: Example with WHO data"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+***
+
+## 1. Data coded into text
+
+There are many cases with large datasets where important data is stored in column names or file names. There are many cases in which your analysis pipeline needs to include steps to extract that data from the characters, rather than having to code it manually yourself. In other cases, you might also conduct "text mining" analyses where you look for particular words and codes inside large amounts of documents, websites, etc. This is made possible in R using several methods: e.g., substrings, character splitting, character replacement and pattern matching. 
+
+Each of these functions exist in both base R and in the tidyverse package *stringr*.
+
+Let's go ahead and load the tidyverse library, as well as a package called *lubridate* (we'll use it later):
+
+```{r, message=F}
+library(tidyverse)
+library(lubridate)
+```
+
+
+## 
+
+Get the stringr cheatsheet [here](https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf)
+
+Get the lubridate cheatsheet [here](https://github.com/rstudio/cheatsheets/blob/main/lubridate.pdf)
+
+***
+
+### 1.1. Extracting substrings using fixed positions
+
+Let's start with a hypothetical example. What if I had named my data files with the date:
+
+```{r}
+filename="data_20220927.csv"
+```
+
+Now, let's say I wanted to extract the dates from file names as part of my analyses. The basic way I might do this is through "text parsing"--i.e., extracting parts of text to get useful data. Here, I know that my file name has useful information (i.e., the year, month and date). 
+
+In this case, I can just extract the part of this character string that contains the information I want. 
+
+If I just **count the start and stop position* of the information within this character string, I can just extract that part of the string (i.e., substring). In this case, the date ("20200927") goes from position 6 to position 13 in this character.
+
+I can use the `substr()` function in base R to do this:
+```{r}
+substr(filename, start=6, stop=13)
+```
+
+Alternatively, I can use the `str_sub()` function in *stringr* in the same way. 
+```{r}
+str_sub(filename, start=6, end=13)
+```
+
+... and once I have this substring, I can convert this into a date object. 
+
+I can do this in base R, using the `as.Date()` function. To use this function, you need to specify the format in which the character string encodes the date information. Here, since it is a 4-number code for year, followed by month and date, you would put "%Y%m%d".
+```{r}
+as.Date(substr(filename, start=6, stop=13), format="%Y%m%d")
+```
+
+Alternatively, you can use the `ymd()` function in *lubridate*. This function is a bit smarter in that it is more flexible--it can parse the text correctly as long as it's in some form of year-month-date order. (If it was in month-date-year, you would use the `mdy()` function).
+```{r}
+filename %>% str_sub(start=6, end=13) %>% ymd()
+```
+
+**Extracting substrings is probably the most straightforward way to parse text. HOWEVER, you can only do this if the text is formatted in a way that makes the position of your information of interest predictable**
+
+***
+
+### 1.2. Replacing characters
+
+You could also extract the date from the file name by substituting *blanks* for the parts that you don't want (i.e., "data_" and ".csv"). 
+
+In base R, you can do this with `gsub()`. For example:
+```{r}
+gsub("data_", "", filename) #this removes "data_" from the character string
+```
+
+So you can string this together, then convert to date:
+```{r}
+a=gsub("data_", "", filename) #remove the prefix
+b=gsub(".csv", "", a) #remove the suffix
+as.Date(b, format="%Y%m%d") #convert to date object
+```
+
+Using the *stringr* function `str_replace()` in the same way:
+```{r}
+filename %>% 
+  str_replace("data_", "") %>% 
+  str_replace(".csv", "") %>% 
+  ymd()
+```
+
+***
+
+### 1.3. Splitting characters
+
+Another option is to split the character string into multiple elements. You can specify the character you use as the marker for where you want to split the character string. This is a very powerful and flexible tool, though it requires you to have a good understanding of how to deal with lists... So it is probably best reserved for complex tasks that you can't do with substrings or text replacement.
+
+For example, if we split the file name at the underscore ("_"):
+```{r}
+strsplit(filename, split=c("_"))
+```
+
+```{r}
+a=unlist(strsplit(filename, split=c("_")))
+a
+```
+
+```{r}
+strsplit(a, split=c("\\."))
+```
+```{r}
+unlist(strsplit(a, split=c("\\.")))
+```
+
+```{r}
+b=unlist(strsplit(a, split=c("\\.")))
+b[2]
+```
+```{r}
+as.Date(b[2], format="%Y%m%d") #convert to date object
+```
+
+***
+
+### 1.4. Pattern Matching 
+
+Finally, there may be cases where you don't need to extract the whole information, but you simply need to know if the character string contains some pattern. 
+
+```{r}
+filenames_vector=c("data_20220927.csv", "data_20221121.csv", "data_20230103.csv", "data_20230308.csv")
+```
+For example, let's say you are scouring the file names for all files pertaining to the year 2022. Then, perhaps all you need to know is whether the file name contains "2022". 
+
+You can find this out one of two ways. 
+
+The `grepl()` function will tell you TRUE or FALSE if the character string does or does not contain the string you are looking for:
+```{r}
+grepl("2022", filenames_vector)
+```
+
+In contrast, `grep()` will return the position of the elements that matched your pattern:
+```{r}
+grep("2022", filenames_vector)
+```
+
+Then, you can extract the file names that contain "2022".
+```{r}
+filenames_vector[grep("2022", filenames_vector)]
+```
+
+***
+
+## 2. Example using WHO tuberculosis data (UNDER CONSTRUCTION)
+
+```{r}
+who
+```
+```{r}
+who %>% pivot_longer(c(-country, -iso2, -iso3, -year))
+```
+
+```{r}
+codes=who %>% 
+  pivot_longer(c(-country, -iso2, -iso3, -year)) %>%
+  pull(name)
+unique(codes)
+```
+The help file provides the codes:
+
+* all codes start with "new"
+* the next part codes the method of diagnosis. It is either "rel", "_sn", "_sp", or "_ep"... notice that the under score ensures that they are all 3 characters long.
+* next part is "_m" for male and "_f" for female. These are all 2 characters long
+* final part has different number of characters: 014 = 0-14 yrs of age, 1524 = 15-24 years of age, 2534 = 25 to 34 years of age, 3544 = 35 to 44 years of age, 4554 = 45 to 54 years of age, 5564 = 55 to 64 years of age, 65 = 65 years of age or older
+
+Get the diagnosis method
+```{r}
+who %>% 
+  pivot_longer(c(-country, -iso2, -iso3, -year)) %>%
+  mutate(method=str_sub(name, 4, 6)) 
+```
+
+Remove the underscore "_" if it is exists.
+```{r}
+who %>% 
+  pivot_longer(c(-country, -iso2, -iso3, -year)) %>%
+  mutate(method=str_sub(name, 4, 6)) %>%
+  mutate(method=str_replace(method, "_", ""))
+```
+

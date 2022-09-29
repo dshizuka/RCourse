@@ -29,7 +29,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ### 6. Wrangling data in R:
 
-    + ### [6. Data Wrangling with Tidyverse Packages](06.1.tidyverse.html)
+    + ### [6.1. Data Wrangling with Tidyverse Packages](06.1.tidyverse.html)
+    
+    + ### [6.2. Parsing Text](06.2.stringr_WHO.html)
 
 * ### [7. Custom Functions (and if-else statements)](07.Functions.html)
 

@@ -349,51 +349,163 @@ div.tocify {
 
 <h1 class="title toc-ignore">Parsing text: Example with WHO data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/27/22</h4>
+<h4 class="date">updated 09/29/22</h4>
 
 </div>
 
 
-<p>Load the tidyverse library:</p>
-<pre class="r"><code>library(tidyverse)
-library(lubridate)</code></pre>
+<hr />
 <div id="data-coded-into-text" class="section level2">
-<h2>Data coded into text</h2>
+<h2>1. Data coded into text</h2>
 <p>There are many cases with large datasets where important data is
 stored in column names or file names. There are many cases in which your
 analysis pipeline needs to include steps to extract that data from the
 characters, rather than having to code it manually yourself. In other
 cases, you might also conduct “text mining” analyses where you look for
 particular words and codes inside large amounts of documents, websites,
-etc. This is made possible in R with functions geared towards character
-splitting or pattern matching.</p>
-<p>As a hypothetical example, I might name my data files with the
-date:</p>
+etc. This is made possible in R using several methods: e.g., substrings,
+character splitting, character replacement and pattern matching.</p>
+<p>Each of these functions exist in both base R and in the tidyverse
+package <em>stringr</em>.</p>
+<p>Let’s go ahead and load the tidyverse library, as well as a package
+called <em>lubridate</em> (we’ll use it later):</p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)</code></pre>
+</div>
+<div id="section" class="section level2">
+<h2></h2>
+<p>Get the stringr cheatsheet <a
+href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf">here</a></p>
+<p>Get the lubridate cheatsheet <a
+href="https://github.com/rstudio/cheatsheets/blob/main/lubridate.pdf">here</a></p>
+<hr />
+<div id="extracting-substrings-using-fixed-positions"
+class="section level3">
+<h3>1.1. Extracting substrings using fixed positions</h3>
+<p>Let’s start with a hypothetical example. What if I had named my data
+files with the date:</p>
 <pre class="r"><code>filename=&quot;data_20220927.csv&quot;</code></pre>
 <p>Now, let’s say I wanted to extract the dates from file names as part
 of my analyses. The basic way I might do this is through “text
 parsing”–i.e., extracting parts of text to get useful data. Here, I know
 that my file name has useful information (i.e., the year, month and
 date).</p>
+<p>In this case, I can just extract the part of this character string
+that contains the information I want.</p>
+<p>If I just **count the start and stop position* of the information
+within this character string, I can just extract that part of the string
+(i.e., substring). In this case, the date (“20200927”) goes from
+position 6 to position 13 in this character.</p>
+<p>I can use the <code>substr()</code> function in base R to do
+this:</p>
+<pre class="r"><code>substr(filename, start=6, stop=13)</code></pre>
+<pre><code>## [1] &quot;20220927&quot;</code></pre>
+<p>Alternatively, I can use the <code>str_sub()</code> function in
+<em>stringr</em> in the same way.</p>
+<pre class="r"><code>str_sub(filename, start=6, end=13)</code></pre>
+<pre><code>## [1] &quot;20220927&quot;</code></pre>
+<p>… and once I have this substring, I can convert this into a date
+object.</p>
+<p>I can do this in base R, using the <code>as.Date()</code> function.
+To use this function, you need to specify the format in which the
+character string encodes the date information. Here, since it is a
+4-number code for year, followed by month and date, you would put
+“%Y%m%d”.</p>
+<pre class="r"><code>as.Date(substr(filename, start=6, stop=13), format=&quot;%Y%m%d&quot;)</code></pre>
+<pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
+<p>Alternatively, you can use the <code>ymd()</code> function in
+<em>lubridate</em>. This function is a bit smarter in that it is more
+flexible–it can parse the text correctly as long as it’s in some form of
+year-month-date order. (If it was in month-date-year, you would use the
+<code>mdy()</code> function).</p>
+<pre class="r"><code>filename %&gt;% str_sub(start=6, end=13) %&gt;% ymd()</code></pre>
+<pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
+<p><strong>Extracting substrings is probably the most straightforward
+way to parse text. HOWEVER, you can only do this if the text is
+formatted in a way that makes the position of your information of
+interest predictable</strong></p>
+<hr />
+</div>
+<div id="replacing-characters" class="section level3">
+<h3>1.2. Replacing characters</h3>
+<p>You could also extract the date from the file name by substituting
+<em>blanks</em> for the parts that you don’t want (i.e., “data_” and
+“.csv”).</p>
+<p>In base R, you can do this with <code>gsub()</code>. For example:</p>
+<pre class="r"><code>gsub(&quot;data_&quot;, &quot;&quot;, filename) #this removes &quot;data_&quot; from the character string</code></pre>
+<pre><code>## [1] &quot;20220927.csv&quot;</code></pre>
+<p>So you can string this together, then convert to date:</p>
+<pre class="r"><code>a=gsub(&quot;data_&quot;, &quot;&quot;, filename) #remove the prefix
+b=gsub(&quot;.csv&quot;, &quot;&quot;, a) #remove the suffix
+as.Date(b, format=&quot;%Y%m%d&quot;) #convert to date object</code></pre>
+<pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
+<p>Using the <em>stringr</em> function <code>str_replace()</code> in the
+same way:</p>
+<pre class="r"><code>filename %&gt;% 
+  str_replace(&quot;data_&quot;, &quot;&quot;) %&gt;% 
+  str_replace(&quot;.csv&quot;, &quot;&quot;) %&gt;% 
+  ymd()</code></pre>
+<pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
+<hr />
+</div>
+<div id="splitting-characters" class="section level3">
+<h3>1.3. Splitting characters</h3>
+<p>Another option is to split the character string into multiple
+elements. You can specify the character you use as the marker for where
+you want to split the character string. This is a very powerful and
+flexible tool, though it requires you to have a good understanding of
+how to deal with lists… So it is probably best reserved for complex
+tasks that you can’t do with substrings or text replacement.</p>
+<p>For example, if we split the file name at the underscore (“_“):</p>
 <pre class="r"><code>strsplit(filename, split=c(&quot;_&quot;))</code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;data&quot;         &quot;20220927.csv&quot;</code></pre>
-<pre class="r"><code>strsplit(filename, split=c(&quot;\\.&quot;))</code></pre>
+<pre class="r"><code>a=unlist(strsplit(filename, split=c(&quot;_&quot;)))
+a</code></pre>
+<pre><code>## [1] &quot;data&quot;         &quot;20220927.csv&quot;</code></pre>
+<pre class="r"><code>strsplit(a, split=c(&quot;\\.&quot;))</code></pre>
 <pre><code>## [[1]]
-## [1] &quot;data_20220927&quot; &quot;csv&quot;</code></pre>
-<pre class="r"><code>str_split(filename, pattern=&quot;_&quot;)</code></pre>
-<pre><code>## [[1]]
-## [1] &quot;data&quot;         &quot;20220927.csv&quot;</code></pre>
-<pre class="r"><code>str_sub(filename, 6,13)</code></pre>
+## [1] &quot;data&quot;
+## 
+## [[2]]
+## [1] &quot;20220927&quot; &quot;csv&quot;</code></pre>
+<pre class="r"><code>unlist(strsplit(a, split=c(&quot;\\.&quot;)))</code></pre>
+<pre><code>## [1] &quot;data&quot;     &quot;20220927&quot; &quot;csv&quot;</code></pre>
+<pre class="r"><code>b=unlist(strsplit(a, split=c(&quot;\\.&quot;)))
+b[2]</code></pre>
 <pre><code>## [1] &quot;20220927&quot;</code></pre>
-<pre class="r"><code>ymd(str_sub(filename, 6,13))</code></pre>
+<pre class="r"><code>as.Date(b[2], format=&quot;%Y%m%d&quot;) #convert to date object</code></pre>
 <pre><code>## [1] &quot;2022-09-27&quot;</code></pre>
-</div>
-<div id="section" class="section level2">
-<h2></h2>
-<p>Get the stringr cheatsheet <a
-href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf">here</a></p>
 <hr />
+</div>
+<div id="pattern-matching" class="section level3">
+<h3>1.4. Pattern Matching</h3>
+<p>Finally, there may be cases where you don’t need to extract the whole
+information, but you simply need to know if the character string
+contains some pattern.</p>
+<pre class="r"><code>filenames_vector=c(&quot;data_20220927.csv&quot;, &quot;data_20221121.csv&quot;, &quot;data_20230103.csv&quot;, &quot;data_20230308.csv&quot;)</code></pre>
+<p>For example, let’s say you are scouring the file names for all files
+pertaining to the year 2022. Then, perhaps all you need to know is
+whether the file name contains “2022”.</p>
+<p>You can find this out one of two ways.</p>
+<p>The <code>grepl()</code> function will tell you TRUE or FALSE if the
+character string does or does not contain the string you are looking
+for:</p>
+<pre class="r"><code>grepl(&quot;2022&quot;, filenames_vector)</code></pre>
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE</code></pre>
+<p>In contrast, <code>grep()</code> will return the position of the
+elements that matched your pattern:</p>
+<pre class="r"><code>grep(&quot;2022&quot;, filenames_vector)</code></pre>
+<pre><code>## [1] 1 2</code></pre>
+<p>Then, you can extract the file names that contain “2022”.</p>
+<pre class="r"><code>filenames_vector[grep(&quot;2022&quot;, filenames_vector)]</code></pre>
+<pre><code>## [1] &quot;data_20220927.csv&quot; &quot;data_20221121.csv&quot;</code></pre>
+<hr />
+</div>
+</div>
+<div id="example-using-who-tuberculosis-data-under-construction"
+class="section level2">
+<h2>2. Example using WHO tuberculosis data (UNDER CONSTRUCTION)</h2>
 <pre class="r"><code>who</code></pre>
 <pre><code>## # A tibble: 7,240 × 60
 ##    country     iso2  iso3   year new_s…¹ new_s…² new_s…³ new_s…⁴ new_s…⁵ new_s…⁶
