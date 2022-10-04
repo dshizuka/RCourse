@@ -1,0 +1,251 @@
+---
+title: "8.1. Randomizations: Sampling from sets and probability distributions"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+***
+
+## 1. Random number generators
+
+`sample()` and `rnorm()`. These are two examples of functions that help you generate random numbers from some probability distributoin. But if you think about it, there is an infinate number of ways to sample a random set of numbers[^1]. Understanding these functions can be really useful in crafting randomization tests, bootstrapping, and simulations.
+
+Let's consider some options:
+
+### 1.1 Sampling from a given set of numbers ***with or without replacement***. 
+We often want to generate a set of random number given some distribution. Say, for example, we want to sample randomly from a set of numbers. For example, let's sample 5 integer between 1 and 10. 
+
+```{r}
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10
+```
+You will probably notice that you have generated a *different* set of random numbers than what is shown here. This makes sense, but it makes it difficult to make this code *reproducible*. What we can do is to use `set.seed()` to make this process repeatable:
+
+```{r}
+set.seed(2) #you can put whatever number inside set.seed()
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10s
+```
+When you run the code like this, you should always get "2, 7, 5, 10, 6"  
+Try changing the number inside the `set.seed()` and see what you get. 
+
+Note that we have used **`replace=F`** to indicate that, once we choose a number, we want to avoid choosing it again. This is akin to physically picking 5 cards out of a set of 10 at the same time. We can do that up to the sample size, but no more. So, this will work:
+
+```{r}
+set.seed(2)
+sample(1:10, 10, replace=F) #10 random numbers between 1 and 10
+```
+But this will NOT work:
+```{r, error=T}
+sample(1:10, 11, replace=F) #11 random numbers between 1 and 10
+```
+
+In the first iteration, you have simply shuffled the order of the numbers. But you cannot shuffle 11 cards out of a deck of 10. 
+
+Compare this to the case when we set `replace=TRUE`:
+```{r}
+set.seed(2)
+sample(1:10, 10, replace=T) #10 random numbers between 1 and 10
+```
+You will notice that we have chose some numbers multiple times ("2" appears three times, "10" and "6" appear twice). When you set `replace=TRUE`, we are basically simulating a situation where we choose a card, write down the number, ***and then put it back before picking up another card***. This process is the essence of a simulation procedure called **bootstrapping**. 
+
+A quick recap:
+
+* `sample(x, n)` allows you to randomly sample *n* numbers from the set `x`.
+* `replace=F` (default) means once you sample one number, you will not sample it again. You can use this to shuffle the order of numbers (generally called *randomization*)
+* `replace=T` allows for sampling a number more than once. You can use this to resample a set of numbers with equal probability (generally called *bootstrapping*)
+
+***
+
+### 2.2 Sampling from probability distributions
+
+Rather than sampling from a discrete set of numbers, we might want to sample numbers from a given hypothetical distribution. 
+As an illustration, let's sample a set of 100 numbers from a normal distribution with mean of 0 and standard deviation of 1
+```{r}
+set.seed(2)
+rn=rnorm(10, mean=0, sd=1)
+rn
+```
+
+You can see that it generates numbers with 8 digits. 
+We can generate a **histogram** and check to see if the output of the `rnorm()` function really looks like a normal distribution. Let's do it with 1,000 numbers so that we reduce sampling error.
+
+```{r, out.width='50%'}
+set.seed(2)
+hist(rnorm(1000, mean=0, sd=1), freq=F)
+```
+
+Looks about right.
+
+Now let's try the same thing but with a **uniform distribution** of numbers ranging from 0 to 1
+```{r, out.width='50%'}
+set.seed(2)
+runif(10, min=0, max=1)
+hist(runif(1000, min=0, max=1), freq=F)
+```
+
+
+### 2.3 Coin-flips
+We can use the `rbinom()` function to simulate coin-flips, i.e., generating 0s and 1s randomly.
+
+(1) Flipping the coin 100 times, keeping track of result each time.
+```{r}
+set.seed(2)
+coin=rbinom(100, 1, prob=0.5) #100 trials of a single flip of the coin
+coin
+table(coin) #generate a table of results
+sum(coin)/length(coin) #calculate probability of 1
+```
+
+(2) Flipping the coin 100 times, but with skewed probability
+```{r}
+set.seed(2)
+flip=100
+coin4=rbinom(100, 1, prob=0.25)
+table(coin4)
+```
+
+(3) 10 trials of 100 fair coin flips
+```{r}
+set.seed(2)
+flips=100
+coin2=rbinom(10, flips, prob=0.5)
+coin2
+```
+
+### 2.4 Table of probability distributions
+Distribution | Function to generate numbers
+--------|-------------
+Beta  | `rbeta()`
+Binomial | `rbinom()`
+Chi-square | `rchisq()`
+Exponential | `rexp()`
+Gamma | `rgamma()`
+Geometric | `rgeom()`
+Logistic | `rlogis()`
+Log Normal | `rlnorm()`
+Negative Binomial | `rnbinom()`
+Normal | `rnorm()`
+Poisson | `rpois()`
+Uniform | `runif()`
+Weibull | `rweibull()`
+
+
+## 1. Combining apply and/or loops with `sample()`
+
+### 1.1. Learning about `sample()` and `set.seed()`
+Now that we've run through the basics of "apply" functions and for-loops, let's try using it to start building the basics of simulations. To do this, we will combine apply and/or loops with the super useful function: `sample()`. Let's generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a column of a matrix (the final matrix should be 10 rows of 5 columns).
+
+```{r}
+times=5
+m=matrix(nrow=10, ncol=times)
+for (i in 1:times){
+m[,i]=sample(1:10, 10, replace=F)
+}
+m
+```
+
+**Now, if you actually did this, you will see that you got a different result than I did!** This is because the `sample()` function gives you a different set of results each time you run it. 
+
+If you want reproducible results with randomization procedures like `sample()`, you can use a function called `set.seed()`. You can put in a number inside this function--and each time you use the same number, you should get the same result. Try running this code:
+```{r}
+set.seed(2)
+times=5
+m=matrix(nrow=10, ncol=times)
+for (i in 1:times){
+m[,i]=sample(1:10, 10, replace=F)
+}
+m
+```
+Now, you should have gotten the exact same results as shown here!
+
+
+**Mini-exercise:** What do you think this code will produce (note *where* I put the `set.seed()` function)
+```{r, eval=F}
+times=5
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times){
+set.seed(2)
+m[i,]=sample(1:10, 10, replace=F)
+}
+m
+```
+
+You can do the same thing with an `sapply` function. Here, if you are going to repeat a set of codes 5 times, just put `1:5` as the input to the `sapply()` function:
+
+```{r}
+set.seed(2)
+sapply(1:5, function(x){
+  sample(1:10, 10, replace=F)
+})
+```
+
+If you used the same `set.seed(2)` command, you should see that you get the same result!
+
+*** 
+
+### 2.2 Practice with for-loops: What does a P-value mean?
+
+Let's use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let's investigate this case for the p-value generated from a Pearson's correlation coefficient. 
+
+
+Let's start by testing the correlation between two random sets of values drawn from normal distributions. You can do this by using the functino `rnorm()`. By default, this will pull X number of values from a normal distribution with mean = 0 and sd = 1. But you can set the mean (and sd) to be something different:
+```{r}
+rnorm(10, mean=10)
+```
+
+Use this to generate two distributions with the same mean. Then, do a t-test:
+```{r}
+set.seed(2)
+r1=rnorm(100, mean=10)
+r2=rnorm(100, mean=10)
+test=t.test(r1, r2)
+test
+```
+It's easy to extract the P-value from a t-test:
+```{r}
+test$p.value
+```
+What we have done is see if two sets of random numbers are correlated. As expected, there is no significant difference in the means.
+
+**However**, what if we did this test a bunch of times? We should get a "significant correlation" (P<0.05) 5% of the time. Let's try this and see if that's true. 
+What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. Let's run the loop and store the p-values.
+
+```{r}
+times=10000
+set.seed(2)
+p=vector(length=times)
+cor.coefs=vector(length=times)
+for(i in 1:times){
+r1=rnorm(100)
+r2=rnorm(100)
+test=t.test(r1,r2)
+p[i]=test$p.value
+}
+```
+
+Now let's visualize the p-values we generated as a histogram, with a red line where P=0.05 is.
+```{r}
+hist(p, breaks=100)
+abline(v=0.05, col="red", lwd=2)
+```
+
+So, in theory, about 5%, or 10,000 x 0.05 = 500 of these values should be <=0.05. Let's see if that's right:
+
+```{r}
+length(which(p<=0.05))
+```
+
+You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a 'significant' result 500 times. 
+
+This is a statistical cautionary tale--Even when we set up two fictional distributions to have the same mean and variance, you will get a "significant difference" in their means 5% of the time if you are using P < 0.05 as the criterion for "significance".
+
+***
+[^1]: Strictly speaking, we can only generate pseudo-random numbers--the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it. 

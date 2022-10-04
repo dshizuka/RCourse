@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -15,22 +14,39 @@
 
 <title>Module 8: Apply Functions and Loops</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -43,32 +59,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -78,10 +70,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -98,40 +86,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 61px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
-.section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -159,7 +123,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -171,7 +135,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -181,11 +145,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -197,7 +178,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -233,6 +213,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,6 +230,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -258,12 +302,22 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -289,38 +343,77 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Module 8: Apply Functions and Loops</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 10/03/19</h4>
+<h4 class="date">updated 10/04/22</h4>
 
 </div>
 
 
 <hr />
-<p>In this module, we will go over several useful R tricks that allow you to speed up tasks and scale up your analyses!</p>
+<p>In this module, we will go over several useful R tricks that allow
+you to speed up tasks and scale up your analyses!</p>
+<p>Let’s load the packages we’ll need here:</p>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(cowplot)</code></pre>
 <hr />
 <div id="the-apply-family-of-functions" class="section level2">
-<h2>8.1 The “apply-family” of functions</h2>
-<p>The “apply family” function–which includes <code>apply()</code>, <code>sapply()</code>, <code>lapply()</code> and <code>tapply()</code>–takes a series of elements and applies a given function to it. The function to be applied can be defined within the ‘apply’ function.</p>
-<p>Each apply-family function varies slightly in its syntax or output format.</p>
+<h2>1. The “apply-family” of functions</h2>
+<p>The “apply family” function–which includes <code>apply()</code>,
+<code>sapply()</code>, <code>lapply()</code> and
+<code>tapply()</code>–takes a series of elements and applies a given
+function to it. The function to be applied can be defined within the
+‘apply’ function.</p>
+<p>“apply” functions take X, and applies a function to each element
+along the length of X (with the exception of <code>apply()</code>, which
+can apply the function along an array, and <code>tapply()</code>: see
+below). Each apply-family function varies slightly in its syntax or
+output format:</p>
+<ul>
+<li><code>lapply()</code> returns the output as a list</li>
+<li><code>sapply()</code> returns the output in the simplest format
+possible (e.g., it will be a vector if the output is a series of
+numbers)</li>
+<li><code>vapply()</code> allows you to pre-specify a type of return
+value.</li>
+<li><code>apply()</code> is slightly different in that it allows you to
+apply the function on an array–e.g., you can apply a function on rows of
+a matrix, or columns, or on each cell.</li>
+<li><code>tapply()</code> applies a function to an variable in a
+dataframe grouped by a factor. (<em>I don’t think I ever really use this
+one because I prefer to use the <code>group_by()</code> %&gt;%
+<code>summarise()</code> pipeline from dplyr</em>)</li>
+</ul>
 <hr />
-<div id="applying-a-function-to-a-set-of-elements-using-sapply-and-lapply" class="section level3">
-<h3>8.1.1 Applying a function to a set of elements using <code>sapply()</code> and <code>lapply()</code></h3>
-<p>Here, we will use the <code>sapply()</code> function, which can take a series of elements, run a function on it, and then save the output in the simplest format (“s” in “sapply” is for “simplify”).<br />
+<div
+id="applying-a-function-to-a-set-of-elements-using-sapply-and-lapply"
+class="section level3">
+<h3>1.1 Applying a function to a set of elements using
+<code>sapply()</code> and <code>lapply()</code></h3>
+<div id="the-basic-difference-between-sapply-and-lapply"
+class="section level4">
+<h4>1.1.1: The basic difference between <code>sapply()</code> and
+<code>lapply()</code></h4>
+<p>Here, we will use the <code>sapply()</code> function, which can take
+a series of elements, run a function on it, and then save the output in
+the simplest format (“s” in “sapply” is for “simplify”).<br />
 Let’s try out a really simple application:</p>
-<pre class="r"><code>sapply(1:5, function(x) x * 2)</code></pre>
+<pre class="r"><code>sapply(1:5, function(x) x*2)</code></pre>
 <pre><code>## [1]  2  4  6  8 10</code></pre>
 <p>Here, what we did was to:</p>
 <ol style="list-style-type: decimal">
-<li>Take each element of <code>1:10</code> (integers from 1 to 10) and multiply each element by 2</li>
+<li>Take each element of <code>1:10</code> (integers from 1 to 10) and
+multiply each element by 2</li>
 <li>Store the output in the simplest form, which is a vector</li>
 </ol>
-<p>Compare that with the <code>lapply()</code> function, which saves the output as a list.</p>
-<pre class="r"><code>lapply(1:5, function(x) x * 2)</code></pre>
+<p>Compare that with the <code>lapply()</code> function, which saves the
+output as a list.</p>
+<pre class="r"><code>lapply(1:5, function(x) x*2)</code></pre>
 <pre><code>## [[1]]
 ## [1] 2
 ## 
@@ -336,74 +429,226 @@ Let’s try out a really simple application:</p>
 ## [[5]]
 ## [1] 10</code></pre>
 <p>Here’s another example:</p>
-<pre class="r"><code>var = c(1, 2, 3)
-sapply(1:10, function(x) x * var)</code></pre>
+<pre class="r"><code>var=c(1,2,3)
+sapply(1:10, function(x) x*var)</code></pre>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
 ## [1,]    1    2    3    4    5    6    7    8    9    10
 ## [2,]    2    4    6    8   10   12   14   16   18    20
 ## [3,]    3    6    9   12   15   18   21   24   27    30</code></pre>
 <p>What have we done here?</p>
 <ol style="list-style-type: decimal">
-<li>Set up an object called <code>var</code>, which is a vector of three numbers: 1, 2 and 3</li>
-<li>Then, take each element of <code>1:10</code> and multiply by <code>var</code>, which itself is 3 numbers.</li>
-<li>Organize the results as a matrix, which is the simplest format to store a 2-dimensional set of numbers. In this case, there will be 3 rows of 10 numbers.</li>
+<li>Set up an object called <code>var</code>, which is a vector of three
+numbers: 1, 2 and 3</li>
+<li>Then, take each element of <code>1:10</code> and multiply by
+<code>var</code>, which itself is 3 numbers.</li>
+<li>Organize the results as a matrix, which is the simplest format to
+store a 2-dimensional set of numbers. In this case, there will be 3 rows
+of 10 numbers.</li>
 </ol>
-<p>Again, compare this result with the output of <code>lapply()</code> (output not shown):</p>
-<pre class="r"><code>var = c(1, 2, 3)
-lapply(1:10, function(x) x * var)</code></pre>
-<p>So you can see that the output of <code>sapply()</code> is more user-friendly than the output of <code>lapply()</code> in general. However, <code>lapply()</code> is really useful when you want to apply a function whose output is not a neat set of values.</p>
-<p>As an example, let’s use the <code>lapply()</code> function to run a linear regression on a list of dataframes. First, we will create such a list by “splitting” the familiar <code>iris</code> dataset by species (output not shown):</p>
-<pre class="r"><code>iris.list = split(iris, iris$Species)
+<p>Again, compare this result with the output of <code>lapply()</code>
+(output not shown):</p>
+<pre class="r"><code>var=c(1,2,3)
+lapply(1:10, function(x) x*var)</code></pre>
+<p>So you can see that the output of <code>sapply()</code> is more
+user-friendly than the output of <code>lapply()</code> in general.</p>
+</div>
+<div
+id="lapply-is-really-useful-when-your-output-is-complex-like-a-model-output-of-dataframe"
+class="section level4">
+<h4>1.1.2. <code>lapply()</code> is really useful when your output is
+complex, like a model output of dataframe:</h4>
+<p><code>lapply()</code> is really useful when you want to apply a
+function whose output is not a neat set of values.</p>
+<p>As an example, let’s use the <code>lapply()</code> function to run a
+linear regression on a list of dataframes. First, we will create such a
+list by “splitting” the familiar <code>iris</code> dataset by species
+(output not shown):</p>
+<pre class="r"><code>iris.list=split(iris, iris$Species)
 iris.list</code></pre>
-<p>Now we have a list object with three dataframes. Let’s now use the <code>lapply()</code> function to conduct the same linear regression model <code>Petal.Length~Sepal.Length</code> on each dataset. The output will be the <code>anova()</code> tables that show the F-statistic and overall model fits.</p>
-<pre class="r"><code>lapply(iris.list, function(x) anova(lm(Petal.Length ~ Sepal.Length, 
-    data = x)))</code></pre>
+<p>Now we have a list object with three dataframes. Let’s now use the
+<code>lapply()</code> function to conduct the same linear regression
+model <code>Petal.Length~Sepal.Length</code> on each dataset. The output
+will be the <code>anova()</code> tables that show the F-statistic and
+overall model fits.</p>
+<pre class="r"><code>spp.mods=lapply(iris.list, function(x) lm(Petal.Length~Sepal.Length, data=x))
+spp.mods</code></pre>
 <pre><code>## $setosa
-## Analysis of Variance Table
 ## 
-## Response: Petal.Length
-##              Df  Sum Sq Mean Sq F value Pr(&gt;F)  
-## Sepal.Length  1 0.10549 0.10549  3.6898 0.0607 .
-## Residuals    48 1.37231 0.02859                 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.8031        0.1316  
+## 
 ## 
 ## $versicolor
-## Analysis of Variance Table
 ## 
-## Response: Petal.Length
-##              Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-## Sepal.Length  1 6.1521  6.1521  63.263 2.586e-10 ***
-## Residuals    48 4.6679  0.0972                      
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.1851        0.6865  
+## 
+## 
+## $virginica
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.6105        0.7501</code></pre>
+<p>Now, let’s then use the <code>lapply()</code> function again to get
+the summary:</p>
+<pre class="r"><code>spp.mods.summary=lapply(spp.mods, function(x) summary(x))
+spp.mods.summary</code></pre>
+<pre><code>## $setosa
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.40856 -0.08027 -0.00856  0.11708  0.46512 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   0.80305    0.34388   2.335   0.0238 *
+## Sepal.Length  0.13163    0.06853   1.921   0.0607 .
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## $virginica
-## Analysis of Variance Table
+## Residual standard error: 0.1691 on 48 degrees of freedom
+## Multiple R-squared:  0.07138,    Adjusted R-squared:  0.05204 
+## F-statistic:  3.69 on 1 and 48 DF,  p-value: 0.0607
 ## 
-## Response: Petal.Length
-##              Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-## Sepal.Length  1 11.1471 11.1471  141.64 6.298e-16 ***
-## Residuals    48  3.7777  0.0787                      
+## 
+## $versicolor
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68611 -0.22827 -0.04123  0.19458  0.79607 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.18512    0.51421   0.360     0.72    
+## Sepal.Length  0.68647    0.08631   7.954 2.59e-10 ***
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>You can see that the three species vary in their relationships between sepal length and petal length. Here’s one way to visualize it:</p>
-<pre class="r"><code>par(mfrow = c(1, 3))
-plot(Petal.Length ~ Sepal.Length, data = iris.list[[1]], pch = 19, 
-    col = 1, main = &quot;setosa&quot;)
-plot(Petal.Length ~ Sepal.Length, data = iris.list[[2]], pch = 19, 
-    col = 2, main = &quot;versicolor&quot;)
-plot(Petal.Length ~ Sepal.Length, data = iris.list[[3]], pch = 19, 
-    col = 3, main = &quot;virginica&quot;)</code></pre>
-<p><img src="08.Apply_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3118 on 48 degrees of freedom
+## Multiple R-squared:  0.5686, Adjusted R-squared:  0.5596 
+## F-statistic: 63.26 on 1 and 48 DF,  p-value: 2.586e-10
+## 
+## 
+## $virginica
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68603 -0.21104  0.06399  0.18901  0.66402 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.61047    0.41711   1.464     0.15    
+## Sepal.Length  0.75008    0.06303  11.901  6.3e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2805 on 48 degrees of freedom
+## Multiple R-squared:  0.7469, Adjusted R-squared:  0.7416 
+## F-statistic: 141.6 on 1 and 48 DF,  p-value: 6.298e-16</code></pre>
+</div>
+<div
+id="you-can-use-sapply-to-efficiently-extract-the-coefficients-from-a-series-of-models-stored-in-a-list."
+class="section level4">
+<h4>1.1.3. You can use <code>sapply()</code> to efficiently extract the
+coefficients from a series of models stored in a list.</h4>
+<p>Every model output and/or summary objects contain lots of
+information. Let’s see what is in the model summary for “setosa” (the
+first element of the spp.mods.summary list) using the function
+<code>str()</code>:</p>
+<pre class="r"><code>str(spp.mods.summary[[1]])</code></pre>
+<pre><code>## List of 11
+##  $ call         : language lm(formula = Petal.Length ~ Sepal.Length, data = x)
+##  $ terms        :Classes &#39;terms&#39;, &#39;formula&#39;  language Petal.Length ~ Sepal.Length
+##   .. ..- attr(*, &quot;variables&quot;)= language list(Petal.Length, Sepal.Length)
+##   .. ..- attr(*, &quot;factors&quot;)= int [1:2, 1] 0 1
+##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. .. ..$ : chr [1:2] &quot;Petal.Length&quot; &quot;Sepal.Length&quot;
+##   .. .. .. ..$ : chr &quot;Sepal.Length&quot;
+##   .. ..- attr(*, &quot;term.labels&quot;)= chr &quot;Sepal.Length&quot;
+##   .. ..- attr(*, &quot;order&quot;)= int 1
+##   .. ..- attr(*, &quot;intercept&quot;)= int 1
+##   .. ..- attr(*, &quot;response&quot;)= int 1
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: 0x7fd32f399448&gt; 
+##   .. ..- attr(*, &quot;predvars&quot;)= language list(Petal.Length, Sepal.Length)
+##   .. ..- attr(*, &quot;dataClasses&quot;)= Named chr [1:2] &quot;numeric&quot; &quot;numeric&quot;
+##   .. .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Petal.Length&quot; &quot;Sepal.Length&quot;
+##  $ residuals    : Named num [1:50] -0.0744 -0.048 -0.1217 0.0914 -0.0612 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:50] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##  $ coefficients : num [1:2, 1:4] 0.8031 0.1316 0.3439 0.0685 2.3353 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##   .. ..$ : chr [1:4] &quot;Estimate&quot; &quot;Std. Error&quot; &quot;t value&quot; &quot;Pr(&gt;|t|)&quot;
+##  $ aliased      : Named logi [1:2] FALSE FALSE
+##   ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##  $ sigma        : num 0.169
+##  $ df           : int [1:3] 2 48 2
+##  $ r.squared    : num 0.0714
+##  $ adj.r.squared: num 0.052
+##  $ fstatistic   : Named num [1:3] 3.69 1 48
+##   ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;value&quot; &quot;numdf&quot; &quot;dendf&quot;
+##  $ cov.unscaled : num [1:2, 1:2] 4.136 -0.822 -0.822 0.164
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;summary.lm&quot;</code></pre>
+<p>You can see there are lots of info in here. Let’s extract the
+“estimate” of the –i.e., the slope of the relationship. This value is
+stored inside the “coefficients” section of the summary. If you look at
+the output above, you can kind of see that the coefficients are arranged
+in a matrix of 2 rows (intercept and Sepal.Length) and 4 columns
+(Estimate, Std. Error, t-value, and p-value). So, the slope of the
+relationship between Sepal Length and Petal Length is in the 2nd row,
+1st column.</p>
+<p>Use this knowledge and an <code>sapply()</code> function to get those
+slopes!</p>
+<pre class="r"><code>sapply(spp.mods.summary, function(x) x$coefficients[2,1])</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+##  0.1316317  0.6864698  0.7500808</code></pre>
+<p>You can see that the three species vary in their relationships
+between sepal length and petal length. Here’s one way to visualize it
+simply using ggplot (you can just use the original iris data set to do
+this):</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Petal.Length, color=Species)) + 
+  geom_point() + 
+  geom_smooth(method=&quot;lm&quot;) +
+  facet_wrap(~Species)</code></pre>
+<p><img src="08.Apply_files/figure-html/unnamed-chunk-11-1.png" width="768" />
+You can see how the slopes of “versicolor” and “virginica” are steeper
+than for “setosa”.</p>
 <hr />
 </div>
-<div id="tapply-and-comparing-it-to-aggregate" class="section level3">
-<h3>8.1.2 <code>tapply()</code> (and comparing it to <code>aggregate()</code>)</h3>
-<p>The <code>tapply()</code> function applies a function to a set of values that are grouped by some factor. This is pretty much the same as the <code>aggregate()</code> function, but the output format is different. As a demo, let’s first set up a dataframe:</p>
-<pre class="r"><code>fac = c(rep(&quot;A&quot;, 4), rep(&quot;B&quot;, 4), rep(&quot;C&quot;, 4))
-num = 1:12
-dat = data.frame(num, fac)
+</div>
+<div id="tapply-and-comparing-it-to-aggregate-and-dplyr"
+class="section level3">
+<h3>1.2 <code>tapply()</code> (and comparing it to
+<code>aggregate()</code> and dplyr)</h3>
+<p>The <code>tapply()</code> function applies a function to a set of
+values that are grouped by some factor. This is pretty much the same as
+the <code>aggregate()</code> function, but the output format is
+different. As a demo, let’s first set up a dataframe:</p>
+<pre class="r"><code>fac=c(rep(&quot;A&quot;, 4), rep(&quot;B&quot;, 4), rep(&quot;C&quot;, 4))
+num=1:12
+dat=data.frame(num, fac)
 dat</code></pre>
 <pre><code>##    num fac
 ## 1    1   A
@@ -418,21 +663,55 @@ dat</code></pre>
 ## 10  10   C
 ## 11  11   C
 ## 12  12   C</code></pre>
-<p>Now, we’ll sum the values associated each factor (A, B or C). We’ll do this using <code>tapply()</code> and <code>aggregate()</code> and compare the outputs:</p>
-<pre class="r"><code>tapply(dat$num, list(dat$fac), sum)</code></pre>
+<p>Now, we’ll sum the values associated each factor (A, B or C). We’ll
+do this using <code>tapply()</code>, <code>aggregate()</code>, and the
+dplyr pipeline <code>group_by() %&gt;% summarise()</code> and compare
+the outputs:</p>
+<pre class="r"><code>output_tapply=tapply(dat$num, list(dat$fac), sum)
+output_aggregate=aggregate(num, list(fac=fac), sum)
+output_dplyr=dat %&gt;% group_by(fac) %&gt;% summarise(sum(num))</code></pre>
+<p>Let’s see what <code>tapply()</code> did:</p>
+<pre class="r"><code>output_tapply</code></pre>
 <pre><code>##  A  B  C 
 ## 10 26 42</code></pre>
-<pre class="r"><code>aggregate(num, list(fac = fac), sum)</code></pre>
+<pre class="r"><code>class(output_tapply)</code></pre>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<p>You can see that <code>tapply()</code> returns an array (in this
+case, since it’s a one-dimensional array, it is basically a vector) with
+the names of the elements as the factor you used to group the
+values.</p>
+<p>How about what <code>aggregate()</code> did?:</p>
+<pre class="r"><code>output_aggregate</code></pre>
 <pre><code>##   fac  x
 ## 1   A 10
 ## 2   B 26
 ## 3   C 42</code></pre>
+<pre class="r"><code>class(output_aggregate)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>As you can see, <code>aggregate()</code> returns a dataframe with the
+factor as one column and values as a second column.</p>
+<p>Finally, let’s what the dplyr pipeline of
+<code>group_by() %&gt;% summarise()</code> did:</p>
+<pre class="r"><code>output_dplyr</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   fac   `sum(num)`
+##   &lt;chr&gt;      &lt;int&gt;
+## 1 A             10
+## 2 B             26
+## 3 C             42</code></pre>
+<p>This is essentially the same as <code>aggregate()</code> but in a
+tibble format.</p>
 <hr />
 </div>
 <div id="working-with-arrays-using-apply" class="section level3">
-<h3>8.1.3 Working with arrays using <code>apply()</code></h3>
-<p>The <code>apply()</code> function is useful when you want to apply a function on an array (i.e., an n-dimensional set of numbers). Here, the syntax is apply(X, MARGIN, FUN, …), where X is a matrix or array, MARGIN is the direction in which the function will applied—for a matrix, <code>MARGIN=1</code> indicates rows, and <code>MARGIN=2</code> indicates columns. For example:</p>
-<pre class="r"><code>m = matrix(1:20, nrow = 5, byrow = TRUE)
+<h3>1.3 Working with arrays using <code>apply()</code></h3>
+<p>The <code>apply()</code> function is useful when you want to apply a
+function on an array (i.e., an n-dimensional set of numbers). Here, the
+syntax is apply(X, MARGIN, FUN, …), where X is a matrix or array, MARGIN
+is the direction in which the function will applied—for a matrix,
+<code>MARGIN=1</code> indicates rows, and <code>MARGIN=2</code>
+indicates columns. For example:</p>
+<pre class="r"><code>m=matrix(1:20, nrow=5, byrow=TRUE) 
 m</code></pre>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]    1    2    3    4
@@ -440,283 +719,417 @@ m</code></pre>
 ## [3,]    9   10   11   12
 ## [4,]   13   14   15   16
 ## [5,]   17   18   19   20</code></pre>
-<pre class="r"><code>apply(m, 1, sum)  #sum the rows</code></pre>
+<pre class="r"><code>apply(m,1,sum) #sum the rows</code></pre>
 <pre><code>## [1] 10 26 42 58 74</code></pre>
-<pre class="r"><code>apply(m, 2, sum)  #sum the columns</code></pre>
+<pre class="r"><code>apply(m,2,sum) #sum the columns</code></pre>
 <pre><code>## [1] 45 50 55 60</code></pre>
-<p>Or you can set the margin to <code>c(1,2)</code> to apply a function to row/column combinations (i.e., each cell)</p>
-<pre class="r"><code>apply(m, c(1, 2), function(x) x^2)</code></pre>
+<p>Or you can set the margin to <code>c(1,2)</code> to apply a function
+to row/column combinations (i.e., each cell)</p>
+<pre class="r"><code>apply(m,c(1,2),function(x) x^2)</code></pre>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]    1    4    9   16
 ## [2,]   25   36   49   64
 ## [3,]   81  100  121  144
 ## [4,]  169  196  225  256
 ## [5,]  289  324  361  400</code></pre>
-<p>Where <code>apply()</code> really shines is when working with larger-dimensional arrays. For example, consider a 3x4x5 3-D array.</p>
-<p><img src="images/Array.png" style="width:50.0%" /> We can sum across each of those dimensions:</p>
-<pre class="r"><code>a = array(1:60, dim = c(5, 4, 3))
-apply(a, 1, sum)</code></pre>
-<pre><code>## [1] 342 354 366 378 390</code></pre>
-<pre class="r"><code>apply(a, 2, sum)</code></pre>
-<pre><code>## [1] 345 420 495 570</code></pre>
+<p>Where <code>apply()</code> really shines is when working with
+larger-dimensional arrays. For example, consider a 3x4x5 3-D array.</p>
+<p><img src="images/Array.png" style="width:50.0%" /> We can sum across
+each of those dimensions:</p>
+<pre class="r"><code>a=array(1:60, dim=c(5, 4, 3)) </code></pre>
+<p>This creates a 3-dimensional array that is 5 values high, 4 values
+wide, and 3 values deep.</p>
+<p>The first “layer” of this matrix along dimension 1 (i.e., the matrix
+you can see on the front face of the diagram) would be:</p>
+<pre class="r"><code>a[,,1]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    6   11   16
+## [2,]    2    7   12   17
+## [3,]    3    8   13   18
+## [4,]    4    9   14   19
+## [5,]    5   10   15   20</code></pre>
+<p>The second “layer” would be:</p>
+<pre class="r"><code>a[,,2]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   21   26   31   36
+## [2,]   22   27   32   37
+## [3,]   23   28   33   38
+## [4,]   24   29   34   39
+## [5,]   25   30   35   40</code></pre>
+<p>etc…</p>
+<p>Now, let’s try out the <code>apply()</code> function along each
+dimension. First, let’s calculate the sum across the “depth” dimension…
+This should return three values:</p>
 <pre class="r"><code>apply(a, 3, sum)</code></pre>
 <pre><code>## [1]  210  610 1010</code></pre>
-<pre class="r"><code>apply(a, c(1, 2), sum)</code></pre>
+<p>This corresponds to the sums of each matrix if we sliced the matrices
+like I’m showing on the diagram above:</p>
+<pre class="r"><code>sum(a[,,1])</code></pre>
+<pre><code>## [1] 210</code></pre>
+<pre class="r"><code>sum(a[,,2])</code></pre>
+<pre><code>## [1] 610</code></pre>
+<pre class="r"><code>sum(a[,,3])</code></pre>
+<pre><code>## [1] 1010</code></pre>
+<p>If we want to sum the matrices as we cut the array along the “height”
+dimension (i.e., along rows), we should get 5 values:</p>
+<pre class="r"><code>apply(a, 1, sum)</code></pre>
+<pre><code>## [1] 342 354 366 378 390</code></pre>
+<p>If we sum the matrices as we cut the array along the “width”
+dimension (i.e., along columns), we should get 4 values:</p>
+<pre class="r"><code>apply(a, 2, sum)</code></pre>
+<pre><code>## [1] 345 420 495 570</code></pre>
+<p>We can also sum the array along two dimensions. Let’s say we want to
+“collapse” the array into the 5-row x 4-column matrix–i.e., we sum each
+corresponding cell of the three “layers” of the matrices in the figure
+above:</p>
+<pre class="r"><code>apply(a, c(1,2), sum)</code></pre>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]   63   78   93  108
 ## [2,]   66   81   96  111
 ## [3,]   69   84   99  114
 ## [4,]   72   87  102  117
 ## [5,]   75   90  105  120</code></pre>
+<hr />
 </div>
 </div>
 <div id="for-loops" class="section level2">
-<h2>8.3 For-Loops</h2>
-<p>A “for loop” is another way to repeat a function or series of functions many times. The idea here is to request that an index (e.g., i) take on a series of values, and that a lines of commands are executed as many times as there are different values of i.</p>
-<div id="simple-examples-of-for-loops" class="section level3">
-<h3>8.3.1 Simple examples of for-loops</h3>
+<h2>2. For-Loops</h2>
+<p>A “for loop” is another way to repeat a function or series of
+functions many times. The idea here is to request that an index (e.g.,
+i) take on a series of values, and that a lines of commands are executed
+as many times as there are different values of i.</p>
+<div
+id="set-up-an-empty-object-e.g.-vector-or-list-to-store-the-values-in"
+class="section level3">
+<h3>2.1. Set up an empty object (e.g., vector or list) to store the
+values in:</h3>
 <p>Here’s a simple example for just repeating a command 5 times:</p>
-<pre class="r"><code>for (i in 1:5) print(i * 2)</code></pre>
+<pre class="r"><code>for (i in 1:5) print(i*2)</code></pre>
 <pre><code>## [1] 2
 ## [1] 4
 ## [1] 6
 ## [1] 8
 ## [1] 10</code></pre>
-<p>Sometimes, it is useful to store the results of a loop to an object. Here, let’s repeat the above command, but we will save the result as a vector. To do this, we will have to first create an empty vector and then request that the output of the command is stored in order. Here, I recommend that you first establish the number of iterations you want to run the command. You’ll see what you mean here:</p>
-<pre class="r"><code>times = 5
-v = numeric(length = times)
-for (i in 1:times) v[i] = i * 2
+<p>Sometimes, it is useful to store the results of a loop to an object.
+Here, let’s repeat the above command, but we will save the result as a
+vector. To do this, we will have to first create an empty vector and
+then request that the output of the command is stored in order. Here, I
+recommend that you first establish the number of iterations you want to
+run the command. You’ll see what you mean here:</p>
+<pre class="r"><code>times=5 
+v=numeric(length=times)
+for (i in 1:times) v[i]=i*2
 v</code></pre>
 <pre><code>## [1]  2  4  6  8 10</code></pre>
-<p>Let’s try combining a for-loop with <code>sample()</code>. Let’s generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a row of a matrix (the final matrix should be 5 rows of 10 columns).</p>
-<pre class="r"><code>set.seed(2)
-times = 5
-m = matrix(nrow = times, ncol = 10)
-for (i in 1:times) {
-    m[i, ] = sample(1:10, 10, replace = F)
-}
+</div>
+<div
+id="if-the-output-of-each-loop-is-a-vector-then-you-have-to-store-the-output-in-a-matrix-of-the-appropriate-size"
+class="section level3">
+<h3>2.2. If the output of each loop is a vector, then you have to store
+the output in a matrix of the appropriate size:</h3>
+<p>Let’s say you want to multiply a vector of numbers 1 through 10 by a
+series of numbers 1 through 5. Then, your output needs to be a matrix
+that is 5 x 10. Here, I’ll set up an empty matrix with 5 rows and 10
+columns to save the output:</p>
+<pre class="r"><code>times=5 
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times) m[i,]=(1:10)*i
 m</code></pre>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-## [1,]    5    6    9    1   10    7    4    8    3     2
-## [2,]    1    3    6    2    9   10    7    5    4     8
-## [3,]    6    9   10    5    8    3    1    7    2     4
-## [4,]    6    2    7    9    3    4   10    1    5     8
-## [5,]    9    1    2    4    5    6    7    8   10     3</code></pre>
-<p><strong>Mini-exercise:</strong> What do you think this code will produce (note <em>where</em> I put the <code>set.seed()</code> function)</p>
-<pre class="r"><code>times = 5
-m = matrix(nrow = times, ncol = 10)
-for (i in 1:times) {
-    set.seed(2)
-    m[i, ] = sample(1:10, 10, replace = F)
-}
-m</code></pre>
-<div id="practice-with-for-loops-the-p-value" class="section level4">
-<h4>8.3.2 Practice with for-loops: The P-value</h4>
-<p>Let’s use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let’s investigate this case for the p-value generated from a Pearson’s correlation coefficient. Let’s start by testing the correlation between two random sets of values drawn from normal distributions:</p>
-<pre class="r"><code>set.seed(2)
-r1 = rnorm(100)
-r2 = rnorm(100)
-test = cor.test(r1, r2)
-test</code></pre>
-<pre><code>## 
-##  Pearson&#39;s product-moment correlation
+## [1,]    1    2    3    4    5    6    7    8    9    10
+## [2,]    2    4    6    8   10   12   14   16   18    20
+## [3,]    3    6    9   12   15   18   21   24   27    30
+## [4,]    4    8   12   16   20   24   28   32   36    40
+## [5,]    5   10   15   20   25   30   35   40   45    50</code></pre>
+</div>
+<div
+id="you-can-use-loops-with-output-as-a-list-to-run-a-series-of-complex-tasks"
+class="section level3">
+<h3>2.3. You can use loops with output as a list to run a series of
+complex tasks:</h3>
+<p>Let’s take the same example as we used in the <code>lapply()</code>
+example (Section 1.1 above). We’ll split the iris dataset by species,
+then run a series of linear regressions with Sepal Length as the
+predictor variable and Petal Length as the response variable:</p>
+<p>Let’s just do the <code>split()</code> function again to make sure we
+have the same setup:</p>
+<pre class="r"><code>iris.list=split(iris, iris$Species)
+iris.list</code></pre>
+<pre><code>## $setosa
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 4           4.6         3.1          1.5         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 6           5.4         3.9          1.7         0.4  setosa
+## 7           4.6         3.4          1.4         0.3  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa
+## 11          5.4         3.7          1.5         0.2  setosa
+## 12          4.8         3.4          1.6         0.2  setosa
+## 13          4.8         3.0          1.4         0.1  setosa
+## 14          4.3         3.0          1.1         0.1  setosa
+## 15          5.8         4.0          1.2         0.2  setosa
+## 16          5.7         4.4          1.5         0.4  setosa
+## 17          5.4         3.9          1.3         0.4  setosa
+## 18          5.1         3.5          1.4         0.3  setosa
+## 19          5.7         3.8          1.7         0.3  setosa
+## 20          5.1         3.8          1.5         0.3  setosa
+## 21          5.4         3.4          1.7         0.2  setosa
+## 22          5.1         3.7          1.5         0.4  setosa
+## 23          4.6         3.6          1.0         0.2  setosa
+## 24          5.1         3.3          1.7         0.5  setosa
+## 25          4.8         3.4          1.9         0.2  setosa
+## 26          5.0         3.0          1.6         0.2  setosa
+## 27          5.0         3.4          1.6         0.4  setosa
+## 28          5.2         3.5          1.5         0.2  setosa
+## 29          5.2         3.4          1.4         0.2  setosa
+## 30          4.7         3.2          1.6         0.2  setosa
+## 31          4.8         3.1          1.6         0.2  setosa
+## 32          5.4         3.4          1.5         0.4  setosa
+## 33          5.2         4.1          1.5         0.1  setosa
+## 34          5.5         4.2          1.4         0.2  setosa
+## 35          4.9         3.1          1.5         0.2  setosa
+## 36          5.0         3.2          1.2         0.2  setosa
+## 37          5.5         3.5          1.3         0.2  setosa
+## 38          4.9         3.6          1.4         0.1  setosa
+## 39          4.4         3.0          1.3         0.2  setosa
+## 40          5.1         3.4          1.5         0.2  setosa
+## 41          5.0         3.5          1.3         0.3  setosa
+## 42          4.5         2.3          1.3         0.3  setosa
+## 43          4.4         3.2          1.3         0.2  setosa
+## 44          5.0         3.5          1.6         0.6  setosa
+## 45          5.1         3.8          1.9         0.4  setosa
+## 46          4.8         3.0          1.4         0.3  setosa
+## 47          5.1         3.8          1.6         0.2  setosa
+## 48          4.6         3.2          1.4         0.2  setosa
+## 49          5.3         3.7          1.5         0.2  setosa
+## 50          5.0         3.3          1.4         0.2  setosa
 ## 
-## data:  r1 and r2
-## t = -0.54989, df = 98, p-value = 0.5836
-## alternative hypothesis: true correlation is not equal to 0
-## 95 percent confidence interval:
-##  -0.2491651  0.1425093
-## sample estimates:
-##         cor 
-## -0.05546129</code></pre>
-<p>What we have done is see if two sets of random numbers are correlated. As expected, we have a low correlations coefficient and high P-value.<br />
-<strong>However</strong>, what if we did this test a bunch of times? We should get a “significant correlation” (P&lt;0.05) 5% of the time. Let’s try this and see if that’s true. What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. The results will be a series of TRUE/FALSE. We can look at the proportion of iterations in which the answer was TRUE.</p>
-<pre class="r"><code>times = 10000
-set.seed(2)
-results = vector(length = times)
-cor.coefs = vector(length = times)
-for (i in 1:times) {
-    r1 = rnorm(100)
-    r2 = rnorm(100)
-    test = cor.test(r1, r2)
-    p = test$p.value
-    results[i] = p &lt;= 0.05
+## $versicolor
+##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+## 51           7.0         3.2          4.7         1.4 versicolor
+## 52           6.4         3.2          4.5         1.5 versicolor
+## 53           6.9         3.1          4.9         1.5 versicolor
+## 54           5.5         2.3          4.0         1.3 versicolor
+## 55           6.5         2.8          4.6         1.5 versicolor
+## 56           5.7         2.8          4.5         1.3 versicolor
+## 57           6.3         3.3          4.7         1.6 versicolor
+## 58           4.9         2.4          3.3         1.0 versicolor
+## 59           6.6         2.9          4.6         1.3 versicolor
+## 60           5.2         2.7          3.9         1.4 versicolor
+## 61           5.0         2.0          3.5         1.0 versicolor
+## 62           5.9         3.0          4.2         1.5 versicolor
+## 63           6.0         2.2          4.0         1.0 versicolor
+## 64           6.1         2.9          4.7         1.4 versicolor
+## 65           5.6         2.9          3.6         1.3 versicolor
+## 66           6.7         3.1          4.4         1.4 versicolor
+## 67           5.6         3.0          4.5         1.5 versicolor
+## 68           5.8         2.7          4.1         1.0 versicolor
+## 69           6.2         2.2          4.5         1.5 versicolor
+## 70           5.6         2.5          3.9         1.1 versicolor
+## 71           5.9         3.2          4.8         1.8 versicolor
+## 72           6.1         2.8          4.0         1.3 versicolor
+## 73           6.3         2.5          4.9         1.5 versicolor
+## 74           6.1         2.8          4.7         1.2 versicolor
+## 75           6.4         2.9          4.3         1.3 versicolor
+## 76           6.6         3.0          4.4         1.4 versicolor
+## 77           6.8         2.8          4.8         1.4 versicolor
+## 78           6.7         3.0          5.0         1.7 versicolor
+## 79           6.0         2.9          4.5         1.5 versicolor
+## 80           5.7         2.6          3.5         1.0 versicolor
+## 81           5.5         2.4          3.8         1.1 versicolor
+## 82           5.5         2.4          3.7         1.0 versicolor
+## 83           5.8         2.7          3.9         1.2 versicolor
+## 84           6.0         2.7          5.1         1.6 versicolor
+## 85           5.4         3.0          4.5         1.5 versicolor
+## 86           6.0         3.4          4.5         1.6 versicolor
+## 87           6.7         3.1          4.7         1.5 versicolor
+## 88           6.3         2.3          4.4         1.3 versicolor
+## 89           5.6         3.0          4.1         1.3 versicolor
+## 90           5.5         2.5          4.0         1.3 versicolor
+## 91           5.5         2.6          4.4         1.2 versicolor
+## 92           6.1         3.0          4.6         1.4 versicolor
+## 93           5.8         2.6          4.0         1.2 versicolor
+## 94           5.0         2.3          3.3         1.0 versicolor
+## 95           5.6         2.7          4.2         1.3 versicolor
+## 96           5.7         3.0          4.2         1.2 versicolor
+## 97           5.7         2.9          4.2         1.3 versicolor
+## 98           6.2         2.9          4.3         1.3 versicolor
+## 99           5.1         2.5          3.0         1.1 versicolor
+## 100          5.7         2.8          4.1         1.3 versicolor
+## 
+## $virginica
+##     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 101          6.3         3.3          6.0         2.5 virginica
+## 102          5.8         2.7          5.1         1.9 virginica
+## 103          7.1         3.0          5.9         2.1 virginica
+## 104          6.3         2.9          5.6         1.8 virginica
+## 105          6.5         3.0          5.8         2.2 virginica
+## 106          7.6         3.0          6.6         2.1 virginica
+## 107          4.9         2.5          4.5         1.7 virginica
+## 108          7.3         2.9          6.3         1.8 virginica
+## 109          6.7         2.5          5.8         1.8 virginica
+## 110          7.2         3.6          6.1         2.5 virginica
+## 111          6.5         3.2          5.1         2.0 virginica
+## 112          6.4         2.7          5.3         1.9 virginica
+## 113          6.8         3.0          5.5         2.1 virginica
+## 114          5.7         2.5          5.0         2.0 virginica
+## 115          5.8         2.8          5.1         2.4 virginica
+## 116          6.4         3.2          5.3         2.3 virginica
+## 117          6.5         3.0          5.5         1.8 virginica
+## 118          7.7         3.8          6.7         2.2 virginica
+## 119          7.7         2.6          6.9         2.3 virginica
+## 120          6.0         2.2          5.0         1.5 virginica
+## 121          6.9         3.2          5.7         2.3 virginica
+## 122          5.6         2.8          4.9         2.0 virginica
+## 123          7.7         2.8          6.7         2.0 virginica
+## 124          6.3         2.7          4.9         1.8 virginica
+## 125          6.7         3.3          5.7         2.1 virginica
+## 126          7.2         3.2          6.0         1.8 virginica
+## 127          6.2         2.8          4.8         1.8 virginica
+## 128          6.1         3.0          4.9         1.8 virginica
+## 129          6.4         2.8          5.6         2.1 virginica
+## 130          7.2         3.0          5.8         1.6 virginica
+## 131          7.4         2.8          6.1         1.9 virginica
+## 132          7.9         3.8          6.4         2.0 virginica
+## 133          6.4         2.8          5.6         2.2 virginica
+## 134          6.3         2.8          5.1         1.5 virginica
+## 135          6.1         2.6          5.6         1.4 virginica
+## 136          7.7         3.0          6.1         2.3 virginica
+## 137          6.3         3.4          5.6         2.4 virginica
+## 138          6.4         3.1          5.5         1.8 virginica
+## 139          6.0         3.0          4.8         1.8 virginica
+## 140          6.9         3.1          5.4         2.1 virginica
+## 141          6.7         3.1          5.6         2.4 virginica
+## 142          6.9         3.1          5.1         2.3 virginica
+## 143          5.8         2.7          5.1         1.9 virginica
+## 144          6.8         3.2          5.9         2.3 virginica
+## 145          6.7         3.3          5.7         2.5 virginica
+## 146          6.7         3.0          5.2         2.3 virginica
+## 147          6.3         2.5          5.0         1.9 virginica
+## 148          6.5         3.0          5.2         2.0 virginica
+## 149          6.2         3.4          5.4         2.3 virginica
+## 150          5.9         3.0          5.1         1.8 virginica</code></pre>
+<p>Now, use loops to run the analyses. Here, I’m going to save the
+output as a list. To set up an empty list, all I have to do is
+<code>list()</code>:</p>
+<pre class="r"><code>spp.mods.loop=list()
+for(i in 1:length(iris.list)){
+  spp.mods.loop[[i]]=lm(Petal.Length~Sepal.Length, data=iris.list[[i]])
 }
-sum(results + 0)</code></pre>
-<pre><code>## [1] 508</code></pre>
-<p>You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a ‘significant’ result 500 times.</p>
+spp.mods.loop</code></pre>
+<pre><code>## [[1]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.8031        0.1316  
+## 
+## 
+## [[2]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.1851        0.6865  
+## 
+## 
+## [[3]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.6105        0.7501</code></pre>
+<p>We can generate the model summaries and extract the slopes in the
+same loop if we want:</p>
+<pre class="r"><code>spp.mods.summary.loop=list()
+slopes.loop=vector(length=length(iris.list))
+for(i in 1:length(iris.list)){
+  spp.mods.summary.loop[[i]]=summary(spp.mods.loop[[i]])
+  slopes.loop[i] = spp.mods.summary.loop[[i]]$coefficients[2,1]
+}</code></pre>
+<p>Here are the model summaries:</p>
+<pre class="r"><code>spp.mods.summary.loop</code></pre>
+<pre><code>## [[1]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.40856 -0.08027 -0.00856  0.11708  0.46512 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   0.80305    0.34388   2.335   0.0238 *
+## Sepal.Length  0.13163    0.06853   1.921   0.0607 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1691 on 48 degrees of freedom
+## Multiple R-squared:  0.07138,    Adjusted R-squared:  0.05204 
+## F-statistic:  3.69 on 1 and 48 DF,  p-value: 0.0607
+## 
+## 
+## [[2]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68611 -0.22827 -0.04123  0.19458  0.79607 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.18512    0.51421   0.360     0.72    
+## Sepal.Length  0.68647    0.08631   7.954 2.59e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3118 on 48 degrees of freedom
+## Multiple R-squared:  0.5686, Adjusted R-squared:  0.5596 
+## F-statistic: 63.26 on 1 and 48 DF,  p-value: 2.586e-10
+## 
+## 
+## [[3]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68603 -0.21104  0.06399  0.18901  0.66402 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.61047    0.41711   1.464     0.15    
+## Sepal.Length  0.75008    0.06303  11.901  6.3e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2805 on 48 degrees of freedom
+## Multiple R-squared:  0.7469, Adjusted R-squared:  0.7416 
+## F-statistic: 141.6 on 1 and 48 DF,  p-value: 6.298e-16</code></pre>
+<p>Here are the slopes:</p>
+<pre class="r"><code>slopes.loop</code></pre>
+<pre><code>## [1] 0.1316317 0.6864698 0.7500808</code></pre>
 </div>
-</div>
-</div>
-<div id="random-number-generators" class="section level2">
-<h2>8.1 Random number generators</h2>
-<p>The essence of stochasticity is that a parameter will vary randomly–but <strong><em>what do we mean by random!?</em></strong> If you think about it, there is an infinate number of ways to sample a random set of numbers<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Let’s consider some options:</p>
-<div id="sampling-from-a-given-set-of-numbers-with-or-without-replacement." class="section level4">
-<h4>8.1.1 Sampling from a given set of numbers <strong><em>with or without replacement</em></strong>.</h4>
-<p>We often want to generate a set of random number given some distribution. Say, for example, we want to sample randomly from a set of numbers. For example, let’s sample 5 integer between 1 and 10.</p>
-<pre class="r"><code>sample(1:10, 5, replace = F)  #5 random numbers between 1 and 10</code></pre>
-<pre><code>## [1]  1  8  6  7 10</code></pre>
-<p>You will probably notice that you have generated a <em>different</em> set of random numbers than what is shown here. This makes sense, but it makes it difficult to make this code <em>reproducible</em>. What we can do is to use <code>set.seed()</code> to make this process repeatable:</p>
-<pre class="r"><code>set.seed(2)  #you can put whatever number inside set.seed()
-sample(1:10, 5, replace = F)  #5 random numbers between 1 and 10s</code></pre>
-<pre><code>## [1]  5  6  9  1 10</code></pre>
-<p>When you run the code like this, you should always get “2, 7, 5, 10, 6”<br />
-Try changing the number inside the <code>set.seed()</code> and see what you get.</p>
-<p>Note that we have used <strong><code>replace=F</code></strong> to indicate that, once we choose a number, we want to avoid choosing it again. This is akin to physically picking 5 cards out of a set of 10 at the same time. We can do that up to the sample size, but no more. So, this will work:</p>
-<pre class="r"><code>set.seed(2)
-sample(1:10, 10, replace = F)  #10 random numbers between 1 and 10</code></pre>
-<pre><code>##  [1]  5  6  9  1 10  7  4  8  3  2</code></pre>
-<p>But this will NOT work:</p>
-<pre class="r"><code>sample(1:10, 11, replace = F)  #11 random numbers between 1 and 10</code></pre>
-<pre><code>## Error in sample.int(length(x), size, replace, prob): cannot take a sample larger than the population when &#39;replace = FALSE&#39;</code></pre>
-<p>In the first iteration, you have simply shuffled the order of the numbers. But you cannot shuffle 11 cards out of a deck of 10.</p>
-<p>Compare this to the case when we set <code>replace=TRUE</code>:</p>
-<pre class="r"><code>set.seed(2)
-sample(1:10, 10, replace = T)  #10 random numbers between 1 and 10</code></pre>
-<pre><code>##  [1] 5 6 6 8 1 1 9 2 1 3</code></pre>
-<p>You will notice that we have chose some numbers multiple times (“2” appears three times, “10” and “6” appear twice). When you set <code>replace=TRUE</code>, we are basically simulating a situation where we choose a card, write down the number, <strong><em>and then put it back before picking up another card</em></strong>. This process is the essence of a simulation procedure called <strong>bootstrapping</strong>.</p>
-<p>A quick recap:</p>
-<ul>
-<li><code>sample(x, n)</code> allows you to randomly sample <em>n</em> numbers from the set <code>x</code>.</li>
-<li><code>replace=F</code> (default) means once you sample one number, you will not sample it again. You can use this to shuffle the order of numbers (generally called <em>randomization</em>)</li>
-<li><code>replace=T</code> allows for sampling a number more than once. You can use this to resample a set of numbers with equal probability (generally called <em>bootstrapping</em>)</li>
-</ul>
-<hr />
-</div>
-<div id="sampling-from-probability-distributions" class="section level4">
-<h4>8.1.2 Sampling from probability distributions</h4>
-<p>Rather than sampling from a discrete set of numbers, we might want to sample numbers from a given hypothetical distribution. As an illustration, let’s sample a set of 100 numbers from a normal distribution with mean of 0 and standard deviation of 1</p>
-<pre class="r"><code>set.seed(2)
-rn = rnorm(10, mean = 0, sd = 1)
-rn</code></pre>
-<pre><code>##  [1] -0.89691455  0.18484918  1.58784533 -1.13037567 -0.08025176
-##  [6]  0.13242028  0.70795473 -0.23969802  1.98447394 -0.13878701</code></pre>
-<p>You can see that it generates numbers with 8 digits. We can generate a <strong>histogram</strong> and check to see if the output of the <code>rnorm()</code> function really looks like a normal distribution. Let’s do it with 1,000 numbers so that we reduce sampling error.</p>
-<pre class="r"><code>set.seed(2)
-hist(rnorm(1000, mean = 0, sd = 1), freq = F)</code></pre>
-<p><img src="08.Apply_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
-<p>Looks about right.</p>
-<p>Now let’s try the same thing but with a <strong>uniform distribution</strong> of numbers ranging from 0 to 1</p>
-<pre class="r"><code>set.seed(2)
-runif(10, min = 0, max = 1)</code></pre>
-<pre><code>##  [1] 0.1848823 0.7023740 0.5733263 0.1680519 0.9438393 0.9434750 0.1291590
-##  [8] 0.8334488 0.4680185 0.5499837</code></pre>
-<pre class="r"><code>hist(runif(1000, min = 0, max = 1), freq = F)</code></pre>
-<p><img src="08.Apply_files/figure-html/unnamed-chunk-26-1.png" width="50%" /></p>
-</div>
-<div id="coin-flips" class="section level3">
-<h3>8.1.3 Coin-flips</h3>
-<p>We can use the <code>rbinom()</code> function to simulate coin-flips, i.e., generating 0s and 1s randomly.</p>
-<ol style="list-style-type: decimal">
-<li>Flipping the coin 100 times, keeping track of result each time.</li>
-</ol>
-<pre class="r"><code>set.seed(2)
-coin = rbinom(100, 1, prob = 0.5)  #100 trials of a single flip of the coin
-coin</code></pre>
-<pre><code>##   [1] 0 1 1 0 1 1 0 1 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 1 1 1
-##  [36] 1 1 0 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 1 1 1 1 1 1 0 1 0 0 0 0 0
-##  [71] 0 0 0 0 0 1 0 1 0 1 0 1 0 0 0 1 1 0 1 0 1 0 0 1 0 0 0 0 0 0</code></pre>
-<pre class="r"><code>table(coin)  #generate a table of results</code></pre>
-<pre><code>## coin
-##  0  1 
-## 55 45</code></pre>
-<pre class="r"><code>sum(coin)/length(coin)  #calculate probability of 1</code></pre>
-<pre><code>## [1] 0.45</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Flipping the coin 100 times, but with skewed probability</li>
-</ol>
-<pre class="r"><code>set.seed(2)
-flip = 100
-coin4 = rbinom(100, 1, prob = 0.25)
-table(coin4)</code></pre>
-<pre><code>## coin4
-##  0  1 
-## 72 28</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>10 trials of 100 fair coin flips</li>
-</ol>
-<pre class="r"><code>set.seed(2)
-flips = 100
-coin2 = rbinom(10, flips, prob = 0.5)
-coin2</code></pre>
-<pre><code>##  [1] 48 47 59 45 46 54 50 58 58 52</code></pre>
-</div>
-<div id="table-of-probability-distributions" class="section level3">
-<h3>8.1.4 Table of probability distributions</h3>
-<table>
-<thead>
-<tr class="header">
-<th>Distribution</th>
-<th>Function to generate numbers</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Beta</td>
-<td><code>rbeta()</code></td>
-</tr>
-<tr class="even">
-<td>Binomial</td>
-<td><code>rbinom()</code></td>
-</tr>
-<tr class="odd">
-<td>Chi-square</td>
-<td><code>rchisq()</code></td>
-</tr>
-<tr class="even">
-<td>Exponential</td>
-<td><code>rexp()</code></td>
-</tr>
-<tr class="odd">
-<td>Gamma</td>
-<td><code>rgamma()</code></td>
-</tr>
-<tr class="even">
-<td>Geometric</td>
-<td><code>rgeom()</code></td>
-</tr>
-<tr class="odd">
-<td>Logistic</td>
-<td><code>rlogis()</code></td>
-</tr>
-<tr class="even">
-<td>Log Normal</td>
-<td><code>rlnorm()</code></td>
-</tr>
-<tr class="odd">
-<td>Negative Binomial</td>
-<td><code>rnbinom()</code></td>
-</tr>
-<tr class="even">
-<td>Normal</td>
-<td><code>rnorm()</code></td>
-</tr>
-<tr class="odd">
-<td>Poisson</td>
-<td><code>rpois()</code></td>
-</tr>
-<tr class="even">
-<td>Uniform</td>
-<td><code>runif()</code></td>
-</tr>
-<tr class="odd">
-<td>Weibull</td>
-<td><code>rweibull()</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>Strictly speaking, we can only generate pseudo-random numbers–the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it.<a href="#fnref1">↩</a></p></li>
-</ol>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -724,7 +1137,7 @@ coin2</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -742,13 +1155,42 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

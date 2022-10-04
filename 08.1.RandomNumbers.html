@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>8.1. Randomizations: Sampling from sets and probability distributions</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">8.1. Randomizations: Sampling from sets and
+probability distributions</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 10/04/22</h4>
+
+</div>
+
+
+<hr />
+<div id="random-number-generators" class="section level2">
+<h2>1. Random number generators</h2>
+<p><code>sample()</code> and <code>rnorm()</code>. These are two
+examples of functions that help you generate random numbers from some
+probability distributoin. But if you think about it, there is an
+infinate number of ways to sample a random set of numbers<a href="#fn1"
+class="footnote-ref" id="fnref1"><sup>1</sup></a>. Understanding these
+functions can be really useful in crafting randomization tests,
+bootstrapping, and simulations.</p>
+<p>Let’s consider some options:</p>
+<div
+id="sampling-from-a-given-set-of-numbers-with-or-without-replacement."
+class="section level3">
+<h3>1.1 Sampling from a given set of numbers <strong><em>with or without
+replacement</em></strong>.</h3>
+<p>We often want to generate a set of random number given some
+distribution. Say, for example, we want to sample randomly from a set of
+numbers. For example, let’s sample 5 integer between 1 and 10.</p>
+<pre class="r"><code>sample(1:10, 5, replace=F) #5 random numbers between 1 and 10</code></pre>
+<pre><code>## [1] 2 9 1 3 6</code></pre>
+<p>You will probably notice that you have generated a <em>different</em>
+set of random numbers than what is shown here. This makes sense, but it
+makes it difficult to make this code <em>reproducible</em>. What we can
+do is to use <code>set.seed()</code> to make this process
+repeatable:</p>
+<pre class="r"><code>set.seed(2) #you can put whatever number inside set.seed()
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10s</code></pre>
+<pre><code>## [1]  5  6  9  1 10</code></pre>
+<p>When you run the code like this, you should always get “2, 7, 5, 10,
+6”<br />
+Try changing the number inside the <code>set.seed()</code> and see what
+you get.</p>
+<p>Note that we have used <strong><code>replace=F</code></strong> to
+indicate that, once we choose a number, we want to avoid choosing it
+again. This is akin to physically picking 5 cards out of a set of 10 at
+the same time. We can do that up to the sample size, but no more. So,
+this will work:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace=F) #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1]  5  6  9  1 10  7  4  8  3  2</code></pre>
+<p>But this will NOT work:</p>
+<pre class="r"><code>sample(1:10, 11, replace=F) #11 random numbers between 1 and 10</code></pre>
+<pre><code>## Error in sample.int(length(x), size, replace, prob): cannot take a sample larger than the population when &#39;replace = FALSE&#39;</code></pre>
+<p>In the first iteration, you have simply shuffled the order of the
+numbers. But you cannot shuffle 11 cards out of a deck of 10.</p>
+<p>Compare this to the case when we set <code>replace=TRUE</code>:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace=T) #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1] 5 6 6 8 1 1 9 2 1 3</code></pre>
+<p>You will notice that we have chose some numbers multiple times (“2”
+appears three times, “10” and “6” appear twice). When you set
+<code>replace=TRUE</code>, we are basically simulating a situation where
+we choose a card, write down the number, <strong><em>and then put it
+back before picking up another card</em></strong>. This process is the
+essence of a simulation procedure called
+<strong>bootstrapping</strong>.</p>
+<p>A quick recap:</p>
+<ul>
+<li><code>sample(x, n)</code> allows you to randomly sample <em>n</em>
+numbers from the set <code>x</code>.</li>
+<li><code>replace=F</code> (default) means once you sample one number,
+you will not sample it again. You can use this to shuffle the order of
+numbers (generally called <em>randomization</em>)</li>
+<li><code>replace=T</code> allows for sampling a number more than once.
+You can use this to resample a set of numbers with equal probability
+(generally called <em>bootstrapping</em>)</li>
+</ul>
+<hr />
+</div>
+<div id="sampling-from-probability-distributions"
+class="section level3">
+<h3>2.2 Sampling from probability distributions</h3>
+<p>Rather than sampling from a discrete set of numbers, we might want to
+sample numbers from a given hypothetical distribution. As an
+illustration, let’s sample a set of 100 numbers from a normal
+distribution with mean of 0 and standard deviation of 1</p>
+<pre class="r"><code>set.seed(2)
+rn=rnorm(10, mean=0, sd=1)
+rn</code></pre>
+<pre><code>##  [1] -0.89691455  0.18484918  1.58784533 -1.13037567 -0.08025176  0.13242028
+##  [7]  0.70795473 -0.23969802  1.98447394 -0.13878701</code></pre>
+<p>You can see that it generates numbers with 8 digits. We can generate
+a <strong>histogram</strong> and check to see if the output of the
+<code>rnorm()</code> function really looks like a normal distribution.
+Let’s do it with 1,000 numbers so that we reduce sampling error.</p>
+<pre class="r"><code>set.seed(2)
+hist(rnorm(1000, mean=0, sd=1), freq=F)</code></pre>
+<p><img src="08.1.RandomNumbers_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p>Looks about right.</p>
+<p>Now let’s try the same thing but with a <strong>uniform
+distribution</strong> of numbers ranging from 0 to 1</p>
+<pre class="r"><code>set.seed(2)
+runif(10, min=0, max=1)</code></pre>
+<pre><code>##  [1] 0.1848823 0.7023740 0.5733263 0.1680519 0.9438393 0.9434750 0.1291590
+##  [8] 0.8334488 0.4680185 0.5499837</code></pre>
+<pre class="r"><code>hist(runif(1000, min=0, max=1), freq=F)</code></pre>
+<p><img src="08.1.RandomNumbers_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+</div>
+<div id="coin-flips" class="section level3">
+<h3>2.3 Coin-flips</h3>
+<p>We can use the <code>rbinom()</code> function to simulate coin-flips,
+i.e., generating 0s and 1s randomly.</p>
+<ol style="list-style-type: decimal">
+<li>Flipping the coin 100 times, keeping track of result each time.</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+coin=rbinom(100, 1, prob=0.5) #100 trials of a single flip of the coin
+coin</code></pre>
+<pre><code>##   [1] 0 1 1 0 1 1 0 1 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 1 1 1 1 1
+##  [38] 0 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 0 0 0
+##  [75] 0 1 0 1 0 1 0 1 0 0 0 1 1 0 1 0 1 0 0 1 0 0 0 0 0 0</code></pre>
+<pre class="r"><code>table(coin) #generate a table of results</code></pre>
+<pre><code>## coin
+##  0  1 
+## 55 45</code></pre>
+<pre class="r"><code>sum(coin)/length(coin) #calculate probability of 1</code></pre>
+<pre><code>## [1] 0.45</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Flipping the coin 100 times, but with skewed probability</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flip=100
+coin4=rbinom(100, 1, prob=0.25)
+table(coin4)</code></pre>
+<pre><code>## coin4
+##  0  1 
+## 72 28</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>10 trials of 100 fair coin flips</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flips=100
+coin2=rbinom(10, flips, prob=0.5)
+coin2</code></pre>
+<pre><code>##  [1] 48 47 59 45 46 54 50 58 58 52</code></pre>
+</div>
+<div id="table-of-probability-distributions" class="section level3">
+<h3>2.4 Table of probability distributions</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Function to generate numbers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Beta</td>
+<td><code>rbeta()</code></td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td><code>rbinom()</code></td>
+</tr>
+<tr class="odd">
+<td>Chi-square</td>
+<td><code>rchisq()</code></td>
+</tr>
+<tr class="even">
+<td>Exponential</td>
+<td><code>rexp()</code></td>
+</tr>
+<tr class="odd">
+<td>Gamma</td>
+<td><code>rgamma()</code></td>
+</tr>
+<tr class="even">
+<td>Geometric</td>
+<td><code>rgeom()</code></td>
+</tr>
+<tr class="odd">
+<td>Logistic</td>
+<td><code>rlogis()</code></td>
+</tr>
+<tr class="even">
+<td>Log Normal</td>
+<td><code>rlnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Negative Binomial</td>
+<td><code>rnbinom()</code></td>
+</tr>
+<tr class="even">
+<td>Normal</td>
+<td><code>rnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Poisson</td>
+<td><code>rpois()</code></td>
+</tr>
+<tr class="even">
+<td>Uniform</td>
+<td><code>runif()</code></td>
+</tr>
+<tr class="odd">
+<td>Weibull</td>
+<td><code>rweibull()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="combining-apply-andor-loops-with-sample"
+class="section level2">
+<h2>1. Combining apply and/or loops with <code>sample()</code></h2>
+<div id="learning-about-sample-and-set.seed" class="section level3">
+<h3>1.1. Learning about <code>sample()</code> and
+<code>set.seed()</code></h3>
+<p>Now that we’ve run through the basics of “apply” functions and
+for-loops, let’s try using it to start building the basics of
+simulations. To do this, we will combine apply and/or loops with the
+super useful function: <code>sample()</code>. Let’s generate a random
+sequence of integers from 1 through 10, and do that 5 times. We will
+store the result of each iteration in a column of a matrix (the final
+matrix should be 10 rows of 5 columns).</p>
+<pre class="r"><code>times=5
+m=matrix(nrow=10, ncol=times)
+for (i in 1:times){
+m[,i]=sample(1:10, 10, replace=F)
+}
+m</code></pre>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5]
+##  [1,]    6    6    2    8    7
+##  [2,]    9    3    3    4    2
+##  [3,]    8    1    4    5    6
+##  [4,]    4    7    9    6   10
+##  [5,]    3    5    1   10    4
+##  [6,]    1   10    6    9    8
+##  [7,]    2    2    5    2    5
+##  [8,]    5    4    7    1    1
+##  [9,]    7    9    8    7    9
+## [10,]   10    8   10    3    3</code></pre>
+<p><strong>Now, if you actually did this, you will see that you got a
+different result than I did!</strong> This is because the
+<code>sample()</code> function gives you a different set of results each
+time you run it.</p>
+<p>If you want reproducible results with randomization procedures like
+<code>sample()</code>, you can use a function called
+<code>set.seed()</code>. You can put in a number inside this
+function–and each time you use the same number, you should get the same
+result. Try running this code:</p>
+<pre class="r"><code>set.seed(2)
+times=5
+m=matrix(nrow=10, ncol=times)
+for (i in 1:times){
+m[,i]=sample(1:10, 10, replace=F)
+}
+m</code></pre>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5]
+##  [1,]    5    1    6    6    9
+##  [2,]    6    3    9    2    1
+##  [3,]    9    6   10    7    2
+##  [4,]    1    2    5    9    4
+##  [5,]   10    9    8    3    5
+##  [6,]    7   10    3    4    6
+##  [7,]    4    7    1   10    7
+##  [8,]    8    5    7    1    8
+##  [9,]    3    4    2    5   10
+## [10,]    2    8    4    8    3</code></pre>
+<p>Now, you should have gotten the exact same results as shown here!</p>
+<p><strong>Mini-exercise:</strong> What do you think this code will
+produce (note <em>where</em> I put the <code>set.seed()</code>
+function)</p>
+<pre class="r"><code>times=5
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times){
+set.seed(2)
+m[i,]=sample(1:10, 10, replace=F)
+}
+m</code></pre>
+<p>You can do the same thing with an <code>sapply</code> function. Here,
+if you are going to repeat a set of codes 5 times, just put
+<code>1:5</code> as the input to the <code>sapply()</code> function:</p>
+<pre class="r"><code>set.seed(2)
+sapply(1:5, function(x){
+  sample(1:10, 10, replace=F)
+})</code></pre>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5]
+##  [1,]    5    1    6    6    9
+##  [2,]    6    3    9    2    1
+##  [3,]    9    6   10    7    2
+##  [4,]    1    2    5    9    4
+##  [5,]   10    9    8    3    5
+##  [6,]    7   10    3    4    6
+##  [7,]    4    7    1   10    7
+##  [8,]    8    5    7    1    8
+##  [9,]    3    4    2    5   10
+## [10,]    2    8    4    8    3</code></pre>
+<p>If you used the same <code>set.seed(2)</code> command, you should see
+that you get the same result!</p>
+<hr />
+</div>
+<div id="practice-with-for-loops-what-does-a-p-value-mean"
+class="section level3">
+<h3>2.2 Practice with for-loops: What does a P-value mean?</h3>
+<p>Let’s use the for loop to illustrate a statistical paradigm: the
+p-value. The p-value is the probability of obtaining a result if the
+null hypothesis is true. Let’s investigate this case for the p-value
+generated from a Pearson’s correlation coefficient.</p>
+<p>Let’s start by testing the correlation between two random sets of
+values drawn from normal distributions. You can do this by using the
+functino <code>rnorm()</code>. By default, this will pull X number of
+values from a normal distribution with mean = 0 and sd = 1. But you can
+set the mean (and sd) to be something different:</p>
+<pre class="r"><code>rnorm(10, mean=10)</code></pre>
+<pre><code>##  [1]  8.274020  9.097416  9.440938  9.753487  9.616414  8.040897  9.158295
+##  [8] 11.903547 10.622494 11.990920</code></pre>
+<p>Use this to generate two distributions with the same mean. Then, do a
+t-test:</p>
+<pre class="r"><code>set.seed(2)
+r1=rnorm(100, mean=10)
+r2=rnorm(100, mean=10)
+test=t.test(r1, r2)
+test</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  r1 and r2
+## t = -0.39361, df = 192.94, p-value = 0.6943
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.3601323  0.2403067
+## sample estimates:
+## mean of x mean of y 
+##  9.969302 10.029215</code></pre>
+<p>It’s easy to extract the P-value from a t-test:</p>
+<pre class="r"><code>test$p.value</code></pre>
+<pre><code>## [1] 0.6943067</code></pre>
+<p>What we have done is see if two sets of random numbers are
+correlated. As expected, there is no significant difference in the
+means.</p>
+<p><strong>However</strong>, what if we did this test a bunch of times?
+We should get a “significant correlation” (P&lt;0.05) 5% of the time.
+Let’s try this and see if that’s true. What we can do is to repeat the
+above routine a large number of times (here, 10,000x) and ask how often
+the p-value from that test is less than or equal to 0.05. Let’s run the
+loop and store the p-values.</p>
+<pre class="r"><code>times=10000
+set.seed(2)
+p=vector(length=times)
+cor.coefs=vector(length=times)
+for(i in 1:times){
+r1=rnorm(100)
+r2=rnorm(100)
+test=t.test(r1,r2)
+p[i]=test$p.value
+}</code></pre>
+<p>Now let’s visualize the p-values we generated as a histogram, with a
+red line where P=0.05 is.</p>
+<pre class="r"><code>hist(p, breaks=100)
+abline(v=0.05, col=&quot;red&quot;, lwd=2)</code></pre>
+<p><img src="08.1.RandomNumbers_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>So, in theory, about 5%, or 10,000 x 0.05 = 500 of these values
+should be &lt;=0.05. Let’s see if that’s right:</p>
+<pre class="r"><code>length(which(p&lt;=0.05))</code></pre>
+<pre><code>## [1] 491</code></pre>
+<p>You should have a value close to 500. That is, if you repeat the test
+10,000 times on two random sets of numbers, you will get a ‘significant’
+result 500 times.</p>
+<p>This is a statistical cautionary tale–Even when we set up two
+fictional distributions to have the same mean and variance, you will get
+a “significant difference” in their means 5% of the time if you are
+using P &lt; 0.05 as the criterion for “significance”.</p>
+<hr />
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Strictly speaking, we can only generate pseudo-random
+numbers–the computer can use an algorithm that generates numbers that
+are indistinguishable from random, but it is not truly random as long as
+we are using some algorithm to generate it.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

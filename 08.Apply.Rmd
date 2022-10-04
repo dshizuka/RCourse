@@ -2,10 +2,11 @@
 title: 'Module 8: Apply Functions and Loops' 
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
-output:
-  pdf_document:
+output: 
+  html_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 4
+    toc_float: true
 ---
 ```{r setup, include=F}
 library(knitr)
@@ -15,17 +16,34 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 ***
 In this module, we will go over several useful R tricks that allow you to speed up tasks and scale up your analyses!
 
+Let's load the packages we'll need here:
+
+```{r, message=F}
+library(tidyverse)
+library(ggplot2)
+library(cowplot)
+```
 ***
 
-##8.1 The "apply-family" of functions
+## 1. The "apply-family" of functions
 
 The "apply family" function--which includes `apply()`, `sapply()`, `lapply()` and `tapply()`--takes a series of elements and applies a given function to it. The function to be applied can be defined within the 'apply' function.  
 
-Each apply-family function varies slightly in its syntax or output format. 
+"apply" functions take X, and applies a function to each element along the length of X (with the exception of `apply()`, which can apply the function along an array, and `tapply()`: see below). Each apply-family function varies slightly in its syntax or output format:
+
+* `lapply()` returns the output as a list
+* `sapply()` returns the output in the simplest format possible (e.g., it will be a vector if the output is a series of numbers)
+* `vapply()` allows you to pre-specify a type of return value.
+* `apply()` is slightly different in that it allows you to apply the function on an array--e.g., you can apply a function on rows of a matrix, or columns, or on each cell.
+* `tapply()` applies a function to an variable in a dataframe grouped by a factor. (*I don't think I ever really use this one because I prefer to use the `group_by()` %>% `summarise()` pipeline from dplyr*)
+
+
 
 ***
 
-###8.1.1 Applying a function to a set of elements using `sapply()` and `lapply()`
+### 1.1 Applying a function to a set of elements using `sapply()` and `lapply()`
+
+#### 1.1.1: The basic difference between `sapply()` and `lapply()`
 Here, we will use the `sapply()` function, which can take a series of elements, run a function on it, and then save the output in the simplest format ("s" in "sapply" is for "simplify").
 \
 Let's try out a really simple application:
@@ -62,7 +80,11 @@ var=c(1,2,3)
 lapply(1:10, function(x) x*var)
 ```
 
-So you can see that the output of `sapply()` is more user-friendly than the output of `lapply()` in general. However, `lapply()` is really useful when you want to apply a function whose output is not a neat set of values.  
+So you can see that the output of `sapply()` is more user-friendly than the output of `lapply()` in general. 
+
+#### 1.1.2. `lapply()` is really useful when your output is complex, like a model output of dataframe:
+
+`lapply()` is really useful when you want to apply a function whose output is not a neat set of values.  
 
 As an example, let's use the `lapply()` function to run a linear regression on a list of dataframes. First, we will create such a list by "splitting" the familiar `iris` dataset by species (output not shown):
 ```{r, results='hide'}
@@ -71,19 +93,45 @@ iris.list
 ```
 Now we have a list object with three dataframes. Let's now use the `lapply()` function to conduct the same linear regression model `Petal.Length~Sepal.Length` on each dataset. The output will be the `anova()` tables that show the F-statistic and overall model fits. 
 ```{r}
-lapply(iris.list, function(x) anova(lm(Petal.Length~Sepal.Length, data=x)))
+spp.mods=lapply(iris.list, function(x) lm(Petal.Length~Sepal.Length, data=x))
+spp.mods
 ```
-You can see that the three species vary in their relationships between sepal length and petal length. Here's one way to visualize it:
-```{r, fig.height=3, fig.width=8}
-par(mfrow=c(1,3))
-plot(Petal.Length~Sepal.Length, data=iris.list[[1]], pch=19, col=1, main="setosa")
-plot(Petal.Length~Sepal.Length, data=iris.list[[2]], pch=19, col=2, main="versicolor")
-plot(Petal.Length~Sepal.Length, data=iris.list[[3]], pch=19, col=3, main="virginica")
+
+
+Now, let's then use the `lapply()` function again to get the summary:
+
+```{r}
+spp.mods.summary=lapply(spp.mods, function(x) summary(x))
+spp.mods.summary
 ```
+
+
+#### 1.1.3. You can use `sapply()` to efficiently extract the coefficients from a series of models stored in a list.
+
+Every model output and/or summary objects contain lots of information. Let's see what is in the model summary for "setosa" (the first element of the spp.mods.summary list) using the function `str()`:
+```{r}
+str(spp.mods.summary[[1]])
+```
+You can see there are lots of info in here. Let's extract the "estimate" of the --i.e., the slope of the relationship. This value is stored inside the "coefficients" section of the summary. If you look at the output above, you can kind of see that the coefficients are arranged in a matrix of 2 rows (intercept and Sepal.Length) and 4 columns (Estimate, Std. Error, t-value, and p-value). So, the slope of the relationship between Sepal Length and Petal Length is in the 2nd row, 1st column. 
+
+Use this knowledge and an `sapply()` function to get those slopes!
+```{r}
+sapply(spp.mods.summary, function(x) x$coefficients[2,1])
+```
+
+You can see that the three species vary in their relationships between sepal length and petal length. 
+Here's one way to visualize it simply using ggplot (you can just use the original iris data set to do this):
+```{r, message=F, fig.height=3, fig.width=8}
+ggplot(iris, aes(x=Sepal.Length, y=Petal.Length, color=Species)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  facet_wrap(~Species)
+```
+You can see how the slopes of "versicolor" and "virginica" are steeper than for "setosa".
 
 ***
 
-###8.1.2 `tapply()` (and comparing it to `aggregate()`)
+### 1.2 `tapply()` (and comparing it to `aggregate()` and dplyr)
 The `tapply()` function applies a function to a set of values that are grouped by some factor. This is pretty much the same as the `aggregate()` function, but the output format is different. 
 As a demo, let's first set up a dataframe:
 ```{r}
@@ -93,15 +141,38 @@ dat=data.frame(num, fac)
 dat
 ```
 
-Now, we'll sum the values associated each factor (A, B or C). We'll do this using `tapply()` and `aggregate()` and compare the outputs:
+Now, we'll sum the values associated each factor (A, B or C). We'll do this using `tapply()`,  `aggregate()`, and the dplyr pipeline `group_by() %>% summarise()` and compare the outputs:
 ```{r}
-tapply(dat$num, list(dat$fac), sum)
-aggregate(num, list(fac=fac), sum)
+output_tapply=tapply(dat$num, list(dat$fac), sum)
+output_aggregate=aggregate(num, list(fac=fac), sum)
+output_dplyr=dat %>% group_by(fac) %>% summarise(sum(num))
 ```
+
+Let's see what `tapply()` did:
+```{r}
+output_tapply
+class(output_tapply)
+```
+You can see that `tapply()` returns an array (in this case, since it's a one-dimensional array, it is basically a vector) with the names of the elements as the factor you used to group the values.
+
+How about what `aggregate()` did?:
+```{r}
+output_aggregate
+class(output_aggregate)
+```
+
+As you can see, `aggregate()` returns a dataframe with the factor as one column and values as a second column.
+
+Finally, let's what the dplyr pipeline of `group_by() %>% summarise()` did:
+```{r}
+output_dplyr
+```
+
+This is essentially the same as `aggregate()` but in a tibble format.
 
 ***
 
-###8.1.3 Working with arrays using `apply()`
+### 1.3 Working with arrays using `apply()`
 The `apply()` function is useful when you want to apply a function on an array (i.e., an n-dimensional set of numbers). Here, the syntax is apply(X, MARGIN, FUN, ...), where X is a matrix or array, MARGIN is the direction in which the function will applied—for a matrix, `MARGIN=1` indicates rows, and `MARGIN=2` indicates columns. For example:
 
 ```{r}
@@ -123,19 +194,55 @@ Where `apply()` really shines is when working with larger-dimensional arrays. Fo
 We can sum across each of those dimensions:
 ```{r}
 a=array(1:60, dim=c(5, 4, 3)) 
-apply(a, 1, sum)
-apply(a, 2, sum)
+```
+This creates a 3-dimensional array that is 5 values high, 4 values wide, and 3 values deep. 
+
+The first "layer" of this matrix along dimension 1 (i.e., the matrix you can see on the front face of the diagram) would be:
+```{r}
+a[,,1]
+```
+
+The second "layer" would be:
+```{r}
+a[,,2]
+```
+
+etc...
+
+Now, let's try out the `apply()` function along each dimension. First, let's calculate the sum across the "depth" dimension... This should return three values:
+```{r}
 apply(a, 3, sum)
+```
+
+This corresponds to the sums of each matrix if we sliced the matrices like I'm showing on the diagram above:
+```{r}
+sum(a[,,1])
+sum(a[,,2])
+sum(a[,,3])
+```
+
+If we want to sum the matrices as we cut the array along the "height" dimension (i.e., along rows), we should get 5 values:
+```{r}
+apply(a, 1, sum)
+```
+
+If we sum the matrices as we cut the array along the "width" dimension (i.e., along columns), we should get 4 values:
+```{r}
+apply(a, 2, sum)
+```
+
+We can also sum the array along two dimensions. Let's say we want to "collapse" the array into the 5-row x 4-column matrix--i.e., we sum each corresponding cell of the three "layers" of the matrices in the figure above: 
+```{r}
 apply(a, c(1,2), sum)
 ```
 
+***
 
-##8.2 For-Loops
+## 2. For-Loops
 
 A “for loop” is another way to repeat a function or series of functions many times. The idea here is to request that an index (e.g., i) take on a series of values, and that a lines of commands are executed as many times as there are different values of i.
 
-###8.2.1 Simple examples of for-loops
-
+### 2.1. Set up an empty object (e.g., vector or list) to store the values in:
 Here’s a simple example for just repeating a command 5 times:
 ```{r}
 for (i in 1:5) print(i*2)
@@ -149,185 +256,55 @@ for (i in 1:times) v[i]=i*2
 v
 ```
 
-Let's try combining a for-loop with `sample()`. Let's generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a row of a matrix (the final matrix should be 5 rows of 10 columns).
+### 2.2. If the output of each loop is a vector, then you have to store the output in a matrix of the appropriate size:
 
+Let's say you want to multiply a vector of numbers 1 through 10 by a series of numbers 1 through 5. Then, your output needs to be a matrix that is 5 x 10. Here, I'll set up an empty matrix with 5 rows and 10 columns to save the output:
 ```{r}
-set.seed(2)
-times=5
+times=5 
 m=matrix(nrow=times, ncol=10)
-for (i in 1:times){
-m[i,]=sample(1:10, 10, replace=F)
-}
+for (i in 1:times) m[i,]=(1:10)*i
 m
 ```
 
-**Mini-exercise:** What do you think this code will produce (note *where* I put the `set.seed()` function)
-```{r, eval=F}
-times=5
-m=matrix(nrow=times, ncol=10)
-for (i in 1:times){
-set.seed(2)
-m[i,]=sample(1:10, 10, replace=F)
+### 2.3. You can use loops with output as a list to run a series of complex tasks:
+
+Let's take the same example as we used in the `lapply()` example (Section 1.1 above). We'll split the iris dataset by species, then run a series of linear regressions with Sepal Length as the predictor variable and Petal Length as the response variable:
+
+Let's just do the `split()` function again to make sure we have the same setup:
+```{r}
+iris.list=split(iris, iris$Species)
+iris.list
+```
+
+Now, use loops to run the analyses. Here, I'm going to save the output as a list. To set up an empty list, all I have to do is `list()`:
+
+```{r}
+spp.mods.loop=list()
+for(i in 1:length(iris.list)){
+  spp.mods.loop[[i]]=lm(Petal.Length~Sepal.Length, data=iris.list[[i]])
 }
-m
+spp.mods.loop
 ```
 
-####8.2.2 Practice with for-loops: The P-value
-
-Let's use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let's investigate this case for the p-value generated from a Pearson's correlation coefficient. 
-Let's start by testing the correlation between two random sets of values drawn from normal distributions:
-```{r}
-set.seed(2)
-r1=rnorm(100)
-r2=rnorm(100)
-test=cor.test(r1, r2)
-test
-```
-What we have done is see if two sets of random numbers are correlated. As expected, we have a low correlations coefficient and high P-value.  
-**However**, what if we did this test a bunch of times? We should get a "significant correlation" (P<0.05) 5% of the time. Let's try this and see if that's true. 
-What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. The results will be a series of TRUE/FALSE. We can look at the proportion of iterations in which the answer was TRUE.
+We can generate the model summaries and extract the slopes in the same loop if we want:
 
 ```{r}
-times=10000
-set.seed(2)
-results=vector(length=times)
-cor.coefs=vector(length=times)
-for(i in 1:times){
-r1=rnorm(100)
-r2=rnorm(100)
-test=cor.test(r1,r2)
-p=test$p.value
-results[i]=p<=0.05
+spp.mods.summary.loop=list()
+slopes.loop=vector(length=length(iris.list))
+for(i in 1:length(iris.list)){
+  spp.mods.summary.loop[[i]]=summary(spp.mods.loop[[i]])
+  slopes.loop[i] = spp.mods.summary.loop[[i]]$coefficients[2,1]
 }
-sum(results+0)
 ```
 
-You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a 'significant' result 500 times. 
-
-***
-
-##8.3 Random number generators
-
-In the previous section on Loops, we used a couple of new functions: `sample()` and `rnorm()`. These are two examples of functions that help you generate random numbers from some probability distributoin. But if you think about it, there is an infinate number of ways to sample a random set of numbers[^1]. Understanding these functions can be really useful in crafting randomization tests, bootstrapping, and simulations.
-
-Let's consider some options:
-
-####8.3.1 Sampling from a given set of numbers ***with or without replacement***. 
-We often want to generate a set of random number given some distribution. Say, for example, we want to sample randomly from a set of numbers. For example, let's sample 5 integer between 1 and 10. 
-
+Here are the model summaries:
 ```{r}
-sample(1:10, 5, replace=F) #5 random numbers between 1 and 10
+spp.mods.summary.loop
 ```
-You will probably notice that you have generated a *different* set of random numbers than what is shown here. This makes sense, but it makes it difficult to make this code *reproducible*. What we can do is to use `set.seed()` to make this process repeatable:
 
+Here are the slopes:
 ```{r}
-set.seed(2) #you can put whatever number inside set.seed()
-sample(1:10, 5, replace=F) #5 random numbers between 1 and 10s
-```
-When you run the code like this, you should always get "2, 7, 5, 10, 6"  
-Try changing the number inside the `set.seed()` and see what you get. 
-
-Note that we have used **`replace=F`** to indicate that, once we choose a number, we want to avoid choosing it again. This is akin to physically picking 5 cards out of a set of 10 at the same time. We can do that up to the sample size, but no more. So, this will work:
-
-```{r}
-set.seed(2)
-sample(1:10, 10, replace=F) #10 random numbers between 1 and 10
-```
-But this will NOT work:
-```{r, error=T}
-sample(1:10, 11, replace=F) #11 random numbers between 1 and 10
-```
-
-In the first iteration, you have simply shuffled the order of the numbers. But you cannot shuffle 11 cards out of a deck of 10. 
-
-Compare this to the case when we set `replace=TRUE`:
-```{r}
-set.seed(2)
-sample(1:10, 10, replace=T) #10 random numbers between 1 and 10
-```
-You will notice that we have chose some numbers multiple times ("2" appears three times, "10" and "6" appear twice). When you set `replace=TRUE`, we are basically simulating a situation where we choose a card, write down the number, ***and then put it back before picking up another card***. This process is the essence of a simulation procedure called **bootstrapping**. 
-
-A quick recap:
-
-* `sample(x, n)` allows you to randomly sample *n* numbers from the set `x`.
-* `replace=F` (default) means once you sample one number, you will not sample it again. You can use this to shuffle the order of numbers (generally called *randomization*)
-* `replace=T` allows for sampling a number more than once. You can use this to resample a set of numbers with equal probability (generally called *bootstrapping*)
-
-***
-
-####8.3.2 Sampling from probability distributions
-
-Rather than sampling from a discrete set of numbers, we might want to sample numbers from a given hypothetical distribution. 
-As an illustration, let's sample a set of 100 numbers from a normal distribution with mean of 0 and standard deviation of 1
-```{r}
-set.seed(2)
-rn=rnorm(10, mean=0, sd=1)
-rn
-```
-
-You can see that it generates numbers with 8 digits. 
-We can generate a **histogram** and check to see if the output of the `rnorm()` function really looks like a normal distribution. Let's do it with 1,000 numbers so that we reduce sampling error.
-
-```{r, out.width='50%'}
-set.seed(2)
-hist(rnorm(1000, mean=0, sd=1), freq=F)
-```
-
-Looks about right.
-
-Now let's try the same thing but with a **uniform distribution** of numbers ranging from 0 to 1
-```{r, out.width='50%'}
-set.seed(2)
-runif(10, min=0, max=1)
-hist(runif(1000, min=0, max=1), freq=F)
+slopes.loop
 ```
 
 
-###8.3.3 Coin-flips
-We can use the `rbinom()` function to simulate coin-flips, i.e., generating 0s and 1s randomly.
-
-(1) Flipping the coin 100 times, keeping track of result each time.
-```{r}
-set.seed(2)
-coin=rbinom(100, 1, prob=0.5) #100 trials of a single flip of the coin
-coin
-table(coin) #generate a table of results
-sum(coin)/length(coin) #calculate probability of 1
-```
-
-(2) Flipping the coin 100 times, but with skewed probability
-```{r}
-set.seed(2)
-flip=100
-coin4=rbinom(100, 1, prob=0.25)
-table(coin4)
-```
-
-(3) 10 trials of 100 fair coin flips
-```{r}
-set.seed(2)
-flips=100
-coin2=rbinom(10, flips, prob=0.5)
-coin2
-```
-
-###8.3.4 Table of probability distributions
-Distribution | Function to generate numbers
---------|-------------
-Beta  | `rbeta()`
-Binomial | `rbinom()`
-Chi-square | `rchisq()`
-Exponential | `rexp()`
-Gamma | `rgamma()`
-Geometric | `rgeom()`
-Logistic | `rlogis()`
-Log Normal | `rlnorm()`
-Negative Binomial | `rnbinom()`
-Normal | `rnorm()`
-Poisson | `rpois()`
-Uniform | `runif()`
-Weibull | `rweibull()`
-
-
-***
-[^1]: Strictly speaking, we can only generate pseudo-random numbers--the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it. 
