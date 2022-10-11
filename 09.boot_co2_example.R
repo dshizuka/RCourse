@@ -31,6 +31,8 @@ ggplot(co2.boot, aes(x=year, y=mean.boot))+ geom_line() + geom_point()
 lm.fit=(lm(year.mean~year, data=co2.annual))
 summary(lm.fit)
 obs.slope=summary(lm.fit)$coefficients[2,1]
+obs.slope
+
 
 co2.boot=co2.dat %>% group_by(year) %>%
   summarise(mean.boot=mean(sample(value, 12, replace=T)))

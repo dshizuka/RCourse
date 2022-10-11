@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, digits=4)
 ```
 
 ***
@@ -122,7 +122,7 @@ coin2=rbinom(10, flips, prob=0.5)
 coin2
 ```
 
-### 2.4 Table of probability distributions
+### 1.4 Table of probability distributions
 Distribution | Function to generate numbers
 --------|-------------
 Beta  | `rbeta()`
@@ -140,117 +140,7 @@ Uniform | `runif()`
 Weibull | `rweibull()`
 
 
-## 2. Combining apply and/or loops with `sample()`
-
-### 2.1. Repeating `sample()` with a loop or apply
-Now that we've run through the basics of "apply" functions and for-loops, let's try using it to start building the basics of simulations. To do this, we will combine apply and/or loops with the super useful function: `sample()`. Let's generate a random sequence of integers from 1 through 10, and do that 5 times. We will store the result of each iteration in a column of a matrix (the final matrix should be 10 rows of 5 columns).
-
-```{r}
-times=5
-m=matrix(nrow=10, ncol=times)
-for (i in 1:times){
-m[,i]=sample(1:10, 10, replace=F)
-}
-m
-```
-
-**Now, if you actually did this, you will see that you got a different result than I did!** This is because the `sample()` function gives you a different set of results each time you run it. 
-
-If you want reproducible results with randomization procedures like `sample()`, you can use a function called `set.seed()`. You can put in a number inside this function--and each time you use the same number, you should get the same result. Try running this code:
-```{r}
-set.seed(2)
-times=5
-m=matrix(nrow=10, ncol=times)
-for (i in 1:times){
-m[,i]=sample(1:10, 10, replace=F)
-}
-m
-```
-Now, you should have gotten the exact same results as shown here!
-
-
-**Mini-exercise:** What do you think this code will produce (note *where* I put the `set.seed()` function)
-```{r, eval=F}
-times=5
-m=matrix(nrow=times, ncol=10)
-for (i in 1:times){
-set.seed(2)
-m[i,]=sample(1:10, 10, replace=F)
-}
-m
-```
-
-You can do the same thing with an `sapply` function. Here, if you are going to repeat a set of codes 5 times, just put `1:5` as the input to the `sapply()` function:
-
-```{r}
-set.seed(2)
-sapply(1:5, function(x){
-  sample(1:10, 10, replace=F)
-})
-```
-
-If you used the same `set.seed(2)` command, you should see that you get the same result!
-
-*** 
-
-### 2.2 Practice with for-loops: What does a P-value mean?
-
-Let's use the for loop to illustrate a statistical paradigm: the p-value. The p-value is the probability of obtaining a result if the null hypothesis is true. Let's investigate this case for the p-value generated from a Pearson's correlation coefficient. 
-
-
-Let's start by testing the correlation between two random sets of values drawn from normal distributions. You can do this by using the functino `rnorm()`. By default, this will pull X number of values from a normal distribution with mean = 0 and sd = 1. But you can set the mean (and sd) to be something different:
-```{r}
-rnorm(10, mean=10)
-```
-
-Use this to generate two distributions with the same mean. Then, do a t-test:
-```{r}
-set.seed(2)
-r1=rnorm(100, mean=10)
-r2=rnorm(100, mean=10)
-test=t.test(r1, r2)
-test
-```
-It's easy to extract the P-value from a t-test:
-```{r}
-test$p.value
-```
-What we have done is see if two sets of random numbers are correlated. As expected, there is no significant difference in the means.
-
-**However**, what if we did this test a bunch of times? We should get a "significant correlation" (P<0.05) 5% of the time. Let's try this and see if that's true. 
-What we can do is to repeat the above routine a large number of times (here, 10,000x) and ask how often the p-value from that test is less than or equal to 0.05. Let's run the loop and store the p-values.
-
-```{r}
-times=10000
-set.seed(2)
-p=vector(length=times)
-cor.coefs=vector(length=times)
-for(i in 1:times){
-r1=rnorm(100)
-r2=rnorm(100)
-test=t.test(r1,r2)
-p[i]=test$p.value
-}
-```
-
-Now let's visualize the p-values we generated as a histogram, with a red line where P=0.05 is.
-```{r}
-hist(p, breaks=100)
-abline(v=0.05, col="red", lwd=2)
-```
-
-So, in theory, about 5%, or 10,000 x 0.05 = 500 of these values should be <=0.05. Let's see if that's right:
-
-```{r}
-length(which(p<=0.05))
-```
-
-You should have a value close to 500. That is, if you repeat the test 10,000 times on two random sets of numbers, you will get a 'significant' result 500 times. 
-
-This is a statistical cautionary tale--Even when we set up two fictional distributions to have the same mean and variance, you will get a "significant difference" in their means 5% of the time if you are using P < 0.05 as the criterion for "significance".
-
-
-## 3. Resampling Techniques: Randomization, Bootstrapping, and Jackknifing
+## 2. Resampling Techniques: Randomization, Bootstrapping, and Jackknifing
 
 In statistics, "resampling" techniques are often used to overcome limitations in inference if you are not sure if your result is due to sampling error. In brief: when we collect data, we end up with the dataset that we have. But what if you conducted the same study again: how likely would you be to get the same answer? Broadly speaking, you can ask this question (to some degree) by "resampling" your data. There are three basic flavors of resampling:
 
@@ -264,9 +154,13 @@ In statistics, "resampling" techniques are often used to overcome limitations in
 knitr::include_graphics("images/Rodgers1999_Fig1.png")
 ```
 
-### 3.1. Correlation test with randomization/permutation
+### 2.1. Correlation test with randomization/permutation
 
-#### 3.3.1. Pearson correlation example using trees data
+To demonstrate how one might use a permutation test, let's try to compare P-values generated from a Pearson product-moment correlation test vs. a permutation test.
+
+#### 2.1.1. Pearson correlation example using trees data
+
+As an example, let's use the `trees` dataset from base R. This dataset contains girth (diameter), height and volume estimates for 31 black cherry trees.
 
 ```{r}
 head(trees)
@@ -280,32 +174,58 @@ plot(Height~Girth, data=trees, pch=19)
 cor.test(trees$Girth,trees$Height)
 ```
 
-**P-value = 0.0028**
+The correlation coefficient = 0.52 and **P-value = 0.0028**
 
 ***
 
-#### 3.1.2. Now calculate P-value with randomization/permutation test
+#### 2.1.2. Now calculate P-value with randomization/permutation test
+
+To do this, we are going to first save the observed correlation coefficient.
 
 ```{r}
 obs.cor=cor(trees$Girth,trees$Height)
 obs.cor
 ```
 
+Now, we want to figure out how to get a correlation coefficient after permuting the data. To do this, let's run on iteration of the resampling of tree height data. We can do this using the `sample()` function. 
+
+Here's the raw tree height data:
 ```{r}
-rep=10000
+trees$Height
+```
+
+Here is one iteration of permutation of the tree height data 
+```{r}
+sample(trees$Height, length(trees$Height), replace=F)
+```
+
+To get a correlation coefficient with permuted data, we just put that resampled data inside the `cor()` function:
+```{r}
+cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
+```
+
+Now, we run this whole routine a large number of times (1,000 times here, but more typically 10,000 times)
+
+```{r}
+rep=1000
 rand.cor=vector(length=rep)
 for(i in 1:rep){
-  randHeight=sample(trees$Height, length(trees$Height), replace=F)
-  rand.cor[i]=cor(trees$Girth, randHeight)
+  rand.cor[i]=cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
 }
+```
+
+Here, we plot a histogram of the correlation coefficient from the permutations, and a red line to indicate the observed correlation coefficient.
+```{r}
 hist(rand.cor, xlim=c(-1,1))
 abline(v=obs.cor, lty=2, col="red")
 ```
+
+
 Now, we can calculate a P-value from a randomization test in two ways: A one-tailed test, or two-tailed test. A **one-tailed test** tests the hypothesis with a specific directionality of an effect. For example, that the observed correlation coefficient is specifically MORE POSITIVE than random expectation. In contrast, a **two-tailed test** would test the hypothesis that the absolute value of the observed correlation coefficient is larger than the distribution of absolute values generated by random chance. The standard Pearson's correlation test above generates the P-value for the two-tailed test. Here, we can do either:
 
 ```{r}
 p.onetail=length(which(rand.cor>=obs.cor))/rep
-p.onetail
+round(p.onetail, digits=3)
 ```
 
 ```{r}
@@ -315,13 +235,15 @@ p.twotail
 
 We should get a very similar P-value to the original correlation test (P = 0.0028)
 
-### 3.2. Resampling with bootstrapping vs. jackknifing
+***
 
-```{r}
+### 2.2. Resampling with bootstrapping vs. jackknifing
+
+```{r, message=F}
 library(tidyverse)
 ```
 
-```{r}
+```{r, eval=F}
 co2
 ```
 
@@ -331,8 +253,7 @@ years=1959:1997
 months=1:12
 co2.dat=data.frame(expand.grid(months, years), as.numeric(co2))
 names(co2.dat)=c("month", "year", "value")
-co2.dat
-
+head(co2.dat)
 ```
 
 ```{r}
@@ -347,7 +268,6 @@ lm.fit=(lm(year.mean~year, data=co2.annual))
 summary(lm.fit)
 obs.slope=summary(lm.fit)$coefficients[2,1]
 obs.slope
-
 ```
 This means that the CO2 level is rising by about 1.3 units per year
 
@@ -394,6 +314,9 @@ hist(jk.slopes)
 ci.slopes.jk=quantile(jk.slopes, probs=c(0.025, 0.975))
 ci.slopes.jk
 ```
+
+In both cases, the confidence interval of the slope estimate is quite robust to sampling error (as would expected for such a strong relationship).
+
 
 ***
 [^1]: Strictly speaking, we can only generate pseudo-random numbers--the computer can use an algorithm that generates numbers that are indistinguishable from random, but it is not truly random as long as we are using some algorithm to generate it. 
