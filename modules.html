@@ -14,7 +14,7 @@
 
 <title>Modules</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -142,15 +142,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -324,10 +320,10 @@ Growth Models</a></h4></li>
 href="09.RandomNumbers.html">9. Randomizations and Sampling From
 Distributions</a></h3></li>
 <li><h3 id="batch-processing-example-using-flack-et-al.-2014"><a
-href="09.batch.html">9. Batch Processing (Example using Flack et
+href="10.batch.html">10. Batch Processing (Example using Flack et
 al. 2014)</a></h3></li>
 <li><h3 id="generating-reports-with-rmarkdown"><a
-href="10.Rmarkdown.html">10. Generating reports with
+href="11.Rmarkdown.html">11. Generating reports with
 RMarkdown</a></h3></li>
 <li><h3 id="what-now-more-resources-for-continuing-to-learn-r"><a
 href="resources.html">What now? More resources for continuing to learn

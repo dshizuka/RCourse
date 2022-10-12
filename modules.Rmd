@@ -41,9 +41,9 @@ knitr::opts_chunk$set(echo = TRUE)
     
 * ### [9. Randomizations and Sampling From Distributions](09.RandomNumbers.html)
 
-* ### [9. Batch Processing (Example using Flack et al. 2014)](09.batch.html) 
+* ### [10. Batch Processing (Example using Flack et al. 2014)](10.batch.html) 
 
-* ### [10. Generating reports with RMarkdown](10.Rmarkdown.html)
+* ### [11. Generating reports with RMarkdown](11.Rmarkdown.html)
 
 * ### [What now? More resources for continuing to learn R](resources.html)
 

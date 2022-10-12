@@ -1,12 +1,13 @@
 ---
-title: 'Module 12: How Pigeons Learn Routes'
-subtitle: 'A Lesson in Batch Processing' 
+title: 'Module 10. Batch Processing:'
+subtitle: 'How Pigeons Learn Routes' 
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output:
   html_document:
     toc: true
     toc_depth: 3
+    toc_float: true
 ---
 ```{r setup, include=F}
 library(knitr)
@@ -26,7 +27,7 @@ I have chosen this study because (1) it's super interesting and (2) the complete
 ***
 
 
-##12.1 Download the data files
+## 12.1 Download the data files
 
 * Go to the Dryad database for the associated data files: <http://dx.doi.org/10.5061/dryad.j444n>.
 
@@ -42,7 +43,7 @@ You can see that there is a nested set of folders. The first three folders (R1, 
 
 Now, we will learn how to navigate through this type of folder structure and import sets of data. 
 
-##12.2 Navigating the data folders
+## 12.2 Navigating the data folders
 
 First, load all the libraries we will need. If you don't have some of these, install them using `install.packages()`
 ```{r packagess, message=FALSE}
@@ -114,7 +115,7 @@ list.files("data/Flack et al_Biology Letters/R1/A_A35", pattern=".csv", full.nam
 We will use variations on this function to import data in batches below. 
 
 *** 
-##12.3 Extracting information from file names using `substr()` and assembling metadata
+## 12.3 Extracting information from file names using `substr()` and assembling metadata
 
 In a well-organized data set, the file names often contains useful information that can be interpreted when reading in the files. For example, let's look at the file names of the R1 results from individual A35 again:
 ```{r start 12.3}
@@ -169,9 +170,9 @@ metadata.R1
 *results not shown because it's too long...*
 
 
-##12.4 Analyzing performance of individuals over repeated trials
+## 12.4 Analyzing performance of individuals over repeated trials
 
-###12.4.1 Importing data for each individual for each route
+### 12.4.1 Importing data for each individual for each route
 Now that we have learned a bit about how to deal with file names, we are ready to import datasets in batches!  
 First, let's try importing all of the data for a given bird on a given route. This means we will import all 6 .csv files within an individual folder within the "R1" folder, like this. To do this, we can use the `lapply()` function, and we just need to use the .csv file paths as the elements:
 
@@ -188,7 +189,7 @@ head(dats.R1A35[[1]])
 You can see that each of those data frames contain the GPS position (Latitude and Longitude) of each individual each second during the trial. Thie means that we have the complete data for each individual down to the second! 
 
 
-###12.4.2 Plotting the routes for successive trials
+### 12.4.2 Plotting the routes for successive trials
 
 With the data we have organized, we can draw the route that the bird took in each trial using these latitudes and longitudes. Let's try that:
 
@@ -266,7 +267,7 @@ fpe.R1A35=10400/dist.R1A35
 plot(1:6, fpe.R1A35, pch=19, type="o", las=1, xlab="Trial", ylab="FPE")
 ```
 
-###12.4.4 Calculate and plot FPE across trials for all individuals for Route 1
+### 12.4.4 Calculate and plot FPE across trials for all individuals for Route 1
 
 Ok, here is where it gets challenging. Now what we want to do is calculate the total distance travelled for each bird for each trial on Route 1. For reasons that will become clearer later, we are going to do this as a list of a list, which will replicate the file structure of the dataset we are playing with:
 

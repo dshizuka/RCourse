@@ -14,7 +14,7 @@
 
 <title>9. Randomizations: Sampling from sets and probability distributions</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,15 +145,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -379,7 +375,7 @@ replacement.</h3>
 distribution. Say, for example, we want to sample randomly from a set of
 numbers. For example, let’s sample 5 integer between 1 and 10.</p>
 <pre class="r"><code>sample(1:10, 5, replace=F) #5 random numbers between 1 and 10</code></pre>
-<pre><code>## [1] 10  1  4  6  3</code></pre>
+<pre><code>## [1] 6 7 5 4 8</code></pre>
 <p>You will probably notice that you have generated a <em>different</em>
 set of random numbers than what is shown here. This makes sense, but it
 makes it difficult to make this code <em>reproducible</em>. What we can
@@ -621,8 +617,12 @@ This dataset contains girth (diameter), height and volume estimates for
 ## 4  10.5     72   16.4
 ## 5  10.7     81   18.8
 ## 6  10.8     83   19.7</code></pre>
+<p>We can plot the relationship between tree girth and height:</p>
 <pre class="r"><code>plot(Height~Girth, data=trees, pch=19)</code></pre>
-<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+It seems like there is some correlation there… Let’s do a Pearson’s
+correlation test to look at the correlation coefficient and the P-value
+from this test:</p>
 <pre class="r"><code>cor.test(trees$Girth,trees$Height)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
@@ -635,8 +635,8 @@ This dataset contains girth (diameter), height and volume estimates for
 ## sample estimates:
 ##       cor 
 ## 0.5192801</code></pre>
-<p>The correlation coefficient = 0.52 and <strong>P-value =
-0.0028</strong></p>
+<p>The correlation coefficient = 0.52. Based on the product-moment
+correlation test, the <strong>P-value = 0.0028</strong></p>
 <hr />
 </div>
 <div id="now-calculate-p-value-with-randomizationpermutation-test"
@@ -664,9 +664,9 @@ function.</p>
 resampled data inside the <code>cor()</code> function:</p>
 <pre class="r"><code>cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))</code></pre>
 <pre><code>## [1] -0.03450754</code></pre>
-<p>Now, we run this whole routine a large number of times (1,000 times
-here, but more typically 10,000 times)</p>
-<pre class="r"><code>rep=1000
+<p>Now, we run this whole routine a large number of times (10,000
+times)</p>
+<pre class="r"><code>rep=10000
 rand.cor=vector(length=rep)
 for(i in 1:rep){
   rand.cor[i]=cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
@@ -689,23 +689,61 @@ standard Pearson’s correlation test above generates the P-value for the
 two-tailed test. Here, we can do either:</p>
 <pre class="r"><code>p.onetail=length(which(rand.cor&gt;=obs.cor))/rep
 round(p.onetail, digits=3)</code></pre>
-<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] 0.001</code></pre>
 <pre class="r"><code>p.twotail=length(which(abs(rand.cor)&gt;=abs(obs.cor)))/rep
 p.twotail</code></pre>
-<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] 0.0022</code></pre>
 <p>We should get a very similar P-value to the original correlation test
 (P = 0.0028)</p>
+<hr />
 </div>
 </div>
 <div id="resampling-with-bootstrapping-vs.-jackknifing"
 class="section level3">
 <h3>2.2. Resampling with bootstrapping vs. jackknifing</h3>
+<p>Now, let’s do a quick example of a bootstrapping and jackknifing
+test. Start with loading tidyverse.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
+<div id="the-co2-dataset" class="section level4">
+<h4>2.2.1. The <code>co2</code> dataset</h4>
+<p>We’ll use the <code>co2</code> dataset in base R. This is a
+timeseries of atmospheric <span class="math inline">\(CO_2\)</span>
+levels measured at Manua Loa since January 1959 to December 1997.</p>
 <pre class="r"><code>co2</code></pre>
-<p>Convert this time series into a data frame (manually)</p>
+<p>Since this is a “timeseries” object, the first thing I want to do is
+convert it into a data frame (manually).</p>
+<p>To do this, I will first create objects for months (1 through 12) and
+years (1959 through 1997). Then, I can use a nifty function called
+<code>expand.grid()</code> that will create a two-column matrix of all
+possible combinations of month x year.</p>
 <pre class="r"><code>years=1959:1997
 months=1:12
-co2.dat=data.frame(expand.grid(months, years), as.numeric(co2))
+expand.grid(months, years)[1:20,] #just showing the first 20 rows of this.</code></pre>
+<pre><code>##    Var1 Var2
+## 1     1 1959
+## 2     2 1959
+## 3     3 1959
+## 4     4 1959
+## 5     5 1959
+## 6     6 1959
+## 7     7 1959
+## 8     8 1959
+## 9     9 1959
+## 10   10 1959
+## 11   11 1959
+## 12   12 1959
+## 13    1 1960
+## 14    2 1960
+## 15    3 1960
+## 16    4 1960
+## 17    5 1960
+## 18    6 1960
+## 19    7 1960
+## 20    8 1960</code></pre>
+<p>So we can use this to create a data frame with columns for month,
+year, and <span class="math inline">\(CO_2\)</span> levels. Then I’ll
+name the columns.</p>
+<pre class="r"><code>co2.dat=data.frame(expand.grid(months, years), as.numeric(co2))
 names(co2.dat)=c(&quot;month&quot;, &quot;year&quot;, &quot;value&quot;)
 head(co2.dat)</code></pre>
 <pre><code>##   month year  value
@@ -715,6 +753,11 @@ head(co2.dat)</code></pre>
 ## 4     4 1959 317.56
 ## 5     5 1959 318.13
 ## 6     6 1959 318.00</code></pre>
+</div>
+<div id="get-annual-averages" class="section level4">
+<h4>2.2.2. Get annual averages</h4>
+<p>Now, I will use <code>group_by()</code> and <code>summarise()</code>
+to create an annual avearage dataset.</p>
 <pre class="r"><code>co2.annual=co2.dat %&gt;% group_by(year) %&gt;% summarise(year.mean=mean(value))
 co2.annual</code></pre>
 <pre><code>## # A tibble: 39 × 2
@@ -731,8 +774,10 @@ co2.annual</code></pre>
 ##  9  1967      322.
 ## 10  1968      323.
 ## # … with 29 more rows</code></pre>
+<p>I can plot the change in annual average <span
+class="math inline">\(CO_2\)</span> over time.</p>
 <pre class="r"><code>ggplot(co2.annual, aes(x=year, y=year.mean))+ geom_line() + geom_point()</code></pre>
-<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>Calculate slope of this relationship from observed data:</p>
 <pre class="r"><code>lm.fit=(lm(year.mean~year, data=co2.annual))
 summary(lm.fit)</code></pre>
@@ -757,14 +802,18 @@ summary(lm.fit)</code></pre>
 <pre class="r"><code>obs.slope=summary(lm.fit)$coefficients[2,1]
 obs.slope</code></pre>
 <pre><code>## [1] 1.310499</code></pre>
-<p>This means that the CO2 level is rising by about 1.3 units per
-year</p>
+</div>
+<div id="bootstrap-monthly-temperature-data" class="section level4">
+<h4>2.2.3. Bootstrap monthly temperature data</h4>
+<p>We can test how robust the estimate of the slope is to sampling error
+of the monthly measurements. One way to do this is to use a
+bootstrapping procedure.</p>
 <p>One iteration of a bootstrap procedure:</p>
 <pre class="r"><code>co2.boot=co2.dat %&gt;% group_by(year) %&gt;%
   summarise(mean.boot=mean(sample(value, 12, replace=T)))
 
 ggplot(co2.boot, aes(x=year, y=mean.boot))+ geom_line() + geom_point()</code></pre>
-<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p>Do this 1,000 times to generate confidence interval for the
 slope:</p>
 <pre class="r"><code>times=1000
@@ -778,11 +827,14 @@ for(i in 1:times){
 boot.slopes=sapply(boot.fits, function(x) summary(x)$coefficients[2,1])
 
 hist(boot.slopes)</code></pre>
-<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <pre class="r"><code>ci.slopes.boot=quantile(boot.slopes, probs=c(0.025, 0.975))
 ci.slopes.boot</code></pre>
 <pre><code>##     2.5%    97.5% 
-## 1.295857 1.325682</code></pre>
+## 1.295146 1.324964</code></pre>
+</div>
+<div id="jackknife-monthly-measurements" class="section level4">
+<h4>2.2.4. Jackknife monthly measurements</h4>
 <p>Now do the same with a jackknife procedure:</p>
 <pre class="r"><code>times=1000
 jk.fits=list()
@@ -795,12 +847,16 @@ for(i in 1:times){
 jk.slopes=sapply(jk.fits, function(x) summary(x)$coefficients[2,1])
 
 hist(jk.slopes)</code></pre>
-<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="09.RandomNumbers_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <pre class="r"><code>ci.slopes.jk=quantile(jk.slopes, probs=c(0.025, 0.975))
 ci.slopes.jk</code></pre>
 <pre><code>##     2.5%    97.5% 
-## 1.295073 1.325754</code></pre>
+## 1.294935 1.326785</code></pre>
+<p>In both cases, the confidence interval of the slope estimate is quite
+robust to sampling error (as would expected for such a strong
+relationship).</p>
 <hr />
+</div>
 </div>
 </div>
 <div class="footnotes footnotes-end-of-document">

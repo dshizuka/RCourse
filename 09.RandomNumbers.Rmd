@@ -165,16 +165,18 @@ As an example, let's use the `trees` dataset from base R. This dataset contains 
 ```{r}
 head(trees)
 ```
+We can plot the relationship between tree girth and height:
 
 ```{r}
 plot(Height~Girth, data=trees, pch=19)
 ```
+It seems like there is some correlation there... Let's do a Pearson's correlation test to look at the correlation coefficient and the P-value from this test:
 
 ```{r}
 cor.test(trees$Girth,trees$Height)
 ```
 
-The correlation coefficient = 0.52 and **P-value = 0.0028**
+The correlation coefficient = 0.52. Based on the product-moment correlation test, the  **P-value = 0.0028**
 
 ***
 
@@ -204,10 +206,10 @@ To get a correlation coefficient with permuted data, we just put that resampled 
 cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
 ```
 
-Now, we run this whole routine a large number of times (1,000 times here, but more typically 10,000 times)
+Now, we run this whole routine a large number of times (10,000 times)
 
 ```{r}
-rep=1000
+rep=10000
 rand.cor=vector(length=rep)
 for(i in 1:rep){
   rand.cor[i]=cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
@@ -239,26 +241,44 @@ We should get a very similar P-value to the original correlation test (P = 0.002
 
 ### 2.2. Resampling with bootstrapping vs. jackknifing
 
+Now, let's do a quick example of a bootstrapping and jackknifing test. Start with loading tidyverse. 
 ```{r, message=F}
 library(tidyverse)
 ```
 
+#### 2.2.1. The `co2` dataset
+
+We'll use the `co2` dataset in base R. This is a timeseries of atmospheric $CO_2$ levels measured at Manua Loa since January 1959 to December 1997.  
 ```{r, eval=F}
 co2
 ```
 
-Convert this time series into a data frame (manually)
+Since this is a "timeseries" object, the first thing I want to do is convert it into a data frame (manually). 
+
+To do this, I will first create objects for months (1 through 12) and years (1959 through 1997). Then, I can use a nifty function called `expand.grid()` that will create a two-column matrix of all possible combinations of month x year. 
 ```{r}
 years=1959:1997
 months=1:12
+expand.grid(months, years)[1:20,] #just showing the first 20 rows of this.
+```
+
+So we can use this to create a data frame with columns for month, year, and $CO_2$ levels. Then I'll name the columns. 
+```{r}
 co2.dat=data.frame(expand.grid(months, years), as.numeric(co2))
 names(co2.dat)=c("month", "year", "value")
 head(co2.dat)
 ```
 
+#### 2.2.2. Get annual averages
+
+Now, I will use `group_by()` and `summarise()` to create an annual avearage dataset. 
 ```{r}
 co2.annual=co2.dat %>% group_by(year) %>% summarise(year.mean=mean(value))
 co2.annual
+```
+
+I can plot the change in annual average $CO_2$ over time. 
+```{r}
 ggplot(co2.annual, aes(x=year, y=year.mean))+ geom_line() + geom_point()
 ```
 
@@ -269,8 +289,10 @@ summary(lm.fit)
 obs.slope=summary(lm.fit)$coefficients[2,1]
 obs.slope
 ```
-This means that the CO2 level is rising by about 1.3 units per year
 
+#### 2.2.3. Bootstrap monthly temperature data 
+
+We can test how robust the estimate of the slope is to sampling error of the monthly measurements. One way to do this is to use a bootstrapping procedure.
 
 One iteration of a bootstrap procedure:
 
@@ -297,6 +319,8 @@ hist(boot.slopes)
 ci.slopes.boot=quantile(boot.slopes, probs=c(0.025, 0.975))
 ci.slopes.boot
 ```
+
+#### 2.2.4. Jackknife monthly measurements
 
 Now do the same with a jackknife procedure:
 ```{r}

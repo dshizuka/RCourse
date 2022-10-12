@@ -256,4 +256,4 @@ plot(cars$speed, cars$dist, xlab="Speed", ylab="Distance traveled until stop")
 
 ## Group Exercise
 
-* Go to [this page](10.e.RMDExercise.html) and try to recreate this page using RMarkdown! 
+* Go to [this page](11.e.RMDExercise.html) and try to recreate this page using RMarkdown! 
