@@ -36,10 +36,10 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [7. Custom Functions (and if-else statements)](07.Functions.html)
 
 * ### [8. Apply Fuctions and Loops](08.Apply.html)
-
-    + #### [8.1 Apply & Loops example: Population Growth Models](08.1.PopGrowth.html)
     
 * ### [9. Randomizations and Sampling From Distributions](09.RandomNumbers.html)
+
+  + #### [9.2 Apply & Loops example: Population Growth Models](09.2.PopGrowth.html)
 
 * ### [10. Batch Processing (Example using Flack et al. 2014)](10.batch.html) 
 
