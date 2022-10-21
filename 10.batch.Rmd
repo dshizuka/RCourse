@@ -67,7 +67,7 @@ list.dirs()
 
 
 The `list.files()` function lists just the *names of the files or folders contained within the working directory.*
-```{r}
+```{r, eval=F}
 list.files()
 ```
 *Your output will look different from mine. But it should include the "Flack et al_Biology Letters" folder.*  
@@ -76,7 +76,7 @@ The files are named with the extnsion that indicates the file format (e.g., .pdf
 \
 
 You can specify which files/folders to return by giving the command a "pattern" argument. For example, let's list only the .R script files.
-```{r}
+```{r, eval=F}
 list.files(pattern=".R")
 ```
 *This will only list a file if you have a .R script file in your folder*
@@ -230,7 +230,7 @@ We can make this even fancier, and overlay these results on a terrain map using 
 ```{r, eval=T}
 #use the get_map() function to download a map centered on the mean long/lat position of the bird, with a given zoom factor
 location = c(long=mean(longs), lat=mean(lats))
-map=get_stamenmap(location, bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10, source="stamen", maptype="terrain-background", filetype="png")
+map=get_stamenmap(bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10, source="stamen", maptype="terrain-background", filetype="png")
 #now add this map as the base, and then plot the geom_path on top of it.
 map_lines=ggmap(map) + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low="gold", high="red")
 map_lines

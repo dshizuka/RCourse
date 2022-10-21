@@ -423,6 +423,49 @@ directory (in this case, your Rproject folder)</p>
 <p>The <code>list.files()</code> function lists just the <em>names of
 the files or folders contained within the working directory.</em></p>
 <pre class="r"><code>list.files()</code></pre>
+<pre><code>##  [1] &quot;_site.yml&quot;                      &quot;01.Intro.html&quot;                 
+##  [3] &quot;01.Intro.Rmd&quot;                   &quot;02.ObjectTypes.html&quot;           
+##  [5] &quot;02.ObjectTypes.Rmd&quot;             &quot;03.Data.html&quot;                  
+##  [7] &quot;03.Data.Rmd&quot;                    &quot;03.e.Fix_Data.html&quot;            
+##  [9] &quot;03.e.Fix_Data.Rmd&quot;              &quot;04.1.Plots_1_files&quot;            
+## [11] &quot;04.1.Plots_1.html&quot;              &quot;04.1.Plots_1.Rmd&quot;              
+## [13] &quot;04.2.ggplot2_intro_files&quot;       &quot;04.2.ggplot2_intro.html&quot;       
+## [15] &quot;04.2.ggplot2_intro.Rmd&quot;         &quot;05.1.Stats_LinearModels_files&quot; 
+## [17] &quot;05.1.Stats_LinearModels.html&quot;   &quot;05.1.Stats_LinearModels.Rmd&quot;   
+## [19] &quot;06.1.tidyverse.html&quot;            &quot;06.1.tidyverse.Rmd&quot;            
+## [21] &quot;06.2.stringr_WHO.html&quot;          &quot;06.2.stringr_WHO.Rmd&quot;          
+## [23] &quot;07.Functions_files&quot;             &quot;07.Functions.html&quot;             
+## [25] &quot;07.Functions.Rmd&quot;               &quot;08.Apply_files&quot;                
+## [27] &quot;08.Apply.html&quot;                  &quot;08.Apply.Rmd&quot;                  
+## [29] &quot;09.2.PopGrowth_files&quot;           &quot;09.2.PopGrowth.html&quot;           
+## [31] &quot;09.2.PopGrowth.Rmd&quot;             &quot;09.batch_files&quot;                
+## [33] &quot;09.boot_co2_example.R&quot;          &quot;09.RandomNumbers_files&quot;        
+## [35] &quot;09.RandomNumbers.html&quot;          &quot;09.RandomNumbers.Rmd&quot;          
+## [37] &quot;10.-Rmarkdown_files&quot;            &quot;10.batch_2022_files&quot;           
+## [39] &quot;10.batch_2022.Rmd&quot;              &quot;10.batch_files&quot;                
+## [41] &quot;10.batch.html&quot;                  &quot;10.batch.Rmd&quot;                  
+## [43] &quot;11.e.RMDExercise_files&quot;         &quot;11.e.RMDExercise.html&quot;         
+## [45] &quot;11.e.RMDExercise.Rmd&quot;           &quot;11.Rmarkdown_files&quot;            
+## [47] &quot;11.Rmarkdown.html&quot;              &quot;11.Rmarkdown.Rmd&quot;              
+## [49] &quot;codes_functions.R&quot;              &quot;data&quot;                          
+## [51] &quot;E2_Wale_files&quot;                  &quot;E2_Wale.html&quot;                  
+## [53] &quot;E2_Wale.Rmd&quot;                    &quot;Ex_WorldBank_files&quot;            
+## [55] &quot;Ex_WorldBank.html&quot;              &quot;Ex_WorldBank.Rmd&quot;              
+## [57] &quot;Ex1.Plot_Bowden_files&quot;          &quot;Ex1.Plot_Bowden.html&quot;          
+## [59] &quot;Ex1.Plot_Bowden.Rmd&quot;            &quot;Example_CootDataWrangling.html&quot;
+## [61] &quot;Example_CootDataWrangling.Rmd&quot;  &quot;images&quot;                        
+## [63] &quot;index_2019.Rmd&quot;                 &quot;index_files&quot;                   
+## [65] &quot;index.html&quot;                     &quot;index.Rmd&quot;                     
+## [67] &quot;modules.html&quot;                   &quot;modules.Rmd&quot;                   
+## [69] &quot;old_06.Stats_1.Rmd&quot;             &quot;pdfs&quot;                          
+## [71] &quot;RCourse.Rproj&quot;                  &quot;resources.html&quot;                
+## [73] &quot;resources.Rmd&quot;                  &quot;rmd_examples&quot;                  
+## [75] &quot;scatterplot_w_legend.pdf&quot;       &quot;scatterplot.png&quot;               
+## [77] &quot;site_libs&quot;                      &quot;style.css&quot;                     
+## [79] &quot;syllabus_2019.Rmd&quot;              &quot;syllabus_pdf.html&quot;             
+## [81] &quot;syllabus_pdf.Rmd&quot;               &quot;syllabus.html&quot;                 
+## [83] &quot;syllabus.Rmd&quot;                   &quot;temp_tidyverse_world.R&quot;        
+## [85] &quot;tidytuesday&quot;</code></pre>
 <p><em>Your output will look different from mine. But it should include
 the “Flack et al_Biology Letters” folder.</em><br />
 The files are named with the extnsion that indicates the file format
@@ -434,6 +477,26 @@ means the item is a folder.</p>
 “pattern” argument. For example, let’s list only the .R script
 files.</p>
 <pre class="r"><code>list.files(pattern=&quot;.R&quot;)</code></pre>
+<pre><code>##  [1] &quot;01.Intro.Rmd&quot;                  &quot;02.ObjectTypes.Rmd&quot;           
+##  [3] &quot;03.Data.Rmd&quot;                   &quot;03.e.Fix_Data.Rmd&quot;            
+##  [5] &quot;04.1.Plots_1.Rmd&quot;              &quot;04.2.ggplot2_intro.Rmd&quot;       
+##  [7] &quot;05.1.Stats_LinearModels.Rmd&quot;   &quot;06.1.tidyverse.Rmd&quot;           
+##  [9] &quot;06.2.stringr_WHO.Rmd&quot;          &quot;07.Functions.Rmd&quot;             
+## [11] &quot;08.Apply.Rmd&quot;                  &quot;09.2.PopGrowth.Rmd&quot;           
+## [13] &quot;09.boot_co2_example.R&quot;         &quot;09.RandomNumbers_files&quot;       
+## [15] &quot;09.RandomNumbers.html&quot;         &quot;09.RandomNumbers.Rmd&quot;         
+## [17] &quot;10.-Rmarkdown_files&quot;           &quot;10.batch_2022.Rmd&quot;            
+## [19] &quot;10.batch.Rmd&quot;                  &quot;11.e.RMDExercise_files&quot;       
+## [21] &quot;11.e.RMDExercise.html&quot;         &quot;11.e.RMDExercise.Rmd&quot;         
+## [23] &quot;11.Rmarkdown_files&quot;            &quot;11.Rmarkdown.html&quot;            
+## [25] &quot;11.Rmarkdown.Rmd&quot;              &quot;codes_functions.R&quot;            
+## [27] &quot;E2_Wale.Rmd&quot;                   &quot;Ex_WorldBank.Rmd&quot;             
+## [29] &quot;Ex1.Plot_Bowden.Rmd&quot;           &quot;Example_CootDataWrangling.Rmd&quot;
+## [31] &quot;index_2019.Rmd&quot;                &quot;index.Rmd&quot;                    
+## [33] &quot;modules.Rmd&quot;                   &quot;old_06.Stats_1.Rmd&quot;           
+## [35] &quot;RCourse.Rproj&quot;                 &quot;resources.Rmd&quot;                
+## [37] &quot;syllabus_2019.Rmd&quot;             &quot;syllabus_pdf.Rmd&quot;             
+## [39] &quot;syllabus.Rmd&quot;                  &quot;temp_tidyverse_world.R&quot;</code></pre>
 <p><em>This will only list a file if you have a .R script file in your
 folder</em></p>
 <p><br />
@@ -601,7 +664,7 @@ for(i in 1:length(dats.R1A35)){
   points(dats.R1A35[[i]]$Longitude, dats.R1A35[[i]]$Latitude, type=&quot;l&quot;, col=new.palette[i])
 }
 legend(&quot;topright&quot;, legend=1:6, title=&quot;Trial&quot;, lty=1, lwd=2, col=new.palette, cex=0.8)</code></pre>
-<p><img src="10.batch_files/figure-html/12.4.2-1.png" width="384" /></p>
+<p><img src="10.batch_2022_files/figure-html/12.4.2-1.png" width="384" /></p>
 </div>
 <div id="with-ggplot" class="section level4">
 <h4>with ggplot</h4>
@@ -620,7 +683,7 @@ scale from “gold” to “red”.</p>
 <pre class="r"><code>p = ggplot() + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
 p</code></pre>
 <pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-16-1.png" width="576" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-16-1.png" width="576" /></p>
 </div>
 <div id="with-ggmap" class="section level4">
 <h4>with ggmap</h4>
@@ -637,7 +700,7 @@ map=get_stamenmap(bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10,
 map_lines=ggmap(map) + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
 map_lines</code></pre>
 <pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <ul>
 <li>Note: You used to be able to directly plot onto a google map, but
 this now requires an API key. It’s possible to do this for free but I’m
@@ -682,12 +745,12 @@ set in the list <code>dats.R1A35</code>. We can use the
 <code>sapply()</code> function for this!</p>
 <pre class="r"><code>dist.R1A35=sapply(dats.R1A35, function(x) sum(x$Distance))
 plot(dist.R1A35/1000, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;Distance Travelled (km)&quot;)</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-20-1.png" width="480" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-20-1.png" width="480" /></p>
 <p>We can plot this as FPE, using 10.4km as the straigh-line
 distance:</p>
 <pre class="r"><code>fpe.R1A35=10400/dist.R1A35
 plot(1:6, fpe.R1A35, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;FPE&quot;)</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
 </div>
 </div>
 <div
@@ -728,7 +791,7 @@ par(mar=c(4,4,2,4))
 for (i in 1:3){
   plot(fpe~as.numeric(trial), data=subset(metadata.R1, group==groups[i]), cex=2, pch=21, bg=gray(0.5, 0.5), ylim=c(0,1), las=1, ylab=&quot;FPE&quot;, xlab=&quot;Trial&quot;, main=paste(&quot;Group&quot;, groups[i]))
 }</code></pre>
-<p><img src="10.batch_files/figure-html/plot%20individuals-1.png" width="240" /></p>
+<p><img src="10.batch_2022_files/figure-html/plot%20individuals-1.png" width="240" /></p>
 <p>This is essentially what is plotted in panels (g)-(i) in Figure
 1.</p>
 </div>
@@ -773,7 +836,7 @@ points(mean.fpe~trial, data=use.dat, type=&quot;o&quot;, cex=2, pch=21, bg=color
 
 #add legend
 legend(&quot;topleft&quot;, legend=c(&quot;A: Sequential&quot;, &quot;B: Rotation&quot;, &quot;C: Random&quot;), pch=21, pt.bg=colors, title=&quot;Group&quot;, cex=0.8)</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-26-1.png" width="480" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-26-1.png" width="480" /></p>
 <p>What’s really interesting here is that Treatements B &amp; C perform
 better than Group A by the 5th and 6th release. By that point, the
 individuals in groups B and C have the same experience with this
@@ -785,7 +848,7 @@ more releases overall.</p>
   geom_line() + 
   geom_errorbar(aes(ymin=mean.fpe-se.fpe, ymax=mean.fpe+se.fpe), width=0.3)
 p</code></pre>
-<p><img src="10.batch_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="10.batch_2022_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>This result doesn’t necessarily hold up for Routes 2 and 3 though,
 possibly because the “group A” birds have had enough general practice in
 finding homing routes.</p>
