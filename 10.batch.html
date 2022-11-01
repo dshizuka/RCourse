@@ -14,7 +14,7 @@
 
 <title>Module 10. Batch Processing:</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,15 +145,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -350,7 +346,7 @@ div.tocify {
 <h1 class="title toc-ignore">Module 10. Batch Processing:</h1>
 <h3 class="subtitle">How Pigeons Learn Routes</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 10/21/22</h4>
+<h4 class="date">updated 11/01/22</h4>
 
 </div>
 
@@ -410,7 +406,8 @@ these, install them using <code>install.packages()</code></p>
 library(ggplot2)
 library(ggmap)
 library(mapproj)
-library(dplyr)</code></pre>
+library(dplyr)
+library(lubridate)</code></pre>
 <p><br />
 </p>
 <p>The <code>list.dirs()</code> function lists the <em>paths of all
@@ -433,7 +430,7 @@ means the item is a folder.</p>
 <p>You can specify which files/folders to return by giving the command a
 “pattern” argument. For example, let’s list only the .R script
 files.</p>
-<pre class="r"><code>list.files(pattern=&quot;.R&quot;)</code></pre>
+<pre class="r"><code>list.files(pattern = &quot;.R&quot;)</code></pre>
 <p><em>This will only list a file if you have a .R script file in your
 folder</em></p>
 <p><br />
@@ -451,13 +448,13 @@ set of folders that contain the performance of individuals at Route
 ## [19] &quot;C_A47&quot; &quot;C_D00&quot; &quot;C_D01&quot; &quot;C_D08&quot; &quot;C_D10&quot; &quot;C_D15&quot; &quot;C_D88&quot; &quot;C_D93&quot;</code></pre>
 <p>Or, we can go inside the “R1” folder and list only the individuals in
 experimental treatment “A”</p>
-<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1&quot;, pattern=&quot;A_&quot;)</code></pre>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1&quot;, pattern = &quot;A_&quot;)</code></pre>
 <pre><code>## [1] &quot;A_A35&quot; &quot;A_A38&quot; &quot;A_A45&quot; &quot;A_D06&quot; &quot;A_D09&quot; &quot;A_D16&quot; &quot;A_D83&quot; &quot;A_D94&quot; &quot;A_D96&quot;</code></pre>
 <p><br />
 </p>
 <p>Let’s list all of the .csv files from individual A_A35 for Route
 1:</p>
-<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35/&quot;, pattern=&quot;.csv&quot;)</code></pre>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35/&quot;, pattern = &quot;.csv&quot;)</code></pre>
 <pre><code>## [1] &quot;A_A35_R1_01.csv&quot; &quot;A_A35_R1_02.csv&quot; &quot;A_A35_R1_03.csv&quot; &quot;A_A35_R1_04.csv&quot;
 ## [5] &quot;A_A35_R1_05.csv&quot; &quot;A_A35_R1_06.csv&quot;</code></pre>
 <p><em>In this specific case, there are only .csv files in this folder,
@@ -466,7 +463,7 @@ useful when you are extracting data from folders that contain a bunch of
 ther files.</em></p>
 <p>Finally, we can get the full path for these files by specifying
 “full.names=T”</p>
-<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;, pattern=&quot;.csv&quot;, full.name=T)</code></pre>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;, pattern = &quot;.csv&quot;, full.name = T)</code></pre>
 <pre><code>## [1] &quot;data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_01.csv&quot;
 ## [2] &quot;data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_02.csv&quot;
 ## [3] &quot;data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_03.csv&quot;
@@ -503,14 +500,15 @@ returns the characters given at the specified positions. The syntax is
 <code>substr(x, start, stop)</code></p>
 <p>For example, to get the treatment group, simply get the first
 character of the file name:</p>
-<pre class="r"><code>group=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 1,1)
+<pre class="r"><code>group = substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 1, 1)
 group</code></pre>
 <pre><code>## [1] &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot;</code></pre>
 <p>Now get the rest of the info and assemble a dataframe:</p>
-<pre class="r"><code>id=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 3,5)
-route=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 7,8)
-trial=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;),10,11)
-metadata=data.frame(group=group, id=id, route=route, trial=trial)
+<pre class="r"><code>id = substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 3, 5)
+route = substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 7, 8)
+trial = substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 10,
+    11)
+metadata = data.frame(group = group, id = id, route = route, trial = trial)
 metadata</code></pre>
 <pre><code>##   group  id route trial
 ## 1     A A35    R1    01
@@ -523,15 +521,15 @@ metadata</code></pre>
 of the files in all folders within “R1”, we can nest the
 <code>list.file()</code> function within another
 <code>list.file()</code> function:</p>
-<pre class="r"><code>list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T))</code></pre>
+<pre class="r"><code>list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name = T))</code></pre>
 <p><em>result not shown because it’s too long</em></p>
 <p>So we can assemble the whole metadata for Route 1 as:</p>
-<pre class="r"><code>all.files=list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T))
-group=substr(all.files, 1,1)
-id=substr(all.files, 3,5)
-route=substr(all.files, 7,8)
-trial=substr(all.files,10,11)
-metadata.R1=data.frame(group=group, id=id, route=route, trial=trial)</code></pre>
+<pre class="r"><code>all.files = list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name = T))
+group = substr(all.files, 1, 1)
+id = substr(all.files, 3, 5)
+route = substr(all.files, 7, 8)
+trial = substr(all.files, 10, 11)
+metadata.R1 = data.frame(group = group, id = id, route = route, trial = trial)</code></pre>
 <pre class="r"><code>metadata.R1</code></pre>
 <p><em>results not shown because it’s too long…</em></p>
 </div>
@@ -548,7 +546,8 @@ route. This means we will import all 6 .csv files within an individual
 folder within the “R1” folder, like this. To do this, we can use the
 <code>lapply()</code> function, and we just need to use the .csv file
 paths as the elements:</p>
-<pre class="r"><code>dats.R1A35=lapply(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;, full.name=T), function(x) read.csv(x))
+<pre class="r"><code>dats.R1A35 = lapply(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;,
+    full.name = T), function(x) read.csv(x))
 summary(dats.R1A35)</code></pre>
 <pre><code>##      Length Class      Mode
 ## [1,] 10     data.frame list
@@ -588,19 +587,24 @@ took in each trial using these latitudes and longitudes. Let’s try
 that:</p>
 <div id="with-base-r-plotting" class="section level4">
 <h4>with base R plotting</h4>
-<pre class="r"><code># Use RColorBrewer color set that &quot;PuBu&quot; (purple to blue)
-new.palette=brewer.pal(length(dats.R1A35), &quot;PuBu&quot;)
+<pre class="r"><code># Use RColorBrewer color set that &#39;PuBu&#39; (purple to blue)
+new.palette = brewer.pal(length(dats.R1A35), &quot;PuBu&quot;)
 
-#set the extremes of the plotting ranges: 0.01 degrees beyond the starting and ending points
-lats=c(min(dats.R1A35[[1]]$Latitude)-0.01, max(dats.R1A35[[1]]$Latitude)+0.01)
-longs=c(min(dats.R1A35[[1]]$Longitude)-0.01, max(dats.R1A35[[1]]$Longitude)+0.01)
+# set the extremes of the plotting ranges: 0.01 degrees beyond the
+# starting and ending points
+lats = c(min(dats.R1A35[[1]]$Latitude) - 0.01, max(dats.R1A35[[1]]$Latitude) +
+    0.01)
+longs = c(min(dats.R1A35[[1]]$Longitude) - 0.01, max(dats.R1A35[[1]]$Longitude) +
+    0.01)
 
-#establish empty plot, and then draw line for each trajectory
-plot(longs, lats, type=&quot;n&quot;, las=1, xlab=&quot;Longitude&quot;, ylab=&quot;Latitude&quot;)
-for(i in 1:length(dats.R1A35)){
-  points(dats.R1A35[[i]]$Longitude, dats.R1A35[[i]]$Latitude, type=&quot;l&quot;, col=new.palette[i])
+# establish empty plot, and then draw line for each trajectory
+plot(longs, lats, type = &quot;n&quot;, las = 1, xlab = &quot;Longitude&quot;, ylab = &quot;Latitude&quot;)
+for (i in 1:length(dats.R1A35)) {
+    points(dats.R1A35[[i]]$Longitude, dats.R1A35[[i]]$Latitude, type = &quot;l&quot;,
+        col = new.palette[i])
 }
-legend(&quot;topright&quot;, legend=1:6, title=&quot;Trial&quot;, lty=1, lwd=2, col=new.palette, cex=0.8)</code></pre>
+legend(&quot;topright&quot;, legend = 1:6, title = &quot;Trial&quot;, lty = 1, lwd = 2, col = new.palette,
+    cex = 0.8)</code></pre>
 <p><img src="10.batch_files/figure-html/12.4.2-1.png" width="384" /></p>
 </div>
 <div id="with-ggplot" class="section level4">
@@ -612,31 +616,35 @@ individual for that route). To do this, we will use the function
 executes it on a list as a whole. The only time I’ve ever used this
 function is to use it to collapse a list of data frames into a single
 data frame:</p>
-<pre class="r"><code>all.dat.R1A35=do.call(&quot;rbind&quot;, dats.R1A35)</code></pre>
+<pre class="r"><code>all.dat.R1A35 = do.call(&quot;rbind&quot;, dats.R1A35) %&gt;%
+    mutate(Date = ymd(Date))</code></pre>
 <p>Now, we can use the <code>geom_path()</code> function (Note: NOT
 geom_line()) in ggplot2 to plot longitude on x-axis, latitude on y-axis,
 grouping the data by Date, and coloring the lines using those dates on a
 scale from “gold” to “red”.</p>
-<pre class="r"><code>p = ggplot() + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
+<pre class="r"><code>p = ggplot(all.dat.R1A35) + geom_path(aes(x = Longitude, y = Latitude, group = Date,
+    color = as.numeric(Date))) + scale_colour_gradient(low = &quot;gold&quot;, high = &quot;red&quot;)
 p</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-16-1.png" width="576" /></p>
 </div>
 <div id="with-ggmap" class="section level4">
 <h4>with ggmap</h4>
 <p>We can make this even fancier, and overlay these results on a terrain
 map using the package ‘ggmap’:</p>
-<pre class="r"><code>#use the get_map() function to download a map centered on the mean long/lat position of the bird, with a given zoom factor
-location = c(long=mean(longs), lat=mean(lats))
-map=get_stamenmap(bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10, source=&quot;stamen&quot;, maptype=&quot;terrain-background&quot;, filetype=&quot;png&quot;)</code></pre>
+<pre class="r"><code># use the get_map() function to download a map centered on the mean
+# long/lat position of the bird, with a given zoom factor
+location = c(long = mean(longs), lat = mean(lats))
+map = get_stamenmap(bbox = c(left = -1.5, bottom = 51.7, right = -1.2, top = 51.9),
+    zoom = 10, source = &quot;stamen&quot;, maptype = &quot;terrain-background&quot;, filetype = &quot;png&quot;)</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain-background/10/507/338.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain-background/10/508/338.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain-background/10/507/339.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain-background/10/508/339.png</code></pre>
-<pre class="r"><code>#now add this map as the base, and then plot the geom_path on top of it.
-map_lines=ggmap(map) + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
+<pre class="r"><code># now add this map as the base, and then plot the geom_path on top of it.
+map_lines = ggmap(map) + geom_path(aes(x = Longitude, y = Latitude, group = Date,
+    colour = as.numeric(Date)), data = all.dat.R1A35) + scale_colour_gradient(low = &quot;gold&quot;,
+    high = &quot;red&quot;)
 map_lines</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <ul>
 <li>Note: You used to be able to directly plot onto a google map, but
@@ -680,13 +688,13 @@ distance travelled:</p>
 <p>Now, we just need to calculate the sum of the distance for each data
 set in the list <code>dats.R1A35</code>. We can use the
 <code>sapply()</code> function for this!</p>
-<pre class="r"><code>dist.R1A35=sapply(dats.R1A35, function(x) sum(x$Distance))
-plot(dist.R1A35/1000, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;Distance Travelled (km)&quot;)</code></pre>
+<pre class="r"><code>dist.R1A35 = sapply(dats.R1A35, function(x) sum(x$Distance))
+plot(dist.R1A35/1000, pch = 19, type = &quot;o&quot;, las = 1, xlab = &quot;Trial&quot;, ylab = &quot;Distance Travelled (km)&quot;)</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-20-1.png" width="480" /></p>
 <p>We can plot this as FPE, using 10.4km as the straigh-line
 distance:</p>
-<pre class="r"><code>fpe.R1A35=10400/dist.R1A35
-plot(1:6, fpe.R1A35, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;FPE&quot;)</code></pre>
+<pre class="r"><code>fpe.R1A35 = 10400/dist.R1A35
+plot(1:6, fpe.R1A35, pch = 19, type = &quot;o&quot;, las = 1, xlab = &quot;Trial&quot;, ylab = &quot;FPE&quot;)</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
 </div>
 </div>
@@ -700,16 +708,17 @@ calculate the total distance travelled for each bird for each trial on
 Route 1. For reasons that will become clearer later, we are going to do
 this as a list of a list, which will replicate the file structure of the
 dataset we are playing with:</p>
-<pre class="r"><code>all.files.R1=list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T), full.name=T)
-all.R1=lapply(all.files.R1, function(x) read.csv(x))</code></pre>
-<pre class="r"><code>distances=sapply(all.R1, function(x) sum(x$Distance))
+<pre class="r"><code>all.files.R1 = list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;,
+    full.name = T), full.name = T)
+all.R1 = lapply(all.files.R1, function(x) read.csv(x))</code></pre>
+<pre class="r"><code>distances = sapply(all.R1, function(x) sum(x$Distance))
 head(distances)</code></pre>
 <pre><code>## [1] 37881.73 28738.05 15015.55 21837.51 20811.76 22663.92</code></pre>
 <p>We can simply add this data to the <code>metadata.R1</code> data
 frame we created in Section 12.3.3. We can also calculate that FPE based
 on those distances.</p>
-<pre class="r"><code>metadata.R1$distance=distances
-metadata.R1$fpe=10400/metadata.R1$distance
+<pre class="r"><code>metadata.R1$distance = distances
+metadata.R1$fpe = 10400/metadata.R1$distance
 head(metadata.R1)</code></pre>
 <pre><code>##   group  id route trial distance       fpe
 ## 1     A A35    R1    01 37881.73 0.2745387
@@ -722,11 +731,13 @@ head(metadata.R1)</code></pre>
 <div id="plot-all-individuals-by-group" class="section level4">
 <h4>Plot all individuals by group</h4>
 <p>Here is one way:</p>
-<pre class="r"><code>groups=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
-layout(matrix(1:3, ncol=1))
-par(mar=c(4,4,2,4))
-for (i in 1:3){
-  plot(fpe~as.numeric(trial), data=subset(metadata.R1, group==groups[i]), cex=2, pch=21, bg=gray(0.5, 0.5), ylim=c(0,1), las=1, ylab=&quot;FPE&quot;, xlab=&quot;Trial&quot;, main=paste(&quot;Group&quot;, groups[i]))
+<pre class="r"><code>groups = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+layout(matrix(1:3, ncol = 1))
+par(mar = c(4, 4, 2, 4))
+for (i in 1:3) {
+    plot(fpe ~ as.numeric(trial), data = subset(metadata.R1, group == groups[i]),
+        cex = 2, pch = 21, bg = gray(0.5, 0.5), ylim = c(0, 1), las = 1, ylab = &quot;FPE&quot;,
+        xlab = &quot;Trial&quot;, main = paste(&quot;Group&quot;, groups[i]))
 }</code></pre>
 <p><img src="10.batch_files/figure-html/plot%20individuals-1.png" width="240" /></p>
 <p>This is essentially what is plotted in panels (g)-(i) in Figure
@@ -738,11 +749,13 @@ for (i in 1:3){
 (d)-(f). To do this, we first have create summary data–for each group
 and trial, we will calculate the mean and s.e.m. of FPE (flight path
 efficiency).</p>
-<pre class="r"><code>se=function(x) sqrt(var(x)/length(x))
-summ.dat=metadata.R1 %&gt;% group_by(group, trial) %&gt;% summarise(mean.fpe=mean(fpe), se.fpe=se(fpe))</code></pre>
+<pre class="r"><code>se = function(x) sqrt(var(x)/length(x))
+summ.dat = metadata.R1 %&gt;%
+    group_by(group, trial) %&gt;%
+    summarise(mean.fpe = mean(fpe), se.fpe = se(fpe))</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;group&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>summ.dat$trial=as.numeric(summ.dat$trial)
+<pre class="r"><code>summ.dat$trial = as.numeric(summ.dat$trial)
 head(summ.dat)</code></pre>
 <pre><code>## # A tibble: 6 × 4
 ## # Groups:   group [1]
@@ -756,23 +769,30 @@ head(summ.dat)</code></pre>
 ## 6 A         6    0.506 0.0705</code></pre>
 <p>Then, we can plot these data in a single plot. The following code is
 annotated:</p>
-<pre class="r"><code>#set up groups and colors
-groups=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
-colors=brewer.pal(3, &quot;Set1&quot;)
+<pre class="r"><code># set up groups and colors
+groups = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+colors = brewer.pal(3, &quot;Set1&quot;)
 
-#generate empty plot with the appropriate axes (1 through 6 on x-axis, 0 to 1 on y=axis). Draw a dotted line along FPE = 0.75 for comparison purposes
-plot(1:6, seq(0, 1, length=6), type=&quot;n&quot;, las=1, ylab=&quot;FPE&quot;, xlab=&quot;Trial for Route 1&quot;)
-abline(h=0.75, lty=3, lwd=2)
+# generate empty plot with the appropriate axes (1 through 6 on x-axis, 0
+# to 1 on y=axis). Draw a dotted line along FPE = 0.75 for comparison
+# purposes
+plot(1:6, seq(0, 1, length = 6), type = &quot;n&quot;, las = 1, ylab = &quot;FPE&quot;, xlab = &quot;Trial for Route 1&quot;)
+abline(h = 0.75, lty = 3, lwd = 2)
 
-#using a loop function, subset the data by treatment group, then plot the standard error bars and means. Use different colors for different treatment groups.
-for (i in 1:3){
-use.dat=subset(summ.dat, group==groups[i])
-arrows(use.dat$trial, use.dat$mean.fpe-use.dat$se.fpe, use.dat$trial, use.dat$mean.fpe+use.dat$se.fpe, angle=90, code=3, length=0.1)
-points(mean.fpe~trial, data=use.dat, type=&quot;o&quot;, cex=2, pch=21, bg=colors[i])
+# using a loop function, subset the data by treatment group, then plot the
+# standard error bars and means. Use different colors for different
+# treatment groups.
+for (i in 1:3) {
+    use.dat = subset(summ.dat, group == groups[i])
+    arrows(use.dat$trial, use.dat$mean.fpe - use.dat$se.fpe, use.dat$trial,
+        use.dat$mean.fpe + use.dat$se.fpe, angle = 90, code = 3, length = 0.1)
+    points(mean.fpe ~ trial, data = use.dat, type = &quot;o&quot;, cex = 2, pch = 21,
+        bg = colors[i])
 }
 
-#add legend
-legend(&quot;topleft&quot;, legend=c(&quot;A: Sequential&quot;, &quot;B: Rotation&quot;, &quot;C: Random&quot;), pch=21, pt.bg=colors, title=&quot;Group&quot;, cex=0.8)</code></pre>
+# add legend
+legend(&quot;topleft&quot;, legend = c(&quot;A: Sequential&quot;, &quot;B: Rotation&quot;, &quot;C: Random&quot;), pch = 21,
+    pt.bg = colors, title = &quot;Group&quot;, cex = 0.8)</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-26-1.png" width="480" /></p>
 <p>What’s really interesting here is that Treatements B &amp; C perform
 better than Group A by the 5th and 6th release. By that point, the
@@ -780,10 +800,9 @@ individuals in groups B and C have the same experience with this
 particular route as individuals in group A, but they have experienced
 more releases overall.</p>
 <p>Same plot with ggplot:</p>
-<pre class="r"><code>p = ggplot(summ.dat, aes(x=trial, y=mean.fpe, color=group)) +
-  geom_point(size=3) + 
-  geom_line() + 
-  geom_errorbar(aes(ymin=mean.fpe-se.fpe, ymax=mean.fpe+se.fpe), width=0.3)
+<pre class="r"><code>p = ggplot(summ.dat, aes(x = trial, y = mean.fpe, color = group)) + geom_point(size = 3) +
+    geom_line() + geom_errorbar(aes(ymin = mean.fpe - se.fpe, ymax = mean.fpe +
+    se.fpe), width = 0.3)
 p</code></pre>
 <p><img src="10.batch_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>This result doesn’t necessarily hold up for Routes 2 and 3 though,

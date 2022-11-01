@@ -52,6 +52,7 @@ library(ggplot2)
 library(ggmap)
 library(mapproj)
 library(dplyr)
+library(lubridate)
 ```
 
 
@@ -215,12 +216,14 @@ legend("topright", legend=1:6, title="Trial", lty=1, lwd=2, col=new.palette, cex
 To make the same plot using ggplot2, we need to first combine the dataframes in the list into a single dataframe (i.e., all data for that individual for that route). To do this, we will use the function `do.call()`, which takes a function as input and then executes it on a list as a whole. The only time I've ever used this function is to use it to collapse a list of data frames into a single data frame:
 
 ```{r}
-all.dat.R1A35=do.call("rbind", dats.R1A35)
+all.dat.R1A35=do.call("rbind", dats.R1A35) %>%
+  mutate(Date=ymd(Date))
 ```
 
 Now, we can use the `geom_path()` function (Note: NOT geom_line()) in ggplot2 to plot longitude on x-axis, latitude on y-axis, grouping the data by Date, and coloring the lines using those dates on a scale from "gold" to "red".
 ```{r, fig.height=5, fig.width=6}
-p = ggplot() + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low="gold", high="red")
+
+p = ggplot(all.dat.R1A35) + geom_path(aes(x=Longitude, y=Latitude, group=Date, color=as.numeric(Date)) )+ scale_colour_gradient(low="gold", high="red")
 p
 ```
 
