@@ -19,7 +19,10 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 * **Implementing a simple statistical analysis (simple linear regression)**
 * **Making publication-quality figures**
 
-## 5.1 Using data associated with published papers
+
+***Note: This module uses ggplot to generate figures. If you prefer doing everything in Base R, there is an older version of this module [here](Ex1.Plot_Bowden_baseR.html).***
+
+## 1. Using data associated with published papers
 Today, we will learn a bit more about plots by trying to re-create a plot from a recent publication. I find playing with open-access data and re-creating analyses & figures to be a very fruitful exercise because you get to learn codes, but you also get to really understand the studies much better. 
 
 For this exercise, I have chosen a paper by Bowden et al. (2015) in *Biology Letters*.[^1] This study used a 17-year dataset on wing lengths of two butterfly species in Greenland to show that both species follow the "temperature-size" rule, which posits that higher temperatures generally select for smaller adult body size.  
@@ -56,7 +59,7 @@ library(cowplot)
 
 Now, we can proceed with our exercise. 
 
-## 5.2 Recreating Figure 1: Scatterplot with fit line
+## 2. Recreating Figure 1: Scatterplot with fit line
 
 The first thing we will try is to re-create Figure 1, which has three panels and shows how the snowmelt dat, average May-June temperature, and average May-August temperature (of the previous year) has changed across the study period. They present this as a scatterplot and a simple linear regression fit line.
 
@@ -161,7 +164,7 @@ We won't worry about the minutiae of the axis labels.
 
 ***
 
-### 5.2.2 Getting model results for linear regression using `lm()`
+## 3. Getting model results for linear regression using `lm()`
 
 ggplot has allowed us to put a linear regression fit line on our plots very easily, but we also want to get the statistical results to report in the main text. So let's do this. 
 
@@ -223,7 +226,7 @@ The values reported in the caption of Figure 1 of the paper are in the rectangle
 
 ***
 
-## 5.3 Recreating Figure 2
+## 4. Recreating Figure 2a,b
 
 Now, we will work on re-creating Figure 2, which is a 4-panel figure with the average wing length of males and females (and error bars) for each species (panels *a* and *b*), and the relationship between average wing length and the average May-August temperature of the previous year (panels *c* and *d*). 
 
@@ -231,7 +234,7 @@ Now, we will work on re-creating Figure 2, which is a 4-panel figure with the av
 
 ***
 
-### 5.3.1 Panels (a) and (b): Plotting the mean wing lengths by year, species and sex
+### 4.1 Panels (a) and (b): Plotting the mean wing lengths by year, species and sex
 
 First thing we need to do to construct this figure is to calculate the mean wing lengths for each year for each species and sex. We can do this with the `aggregate()` function that we used in a previous module:
 
@@ -266,7 +269,7 @@ Notice that there is one problem here, which is that the plot connects the dots 
 
 ***
 
-### 5.3.2 Creating a custom function to calculate standard error of the mean
+### 4.2 Creating a custom function to calculate standard error of the mean
 Figure 2(a) and 2(b) have standard error bars associated with each mean value. Let's work on adding those.  The base package in R famously does not have a built-in function for calculating standard error of the mean, but it is very easy to calculate it. 
 
 So, what is standard error? Simply, it is the standard deviation $\sigma$ divided by the square-root of the sample size $n$:
@@ -306,7 +309,7 @@ Now we have the standard error values that correspond with each of the dots on t
 
 ***
 
-### 5.3.3 Plotting the standard error bars on the line plots
+### 4.3 Plotting the standard error bars on the line plots
 
 ```{r}
 ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
@@ -397,7 +400,7 @@ There is no single good answer to these questions. I have heard people say that 
 
 ***
 
-## 5.4 Figure 2(c,d)
+## 5. Recreating Figure 2c,d
 
 Ok, the final plots to make are the Figures 2(c,d), which are plots of the relationships between average wing length of a population/year/sex and the May-August temperature of the previous year.  
 The good news is that **we have covered everything you need to know to make these figures!** Think about it for a minute and see if you can visualize the steps you need to complete to get this data
@@ -450,6 +453,9 @@ p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
   labs(x = "May-Aug temp (t-1)", y = "average wing length (mm)")
 p.2d
 ```
+
+## 6. Create Figure 2
+
 Now organize these into a multi-panel plot!
 
 ```{r}

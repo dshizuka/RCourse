@@ -364,10 +364,13 @@ butterfly size with climate change</h1>
 regression)</strong></li>
 <li><strong>Making publication-quality figures</strong></li>
 </ul>
+<p><strong><em>Note: This module uses ggplot to generate figures. If you
+prefer doing everything in Base R, there is an older version of this
+module <a href="Ex1.Plot_Bowden_baseR.html">here</a>.</em></strong></p>
 </div>
 <div id="using-data-associated-with-published-papers"
 class="section level2">
-<h2>5.1 Using data associated with published papers</h2>
+<h2>1. Using data associated with published papers</h2>
 <p>Today, we will learn a bit more about plots by trying to re-create a
 plot from a recent publication. I find playing with open-access data and
 re-creating analyses &amp; figures to be a very fruitful exercise
@@ -435,7 +438,7 @@ library(cowplot)</code></pre>
 </div>
 <div id="recreating-figure-1-scatterplot-with-fit-line"
 class="section level2">
-<h2>5.2 Recreating Figure 1: Scatterplot with fit line</h2>
+<h2>2. Recreating Figure 1: Scatterplot with fit line</h2>
 <p>The first thing we will try is to re-create Figure 1, which has three
 panels and shows how the snowmelt dat, average May-June temperature, and
 average May-August temperature (of the previous year) has changed across
@@ -583,10 +586,11 @@ plot_grid(p1, p2, p3, nrow=3)</code></pre>
 <p>We won’t worry about the minutiae of the axis labels.</p>
 <hr />
 </div>
+</div>
 <div id="getting-model-results-for-linear-regression-using-lm"
-class="section level3">
-<h3>5.2.2 Getting model results for linear regression using
-<code>lm()</code></h3>
+class="section level2">
+<h2>3. Getting model results for linear regression using
+<code>lm()</code></h2>
 <p>ggplot has allowed us to put a linear regression fit line on our
 plots very easily, but we also want to get the statistical results to
 report in the main text. So let’s do this.</p>
@@ -700,9 +704,8 @@ following relationships:</p>
 </blockquote>
 <hr />
 </div>
-</div>
-<div id="recreating-figure-2" class="section level2">
-<h2>5.3 Recreating Figure 2</h2>
+<div id="recreating-figure-2ab" class="section level2">
+<h2>4. Recreating Figure 2a,b</h2>
 <p>Now, we will work on re-creating Figure 2, which is a 4-panel figure
 with the average wing length of males and females (and error bars) for
 each species (panels <em>a</em> and <em>b</em>), and the relationship
@@ -721,7 +724,7 @@ not available.</em></p>
 <div
 id="panels-a-and-b-plotting-the-mean-wing-lengths-by-year-species-and-sex"
 class="section level3">
-<h3>5.3.1 Panels (a) and (b): Plotting the mean wing lengths by year,
+<h3>4.1 Panels (a) and (b): Plotting the mean wing lengths by year,
 species and sex</h3>
 <p>First thing we need to do to construct this figure is to calculate
 the mean wing lengths for each year for each species and sex. We can do
@@ -769,7 +772,7 @@ line. We will address this later.</p>
 <div
 id="creating-a-custom-function-to-calculate-standard-error-of-the-mean"
 class="section level3">
-<h3>5.3.2 Creating a custom function to calculate standard error of the
+<h3>4.2 Creating a custom function to calculate standard error of the
 mean</h3>
 <p>Figure 2(a) and 2(b) have standard error bars associated with each
 mean value. Let’s work on adding those. The base package in R famously
@@ -833,7 +836,7 @@ the dots on the plot in our dataframe!</p>
 </div>
 <div id="plotting-the-standard-error-bars-on-the-line-plots"
 class="section level3">
-<h3>5.3.3 Plotting the standard error bars on the line plots</h3>
+<h3>4.3 Plotting the standard error bars on the line plots</h3>
 <pre class="r"><code>ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
   geom_path() +
   geom_point(aes(fill=sex), pch=21, size=2) +
@@ -940,8 +943,8 @@ multiple datasets.</p>
 <hr />
 </div>
 </div>
-<div id="figure-2cd" class="section level2">
-<h2>5.4 Figure 2(c,d)</h2>
+<div id="recreating-figure-2cd" class="section level2">
+<h2>5. Recreating Figure 2c,d</h2>
 <p>Ok, the final plots to make are the Figures 2(c,d), which are plots
 of the relationships between average wing length of a
 population/year/sex and the May-August temperature of the previous
@@ -1007,8 +1010,11 @@ p.2d</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
-<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-33-1.png" width="672" />
-Now organize these into a multi-panel plot!</p>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div id="create-figure-2" class="section level2">
+<h2>6. Create Figure 2</h2>
+<p>Now organize these into a multi-panel plot!</p>
 <pre class="r"><code>plot_grid(p.2a, p.2c, p.2b, p.2d, nrow=2)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
