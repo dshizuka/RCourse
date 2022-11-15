@@ -458,7 +458,7 @@ p.2d
 
 Now organize these into a multi-panel plot!
 
-```{r}
+```{r, warning=F, message=F}
 plot_grid(p.2a, p.2c, p.2b, p.2d, nrow=2)
 
 ```
