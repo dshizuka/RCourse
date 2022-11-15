@@ -44,16 +44,11 @@ Now, since R will have a hard time reading this data, let's manually create two 
 
 Now, let's import these data to R:
 ```{r}
+
 #import the data
 boloria=read.csv("data/boloria.csv")
 colias=read.csv("data/colias.csv")
-head(boloria) #look at one of the dataframes
-```
-
-Let's also load the R packages we will use:
-```{r, message=F}
-library(tidyverse)
-library(cowplot)
+str(boloria) #look at one of the dataframes
 ```
 
 Now, we can proceed with our exercise. 
@@ -66,81 +61,55 @@ The first thing we will try is to re-create Figure 1, which has three panels and
 
 **Alright, let's try to re-create this!**  
 
-### 5.2.1 Multi-panel scatterplot using ggplot and cowplot
+### 5.2.1 Multi-panel scatterplot
 First thing we'll do is re-create the scatterplot of Figure 1a: The date of snowmelt by year. Close reading of the supplemental methods section tells us that this is the first day of the year that less than 50% of the site was covered in snow. 
 
-The dataset we have downloaded is organized by individual butterflies that were caught during the study. However, the snowmelt and temperature information are the same for all rows for a given year (and this info is the same for both species of butterfly). 
-
-So we can actually extract all of the information we need for this figure from this data. All we need to do is to **group the data by year** and **summarize** the snowmelt and temperature data for each year by taking the mean. To do this, we will can use the `group_by()` and `summarize()` functions in the *dplyr* package (included in the *tidyverse* package we loaded). 
-
-Let's use this to create a dataframe that has all of the information we need: year, average snowmelt day, average May-June temperature of that year, and average May-August temperature of the previous year:
-
+The dataset we have downloaded is organized by individual butterflies that were caught during the study. However, the snowmelt and temperature information are the same for all rows for a given year (and this info is the same for both species of butterfly). So we can actually extract all of the information we need for this figure from this data. All we need to do is to summarize the snowmelt and temperature data for each year. To do this, we will use the `aggregate()` function. To review, we can use this function to just get the day of snowmelt for each year:
 
 ```{r}
-year.dat=boloria %>% group_by(year) %>% summarise(mean.snow=mean(snow), mean.mayjun=mean(mayjun), mean.mayaug=mean(mayaug.1))
-year.dat
+snow.years=aggregate(boloria$snow, list(boloria$year), mean) #take mean of snowmelt day for each year. Since all values for a given year is the same, taking the mean just returns that value
+head(snow.years) #just show the first 6 lines. 
+```
+So this results in a dataframe with two columns: the first column is the year and the second column is the snowmelt day. 
+
+Let's expand on this and create a single dataframe that has all of the information we need: year, snowmelt day, average May-June temperature of that year, and average May-August temperature of the previous year. We can do this by using the `aggregate()` function with the first argument as the columns of the original dataset that we want to extract:
+
+```{r}
+year.dat=aggregate(boloria[c("snow", "mayjun", "mayaug.1")], list(year=boloria$year), mean)
+#note:"year=boloria$year" inside the list() function just allows us to name the output column when creating it.
+head(year.dat) #look at first 6 lines
 ```
 
-Let's try plotting on of the panels of Figure 1 here using this data. Here is the plot for average snowmelt date across years.
-
-```{r, fig.width=4, fig.height=3}
-p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
-  geom_point()
-p1
+Great! So we can now just create the scatter plot for Figure 1a:
+```{r, eval=F, echo=T}
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 ```
-
-In ggplot, it's also easy to add the simple linear regression line on this plot by using `stat_smooth(method="lm")`: 
-
-```{r, fig.width=4, fig.height=3}
-p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
-  geom_point() +
-  stat_smooth(method="lm")
-p1
+```{r, eval=T, echo=F, fig.height=2.7, fig.width=3}
+par(mar=c(4,4,2,2))
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 ```
+  
+  
+In fact, it is pretty straightforward to re-create all 3 panels in Figure 1. We just need to use the `par()` function to create 
 
-Let's get rid of the confidence interval and make the line black.
+```{r, eval=T, echo=T, fig.height=6, fig.width=2}
+par(mar=c(4,4,2,2), mfrow=c(3,1))
+plot(year.dat$year, year.dat$snow, pch=19, xlab="", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 
-```{r, fig.width=4, fig.height=3}
-p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
-  geom_point() +
-  stat_smooth(method="lm", se=FALSE, color="black")
-p1
-```
+plot(year.dat$year, year.dat$mayjun, pch=19, xlab="", ylab="average temp t", las=1, ylim=c(-3, 0.5), yaxp=c(-3, 0, 3), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 
-We can plot the other two panels in the same way:
-
-```{r, fig.width=4, fig.height=3}
-p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
-  geom_point() +
-  stat_smooth(method="lm", se=FALSE, color="black")
-p2
-```
-
-```{r, fig.width=4, fig.height=3}
-p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
-  geom_point() +
-  stat_smooth(method="lm", se=FALSE, color="black")
-p3
-```
-
-Now, we've created 3 different scatterplots. But what we want is to make one figure with 3 panels arranged vertically. How do we do that?
-
-The R package called **cowplot** makes the task of making multi-panel plots very easy (The "cow" in "cowplot" stands for Claus O. Wilkes, who wrote the package). 
-
-```{r, fig.height=8, fig.width=2}
-plot_grid(p1, p2, p3, align="v", nrow=3) 
+plot(year.dat$year, year.dat$mayaug.1, pch=19, xlab="year", ylab="average temp t-1", las=1, ylim=c(0.5, 4.5), yaxp=c(1, 4, 3), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
 ```
 
 
-We won't worry about the minutiae of the axis labels. 
+We won't worry about the minutiae of the axis labels. Let's move on to the regression line. 
 
 ***
 
-### 5.2.2 Getting model results for linear regression using `lm()`
+### 5.2.2 Simple linear regression using `lm()`
 
-ggplot has allowed us to put a linear regression fit line on our plots very easily, but we also want to get the statistical results to report in the main text. So let's do this. 
-
-Let's start from the beginning: what is a linear regression? A lot of people think that linear regression is a form of a *linear model*. A linear model is a class of statistic models in which the value of interest is described by a linear combination of a series of parameters (regression slopes and intercept). This can actually include curvilinear relationships between the dependent and independent variables.
+The first thing we need to learn is the function for conducting the simplest form of a linear regression. 
+So, what is a linear regression? A lot of people think that linear regression (or *linear model*) means that the relationship between two variables is defined by a straight line. This is not quite correct. More properly, linear model is a class of statistic models in which the value of interest is described by a linear combination of a series of parameters (regression slopes and intercept). This can actually include curvilinear relationships between the dependent and independent variables.
 
 My aim here is not to provide a thorough lesson on statistics. For that, I suggest you take a proper statistics class or consult a statistics textbook. 
 
@@ -157,10 +126,9 @@ Now, let's use the simple linear regression to ask the question: what is the rel
 To do this, we will create an object using the `lm()` function and then see what the resulting object looks like:
 
 ```{r, results='hold'}
-fit.snow=lm(mean.snow~year, data=year.dat)
+fit.snow=lm(snow~year, data=year.dat)
 class(fit.snow)
 ```
-
 So, you can see that the `lm()` function creates an 'lm object'. The `fit.snow` object actually contains much more information. To see all of the components of this model object, see:
 
 ```{r, eval=F, echo=T}
@@ -198,6 +166,108 @@ The values reported in the caption of Figure 1 of the paper are in the rectangle
 
 ***
 
+### 5.2.3 Fit line using `abline()`
+Now, let's use the output of the linear regression model to plot a 'best fit' regression line on the scatterplot of data. There are at least two ways to do this. We will start with the simpler method: using the `abline()` function. This function can take the output of the `lm()` function directly and plot a regression fit line. This function needs to be called after the plot already exists. 
+
+```{r, eval=F, echo=T}
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
+abline(fit.snow)
+```
+```{r, eval=T, echo=F, fig.height=3, fig.width=3.5}
+par(mar=c(4,4,0,2))
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4)) #plot the snowmelt data
+abline(fit.snow) #plot the regression line that results from the regression fit (from section 5.2.2)
+```
+
+What the `abline()` function essentially does is extract the intercept and slope parameters from the regression fit and draws that line. This is very convenient and generally gives us what we want. However, the problem with this method is that the line is not confined to the dataset (i.e., the line extrapolates beyond the data we have). 
+
+***
+
+### 5.2.4 Fit line using `predict()`
+To draw a proper regression fit line, we want to confine the line to the range of points on the x-axis. To do this, there are three steps:
+
+1. Decide the range of x-values that we want to plot
+2. Generate predicted y-values based on the model fit for that range of x-values
+3. Use the `line()` function to plot this "predicted" relationship (i.e., the best-fit line)
+
+For this example, step 1 is easy: we want to fit a line to the data ranging from 1996 to 2013. 
+To accomplish step 2, we will use the `predict()` function. This function allows us to take any statistical model, feed it a range of x-values and get the y-values based on the parameters. 
+The syntax of the function is: `predict(model_object, list(dependent_variable_name=range_of_x_values))`  
+So, to get the predicted y-values based on the years 1996-2013:
+```{r}
+xv=seq(1996, 2013, 1) #The range of x-values that I want to fit the line to
+predict.snow=predict(fit.snow, list(year=xv)) #predicted values that correspond to those x-values.
+predict.snow
+```
+
+We can then use these values to draw a fit line on the plot:
+```{r, eval=F, echo=T}
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
+lines(xv, predict.snow)
+```
+```{r, eval=T, echo=F, fig.height=3, fig.width=3.5}
+par(mar=c(4,4,0,2))
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
+lines(xv, predict.snow)
+```
+
+**Note** Since we are fitting a simple straight line, we technically only need two x-values to accomplish this. So, the following codes would produce the same figure (output not shown).
+```{r, eval=F, echo=T}
+xv2=c(1996, 2013) #just the minimum and maximum values on the x-axis
+predict.snow2=predict(fit.snow, list(year=xv))
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4))
+lines(xv, predict.snow)
+```
+However, if you were to fit a more complext model fit, you would want to predict many points along the spectrum of x-values. We may eventually tackle this type of problem later in the course. 
+
+Ok, now let's plot all three panels of Figure 1 in one fell swoop:
+```{r, fig.height=6, fig.width=2.5}
+###Regression models
+fit.snow=lm(snow~year, data=year.dat) #regression fit for snowmelt date
+fit.mayjun=lm(mayjun~year, data=year.dat) #regression fit for May-June temp
+fit.mayaug.1=lm(mayaug.1~year, data=year.dat) #regression fit for May-Aug temp from last year.
+
+#set up fit line x- and y-values
+xv=seq(1996, 2013, 1)
+predict.snow=predict(fit.snow, list(year=xv))
+predict.mayjun=predict(fit.mayjun, list(year=xv))
+predict.mayaug.1=predict(fit.mayaug.1, list(year=xv))
+
+#plot multi-panel figure
+par(mfrow=c(3,1), mar=c(4,4,1,2))
+
+plot(year.dat$year, year.dat$snow, pch=19, xlab="year", ylab="snowmelt (DOY)", las=1)
+lines(xv, predict.snow)
+
+plot(year.dat$year, year.dat$mayjun, pch=19, xlab="year", ylab="Average Temperature", las=1)
+lines(xv, predict.mayjun)
+
+plot(year.dat$year, year.dat$mayaug.1, pch=19, xlab="year", ylab="Average Temperature Last Year", las=1)
+lines(xv, predict.mayaug.1)
+
+```
+
+We can add a bunch of arguments to the plotting function to really make it close to the Figure if we want to make it a real publication-quality figure. (I won't walk through all of the arguments)
+```{r, fig.height=7, fig.width=3}
+par(mfrow=c(3,1), xpd=T)
+par(mar=c(4, 5, 1, 2))
+plot(year.dat$year, year.dat$snow, pch=19,  ylab="snowmelt (DOY)", las=1, ylim=c(130, 170), yaxp=c(130, 170, 4), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4), xlab="", xaxt="n", cex=1.5)
+axis(side=1, labels=FALSE)
+lines(xv, predict.snow)
+text(1990, 170, substitute(italic("(a)")))
+par(mar=c(4, 5, 1, 2))
+plot(year.dat$year, year.dat$mayjun, pch=19, ylab=expression(paste("Average Temperature"["t"]," ", (~degree*C))), las=1, ylim=c(-3, 0.5), yaxp=c(-3, 0, 3), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4), xlab="", xaxt="n", cex=1.5)
+axis(side=1, labels=FALSE)
+lines(xv, predict.mayjun)
+text(1990, 0.5, substitute(italic("(b)")))
+par(mar=c(4, 5, 1, 2))
+plot(year.dat$year, year.dat$mayaug.1, pch=19, xlab="year", ylab=expression(paste("Average Temperature"["t-1"]," ", (~degree*C))), las=1, ylim=c(0.5, 4.5), yaxp=c(1, 4, 3), xlim=c(1995, 2015), xaxp=c(1995, 2015, 4), cex=1.5)
+lines(xv, predict.mayaug.1)
+text(1990, 4.5, substitute(italic("(c)")))
+```
+
+***
+
 ## 5.3 Recreating Figure 2
 
 Now, we will work on re-creating Figure 2, which is a 4-panel figure with the average wing length of males and females (and error bars) for each species (panels *a* and *b*), and the relationship between average wing length and the average May-August temperature of the previous year (panels *c* and *d*). 
@@ -211,30 +281,35 @@ Now, we will work on re-creating Figure 2, which is a 4-panel figure with the av
 First thing we need to do to construct this figure is to calculate the mean wing lengths for each year for each species and sex. We can do this with the `aggregate()` function that we used in a previous module:
 
 Let's start with *Colias hecla* since that is the first panel.
-
 ```{r}
-wl.colias=colias %>% group_by(year, sex) %>% summarise(mean.WL=mean(WL)) #calculate the mean of WL by year and sex for the colias dataset.
+wl.colias=aggregate(WL~year+sex, data=colias, mean) #calculate the mean of WL by year and sex for the colias dataset.
 head(wl.colias)
 ```
-
 Ok, so now we have the data that we need to plot the means for each year. 
 
-
+Since the column called 'WL' actually represents the mean values, let's change the column names to reflect that:
+```{r}
+names(wl.colias)=c("year", "sex", "mean")
+```
 Let's start building panel *a*. What we want to do is plot the data for one sex (say female), and then add the points for the second sex (male) on that same plot. To do this, a useful function is `subset()`, which allows us to easily specify a subset of data. 
 Try this to plot the data for just the females:
-
-```{r}
-ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
-  geom_point(aes(fill=sex), pch=21) +
-  scale_fill_manual(values=c("black", "white")) +
-  geom_path()
+```{r, eval=F, echo=T}
+plot(mean~year, data=subset(wl.colias, sex=="f"), type="b", pch=19)
+```
+```{r, eval=T, echo=F, fig.height=3, fig.width=4}
+par(mar=c(4,4,1,2))
+plot(mean~year, data=subset(wl.colias, sex=="f"), type="b", pch=19)
 ```
 
-```{r}
-ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
-  geom_path() +
-  geom_point(aes(fill=sex), pch=21) +
-  scale_fill_manual(values=c("black", "white"))
+Ok, so now what we have to do is plot this with the proper axis limits and then add the male data:
+```{r, eval=F, echo=T}
+plot(mean~year, data=subset(wl.colias, sex=="f"), type="b", pch=19, ylim=c(21,24), xlim=c(1996,2013), las=1)
+points(mean~year, data=subset(wl.colias, sex=="m"), type="b", pch=1)
+```
+```{r, eval=T, echo=F, fig.height=3, fig.width=4}
+par(mar=c(4,4,1,2))
+plot(mean~year, data=subset(wl.colias, sex=="f"), type="b", pch=19, ylim=c(21,24), xlim=c(1996,2013), las=1)
+points(mean~year, data=subset(wl.colias, sex=="m"), type="b", pch=1)
 ```
 
 Notice that there is one problem here, which is that the plot connects the dots between the years 2009 and 2011, even though the data for 2010 is missing. The figure in the publication correctly omits this line. We will address this later.
@@ -282,7 +357,7 @@ Now we have the standard error values that correspond with each of the dots on t
 
 ***
 
-###5.3.3 Plotting the standard error bars using `arrows()`
+### 5.3.3 Plotting the standard error bars using `arrows()`
 
 There are a number of packages that helps you create plots with error bars. To do this, we'are actually going to use the `arrow()` function, which is for drawing arrows between two points, but can be co-opted for drawing error bars.  
 Where do we want our error bars to go? Well, for any given error bar, the starting and ending x-axis coordinates are the years, and the y-axis coordinates are the mean + s.e. and mean - s.e.
@@ -311,7 +386,7 @@ That's pretty close to Figure 2(a)
 
 ***
 
-###5.3.4 Convert the plotting routine into a function
+### 5.3.4 Convert the plotting routine into a function
 
 Now, we are going to work on plotting both species data, and we will also plot the data properly by skipping the year when no data were collected (2010).
 
@@ -402,7 +477,7 @@ There is no single good answer to these questions. I have heard people say that 
 
 ***
 
-##5.4 Figure 2(c,d)
+## 5.4 Figure 2(c,d)
 
 Ok, the final plots to make are the Figures 2(c,d), which are plots of the relationships between average wing length of a population/year/sex and the May-August temperature of the previous year.  
 The good news is that **we have covered everything you need to know to make these figures!** Think about it for a minute and see if you can visualize the steps you need to complete to get this data
@@ -412,8 +487,8 @@ The good news is that **we have covered everything you need to know to make thes
 Ok, let's start. To begin, let's add another column to the "wl.colias" dataframe that is the temperature of the previosu year. To do this, we will use a `match()` function that is useful as a "lookup" function to merge two datasets together. 
 
 ```{r}
-wl.colias$mayaug.1=year.dat[match(wl.colias$year, year.dat$year), "mayaug"]
-wl.boloria$mayaug.1=year.dat[match(wl.boloria$year, year.dat$year), "mayaug"]
+wl.colias$mayaug.1=year.dat[match(wl.colias$year, year.dat$year), "mayaug.1"]
+wl.boloria$mayaug.1=year.dat[match(wl.boloria$year, year.dat$year), "mayaug.1"]
 ```
 
 Now, we can make a scatterplot for each species where the average female wing lengths are filled black and males are filled white

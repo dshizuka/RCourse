@@ -14,7 +14,7 @@
 
 <title>Worked Example: Plotting the change in butterfly size with climate change</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -415,10 +419,10 @@ chariclea</em></li>
 “colias.csv”</li>
 </ol>
 <p>Now, let’s import these data to R:</p>
-<pre class="r"><code># import the data
-boloria = read.csv(&quot;data/boloria.csv&quot;)
-colias = read.csv(&quot;data/colias.csv&quot;)
-head(boloria)  #look at one of the dataframes</code></pre>
+<pre class="r"><code>#import the data
+boloria=read.csv(&quot;data/boloria.csv&quot;)
+colias=read.csv(&quot;data/colias.csv&quot;)
+head(boloria) #look at one of the dataframes</code></pre>
 <pre><code>##   year site sex    WL DOY  snow snow.1  mayjun mayaug.1
 ## 1 1996    2   m 17.56 189 158.8     NA -1.7558       NA
 ## 2 1996    2   m 17.91 189 158.8     NA -1.7558       NA
@@ -456,8 +460,9 @@ class="math inline">\(p\)</span> &lt; 0.001) from 1996-2013 at
 Zackenberg, Greenland</p>
 </div>
 <p><strong>Alright, let’s try to re-create this!</strong></p>
-<div id="multi-panel-scatterplot" class="section level3">
-<h3>5.2.1 Multi-panel scatterplot</h3>
+<div id="multi-panel-scatterplot-using-ggplot-and-cowplot"
+class="section level3">
+<h3>5.2.1 Multi-panel scatterplot using ggplot and cowplot</h3>
 <p>First thing we’ll do is re-create the scatterplot of Figure 1a: The
 date of snowmelt by year. Close reading of the supplemental methods
 section tells us that this is the first day of the year that less than
@@ -476,10 +481,7 @@ functions in the <em>dplyr</em> package (included in the
 <p>Let’s use this to create a dataframe that has all of the information
 we need: year, average snowmelt day, average May-June temperature of
 that year, and average May-August temperature of the previous year:</p>
-<pre class="r"><code>year.dat = boloria %&gt;%
-    group_by(year) %&gt;%
-    summarise(mean.snow = mean(snow), mean.mayjun = mean(mayjun),
-        mean.mayaug = mean(mayaug.1))
+<pre class="r"><code>year.dat=boloria %&gt;% group_by(year) %&gt;% summarise(mean.snow=mean(snow), mean.mayjun=mean(mayjun), mean.mayaug=mean(mayaug.1))
 year.dat</code></pre>
 <pre><code>## # A tibble: 17 × 4
 ##     year mean.snow mean.mayjun mean.mayaug
@@ -501,57 +503,102 @@ year.dat</code></pre>
 ## 15  2011      142.     -0.870        2.41 
 ## 16  2012      162.     -1.71         2.44 
 ## 17  2013      131      -0.509        2.80</code></pre>
-<pre class="r"><code>p1 = ggplot(year.dat, aes(x = year, y = mean.snow)) + geom_point()
+<p>Let’s try plotting on of the panels of Figure 1 here using this data.
+Here is the plot for average snowmelt date across years.</p>
+<pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point()
 p1</code></pre>
 <p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
-<pre class="r"><code>p2 = ggplot(year.dat, aes(x = year, y = mean.mayjun)) + geom_point()</code></pre>
-<pre class="r"><code>p3 = ggplot(year.dat, aes(x = year, y = mean.mayaug)) + geom_point()</code></pre>
-<pre class="r"><code>year.dat = aggregate(boloria[c(&quot;snow&quot;, &quot;mayjun&quot;, &quot;mayaug.1&quot;)],
-    list(year = boloria$year), mean)
-# note:&#39;year=boloria$year&#39; inside the list() function just
-# allows us to name the output column when creating it.
-head(year.dat)  #look at first 6 lines</code></pre>
-<pre><code>##   year   snow  mayjun  mayaug.1
-## 1 1996 158.80 -1.7558        NA
-## 2 1997 159.00 -2.2195 1.6278379
-## 3 1998 161.00 -2.8707 1.1259500
-## 4 1999 166.67 -1.3216 0.8935792
-## 5 2000 154.83 -1.8207 1.6399051
-## 6 2001 158.50 -2.2239 1.4483740</code></pre>
-<p>Great! So we can now just create the scatter plot for Figure 1a:</p>
-<pre class="r"><code>plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))</code></pre>
+<p>In ggplot, it’s also easy to add the simple linear regression line on
+this plot by using <code>stat_smooth(method="lm")</code>:</p>
+<pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;)
+p1</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
+<p>Let’s get rid of the confidence interval and make the line black.</p>
+<pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
+p1</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<p>We can plot the other two panels in the same way:</p>
+<pre class="r"><code>p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
+p2</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
+<pre class="r"><code>p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
+p3</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
+<p>Now, we’ve created 3 different scatterplots. But what we want is to
+make one figure with 3 panels arranged vertically. How do we do
+that?</p>
+<p>The R package called <strong>cowplot</strong> makes the task of
+making multi-panel plots very easy (The “cow” in “cowplot” stands for
+Claus O. Wilkes, who wrote the package).</p>
+<pre class="r"><code>plot_grid(p1, p2, p3, align=&quot;v&quot;, nrow=3) </code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-9-1.png" width="288" /></p>
-<p>In fact, it is pretty straightforward to re-create all 3 panels in
-Figure 1. We just need to use the <code>par()</code> function to
-create</p>
-<pre class="r"><code>par(mar = c(4, 4, 2, 2), mfrow = c(3, 1))
-plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))
+<pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
+  theme_cowplot() +
+  labs(y=&quot;Snowmelt (DOY)&quot;, x=&quot;Year&quot;) +
+  theme(axis.title.y = element_text(size=12))
 
-plot(year.dat$year, year.dat$mayjun, pch = 19, xlab = &quot;&quot;, ylab = &quot;average temp t&quot;,
-    las = 1, ylim = c(-3, 0.5), yaxp = c(-3, 0, 3), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))
+p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
+  theme_cowplot() +
+  labs(expression(paste(&quot;Average Temperature&quot;[&quot;t&quot;], 
+    &quot; &quot;, (~degree * C))), x=&quot;Year&quot;) +
+  theme(axis.title.y = element_text(size=12))
 
-plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;,
-    ylab = &quot;average temp t-1&quot;, las = 1, ylim = c(0.5, 4.5), yaxp = c(1,
-        4, 3), xlim = c(1995, 2015), xaxp = c(1995, 2015, 4))</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-10-1.png" width="192" /></p>
-<p>We won’t worry about the minutiae of the axis labels. Let’s move on
-to the regression line.</p>
+p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
+  geom_point() +
+  stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
+  theme_cowplot() +
+  labs(expression(paste(&quot;Average Temperature&quot;[&quot;t-1&quot;], &quot; &quot;, 
+        (~degree * C))), x=&quot;Year&quot;) + 
+  theme(axis.title.y = element_text(size=12))
+
+plot_grid(p1, p2, p3, nrow=3)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-10-1.png" width="288" /></p>
+<p>We won’t worry about the minutiae of the axis labels.</p>
 <hr />
-<p>###5.2.2 Simple linear regression using <code>lm()</code></p>
-<p>The first thing we need to learn is the function for conducting the
-simplest form of a linear regression. So, what is a linear regression? A
-lot of people think that linear regression (or <em>linear model</em>)
-means that the relationship between two variables is defined by a
-straight line. This is not quite correct. More properly, linear model is
-a class of statistic models in which the value of interest is described
-by a linear combination of a series of parameters (regression slopes and
-intercept). This can actually include curvilinear relationships between
-the dependent and independent variables.</p>
+</div>
+<div id="getting-model-results-for-linear-regression-using-lm"
+class="section level3">
+<h3>5.2.2 Getting model results for linear regression using
+<code>lm()</code></h3>
+<p>ggplot has allowed us to put a linear regression fit line on our
+plots very easily, but we also want to get the statistical results to
+report in the main text. So let’s do this.</p>
+<p>Let’s start from the beginning: what is a linear regression? A lot of
+people think that linear regression is a form of a <em>linear
+model</em>. A linear model is a class of statistic models in which the
+value of interest is described by a linear combination of a series of
+parameters (regression slopes and intercept). This can actually include
+curvilinear relationships between the dependent and independent
+variables.</p>
 <p>My aim here is not to provide a thorough lesson on statistics. For
 that, I suggest you take a proper statistics class or consult a
 statistics textbook.</p>
@@ -580,13 +627,13 @@ is the relationship between snowmelt date (dependent variable) and year
 id="fnref2"><sup>2</sup></a> To do this, we will create an object using
 the <code>lm()</code> function and then see what the resulting object
 looks like:</p>
-<pre class="r"><code>fit.snow = lm(snow ~ year, data = year.dat)
+<pre class="r"><code>fit.snow=lm(mean.snow~year, data=year.dat)
 class(fit.snow)</code></pre>
 <pre><code>## [1] &quot;lm&quot;</code></pre>
 <p>So, you can see that the <code>lm()</code> function creates an ‘lm
 object’. The <code>fit.snow</code> object actually contains much more
 information. To see all of the components of this model object, see:</p>
-<pre class="r"><code>str(fit.snow)  #output not shown</code></pre>
+<pre class="r"><code>str(fit.snow) #output not shown</code></pre>
 <p>This will yield a very long output that details all of the components
 of the model fitting results that we might want. Ok, so how do we
 extract the information we want from this statistical analysis? One
@@ -594,7 +641,7 @@ convenient function is the <code>summary()</code> function:</p>
 <pre class="r"><code>summary(fit.snow)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = snow ~ year, data = year.dat)
+## lm(formula = mean.snow ~ year, data = year.dat)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
@@ -654,129 +701,10 @@ following relationships:</p>
 </ul>
 </blockquote>
 <hr />
-<p>###5.2.3 Fit line using <code>abline()</code> Now, let’s use the
-output of the linear regression model to plot a ‘best fit’ regression
-line on the scatterplot of data. There are at least two ways to do this.
-We will start with the simpler method: using the <code>abline()</code>
-function. This function can take the output of the <code>lm()</code>
-function directly and plot a regression fit line. This function needs to
-be called after the plot already exists.</p>
-<pre class="r"><code>plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))
-abline(fit.snow)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-16-1.png" width="336" /></p>
-<p>What the <code>abline()</code> function essentially does is extract
-the intercept and slope parameters from the regression fit and draws
-that line. This is very convenient and generally gives us what we want.
-However, the problem with this method is that the line is not confined
-to the dataset (i.e., the line extrapolates beyond the data we
-have).</p>
-<hr />
-<p>###5.2.4 Fit line using <code>predict()</code> To draw a proper
-regression fit line, we want to confine the line to the range of points
-on the x-axis. To do this, there are three steps:</p>
-<ol style="list-style-type: decimal">
-<li>Decide the range of x-values that we want to plot</li>
-<li>Generate predicted y-values based on the model fit for that range of
-x-values</li>
-<li>Use the <code>line()</code> function to plot this “predicted”
-relationship (i.e., the best-fit line)</li>
-</ol>
-<p>For this example, step 1 is easy: we want to fit a line to the data
-ranging from 1996 to 2013. To accomplish step 2, we will use the
-<code>predict()</code> function. This function allows us to take any
-statistical model, feed it a range of x-values and get the y-values
-based on the parameters. The syntax of the function is:
-<code>predict(model_object, list(dependent_variable_name=range_of_x_values))</code><br />
-So, to get the predicted y-values based on the years 1996-2013:</p>
-<pre class="r"><code>xv = seq(1996, 2013, 1)  #The range of x-values that I want to fit the line to
-predict.snow = predict(fit.snow, list(year = xv))  #predicted values that correspond to those x-values.
-predict.snow</code></pre>
-<pre><code>##        1        2        3        4        5        6        7        8 
-## 162.7781 161.7089 160.6397 159.5705 158.5013 157.4321 156.3629 155.2938 
-##        9       10       11       12       13       14       15       16 
-## 154.2246 153.1554 152.0862 151.0170 149.9478 148.8786 147.8094 146.7402 
-##       17       18 
-## 145.6710 144.6018</code></pre>
-<p>We can then use these values to draw a fit line on the plot:</p>
-<pre class="r"><code>plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))
-lines(xv, predict.snow)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-19-1.png" width="336" /></p>
-<p><strong>Note</strong> Since we are fitting a simple straight line, we
-technically only need two x-values to accomplish this. So, the following
-codes would produce the same figure (output not shown).</p>
-<pre class="r"><code>xv2 = c(1996, 2013)  #just the minimum and maximum values on the x-axis
-predict.snow2 = predict(fit.snow, list(year = xv))
-plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4))
-lines(xv, predict.snow)</code></pre>
-<p>However, if you were to fit a more complext model fit, you would want
-to predict many points along the spectrum of x-values. We may eventually
-tackle this type of problem later in the course.</p>
-<p>Ok, now let’s plot all three panels of Figure 1 in one fell
-swoop:</p>
-<pre class="r"><code>### Regression models
-fit.snow = lm(snow ~ year, data = year.dat)  #regression fit for snowmelt date
-fit.mayjun = lm(mayjun ~ year, data = year.dat)  #regression fit for May-June temp
-fit.mayaug.1 = lm(mayaug.1 ~ year, data = year.dat)  #regression fit for May-Aug temp from last year.
-
-# set up fit line x- and y-values
-xv = seq(1996, 2013, 1)
-predict.snow = predict(fit.snow, list(year = xv))
-predict.mayjun = predict(fit.mayjun, list(year = xv))
-predict.mayaug.1 = predict(fit.mayaug.1, list(year = xv))
-
-# plot multi-panel figure
-par(mfrow = c(3, 1), mar = c(4, 4, 1, 2))
-
-plot(year.dat$year, year.dat$snow, pch = 19, xlab = &quot;year&quot;, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1)
-lines(xv, predict.snow)
-
-plot(year.dat$year, year.dat$mayjun, pch = 19, xlab = &quot;year&quot;,
-    ylab = &quot;Average Temperature&quot;, las = 1)
-lines(xv, predict.mayjun)
-
-plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;,
-    ylab = &quot;Average Temperature Last Year&quot;, las = 1)
-lines(xv, predict.mayaug.1)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-21-1.png" width="240" /></p>
-<p>We can add a bunch of arguments to the plotting function to really
-make it close to the Figure if we want to make it a real
-publication-quality figure. (I won’t walk through all of the
-arguments)</p>
-<pre class="r"><code>par(mfrow = c(3, 1), xpd = T)
-par(mar = c(4, 5, 1, 2))
-plot(year.dat$year, year.dat$snow, pch = 19, ylab = &quot;snowmelt (DOY)&quot;,
-    las = 1, ylim = c(130, 170), yaxp = c(130, 170, 4), xlim = c(1995,
-        2015), xaxp = c(1995, 2015, 4), xlab = &quot;&quot;, xaxt = &quot;n&quot;,
-    cex = 1.5)
-axis(side = 1, labels = FALSE)
-lines(xv, predict.snow)
-text(1990, 170, substitute(italic(&quot;(a)&quot;)))
-par(mar = c(4, 5, 1, 2))
-plot(year.dat$year, year.dat$mayjun, pch = 19, ylab = expression(paste(&quot;Average Temperature&quot;[&quot;t&quot;],
-    &quot; &quot;, (~degree * C))), las = 1, ylim = c(-3, 0.5), yaxp = c(-3,
-    0, 3), xlim = c(1995, 2015), xaxp = c(1995, 2015, 4), xlab = &quot;&quot;,
-    xaxt = &quot;n&quot;, cex = 1.5)
-axis(side = 1, labels = FALSE)
-lines(xv, predict.mayjun)
-text(1990, 0.5, substitute(italic(&quot;(b)&quot;)))
-par(mar = c(4, 5, 1, 2))
-plot(year.dat$year, year.dat$mayaug.1, pch = 19, xlab = &quot;year&quot;,
-    ylab = expression(paste(&quot;Average Temperature&quot;[&quot;t-1&quot;], &quot; &quot;,
-        (~degree * C))), las = 1, ylim = c(0.5, 4.5), yaxp = c(1,
-        4, 3), xlim = c(1995, 2015), xaxp = c(1995, 2015, 4),
-    cex = 1.5)
-lines(xv, predict.mayaug.1)
-text(1990, 4.5, substitute(italic(&quot;(c)&quot;)))</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-22-1.png" width="288" /></p>
-<hr />
-<p>##5.3 Recreating Figure 2</p>
+</div>
+</div>
+<div id="recreating-figure-2" class="section level2">
+<h2>5.3 Recreating Figure 2</h2>
 <p>Now, we will work on re-creating Figure 2, which is a 4-panel figure
 with the average wing length of males and females (and error bars) for
 each species (panels <em>a</em> and <em>b</em>), and the relationship
@@ -792,53 +720,63 @@ May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are
 not available.</em></p>
 </div>
 <hr />
-<p>###5.3.1 Panels (a) and (b): Plotting the mean wing lengths by year,
-species and sex</p>
+<div
+id="panels-a-and-b-plotting-the-mean-wing-lengths-by-year-species-and-sex"
+class="section level3">
+<h3>5.3.1 Panels (a) and (b): Plotting the mean wing lengths by year,
+species and sex</h3>
 <p>First thing we need to do to construct this figure is to calculate
 the mean wing lengths for each year for each species and sex. We can do
 this with the <code>aggregate()</code> function that we used in a
 previous module:</p>
 <p>Let’s start with <em>Colias hecla</em> since that is the first
 panel.</p>
-<pre class="r"><code>wl.colias = aggregate(WL ~ year + sex, data = colias, mean)  #calculate the mean of WL by year and sex for the colias dataset.
-head(wl.colias)</code></pre>
-<pre><code>##   year sex       WL
-## 1 1996   f 23.50433
-## 2 1997   f 23.03800
-## 3 1998   f 23.14333
-## 4 1999   f 23.66786
-## 5 2000   f 22.92941
-## 6 2001   f 23.05778</code></pre>
+<pre class="r"><code>wl.colias=colias %&gt;% group_by(year, sex) %&gt;% summarise(mean.WL=mean(WL)) #calculate the mean of WL by year and sex for the colias dataset.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>head(wl.colias)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   year [3]
+##    year sex   mean.WL
+##   &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1  1996 f        23.5
+## 2  1996 m        22.9
+## 3  1997 f        23.0
+## 4  1997 m        21.9
+## 5  1998 f        23.1
+## 6  1998 m        22.6</code></pre>
 <p>Ok, so now we have the data that we need to plot the means for each
 year.</p>
-<p>Since the column called ‘WL’ actually represents the mean values,
-let’s change the column names to reflect that:</p>
-<pre class="r"><code>names(wl.colias) = c(&quot;year&quot;, &quot;sex&quot;, &quot;mean&quot;)</code></pre>
 <p>Let’s start building panel <em>a</em>. What we want to do is plot the
 data for one sex (say female), and then add the points for the second
 sex (male) on that same plot. To do this, a useful function is
 <code>subset()</code>, which allows us to easily specify a subset of
 data. Try this to plot the data for just the females:</p>
-<pre class="r"><code>plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;,
-    pch = 19)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-26-1.png" width="384" /></p>
-<p>Ok, so now what we have to do is plot this with the proper axis
-limits and then add the male data:</p>
-<pre class="r"><code>plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;,
-    pch = 19, ylim = c(21, 24), xlim = c(1996, 2013), las = 1)
-points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot;b&quot;,
-    pch = 1)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-28-1.png" width="384" /></p>
+<pre class="r"><code>ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  geom_path()</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path() +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;))</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>Notice that there is one problem here, which is that the plot
 connects the dots between the years 2009 and 2011, even though the data
 for 2010 is missing. The figure in the publication correctly omits this
 line. We will address this later.</p>
 <hr />
-<p>###5.3.2 Creating a custom function to calculate standard error of
-the mean Figure 2(a) and 2(b) have standard error bars associated with
-each mean value. Let’s work on adding those. The base package in R
-famously does not have a built-in function for calculating standard
-error of the mean, but it is very easy to calculate it.</p>
+</div>
+<div
+id="creating-a-custom-function-to-calculate-standard-error-of-the-mean"
+class="section level3">
+<h3>5.3.2 Creating a custom function to calculate standard error of the
+mean</h3>
+<p>Figure 2(a) and 2(b) have standard error bars associated with each
+mean value. Let’s work on adding those. The base package in R famously
+does not have a built-in function for calculating standard error of the
+mean, but it is very easy to calculate it.</p>
 <p>So, what is standard error? Simply, it is the standard deviation
 <span class="math inline">\(\sigma\)</span> divided by the square-root
 of the sample size <span class="math inline">\(n\)</span>: <span
@@ -849,7 +787,7 @@ class="math inline">\(\sigma^2\)</span>. Thus, <span
 class="math display">\[SE = \sqrt{\frac{\sigma^2}{n}}\]</span> So, to
 calculate the standard error of the mean of a vector, say WL, we simply
 need to do:</p>
-<pre class="r"><code>sqrt(var(colias$WL)/length(colias$WL))  #the standard error of the mean of WL for the entire sample of Colias butterflies. </code></pre>
+<pre class="r"><code>sqrt(var(colias$WL)/length(colias$WL)) #the standard error of the mean of WL for the entire sample of Colias butterflies. </code></pre>
 <pre><code>## [1] 0.0366356</code></pre>
 <p>So, what we need to do is figure out an easy way to do this
 calculation for each year-species-sex. The best way to do this is to
@@ -863,9 +801,7 @@ call this variable <code>x</code>. Then, we use curly brackets
 <code>{}</code> to tell R what this function will do. Here is how to
 build a custom function called <code>se()</code> that will calculate the
 standard error of the mean:</p>
-<pre class="r"><code>se = function(x) {
-    sqrt(var(x)/length(x))
-}  #create a new function called se() that will take a vector, x, and divide the variance of the vector by its length, then take its square-root.</code></pre>
+<pre class="r"><code>se=function(x) {sqrt(var(x, na.rm=T)/length(which(is.na(x)==F)))} #create a new function called se() that will take a vector, x, and divide the variance of the vector by its length, then take its square-root.</code></pre>
 <p>Now, let’s implement this function to the global sample of wing
 lengths in <em>Colias</em>:</p>
 <pre class="r"><code>se(colias$WL)</code></pre>
@@ -874,168 +810,118 @@ lengths in <em>Colias</em>:</p>
 above.</p>
 <p>Now, we can calculate the standard error for each year, species and
 sex:</p>
-<pre class="r"><code>wl.se.colias = aggregate(WL ~ year + sex, data = colias, se)
-head(wl.se.colias)</code></pre>
-<pre><code>##   year sex        WL
-## 1 1996   f 0.1875043
-## 2 1997   f 0.3290552
-## 3 1998   f 0.7941522
-## 4 1999   f 0.2076059
-## 5 2000   f 0.2582698
-## 6 2001   f 0.2911318</code></pre>
-<pre class="r"><code># let&#39;s add the standard errors to the wl.colias dataframe
-wl.colias$se = wl.se.colias[, 3]
-head(wl.colias)</code></pre>
-<pre><code>##   year sex     mean        se
-## 1 1996   f 23.50433 0.1875043
-## 2 1997   f 23.03800 0.3290552
-## 3 1998   f 23.14333 0.7941522
-## 4 1999   f 23.66786 0.2076059
-## 5 2000   f 22.92941 0.2582698
-## 6 2001   f 23.05778 0.2911318</code></pre>
+<pre class="r"><code>wl.colias=colias %&gt;% group_by(year, sex) %&gt;% summarise(mean.WL=mean(WL), se.WL=se(WL)) #calculate the mean of WL by year and sex for the colias dataset.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>wl.colias</code></pre>
+<pre><code>## # A tibble: 34 × 4
+## # Groups:   year [17]
+##     year sex   mean.WL se.WL
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1  1996 f        23.5 0.188
+##  2  1996 m        22.9 0.150
+##  3  1997 f        23.0 0.329
+##  4  1997 m        21.9 0.281
+##  5  1998 f        23.1 0.794
+##  6  1998 m        22.6 0.205
+##  7  1999 f        23.7 0.208
+##  8  1999 m        22.4 0.191
+##  9  2000 f        22.9 0.258
+## 10  2000 m        22.5 0.150
+## # … with 24 more rows</code></pre>
 <p>Now we have the standard error values that correspond with each of
 the dots on the plot in our dataframe!</p>
 <hr />
-<p>###5.3.3 Plotting the standard error bars using
-<code>arrows()</code></p>
-<p>There are a number of packages that helps you create plots with error
-bars. To do this, we’are actually going to use the <code>arrow()</code>
-function, which is for drawing arrows between two points, but can be
-co-opted for drawing error bars.<br />
-Where do we want our error bars to go? Well, for any given error bar,
-the starting and ending x-axis coordinates are the years, and the y-axis
-coordinates are the mean + s.e. and mean - s.e. To see how this works,
-let’s try:</p>
-<pre class="r"><code>par(mar = c(4, 4, 1, 2))
-
-plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;,
-    pch = 19, ylim = c(21, 24), xlim = c(1996, 2013), las = 1)
-
-arrows(wl.colias$year, wl.colias$mean + wl.colias$se, wl.colias$year,
-    wl.colias$mean - wl.colias$se, code = 3)  #code=3 draws double-sided arrows
-
-points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot;b&quot;,
-    pch = 1)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-33-1.png" width="480" /></p>
-<p>So we can just amend the arrows function here to make the angles of
-the arrowheads to be 90 degrees and shorten the tips:</p>
-<pre class="r"><code>par(mar = c(4, 4, 1, 2))
-plot(mean ~ year, data = subset(wl.colias, sex == &quot;f&quot;), type = &quot;b&quot;,
-    pch = 19, ylim = c(21, 24), xlim = c(1996, 2013), las = 1)
-points(mean ~ year, data = subset(wl.colias, sex == &quot;m&quot;), type = &quot;b&quot;,
-    pch = 1)
-arrows(wl.colias$year, wl.colias$mean + wl.colias$se, wl.colias$year,
-    wl.colias$mean - wl.colias$se, code = 3, angle = 90, length = 0.05)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-34-1.png" width="384" /></p>
-<p>That’s pretty close to Figure 2(a)</p>
-<hr />
-<p>###5.3.4 Convert the plotting routine into a function</p>
-<p>Now, we are going to work on plotting both species data, and we will
-also plot the data properly by skipping the year when no data were
-collected (2010).</p>
-<p>The first thing to do is to create an dataframe with means and s.e.
-for each year/sex for <em>Boloria chariclea</em></p>
-<pre class="r"><code>wl.boloria = aggregate(WL ~ year + sex, data = boloria, mean)
-ses = aggregate(WL ~ year + sex, data = boloria, se)
-wl.boloria$se = ses[, 3]
-names(wl.boloria) = c(&quot;year&quot;, &quot;sex&quot;, &quot;mean&quot;, &quot;se&quot;)
-head(wl.boloria)</code></pre>
-<pre><code>##   year sex     mean         se
-## 1 1996   f 19.19530 0.04240713
-## 2 1997   f 18.61404 0.07397037
-## 3 1998   f 18.83433 0.14669437
-## 4 1999   f 19.08135 0.15136673
-## 5 2000   f 19.02211 0.05388168
-## 6 2001   f 19.51500 0.14057050</code></pre>
-<p>Great, now we have a summarized dataset for both species.</p>
-<p>Now, we could copy and paste the whole plotting routine the we did
-for <em>Colias</em> and just replace the “colias” with “boloria”.
-However, let’s do something a bit more fancy–we will convert the
-plotting routine into a function, and then we can call different
-datasets and make the same kind of plot with different data.</p>
-<p>For reasons that will become apparent in a minute, I am going to set
-up a function that adds points, lines and standard error bars to an
-existing plotting region. We will call this function
-<code>points_se()</code>.<br />
-Unlike the previous function we made, this function will take up
-multiple lines of code. To do this, we follow <code>function()</code>
-with a curly bracket (<code>{</code>) and return. Then, we can write
-however many lines of code that will be executed as part of the new
-function. We just have to end it all by closing the curly bracket
-(<code>}</code>). Here is what the function will do:</p>
-<ul>
-<li>Take two parameters: (1) the dataframe, (2) fill-color of the
-points.</li>
-<li>The function will assume we are plotting means and standard errors
-by year</li>
-<li>plot the standard error bars first using the data<span
-class="math inline">\(mean and data\)</span>se</li>
-<li>plot the lines and points second (so that it will go on top of the
-error bars)</li>
-</ul>
-<pre class="r"><code>points_se = function(data, color) {
-    arrows(data$year, data$mean + data$se, data$year, data$mean -
-        data$se, code = 3, angle = 90, length = 0.05)
-    points(data$year, data$mean, type = &quot;b&quot;, pch = 21, bg = color)
-    # note: by using pch = 21, we can make points that will
-    # be filled with color designated by &#39;bg=&#39;
-}</code></pre>
-<p>With this function, All we have to do is set up an empty plotting
-region with the appropriate axis ranges, and then we can add the dots,
-lines and error bars for any range of data in the same format.</p>
-<p>Let’s use this to plot Figure 2(a) the way we did before. What we
-will do is first set up an empty plotting region by plotting the data as
-<code>type="n"</code> (for “none”) with the appropriate axis ranges.
-Then, we will plot just the female data (with black dots) by designating
-the dataframe as a subset of the data in which <code>sex=="f"</code>.
-You can do this with a function called <code>subset()</code>.</p>
-<pre class="r"><code>plot(WL ~ year, data = wl.colias, type = &quot;n&quot;, ylim = c(21, 24),
-    xlim = c(1996, 2013), las = 1)
-points_se(x = &quot;year&quot;, y = &quot;WL&quot;, data = subset(wl.colias, sex ==
-    &quot;f&quot;), color = &quot;black&quot;)  #plot just female data
-points_se(x = &quot;year&quot;, y = &quot;WL&quot;, data = subset(wl.colias, sex ==
-    &quot;m&quot;), color = &quot;white&quot;)  #plot just male data</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-38-1.png" width="384" /></p>
-<p>Great! Now here is where going through the trouble of setting up a
-plotting function pays off. First, it makes it easy to plot the
-<em>Boloria</em> data using the exact same plotting parameters (except
-the y-axis has to be adjusted because these butterflies are
-smaller).</p>
-<pre class="r"><code>plot(WL ~ year, data = wl.boloria, type = &quot;n&quot;, ylim = c(17, 20),
-    xlim = c(1996, 2013), las = 1)
-points_se(data = subset(wl.boloria, sex == &quot;f&quot;), color = &quot;black&quot;)  #plot just female data
-points_se(data = subset(wl.boloria, sex == &quot;m&quot;), color = &quot;white&quot;)  #plot just male data</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-40-1.png" width="384" /></p>
+</div>
+<div id="plotting-the-standard-error-bars-on-the-line-plots"
+class="section level3">
+<h3>5.3.3 Plotting the standard error bars on the line plots</h3>
+<pre class="r"><code>ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path() +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL))</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>p.2a=ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path() +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_cowplot() +
+  labs(y=&quot;Average Wing Length (mm)&quot;)
+p.2a</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+Now, let’s do the same with Boloria (Figure 2b):</p>
+<pre class="r"><code>wl.boloria=boloria %&gt;% group_by(year, sex) %&gt;% summarise(mean.WL=mean(WL), se.WL=se(WL)) #calculate the mean of WL by year and sex for the colias dataset.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>wl.boloria</code></pre>
+<pre><code>## # A tibble: 34 × 4
+## # Groups:   year [17]
+##     year sex   mean.WL  se.WL
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+##  1  1996 f        19.2 0.0424
+##  2  1996 m        18.2 0.0376
+##  3  1997 f        18.6 0.0740
+##  4  1997 m        17.9 0.0555
+##  5  1998 f        18.8 0.147 
+##  6  1998 m        18.2 0.122 
+##  7  1999 f        19.1 0.151 
+##  8  1999 m        18.1 0.108 
+##  9  2000 f        19.0 0.0539
+## 10  2000 m        18.1 0.0601
+## # … with 24 more rows</code></pre>
+<pre class="r"><code>p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path() +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_cowplot() +
+  labs(y=&quot;Average Wing Length (mm)&quot;)
+p.2b</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+You’ll notice that there is the data for 2003 is missing for females.
+This is because there is a missing data point, and therefore the
+<code>mean()</code> function is returning NA. We can get around this by
+telling the <code>mean()</code> function to skip the NA using the
+argument <code>na.rm=T</code>.</p>
+<pre class="r"><code>wl.boloria=boloria %&gt;% group_by(year, sex) %&gt;% summarise(mean.WL=mean(WL, na.rm=T), se.WL=se(WL)) #calculate the mean of WL by year and sex for the colias dataset.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path() +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_cowplot() +
+  labs(y=&quot;Average Wing Length (mm)&quot;)
+p.2b</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>To go further, we can fix the details like skipping the year 2010 by
 plotting the points for years &lt;2010 and years &gt;2010 separately for
 each sex and each species, all in two vertical panels. I’ll also adjust
 the tick marks a bit:</p>
-<pre class="r"><code>par(mar = c(4, 4, 1, 2), mfrow = c(2, 1))
-
-plot(mean ~ year, data = wl.colias, type = &quot;n&quot;, ylim = c(21,
-    24), xlim = c(1996, 2013), xaxp = c(1996, 2012, 4), yaxp = c(21,
-    24, 3), las = 1)
-points_se(data = subset(wl.colias, sex == &quot;f&quot; &amp; year &lt; 2010),
-    color = &quot;black&quot;)  #plot just female data for years &lt;2010
-points_se(data = subset(wl.colias, sex == &quot;f&quot; &amp; year &gt; 2010),
-    color = &quot;black&quot;)  #plot just female data for years &gt;2010
-points_se(data = subset(wl.colias, sex == &quot;m&quot; &amp; year &lt; 2010),
-    color = &quot;white&quot;)  #plot just male data for years &lt;2010
-points_se(data = subset(wl.colias, sex == &quot;m&quot; &amp; year &gt; 2010),
-    color = &quot;white&quot;)  #plot just male data for years &gt;2010
-
-plot(mean ~ year, data = wl.boloria, type = &quot;n&quot;, ylim = c(17,
-    20), xlim = c(1996, 2013), xaxp = c(1996, 2012, 4), yaxp = c(17,
-    20, 3), las = 1)
-points_se(data = subset(wl.boloria, sex == &quot;f&quot; &amp; year &lt; 2010),
-    color = &quot;black&quot;)
-points_se(data = subset(wl.boloria, sex == &quot;f&quot; &amp; year &gt; 2010),
-    color = &quot;black&quot;)
-points_se(data = subset(wl.boloria, sex == &quot;m&quot; &amp; year &lt; 2010),
-    color = &quot;white&quot;)
-points_se(data = subset(wl.boloria, sex == &quot;m&quot; &amp; year &gt; 2010),
-    color = &quot;white&quot;)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-41-1.png" width="384" /></p>
+<pre class="r"><code>p.2a=ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path(data=wl.colias %&gt;% filter(year&lt;2010)) +
+  geom_path(data=wl.colias %&gt;% filter(year&gt;2010)) +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_cowplot() +
+  labs(y=&quot;Average Wing Length (mm)&quot;)
+p.2a</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<pre class="r"><code>p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
+  geom_path(data=wl.boloria %&gt;% filter(year&lt;2010)) +
+  geom_path(data=wl.boloria %&gt;% filter(year&gt;2010)) +
+  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_cowplot() +
+  labs(y=&quot;Average Wing Length (mm)&quot;)
+p.2b</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <p>We’ve pretty much re-created Figure 2(a,b)!</p>
 <p>Some things that are worth thinking about here are:</p>
 <ul>
@@ -1054,7 +940,10 @@ code will have to be tweaked in multiple places. If I just make a
 function, then I can tweak it just once and then re-run the function on
 multiple datasets.</p>
 <hr />
-<p>##5.4 Figure 2(c,d)</p>
+</div>
+</div>
+<div id="figure-2cd" class="section level2">
+<h2>5.4 Figure 2(c,d)</h2>
 <p>Ok, the final plots to make are the Figures 2(c,d), which are plots
 of the relationships between average wing length of a
 population/year/sex and the May-August temperature of the previous
@@ -1067,57 +956,72 @@ if you can visualize the steps you need to complete to get this data</p>
 “wl.colias” dataframe that is the temperature of the previosu year. To
 do this, we will use a <code>match()</code> function that is useful as a
 “lookup” function to merge two datasets together.</p>
-<pre class="r"><code>wl.colias$mayaug.1 = year.dat[match(wl.colias$year, year.dat$year),
-    &quot;mayaug.1&quot;]
-wl.boloria$mayaug.1 = year.dat[match(wl.boloria$year, year.dat$year),
-    &quot;mayaug.1&quot;]</code></pre>
+<pre class="r"><code>wl.colias %&gt;% left_join(., year.dat)</code></pre>
+<pre><code>## Joining, by = &quot;year&quot;</code></pre>
+<pre><code>## # A tibble: 34 × 7
+## # Groups:   year [17]
+##     year sex   mean.WL se.WL mean.snow mean.mayjun mean.mayaug
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+##  1  1996 f        23.5 0.188      159.       -1.76      NA    
+##  2  1996 m        22.9 0.150      159.       -1.76      NA    
+##  3  1997 f        23.0 0.329      159        -2.22       1.63 
+##  4  1997 m        21.9 0.281      159        -2.22       1.63 
+##  5  1998 f        23.1 0.794      161        -2.87       1.13 
+##  6  1998 m        22.6 0.205      161        -2.87       1.13 
+##  7  1999 f        23.7 0.208      167.       -1.32       0.894
+##  8  1999 m        22.4 0.191      167.       -1.32       0.894
+##  9  2000 f        22.9 0.258      155.       -1.82       1.64 
+## 10  2000 m        22.5 0.150      155.       -1.82       1.64 
+## # … with 24 more rows</code></pre>
+<pre class="r"><code>wl.colias=wl.colias %&gt;% left_join(., year.dat)</code></pre>
+<pre><code>## Joining, by = &quot;year&quot;</code></pre>
+<pre class="r"><code>wl.boloria=wl.boloria %&gt;% left_join(., year.dat)</code></pre>
+<pre><code>## Joining, by = &quot;year&quot;</code></pre>
 <p>Now, we can make a scatterplot for each species where the average
 female wing lengths are filled black and males are filled white</p>
-<pre class="r"><code>plot(mean ~ mayaug.1, data = wl.colias, pch = 21, bg = c(&quot;black&quot;,
-    &quot;white&quot;)[as.numeric(sex)], xlim = c(0, 5), las = 1, xlab = &quot;May-Aug temp (t-1)&quot;,
-    ylab = &quot;average wing length (mm)&quot;)</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-44-1.png" width="384" /></p>
-<p>Then, we need to fit a separate linear regression for males and
-females, and then we will add those lines.<br />
-First, the linear models for each sex for <em>Colias</em></p>
-<pre class="r"><code>fit.col_f = lm(mean ~ mayaug.1, data = subset(wl.colias, sex ==
-    &quot;f&quot;))
-fit.col_m = lm(mean ~ mayaug.1, data = subset(wl.colias, sex ==
-    &quot;m&quot;))</code></pre>
-<p>Now, add those lines to the plot:</p>
-<pre class="r"><code>xv = c(0.89, 4.02)  #take the two extreme x-values I want the fit line to connect
-predict.col.f = predict(fit.col_f, list(mayaug.1 = xv))  #get the y-values at the ends of the line for female
-predict.col.m = predict(fit.col_m, list(mayaug.1 = xv))  #get the y-values at the ends of the line for male
-
-plot(mean ~ mayaug.1, data = wl.colias, pch = 21, bg = c(&quot;black&quot;,
-    &quot;white&quot;)[as.numeric(sex)], xlim = c(0, 5), las = 1, xlab = &quot;May-Aug temp (t-1)&quot;,
-    ylab = &quot;average wing length (mm)&quot;)
-lines(xv, predict.col.f)
-lines(xv, predict.col.m)</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-47-1.png" width="384" /></p>
+<pre class="r"><code>ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  stat_smooth(method=&quot;lm&quot;, se=F, color=&quot;black&quot;) </code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<pre class="r"><code>p.2c=ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  stat_smooth(method=&quot;lm&quot;, se=F, color=&quot;black&quot;) +
+  theme_cowplot() +
+  labs(x = &quot;May-Aug temp (t-1)&quot;, y = &quot;average wing length (mm)&quot;)
+p.2c</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p>We can do the same thing with <em>Boloria</em>:</p>
-<pre class="r"><code>fit.bol_f = lm(mean ~ mayaug.1, data = subset(wl.boloria, sex ==
-    &quot;f&quot;))
-fit.bol_m = lm(mean ~ mayaug.1, data = subset(wl.boloria, sex ==
-    &quot;m&quot;))
-par(mar = c(4, 4, 1, 2))
-xv = c(0.89, 4.02)  #take the two extreme x-values I want the fit line to connect
-predict.bol.f = predict(fit.bol_f, list(mayaug.1 = xv))  #get the y-values at the ends of the line for female
-predict.bol.m = predict(fit.bol_m, list(mayaug.1 = xv))  #get the y-values at the ends of the line for male
-
-plot(mean ~ mayaug.1, data = wl.boloria, pch = 21, bg = c(&quot;black&quot;,
-    &quot;white&quot;)[as.numeric(sex)], xlim = c(0, 5), las = 1, xlab = &quot;May-Aug temp (t-1)&quot;,
-    ylab = &quot;average wing length (mm)&quot;)</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): NAs introduced by coercion</code></pre>
-<pre class="r"><code>lines(xv, predict.bol.f)
-lines(xv, predict.bol.m)</code></pre>
-<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-48-1.png" width="384" /></p>
+<pre class="r"><code>p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
+  stat_smooth(method=&quot;lm&quot;, se=F, color=&quot;black&quot;) +
+  theme_cowplot() +
+  labs(x = &quot;May-Aug temp (t-1)&quot;, y = &quot;average wing length (mm)&quot;)
+p.2d</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+Now organize these into a multi-panel plot!</p>
+<pre class="r"><code>plot_grid(p.2a, p.2c, p.2b, p.2d, nrow=2)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).
+## Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="Ex1.Plot_Bowden_2022_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 <hr />
 <p>Ok, I hope you feel like you learned some things by going through
 this exercise!</p>
-</div>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
