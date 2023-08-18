@@ -17,17 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
-* #### 08/30/22: I have now created individual folders in the course OneDrive folder. Please check to see you have access to it, and go ahead and upload your slide (powerpoint or pdf) for your lightning presentation before Thursday's class. You can find the link via the Canvas Announcement. We will cover the *Lightning Talk" slide requirement today. 
-
-* #### 08/23/22: In the first session of the course, we did quick intros and covered Module 1
-
-* #### 08/16/22: **Welcome to the R Course!** I will post announcements and updates on this page. I will send out the announcements via Canvas as well.
+* #### 08/18/22: Welcome to the Fall 2023 semester! 
 
 
 ---
 
 ## Quick Links:
 
-- #### Course One Drive: (please see the Canvas page for the link because I don't want to make it publicly available)
-
-- #### Syllabus: click on the "Syllabus" tab above, or [download pdf version](pdfs/syllabus.pdf).

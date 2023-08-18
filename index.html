@@ -13,7 +13,7 @@
 
 <title>Welcome to the R Course!</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -141,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -282,37 +279,13 @@ Biologists</strong>. I will post course modules here each week.</h3>
 <div id="updates" class="section level2">
 <h2>Updates</h2>
 <ul>
-<li><h4
-id="i-have-now-created-individual-folders-in-the-course-onedrive-folder.-please-check-to-see-you-have-access-to-it-and-go-ahead-and-upload-your-slide-powerpoint-or-pdf-for-your-lightning-presentation-before-thursdays-class.-you-can-find-the-link-via-the-canvas-announcement.-we-will-cover-the-lightning-talk-slide-requirement-today.">08/30/22:
-I have now created individual folders in the course OneDrive folder.
-Please check to see you have access to it, and go ahead and upload your
-slide (powerpoint or pdf) for your lightning presentation before
-Thursday’s class. You can find the link via the Canvas Announcement. We
-will cover the *Lightning Talk” slide requirement today.</h4></li>
-<li><h4
-id="in-the-first-session-of-the-course-we-did-quick-intros-and-covered-module-1">08/23/22:
-In the first session of the course, we did quick intros and covered
-Module 1</h4></li>
-<li><h4
-id="welcome-to-the-r-course-i-will-post-announcements-and-updates-on-this-page.-i-will-send-out-the-announcements-via-canvas-as-well.">08/16/22:
-<strong>Welcome to the R Course!</strong> I will post announcements and
-updates on this page. I will send out the announcements via Canvas as
-well.</h4></li>
+<li><h4 id="welcome-to-the-fall-2023-semester">08/18/22: Welcome to the
+Fall 2023 semester!</h4></li>
 </ul>
 <hr />
 </div>
 <div id="quick-links" class="section level2">
 <h2>Quick Links:</h2>
-<ul>
-<li><h4
-id="course-one-drive-please-see-the-canvas-page-for-the-link-because-i-dont-want-to-make-it-publicly-available">Course
-One Drive: (please see the Canvas page for the link because I don’t want
-to make it publicly available)</h4></li>
-<li><h4
-id="syllabus-click-on-the-syllabus-tab-above-or-download-pdf-version.">Syllabus:
-click on the “Syllabus” tab above, or <a
-href="pdfs/syllabus.pdf">download pdf version</a>.</h4></li>
-</ul>
 </div>
 
 
