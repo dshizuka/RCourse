@@ -1,6 +1,6 @@
 ---
 title: 'BIOS 967: Intro to R for Biologists'
-subtitle: Syllabus, Fall 2022
+subtitle: Syllabus, Fall 2023
 date: 'updated `r format(Sys.time(), ''%m/%d/%y'')` '
 output:
   pdf_document: default
@@ -82,46 +82,45 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 ### <u>Tentative course schedule (subject to change!)</u>
 
-* Week 1 (Aug 23, 25): Getting started with R; **Presentations 1: Lightning Talks**
+* Week 1 (Aug 22, 24): Intros & Getting started with R; File Organization & Importing Data;
 
-* Week 2 (Aug 30, Sep 1): Importing Data; Data Formats
+* Week 2 (Aug 31): **No class on Tuesday (29th)**; Data Formats
 
-* Week 3 (Sep 6, 8): Some simple statistics & Plots
+* Week 3 (Sep 5, 7): Some simple statistics & Plots
 
-* Week 4 (Sep 13, 15): Data Wrangling & Plotting in Tidyverse (ggplot, dplyr, etc.)
+* Week 4 (Sep 14): **No class on Tuesday (12th)**; Data Wrangling & Plotting in Tidyverse Part 1
 
-* Week 5 (Sep 20, 22): Creating reports; **(Thursday independent work)**
+* Week 5 (Sep 19, 21): Data Wrangling & Plotting in Tidyverse Part 2; Creating reports 
 
-* Week 6 (Sep 27, 29): apply functions, loops, statements, custom functions
+* Week 6 (Sep 26, 28): apply functions, loops, statements, custom functions
 
-* Week 7 (Oct 4, 6):  Resampling & bootstrapping **(Thursday independent work)**
+* Week 7 (Oct 3, 5):  Resampling & bootstrapping
 
-* Week 8 (Oct 11, 13): Simulations, stochasticity, **Submit proposal for independent project**
+* Week 8 (Oct 10, 12): Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9 (Oct 20): **Fall Break (Tuesday 18th)**; **Presentations 2: Project Plans (Thursday)**
+* Week 9 (Oct 19): **Fall Break (Tuesday 17th)**; **Presentations 2: Project Plans (Thursday)**
 
-* Week 10 (Oct 25, 27): Batch processing; Version Control
+* Week 10 (Oct 24, 26): Batch processing
 
-* Week 11 (Nov 1, 3): Worked examples, independent projects
+* Week 11 (Oct 31, Nov 2): Worked examples, independent projects
 
-* Week 12 (Nov 8, 10): Worked examples, independent projects
+* Week 12 (Nov 7, 9): Worked examples, independent projects
 
-* Week 13 (Nov 15, 17): Independent projects
+* Week 13 (Nov 14, 16): Independent projects
 
-* Week 14 (Nov 22, 24): **No class for Thanksgiving**
+* Week 14 (Nov 21, 23): **No class for Thanksgiving**
 
-* Week 15 (Nov 29, Dec 1): Independent projects
+* Week 15 (Nov 28, Nov 30): Independent projects
 
-* Week 16 (Dec 6, 8): **Presentations 3: Independent projects presentation**
+* Week 16 (Dec 5, 7): **Presentations 3: Independent projects presentation**
 
 ***
 ### <u>Before the Course</u>  
 Please do the following things before we meet for the first class.   
 
-1. **Download and Install *R* **  
-Go to [https://cran.r-project.org/](https://cran.r-project.org/) and follow directions for downloading and installing R. *Even if you already have R*, upgrade to the latest version. It will make things easier to have everyone on the same version.
-2. **Download and Install *R Studio* **  
-Go to [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/) and download the **R Studio Desktop** installer. Follow directions to install the program.
-3. **Bookmark the Course Google Drive**:
-https://drive.google.com/drive/folders/1jcXt02j5j2RK2FvoeYZeBqD-8NaOHkz4?usp=sharing
+1. **Download and Install *R* and *RStudio Desktop* **  
+Go to [https://posit.co/download/rstudio-desktop/](https://posit.co/download/rstudio-desktop/) and follow directions for downloading and installing R and RStudio If you already have R, upgrade to the latest version. It will make things easier to have everyone on the same version.
+
+2. **Get a GitHub account**:
+Go to [https://github.com/](https://github.com/) and create an account. Send me an email with your account name and email so I can add you to the class "GitHub Organization".
 
