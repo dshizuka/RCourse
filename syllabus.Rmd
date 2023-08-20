@@ -1,9 +1,9 @@
 ---
 title: 'BIOS 967: Intro to R for Biologists'
 subtitle: Syllabus, Fall 2023
-date: 'updated `r format(Sys.time(), ''%m/%d/%y'')` '
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output:
-  pdf_document: default
+  html_document: default
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
