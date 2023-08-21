@@ -88,9 +88,9 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 * Week 3 (Sep 5, 7): Some simple statistics & Plots
 
-* Week 4 (Sep 14): **No class on Tuesday (12th)**; Data Wrangling & Plotting in Tidyverse Part 1
+* Week 4 (Sep 14): **No class on Tuesday (12th)**; **Presentations 1: Project Ideas (Thursday)**
 
-* Week 5 (Sep 19, 21): Data Wrangling & Plotting in Tidyverse Part 2; Creating reports 
+* Week 5 (Sep 19, 21): Data Wrangling & Plotting in Tidyverse Part ; Creating reports 
 
 * Week 6 (Sep 26, 28): apply functions, loops, statements, custom functions
 
