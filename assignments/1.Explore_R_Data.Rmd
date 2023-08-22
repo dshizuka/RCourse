@@ -1,0 +1,20 @@
+---
+title: "Assignment: Explore R Data"
+subtitle: "BIOS 967: Intro to R for Biologists"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  pdf_document
+---
+
+In Module 2 (Types of Objects), we introduced the "iris" dataset.
+
+```{r}
+head(iris)
+```
+
+You can get a list of pre-loaded datasets in R by running the code:
+```{r, eval=F}
+data()
+```
+

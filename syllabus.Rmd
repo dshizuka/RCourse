@@ -56,7 +56,7 @@ Here are the basic expectations for each of the above categories:
 
 (2) **Presentations:** Three times during the semester, we will have project presentation sessions. In the **first session** near the beginning of the semester, each student will present a *brief* overview of their research theme. This can be very broad description of the theme or a detailed account of a specific project. In the **second session** in the middle of the semester, students will present a 'progress report'--a description of the project that they settled on, and where they are on the project. In the **third session**, the students will present their final products.
 
-(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture, and to prepare you towards the beginning of your independent project. You will have 5 or 7 days to complete the assignment. 
+(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture, and to prepare you towards the beginning of your independent project. These sill be posted via Canvas. You will have 5 or 7 days to complete the assignment. 
 
 (4) **Project Proposal & Progress Reports:** The student will develop a project proposal in two steps: submission of an initial project idea, and submission of a 2-page project proposal that includes objectives and description of the dataset (i.e., how it was collected). During the last third of the semester, students will submit progress reports every 2 weeks. 
 
