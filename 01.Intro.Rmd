@@ -160,7 +160,7 @@ a != c # a is not the same as c?
 
 ***
 
-##1.5 Functions and help files
+## 1.5 Functions and help files
 *Functions* are commands that you use to manipulate objects in R. Functions followed by `()`, and each function comes with specific arguments or syntax that goes inside the parentheses. Function names are like the verbs that you have to learn to master this language.
 
 For example, the function `rep(x,n)`  is a function that says, “repeat the value x n times”. Try it:
@@ -244,7 +244,7 @@ However, it is often good practice to actually set the working directory for eac
 To do this, you will use a function called `setwd()`. To use this function, you will have to get familiar with the concept of file or folder **paths**. A path name is the "address" of a specific file or folder on your computer. Paths typically look something like `/Users/dshizuka/folder`. 
 
 * ***For Windows***, you can get the path name of the file or folder by right-clicking it and click "Copy as Path"
-* ***For Mac (or Windows)***, you can look for the file/folder in Finder, and then drag and drop the icon into the "Go to file/function" bar at the top of the RStudio window.  
+* ***For Mac (or Windows)***, you can look for the file/folder in Finder, and then right-click it *while holding down the Option key*. This will give you the option of "Copy "filename" as Pathname".   
 
 ```{r, echo=FALSE, fig.align="center"}
 knitr::include_graphics("images/GoToFile.png")
