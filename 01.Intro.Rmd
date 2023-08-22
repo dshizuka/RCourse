@@ -246,13 +246,10 @@ To do this, you will use a function called `setwd()`. To use this function, you 
 * ***For Windows***, you can get the path name of the file or folder by right-clicking it and click "Copy as Path"
 * ***For Mac (or Windows)***, you can look for the file/folder in Finder, and then right-click it *while holding down the Option key*. This will give you the option of "Copy "filename" as Pathname".   
 
-```{r, echo=FALSE, fig.align="center"}
-knitr::include_graphics("images/GoToFile.png")
-```
-  
-Once you have the path name, you can set the working directory as something like:
+Once you have the path name, you can set the working directory.
+For example, if I wanted to set my working directory to be my Documents folder, I can set it this way:
 ```{r, eval=F}
-setwd("/Users/dshizuka/folder") #fill in the path to your working directory folder
+setwd("/Users/daishizuka/Documents") #fill in the path to your working directory folder
 ```
 **Make sure your path name is inside the quotes!**  
 
