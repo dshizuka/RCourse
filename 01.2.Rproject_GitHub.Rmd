@@ -1,0 +1,45 @@
+---
+title: "Part 1.2: File Organization and GitHub"
+subtitle: "BIOS 967: Intro to R for Biologists"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+font size: 11pt
+geometry: margin=1in
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Organizing your folders and setting up an R Studio Project
+
+As explained in the previous module, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses path names to arrange these files (as do all programming languages). Once you understand how pathnames work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
+
+because your path names are defined relative to the entire organization of your computer. ***Wouldn't it be more convenient if you didn't have to type out path names for files all the time?***
+
+That's where file organization comes in. And RStudio Project makes it easier for you to do that. 
+
+Here is what I recommend for every project you start: 
+
+1. Create a folder that will be your main "project folder".
+  
+* Try this out be creating a "BIOS 967" Folder somewhere in your computer.
+
+2. Next, in R Studio, click on "File" > "New Project" 
+
+3. Click on "Existing Directory", click "Browse" and select the "BIOS 967" Folder you created, then click "Create Project"
+
+4. Now, you will see that there is a new "BIOS967.rproj" file in your folder.
+
+5. Open that .rproj file. This will open up a new RStudio window. 
+
+6. Run the command `getwd()` in your console. This should now give you the path to the folder. 
+
+7. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
+
+* Try this out by creating a new R Script file, name it something with the date on it, and save. It should automatically go into this folder. 
