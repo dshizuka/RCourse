@@ -1,5 +1,5 @@
 ---
-title: "Part 1.2: File Organization and GitHub"
+title: "Part 1.2: File Organization, Version Control, and Workflow"
 subtitle: "BIOS 967: Intro to R for Biologists"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
@@ -16,13 +16,23 @@ geometry: margin=1in
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 1. Organizing your folders and setting up an R Studio Project
+*Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html).*
 
-As explained in the previous module, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses path names to arrange these files (as do all programming languages). Once you understand how pathnames work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
+## 1. Pros and Cons of absolute paths
 
-because your path names are defined relative to the entire organization of your computer. ***Wouldn't it be more convenient if you didn't have to type out path names for files all the time?***
+As explained in the previous module, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses pathnames to arrange these files (as do all programming languages). These are sometimes called "absolute paths". Once you understand how path names work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
 
-That's where file organization comes in. And RStudio Project makes it easier for you to do that. 
+For example, if I were to create a new data file and save it as a .csv file on the desktop on my own computer (Mac), the path name might look like this:
+`/Users/daishizuka/Desktop/data.csv`
+
+But if I copy and paste the exact same file and save it on the desktop of one of my lab computers (Windows), the path name might look like this:
+`C:\Users\ShizukaLab\Desktop\data.csv`
+
+This means that if your code script references this dataset, you can't just run the same code to import data on different computers. Now, this might not feel like a big problem for you if you plan to do all of your analyses on your own computer, and you know where all the files on your computer are. HOWEVER, this is a major hindrance to collaboration. Also, it is a major hindrance to me teaching this class, as I can't easily try out your code to help you troubleshoot. 
+
+That's where RStudio Projects come in...
+
+## 2. Setting up an R Studio Project and organizing your files.
 
 Here is what I recommend for every project you start: 
 
