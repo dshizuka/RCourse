@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html).*
 
-## 1. Pros and Cons of absolute paths
+## 1. Navigating folders and files using absolute paths (but don't do this!)
 
 As explained in the previous module, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses pathnames to arrange these files (as do all programming languages). These are sometimes called "absolute paths". Once you understand how path names work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
 
@@ -32,19 +32,29 @@ This means that if your code script references this dataset, you can't just run 
 
 That's where RStudio Projects come in...
 
-## 2. Setting up an R Studio Project and organizing your files.
+## 2. Setting up an Rstudio Project and organizing your files.
+
+Rstudio projects facilitate a important "best practice" for developing code to facilitate your research, which is to make sure that ***for each project, create one folder that contains all of your data, scripts, outputs (e.g., plots) and other assets.*** 
+
+Additionally, I highly recommend that this "project directory" folder includes a subfolder called "data" that contain all of the data files, and "figures" (or some other name) folder that will contain all of the output plots, etc. 
+
+Setting up a project directory in this way allows you to keep everything organized and up to date, and it also helps with collaborations or sharing code, because it is easy to follow where things are. It is also nice for your "future self"--if you come back to a project after some time, it is easy to pick up where you left off without wondering where you left all of the relevant files. 
+
+Finally, the more important reason to set up an Rstudio project folder is that it will allow anyone to run the code you are developing in this folder because you all of your pathnames will be "relative" to the parent directory. By using "relative path" names in your code, it becomes much more reproducible and enables collaboration. 
+
+### 2.1. Setting up a new Rstudio project folder
 
 Here is what I recommend for every project you start: 
 
 1. Create a folder that will be your main "project folder".
   
-* Try this out be creating a "BIOS 967" Folder somewhere in your computer.
+* Try this out be creating a "trial" Folder somewhere in your computer.
 
 2. Next, in R Studio, click on "File" > "New Project" 
 
-3. Click on "Existing Directory", click "Browse" and select the "BIOS 967" Folder you created, then click "Create Project"
+3. Click on "Existing Directory", click "Browse" and select the "trial" Folder you created, then click "Create Project"
 
-4. Now, you will see that there is a new "BIOS967.rproj" file in your folder.
+4. Now, you will see that there is a new "trial.rproj" file in your folder.
 
 5. Open that .rproj file. This will open up a new RStudio window. 
 
@@ -53,3 +63,16 @@ Here is what I recommend for every project you start:
 7. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
 
 * Try this out by creating a new R Script file, name it something with the date on it, and save. It should automatically go into this folder. 
+
+* Now try saving a data file. We can try this out by simply saving one of the pre-loaded datasets as a .csv file. 
+
+Try saving the `iris` dataset by using the `write.csv()` function:
+```{r, eval=F}
+write.csv(iris, "iris.csv")
+```
+
+You see this new .csv file in your project folder. 
+
+## 3. Version Control and GitHub
+
+

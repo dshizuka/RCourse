@@ -14,7 +14,7 @@
 
 <title>Part 1.2: File Organization, Version Control, and Workflow</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -352,8 +352,11 @@ Control, and Workflow</h1>
 <p><em>Note: You can get a lot of this information from Hadley Wickham’s
 “R for Data Science” book, Chapter 8: <a
 href="https://r4ds.had.co.nz/workflow-projects.html">here</a>.</em></p>
-<div id="pros-and-cons-of-absolute-paths" class="section level2">
-<h2>1. Pros and Cons of absolute paths</h2>
+<div
+id="navigating-folders-and-files-using-absolute-paths-but-dont-do-this"
+class="section level2">
+<h2>1. Navigating folders and files using absolute paths (but don’t do
+this!)</h2>
 <p>As explained in the previous module, the Working Directory defines
 where R will look for files, or where it will save files that you
 generate. R uses pathnames to arrange these files (as do all programming
@@ -378,23 +381,46 @@ Also, it is a major hindrance to me teaching this class, as I can’t
 easily try out your code to help you troubleshoot.</p>
 <p>That’s where RStudio Projects come in…</p>
 </div>
-<div id="setting-up-an-r-studio-project-and-organizing-your-files."
+<div id="setting-up-an-rstudio-project-and-organizing-your-files."
 class="section level2">
-<h2>2. Setting up an R Studio Project and organizing your files.</h2>
+<h2>2. Setting up an Rstudio Project and organizing your files.</h2>
+<p>Rstudio projects facilitate a important “best practice” for
+developing code to facilitate your research, which is to make sure that
+<strong><em>for each project, create one folder that contains all of
+your data, scripts, outputs (e.g., plots) and other
+assets.</em></strong></p>
+<p>Additionally, I highly recommend that this “project directory” folder
+includes a subfolder called “data” that contain all of the data files,
+and “figures” (or some other name) folder that will contain all of the
+output plots, etc.</p>
+<p>Setting up a project directory in this way allows you to keep
+everything organized and up to date, and it also helps with
+collaborations or sharing code, because it is easy to follow where
+things are. It is also nice for your “future self”–if you come back to a
+project after some time, it is easy to pick up where you left off
+without wondering where you left all of the relevant files.</p>
+<p>Finally, the more important reason to set up an Rstudio project
+folder is that it will allow anyone to run the code you are developing
+in this folder because you all of your pathnames will be “relative” to
+the parent directory. By using “relative path” names in your code, it
+becomes much more reproducible and enables collaboration.</p>
+<div id="setting-up-a-new-rstudio-project-folder"
+class="section level3">
+<h3>2.1. Setting up a new Rstudio project folder</h3>
 <p>Here is what I recommend for every project you start:</p>
 <ol style="list-style-type: decimal">
 <li>Create a folder that will be your main “project folder”.</li>
 </ol>
 <ul>
-<li>Try this out be creating a “BIOS 967” Folder somewhere in your
+<li>Try this out be creating a “trial” Folder somewhere in your
 computer.</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Next, in R Studio, click on “File” &gt; “New Project”</p></li>
 <li><p>Click on “Existing Directory”, click “Browse” and select the
-“BIOS 967” Folder you created, then click “Create Project”</p></li>
-<li><p>Now, you will see that there is a new “BIOS967.rproj” file in
-your folder.</p></li>
+“trial” Folder you created, then click “Create Project”</p></li>
+<li><p>Now, you will see that there is a new “trial.rproj” file in your
+folder.</p></li>
 <li><p>Open that .rproj file. This will open up a new RStudio
 window.</p></li>
 <li><p>Run the command <code>getwd()</code> in your console. This should
@@ -405,10 +431,20 @@ import any files, you can just put in the file name instead of the whole
 path.</p></li>
 </ol>
 <ul>
-<li>Try this out by creating a new R Script file, name it something with
-the date on it, and save. It should automatically go into this
-folder.</li>
+<li><p>Try this out by creating a new R Script file, name it something
+with the date on it, and save. It should automatically go into this
+folder.</p></li>
+<li><p>Now try saving a data file. We can try this out by simply saving
+one of the pre-loaded datasets as a .csv file.</p></li>
 </ul>
+<p>Try saving the <code>iris</code> dataset by using the
+<code>write.csv()</code> function:</p>
+<pre class="r"><code>write.csv(iris, &quot;iris.csv&quot;)</code></pre>
+<p>You see this new .csv file in your project folder.</p>
+</div>
+</div>
+<div id="version-control-and-github" class="section level2">
+<h2>3. Version Control and GitHub</h2>
 </div>
 
 
