@@ -480,8 +480,14 @@ talk to Rstudio</h3>
 <p><em>Here, we are following the directions on <a
 href="https://happygitwithr.com/install-git">Chapter 6-13 of the Happy
 git with R website, here</a></em></p>
-<div id="step-1-check-if-you-have-git-installed" class="section level4">
-<h4>Step 1: Check if you have Git installed</h4>
+</div>
+<div id="create-a-github-account" class="section level3">
+<h3>3.2.1. Create a GitHub account</h3>
+<p>Go to <a href="https://github.com/">github.com</a> and sign up for an
+account.</p>
+</div>
+<div id="check-if-you-have-git-installed" class="section level3">
+<h3>3.2.2 Check if you have Git installed</h3>
 <p>The simplest way to do this is use the <strong>Shell</strong> on your
 computer. You have this already, whether or not you know it.</p>
 <ul>
@@ -505,12 +511,65 @@ this, with a black background and courier or monaco font.k</p>
 <pre eval="F"><code>git --version</code></pre>
 <p>It should give you the version number.</p>
 </div>
-</div>
-<div id="step-2-install-a-git-client" class="section level3">
-<h3>Step 2: Install a Git Client</h3>
+<div id="install-a-git-client" class="section level3">
+<h3>3.2.3. Install a Git Client</h3>
 <p>There are many Git clients out there. Personally, I just use <a
 href="https://desktop.github.com/">GitHub Desktop</a> <img
 src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
+<p>Git Clients provide a graphical user interface (GUI) that facilitates
+the processes of committing, pushing, pulling and other tasks. It also
+allows you to see the history of changes to your repository.</p>
+</div>
+<div id="create-a-personal-access-token-on-github"
+class="section level3">
+<h3>3.2.4. Create a Personal Access Token on GitHub</h3>
+<p>When linking a GitHub repository with Rstudio, you will need to be
+able to authenticate your connection. To increase security, GitHub no
+longer supports access using a simple password. Instead, it requires you
+to authenticate using a personal access token. You need to generate a
+token, and then you will use this later to connect Rstudio with your
+repository.</p>
+<ul>
+<li>Go to <a
+href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+and click “Generate token”. Your settings should include “repo”, “user”,
+“workflow”, and I would set the expiration date to be at least the end
+of the semester (e.g., December 15th, 2023). <strong>SAVE THIS
+TOKEN</strong>.</li>
+</ul>
+<p><em>(The longer way to go is to sign in to github, Click on your
+avatar on the top-right corner, then go to Settings &gt; Developer
+settings (at the very bottom) &gt; Personal access tokens &gt; Tokens
+(classic))</em></p>
+</div>
+<div id="make-a-repository-repo-on-github." class="section level3">
+<h3>3.2.5. Make a repository (“repo”) on GitHub.</h3>
+<p>Log into <a href="https://github.com">github</a>, click on
+“Repositories”, then click the big green “New” button</p>
+<ul>
+<li>Repository template: No template</li>
+<li>Repository name: <code>BIOS967_YourLastName_YourFirstName</code>
+<strong><em>please follow this template for naming your repository–this
+allows me to easily find your repo on my end</em></strong></li>
+<li>Initialize this repository with: Add a README file.</li>
+</ul>
+<p>Click on “Create Repository”</p>
+<p>Now, click on the green button that says “&lt;&gt;Code”</p>
+<p>Copy the clone URL to your clipboard. Use the HTTPS URL.</p>
+<p><img src="images/github-https-or-ssh-url-annotated.png"
+style="width:50.0%" /></p>
+</div>
+<div id="clone-the-github-repository-to-your-computer-via-rstudio"
+class="section level3">
+<h3>3.2.6. Clone the GitHub repository to your computer via RStudio</h3>
+<p>In RStudio, start a new project: File &gt; New Project &gt; Version
+Control &gt; Git. In “Repository URL”, paste the URL of your new GitHub
+repository.</p>
+<p>Determine where your project will be saved locally. Be intentional. I
+have all of my GitHub repositories saved in my Documents folder in a
+subfolder called “GitHub”.</p>
+<p>Check “Open in new session”</p>
+<p>Click “Create Project”.</p>
 </div>
 </div>
 

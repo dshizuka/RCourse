@@ -91,7 +91,11 @@ You see this new .csv file in your project folder.
 
 *Here, we are following the directions on [Chapter 6-13 of the Happy git with R website, here](https://happygitwithr.com/install-git)*
 
-#### Step 1: Check if you have Git installed
+### 3.2.1. Create a GitHub account
+
+Go to [github.com](https://github.com/) and sign up for an account.
+
+### 3.2.2 Check if you have Git installed
 
 The simplest way to do this is use the **Shell** on your computer. You have this already, whether or not you know it. 
 
@@ -125,8 +129,46 @@ git --version
 ```
 It should give you the version number. 
 
-### Step 2: Install a Git Client
+### 3.2.3. Install a Git Client
 
 There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
+
+Git Clients provide a graphical user interface (GUI) that facilitates the processes of committing, pushing, pulling and other tasks. It also allows you to see the history of changes to your repository.
+
+### 3.2.4. Create a Personal Access Token on GitHub
+
+When linking a GitHub repository with Rstudio, you will need to be able to authenticate your connection. To increase security, GitHub no longer supports access using a simple password. Instead, it requires you to authenticate using a personal access token. You need to generate a token, and then you will use this later to connect Rstudio with your repository. 
+
+* Go to [https://github.com/settings/tokens](https://github.com/settings/tokens) and click “Generate token”. Your settings should include "repo", "user", "workflow", and I would set the expiration date to be at least the end of the semester (e.g., December 15th, 2023). **SAVE THIS TOKEN**. 
+
+*(The longer way to go is to sign in to github, Click on your avatar on the top-right corner, then go to Settings > Developer settings (at the very bottom) > Personal access tokens > Tokens (classic))*
+
+### 3.2.5. Make a repository ("repo") on GitHub.
+
+Log into [github](https://github.com), click on “Repositories”, then click the big green “New” button
+
+* Repository template: No template
+* Repository name: `BIOS967_YourLastName_YourFirstName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
+* Initialize this repository with: Add a README file.
+
+Click on "Create Repository"
+
+Now, click on the green button that says "<>Code"
+
+Copy the clone URL to your clipboard. Use the HTTPS URL. 
+
+![](images/github-https-or-ssh-url-annotated.png){width=50%}
+
+### 3.2.6. Clone the GitHub repository to your computer via RStudio
+
+In RStudio, start a new project:
+File > New Project > Version Control > Git. In “Repository URL”, paste the URL of your new GitHub repository. 
+
+Determine where your project will be saved locally. Be intentional. I have all of my GitHub repositories saved in my Documents folder in a subfolder called "GitHub". 
+
+Check "Open in new session"
+
+Click "Create Project".
+
 
 
