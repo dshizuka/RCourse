@@ -32,7 +32,7 @@ This means that if your code script references this dataset, you can't just run 
 
 That's where RStudio Projects come in...
 
-## 2. Using Rstudio Projects and organizing your files.
+## 2. Using Rstudio Projects and organizing your files. ![](images/Rstudiologo.png){width=10%}
 
 Rstudio projects facilitate a important "best practice" for developing code to facilitate your research, which is to make sure that ***for each project, create one folder that contains all of your data, scripts, outputs (e.g., plots) and other assets.*** 
 
@@ -170,5 +170,14 @@ Check "Open in new session"
 
 Click "Create Project".
 
+**At some point in this process, you will be asked to authenticate. At that point, you will enter your GitHub account name, and then enter the Personal Access Token that you created in step 3.2.4.**
 
+## 4. The Git workflow: Pull, Stage, Commit, Push 
+
+Once you have finished the set up process, you are ready to start your workflow!
+
+The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
+
+
+, you will be able to 
 
