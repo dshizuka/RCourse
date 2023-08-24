@@ -184,7 +184,7 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 
 * **Stage:** Whenever you make any changes on any files in your project directory, Git will "stage" those changes. This just means that the system recognizes that you've made those changes (e.g., add file, delete file, edit file) and it is ready for you to commit to those changes. 
 
-* **Commit:** When you are done making a set of changes and you are ready to upload those changes to GitHub, you first need to **commit** those changes. When you do this, you will write in a brief description of the changes that you have made. This will go in your change history, and it can be a nice way for you (and your collaborators) to understand what changes you have made. 
+* **Commit:** When you are done making a set of changes and you are ready to upload those changes to GitHub, you first need to **commit** those changes. When you do this, you will write a "commit message"--i.e., a brief description of the changes that you have made. Git will make you do this--it won't let you push those changes to GitHub unless you've written something. This will go in your change history, and it can be a nice way for you (and your collaborators) to understand what changes you have made. 
 
 * **Push:** Once you have committed your changes, you are ready to **push** those changes onto your remote repository--i.e., the copy that is stored in GitHub. 
 
