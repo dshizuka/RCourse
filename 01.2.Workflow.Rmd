@@ -215,7 +215,21 @@ Add some text--e.g., "Here is the first change in my repository".
 
 Save the readme.txt file. 
 
+Now go to the Git window (top right window). You should see the change reflected in the window. 
 
+### 4.3. Commit changes
+
+Click on "Commit" in the Git window
+
+A new window will pop out. Check all the boxes that represent each change you've made. 
+
+Check the "Staged" box. Then, write a commit message. Something like, "add a line to readme file". 
+
+Press "Commit". 
+
+### 4.4. Push changes to GitHub. 
+
+Click "Push" to upload the changes to the remote repository on GitHub. 
 
 
 
