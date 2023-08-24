@@ -143,13 +143,18 @@ When linking a GitHub repository with Rstudio, you will need to be able to authe
 
 *(The longer way to go is to sign in to github, Click on your avatar on the top-right corner, then go to Settings > Developer settings (at the very bottom) > Personal access tokens > Tokens (classic))*
 
-### 3.2.5. Make a repository ("repo") on GitHub.
+### 3.2.5. Make a repository ("repo") on the "course organization" on GitHub.
 
-Log into [github](https://github.com), click on “Repositories”, then click the big green “New” button
+Log into the BIOS967 organization on github here: [https://github.com/BIOS967](https://github.com/BIOS967) (if you are doing this in the course right now. If you're just doing this independently, you can just log into github normally. 
 
-* Repository template: No template
+
+click on “Repositories” on the top ribbon
+
+Then click the big green “New repository” button
+
 * Repository name: `BIOS967_YourLastName_YourFirstName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
-* Initialize this repository with: Add a README file.
+* Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
+* Initialize this repository with: Check Add a README file.
 
 Click on "Create Repository"
 
@@ -176,7 +181,7 @@ Click "Create Project".
 
 Once you have finished the set up process, you are ready to start your workflow!
 
-First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right).
+First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right). If you click on that tab, it'll look like this:
 
 ![](images/gitwindow.png){width=100%}
 
@@ -191,6 +196,25 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 * **Commit:** When you are done making a set of changes and you are ready to upload those changes to GitHub, you first need to **commit** those changes. When you do this, you will write a "commit message"--i.e., a brief description of the changes that you have made. Git will make you do this--it won't let you push those changes to GitHub unless you've written something. This will go in your change history, and it can be a nice way for you (and your collaborators) to understand what changes you have made. 
 
 * **Push:** Once you have committed your changes, you are ready to **push** those changes onto your remote repository--i.e., the copy that is stored in GitHub. 
+
+### 4.1. Pull from the repository
+
+First, click "Pull" in the Git window. This will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
+
+![](images/gitwindow_pull.png){width=50%}
+
+It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
+
+### 4.2. Make some changes
+
+Now you can make any change on your project. Let's just start by editing the readme file. 
+
+On the bottom right window, click on the "Files" tab and select the readme.txt file. 
+
+Add some text--e.g., "Here is the first change in my repository". 
+
+Save the readme.txt file. 
+
 
 
 
