@@ -176,11 +176,13 @@ Click "Create Project".
 
 Once you have finished the set up process, you are ready to start your workflow!
 
+First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right).
+
 The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
 
 Here are the 4 main actions that you will take whenever you work with your GitHub repository:
 
-* **Pull:** When you open your project on your computer, I highly recommend that you always first click "Pull". This takes the version of your repository that is stored on GitHub remotely and pulls it to your local folder. Thus, you have synced your computer with whatever changes that other people (e.g., your instructor) has made on your repository. 
+* **Pull:** When you open your project on your computer, I highly recommend that you always first click "Pull". This takes the version of your repository that is stored on GitHub remotely and pulls it to your local folder. Thus, you have synced your computer with whatever changes that other people (e.g., your instructor) has made on your repository. **Get used to pulling from your repository when you first open your project, even if you haven't made any changes since last time because I may have suggested changes for you!** 
 
 * **Stage:** Whenever you make any changes on any files in your project directory, Git will "stage" those changes. This just means that the system recognizes that you've made those changes (e.g., add file, delete file, edit file) and it is ready for you to commit to those changes. 
 
