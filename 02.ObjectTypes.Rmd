@@ -15,7 +15,7 @@ library(knitr)
 ```
 
 
-## 2.1 Overview: Types of Objects
+## 1. Overview: Types of Objects
 
 The main purpose of R is to manipulate 'objects' to accomplish tasks. Your goal is to assign objects and then use functions to manipulate them.  
 There are many types (or classes) of objects. Many functions are specifically tailored to deal with specific types of objects. Therefore, it is critical that you understand the distinctions between different types of objects, and how to best make use of each. Some packages generate special types of objects, which can then be manipulated or analyzed in special ways. Here, we will cover some of the most common types of objects you will encounter.  
@@ -41,10 +41,10 @@ Object Type   | Detail
 
 ***
 
-## 2.2 Vectors
+## 2. Vectors
 Vectors are essentially a one-dimensional set of elements. The elements can be numbers (numeric vectors), characters, etc. 
 
-### 2.2.1 Vectors of different types
+### 2.1 Vectors of different types
 Let's try making a **numeric** vector using a function called `c()` (for 'combine'):
 ```{r}
 v=c(4,3,5,3,2,3,1)
@@ -84,7 +84,7 @@ logic+0
 You can see that TRUE becomes 1 and FALSE becomes 0
 
 
-### 2.2.2 Vector Functions
+### 2.2 Vector Functions
 You can measure various attributes of this vector. For example, let’s find out how many numbers there are in this vector and add up all of the numbers. Try:
 ```{r}
 length(v)
@@ -118,7 +118,7 @@ We can manipulate vectors as a whole. for example, let's multiply the vector by 
 v*10
 ```
 
-### 2.2.3 Indexing: The importance of [ ]
+### 2.3 Indexing: The importance of [ ]
 For multi-element objects (i.e., anything that is a combination of numbers, letters, etc.), we can locate specific elements within objects using square brackets `[]`. For example, we can ask what is the 6th number in the numeric vector `v`, or the second element in the character vector `chars` from above.
 ```{r}
 v[6]
@@ -128,7 +128,7 @@ chars[2]
 
 ***
 
-## 2.3 Matrices
+## 3. Matrices
 Ok, now let’s try a matrix. This is a two-dimensional set of numbers, so when we create a matrix, we also need to specify the dimensions. Let's demonstrate the difference beween vectors and matrices:
 ```{r}
 1:9 #colon create vector of integers
@@ -155,7 +155,7 @@ mat3
 ```
 You can see that matrices can be “rectangular”, and also you can name the dimensions (rows & columns) of the matrix using `rownames()` and `colnames()`. 
   
-### 2.3.1. Indexing with a matrix
+### 3.1. Indexing with a matrix
 
 Indexing in a matrix requires two values inside the square brackets: `[row, column]`. You can also use this to look at entire rows or columns. 
 For example:
@@ -175,7 +175,7 @@ mat3*10 #multiply all values in mat3 by 10
 > Technically, a matrix is simply a two-dimensional *array* (and vectors are one-dimensional arrays). More generally, an *array* can be any number of dimensions. A three-dimensional array would be a stack of matrices, and a four-dimensional arrays would be yet another stack of those... Arrays can be very useful for fast computing, but it can also be very confusing, so I'm going to avoid the issue here. We may come back to the idea of three-dimensional arrays later in the course.  
 
 ***
-## 2.4 Dataframes
+## 4. Dataframes
 
 For most cases, your data will be organized in the form of a **dataframe**. A **dataframe** is an object with rows and columns in which each row represents an observation (sometimes called *cases*), and each column is a measurement of a variable (sometimes called *fields*). Whereas the values of a matrix can only be numbers, the values of a variable in a dataframe can be numeric, character,factor, or other formats (e.g., dates, logical variables such as TRUE and FALSE).
 
@@ -192,7 +192,7 @@ dat=data.frame(Sex=sex, Size=size) #Notice the capitalization
 dat
 ```
 
-### 2.4.1. Indexing in dataframes
+### 4.1. Indexing in dataframes
 We can refer to each row or columns in the dataframe using square brackets, just as with the other objects we have learned already.
 ```{r, echo=TRUE}
 dat[1,] #first row
@@ -217,7 +217,7 @@ str(dat)
 summary(dat)
 ```
 
-### 2.4.2. Built-in data sets
+### 4.2. Built-in data sets
 The base R program comes with a bunch of datasets as part of the program. To load a specific data set, you simply use the function `data()`. For example, to load the data set called 'iris':
 ```{r}
 data("iris")
@@ -230,7 +230,7 @@ head(iris)
 Built-in datasets are often useful for learning how functions work. You will often see examples within help files make use of built-in data sets to demonstrate how something works. You will also see some R packages will include some built-in data sets for this same reason. 
 
 ***
-## 2.5 Lists
+## 5. Lists
 A **List** object is a powerful and flexible tool in R. Dataframes, matrices and array have many constraints -- e.g., each row must have the same number of columns. In contrast, you can combine any set of objects together into a list.  
 As an example, let's create three vectors that are of different lengths with different types of elements (number, logical, and character).
 ```{r}

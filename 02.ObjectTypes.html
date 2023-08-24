@@ -348,7 +348,7 @@ div.tocify {
 
 
 <div id="overview-types-of-objects" class="section level2">
-<h2>2.1 Overview: Types of Objects</h2>
+<h2>1. Overview: Types of Objects</h2>
 <p>The main purpose of R is to manipulate ‘objects’ to accomplish tasks.
 Your goal is to assign objects and then use functions to manipulate
 them.<br />
@@ -432,11 +432,11 @@ described above</em></p>
 <hr />
 </div>
 <div id="vectors" class="section level2">
-<h2>2.2 Vectors</h2>
+<h2>2. Vectors</h2>
 <p>Vectors are essentially a one-dimensional set of elements. The
 elements can be numbers (numeric vectors), characters, etc.</p>
 <div id="vectors-of-different-types" class="section level3">
-<h3>2.2.1 Vectors of different types</h3>
+<h3>2.1 Vectors of different types</h3>
 <p>Let’s try making a <strong>numeric</strong> vector using a function
 called <code>c()</code> (for ‘combine’):</p>
 <pre class="r"><code>v=c(4,3,5,3,2,3,1)
@@ -476,7 +476,7 @@ numerics by adding a number:</p>
 <p>You can see that TRUE becomes 1 and FALSE becomes 0</p>
 </div>
 <div id="vector-functions" class="section level3">
-<h3>2.2.2 Vector Functions</h3>
+<h3>2.2 Vector Functions</h3>
 <p>You can measure various attributes of this vector. For example, let’s
 find out how many numbers there are in this vector and add up all of the
 numbers. Try:</p>
@@ -542,7 +542,7 @@ vector by 10.</p>
 <pre><code>## [1] 40 30 50 30 20 30 10</code></pre>
 </div>
 <div id="indexing-the-importance-of" class="section level3">
-<h3>2.2.3 Indexing: The importance of [ ]</h3>
+<h3>2.3 Indexing: The importance of [ ]</h3>
 <p>For multi-element objects (i.e., anything that is a combination of
 numbers, letters, etc.), we can locate specific elements within objects
 using square brackets <code>[]</code>. For example, we can ask what is
@@ -556,7 +556,7 @@ element in the character vector <code>chars</code> from above.</p>
 </div>
 </div>
 <div id="matrices" class="section level2">
-<h2>2.3 Matrices</h2>
+<h2>3. Matrices</h2>
 <p>Ok, now let’s try a matrix. This is a two-dimensional set of numbers,
 so when we create a matrix, we also need to specify the dimensions.
 Let’s demonstrate the difference beween vectors and matrices:</p>
@@ -593,7 +593,7 @@ mat3</code></pre>
 the dimensions (rows &amp; columns) of the matrix using
 <code>rownames()</code> and <code>colnames()</code>.</p>
 <div id="indexing-with-a-matrix" class="section level3">
-<h3>2.3.1. Indexing with a matrix</h3>
+<h3>3.1. Indexing with a matrix</h3>
 <p>Indexing in a matrix requires two values inside the square brackets:
 <code>[row, column]</code>. You can also use this to look at entire rows
 or columns. For example:</p>
@@ -625,7 +625,7 @@ course.</p>
 </div>
 </div>
 <div id="dataframes" class="section level2">
-<h2>2.4 Dataframes</h2>
+<h2>4. Dataframes</h2>
 <p>For most cases, your data will be organized in the form of a
 <strong>dataframe</strong>. A <strong>dataframe</strong> is an object
 with rows and columns in which each row represents an observation
@@ -669,7 +669,7 @@ dat</code></pre>
 ## 9    F    3
 ## 10   F    4</code></pre>
 <div id="indexing-in-dataframes" class="section level3">
-<h3>2.4.1. Indexing in dataframes</h3>
+<h3>4.1. Indexing in dataframes</h3>
 <p>We can refer to each row or columns in the dataframe using square
 brackets, just as with the other objects we have learned already.</p>
 <pre class="r"><code>dat[1,] #first row</code></pre>
@@ -706,7 +706,7 @@ each column.</p>
 ##                     Max.   :9.0</code></pre>
 </div>
 <div id="built-in-data-sets" class="section level3">
-<h3>2.4.2. Built-in data sets</h3>
+<h3>4.2. Built-in data sets</h3>
 <p>The base R program comes with a bunch of datasets as part of the
 program. To load a specific data set, you simply use the function
 <code>data()</code>. For example, to load the data set called
@@ -731,7 +731,7 @@ packages will include some built-in data sets for this same reason.</p>
 </div>
 </div>
 <div id="lists" class="section level2">
-<h2>2.5 Lists</h2>
+<h2>5. Lists</h2>
 <p>A <strong>List</strong> object is a powerful and flexible tool in R.
 Dataframes, matrices and array have many constraints – e.g., each row
 must have the same number of columns. In contrast, you can combine any
