@@ -5,7 +5,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
@@ -192,7 +192,7 @@ dat=data.frame(Sex=sex, Size=size) #Notice the capitalization
 dat
 ```
 
-#### Indexing in dataframes
+### 2.4.1. Indexing in dataframes
 We can refer to each row or columns in the dataframe using square brackets, just as with the other objects we have learned already.
 ```{r, echo=TRUE}
 dat[1,] #first row
@@ -217,7 +217,7 @@ str(dat)
 summary(dat)
 ```
 
-#### Built-in data sets
+### 2.4.2. Built-in data sets
 The base R program comes with a bunch of datasets as part of the program. To load a specific data set, you simply use the function `data()`. For example, to load the data set called 'iris':
 ```{r}
 data("iris")

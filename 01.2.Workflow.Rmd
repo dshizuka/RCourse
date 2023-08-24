@@ -48,7 +48,7 @@ Here is what I recommend for every project you start:
 
 1. Create a folder that will be your main "project folder".
   
-* Try this out be creating a "trial" Folder somewhere in your computer.
+*Try this out be creating a "trial" Folder somewhere in your computer.*
 
 2. Next, in R Studio, click on "File" > "New Project" 
 
