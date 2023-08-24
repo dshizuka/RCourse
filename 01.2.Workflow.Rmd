@@ -6,7 +6,7 @@ date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 font size: 11pt
 geometry: margin=1in
@@ -16,7 +16,7 @@ geometry: margin=1in
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html).*
+*Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html), and the [https://happygitwithr.com/](https://happygitwithr.com/) tutorials.*
 
 ## 1. Navigating folders and files using absolute paths (but don't do this!)
 
@@ -32,7 +32,7 @@ This means that if your code script references this dataset, you can't just run 
 
 That's where RStudio Projects come in...
 
-## 2. Setting up an Rstudio Project and organizing your files.
+## 2. Using Rstudio Projects and organizing your files.
 
 Rstudio projects facilitate a important "best practice" for developing code to facilitate your research, which is to make sure that ***for each project, create one folder that contains all of your data, scripts, outputs (e.g., plots) and other assets.*** 
 
@@ -58,21 +58,73 @@ Here is what I recommend for every project you start:
 
 5. Open that .rproj file. This will open up a new RStudio window. 
 
-6. Run the command `getwd()` in your console. This should now give you the path to the folder. 
+6. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
 
-7. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
+Try this out by saving a pre-loaded data frame as a spreadsheet file:
+Here, we'll save the "iris" data set as a .csv file.
 
-* Try this out by creating a new R Script file, name it something with the date on it, and save. It should automatically go into this folder. 
-
-* Now try saving a data file. We can try this out by simply saving one of the pre-loaded datasets as a .csv file. 
-
-Try saving the `iris` dataset by using the `write.csv()` function:
-```{r, eval=F}
-write.csv(iris, "iris.csv")
+```{r}
+write.csv(iris, file="iris.csv")
 ```
 
 You see this new .csv file in your project folder. 
 
-## 3. Version Control and GitHub
+## 3. Version control and collaboration using Git and GitHub ![](images/github-mark.png){width=10%}
+
+***Version control*** is a system by which you can keep track of changes to collaborative projects. One common example is Google Doc, which is an online document that multiple people can collaborate on. Importantly, Google Doc automatically saves versions of the document when changes are made, and users can revert back to earlier versions if they want. 
+
+***Git*** is an open-source software that facilitates version control of files in *repositories* (which is another way of saying *project directory*).
+
+***GitHub*** is a service that facilitates Git-based projects. There are other popular similar services, such as Bitbucket and GitLab 
+
+### 3.1. Why are we using version control and GitHub
+
+* For practical purposes, **this system will help me teach this class**. If we do this right, it will help tremendously with the process of troubleshooting your code when we get to independent projects! It will allow me to access your projects on my computer, help make edits, and keep track of those edits. 
+
+* The larger reason is that **this will help you with your research**. You will no doubt be using R (and perhaps other coding languages) for your research, and this enables a workflow that is portable from one computer/collaborator to another. 
+
+* It will expand the scope of your work. Once you make a project repository, you can make it private or public. If you make a public repository, then you can share it with colleagues. Likewise, you can *fork* any other public repository--this is increasingly the way people disseminate new software or packages for cutting-edge analysis techniques. 
+
+* **You'll impress people!** 
+
+### 3.2. Set up a GitHub repository for this course, and set it up to talk to Rstudio
+
+*Here, we are following the directions on [Chapter 6-13 of the Happy git with R website, here](https://happygitwithr.com/install-git)*
+
+#### Step 1: Check if you have Git installed
+
+The simplest way to do this is use the **Shell** on your computer. You have this already, whether or not you know it. 
+
+* On a Mac, search for "Terminal" on your computer. You can either look in the Applications folder or search for "Terminal.app" in Spotlight 
+
+![](images/Spotlight_terminal.png){width=50%}
+
+* On a Windows computer, search for "Shell"
 
 
+Either way, the Shell/Terminal window often looks something like this, with a black background and courier or monaco font.k
+
+![](images/Shell_window.png){width=50%}
+
+
+Then type in this window:
+
+```{eval=F}
+which git
+```
+
+If it responds with something like:
+```{}
+## /usr/bin/git
+```
+then it means you have Git installed already.
+
+Now check the version:
+```{eval=F}
+git --version
+```
+It should give you the version number. 
+
+### Step 2: Install a Git Client
+
+There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
