@@ -241,6 +241,14 @@ Click "Create Project".
 
 **At some point in this process, you will be asked to authenticate. At that point, you will enter your GitHub account name, and then enter the Personal Access Token that you created in step 3.2.4.**
 
+Congratulations! Now you have successfully cloned a GitHub repository on your computer.
+
+This means that, whenever I make an update or create new files on this repository, you can download those changes by "pulling" this repository. 
+
+Let's try that out. I'm going to make some change on the repository and upload ("commit" and "push") those changes up to GitHub. Then, I want you to "pull" those changes.
+
+To pull changes from a GitHub repository, click on the "Git" tab on the top right window in Rstudio, and click the "Pull" button.
+
 <br>
 
 ### 3.2.6. Make a repository ("repo") on on GitHub.
