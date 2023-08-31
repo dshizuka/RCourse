@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Module 3: File Organization with RStudio Projects, Version Control, and GitHub Workflow</title>
+<title>File Organization with RStudio Projects, Version Control, and GitHub Workflow</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -340,8 +340,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Module 3: File Organization with RStudio
-Projects, Version Control, and GitHub Workflow</h1>
+<h1 class="title toc-ignore">File Organization with RStudio Projects,
+Version Control, and GitHub Workflow</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
 <h4 class="date">updated 08/31/23</h4>
@@ -422,11 +422,12 @@ dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre
 ## 11    20-11   male    adult 25.5   62.0
 ## 12    20-12 female    adult 27.0   59.0
 ## 13    20-13 female    adult 26.5   60.0</code></pre>
-<p>Now, this might not feel like a big problem for you if you plan to do
-all of your analyses on your own computer, and you know where the file
-will always be on your computer. HOWEVER, this is a major hindrance to
-collaboration. Also, it is a major hindrance to me teaching this class,
-as I can’t easily try out your code to help you troubleshoot.</p>
+<p>Now, this might seem like a fine way to read your data file if you
+plan to do all of your analyses on your own computer, and you know where
+the file will always be on your computer. HOWEVER, this is a major
+hindrance to collaboration. Also, it is a major hindrance to me teaching
+this class, as I can’t easily try out your code to help you
+troubleshoot.</p>
 <p>That’s where RStudio Projects come in…</p>
 </div>
 <div id="using-rstudio-projects-and-organizing-your-files."
@@ -451,8 +452,8 @@ without wondering where you left all of the relevant files.</p>
 <p>Finally, the more important reason to set up an Rstudio project
 folder is that it will allow anyone to run the code you are developing
 in this folder because you all of your pathnames will be “relative” to
-the parent directory. By using “relative path” names in your code, it
-becomes much more reproducible and enables collaboration.</p>
+the parent directory. By using <em>relative path</em> names in your
+code, it becomes much more reproducible and enables collaboration.</p>
 <div id="setting-up-a-new-rstudio-project-folder"
 class="section level3">
 <h3>2.1. Setting up a new Rstudio project folder</h3>
@@ -470,15 +471,58 @@ computer.</em></p>
 folder.</p></li>
 <li><p>Open that .rproj file. This will open up a new RStudio
 window.</p></li>
-<li><p>Now, whenever you create any file within this R Project, the
-files will automatically go into this folder. Also, if you want to
-import any files, you can just put in the file name instead of the whole
-path.</p></li>
 </ol>
-<p>Try this out by saving a pre-loaded data frame as a spreadsheet file:
-Here, we’ll save the “iris” data set as a .csv file.</p>
-<pre class="r"><code>write.csv(iris, file=&quot;iris.csv&quot;)</code></pre>
-<p>You see this new .csv file in your project folder.</p>
+<p>Now, whenever you create any file within this R Project, the files
+will automatically go into this folder. Also, if you want to import any
+files, you can just put in the file name instead of the whole path.</p>
+<p>Let’s try this out:</p>
+<ul>
+<li><p>Go find the “SampleData.csv” file that you downloaded earlier and
+drop it into a subfolder called “data” in your “trial” project folder.
+<img src="images/screen_trial.png" /></p></li>
+<li><p>Now click on the “refresh” button <img
+src="images/Rstudio_refresh.png" /> on the far right side of your
+“Files” window on the bottom-right part of your Rstudio window</p></li>
+</ul>
+<p>You should now see that there is a “data” folder in your project
+directory, and that “SampleData.csv” is in that folder.</p>
+<p>Now, you can use <code>read.csv()</code> again to read your file. But
+this time, you only need a <em>relative pathname</em>–that is, you only
+need to put in <code>"data/SampleData.csv"</code> to tell R to look for
+“SampleData.csv” inside the “data” folder, instead of the whole pathname
+on your computer.</p>
+<p>Let’s call this version of the data <code>dat2</code></p>
+<pre class="r"><code>dat2=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
+<pre class="r"><code>dat2</code></pre>
+<pre><code>##    Indiv.ID    sex      age size weight
+## 1     20-01   male    adult 29.5   66.5
+## 2     20-02   male juvenile 28.0   58.5
+## 3     20-03 female    adult 26.0   57.0
+## 4     20-04 female    adult 25.0   55.5
+## 5     20-05 female juvenile 25.0   62.0
+## 6     20-06   male juvenile 28.0   61.0
+## 7     20-07 female    adult 26.0   58.0
+## 8     20-08   male    adult 28.5   65.0
+## 9     20-09   male juvenile 27.5   60.0
+## 10    20-10 female juvenile 26.0   59.0
+## 11    20-11   male    adult 25.5   62.0
+## 12    20-12 female    adult 27.0   59.0
+## 13    20-13 female    adult 26.5   60.0</code></pre>
+<p>The beauty of this system is that, as long as the project directory
+structure is the same the computer, you can run this exact same code to
+import the data on any computer. In turn, that means that this entire
+project and code are portable in multiple ways. You could:</p>
+<ul>
+<li><p>send a collaborator your whole project directory, or</p></li>
+<li><p>copy the project directory on a thumbdrive, or</p></li>
+<li><p>sync the project directory on DropBox, OneDrive, or other cloud
+storage that syncs with multiple computers…</p></li>
+</ul>
+<p>and you should be able to run the code as-is.</p>
+<p><em>However, the most elegant way to have your project run on
+multiple computers across multiple collaborators is to use a version
+control system, such as GitHub…</em></p>
+<p><br></p>
 </div>
 </div>
 <div id="version-control-and-collaboration-using-git-and-github"
@@ -497,6 +541,7 @@ another way of saying <em>project directory</em>).</p>
 <p><strong><em>GitHub</em></strong> is a service that facilitates
 Git-based projects. There are other popular similar services, such as
 Bitbucket and GitLab</p>
+<p><br></p>
 <div id="why-are-we-using-version-control-and-github"
 class="section level3">
 <h3>3.1. Why are we using version control and GitHub</h3>
@@ -516,8 +561,9 @@ repository, then you can share it with colleagues. Likewise, you can
 <em>fork</em> any other public repository–this is increasingly the way
 people disseminate new software or packages for cutting-edge analysis
 techniques.</p></li>
-<li><p><strong>You’ll impress people!</strong></p></li>
+<li><p>It could be a nice thing to add to your CV</p></li>
 </ul>
+<p><br></p>
 </div>
 <div
 id="set-up-a-github-repository-for-this-course-and-set-it-up-to-talk-to-rstudio"
@@ -532,9 +578,26 @@ git with R website, here</a></em></p>
 <h3>3.2.1. Create a GitHub account</h3>
 <p>Go to <a href="https://github.com/">github.com</a> and sign up for an
 account.</p>
+<p><br></p>
 </div>
-<div id="check-if-you-have-git-installed" class="section level3">
-<h3>3.2.2 Check if you have Git installed</h3>
+<div id="install-a-git-client" class="section level3">
+<h3>3.2.2. Install a Git Client</h3>
+<p>There are many Git clients out there. Personally, I just use <a
+href="https://desktop.github.com/">GitHub Desktop</a> <img
+src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
+<p>Git Clients provide a graphical user interface (GUI) that facilitates
+the processes of committing, pushing, pulling and other tasks. It also
+allows you to see the history of changes to your repository.</p>
+<p>To install GitHub Desktop, go to <a
+href="https://desktop.github.com/"
+class="uri">https://desktop.github.com/</a> and follow their
+directions.</p>
+<p><br></p>
+</div>
+<div id="check-if-you-now-have-git-installed" class="section level3">
+<h3>3.2.3 Check if you now have Git installed</h3>
+<p>If you’ve installed a Git Client, it probably installed Git on your
+computer also. But let’s check to make sure.</p>
 <p>The simplest way to do this is use the <strong>Shell</strong> on your
 computer. You have this already, whether or not you know it.</p>
 <ul>
@@ -557,15 +620,7 @@ this, with a black background and courier or monaco font.k</p>
 <p>Now check the version:</p>
 <pre eval="F"><code>git --version</code></pre>
 <p>It should give you the version number.</p>
-</div>
-<div id="install-a-git-client" class="section level3">
-<h3>3.2.3. Install a Git Client</h3>
-<p>There are many Git clients out there. Personally, I just use <a
-href="https://desktop.github.com/">GitHub Desktop</a> <img
-src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
-<p>Git Clients provide a graphical user interface (GUI) that facilitates
-the processes of committing, pushing, pulling and other tasks. It also
-allows you to see the history of changes to your repository.</p>
+<p><br></p>
 </div>
 <div id="create-a-personal-access-token-on-github"
 class="section level3">
@@ -588,15 +643,37 @@ TOKEN</strong>.</li>
 avatar on the top-right corner, then go to Settings &gt; Developer
 settings (at the very bottom) &gt; Personal access tokens &gt; Tokens
 (classic))</em></p>
+<p><br></p>
 </div>
-<div id="make-a-repository-repo-on-the-course-organization-on-github."
-class="section level3">
-<h3>3.2.5. Make a repository (“repo”) on the “course organization” on
-GitHub.</h3>
-<p>Log into the BIOS967 organization on github here: <a
-href="https://github.com/BIOS967">https://github.com/BIOS967</a> (if you
-are doing this in the course right now. If you’re just doing this
-independently, you can just log into github normally.</p>
+<div id="clone-a-repository" class="section level3">
+<h3>3.2.5. Clone a repository</h3>
+<p>Go to the BIOS967 organization on GitHub: <a
+href="https://github.com/BIOS967"
+class="uri">https://github.com/BIOS967</a></p>
+<p>At the top of the page, click on “Repositories”</p>
+<p>Click on “BIOS967_Fall2023” (for the Fall 2023 semester)</p>
+<p>Now, click on the green button that says “&lt;&gt;Code”</p>
+<p>Copy the clone URL to your clipboard. Use the HTTPS URL.</p>
+<p><img src="images/Github_clone.png" /> In RStudio, start a new
+project: File &gt; New Project &gt; Version Control &gt; Git. In
+“Repository URL”, paste the URL of your new GitHub repository.</p>
+<p>Determine where your project will be saved locally. Be intentional. I
+have all of my GitHub repositories saved in my Documents folder in a
+subfolder called “GitHub”.</p>
+<p>Check “Open in new session”</p>
+<p>Click “Create Project”.</p>
+<p><strong>At some point in this process, you will be asked to
+authenticate. At that point, you will enter your GitHub account name,
+and then enter the Personal Access Token that you created in step
+3.2.4.</strong></p>
+</div>
+<div id="make-a-repository-repo-on-on-github." class="section level3">
+<h3>3.2.6. Make a repository (“repo”) on on GitHub.</h3>
+<p><strong>If you are doing this for the BIOS967 course, log into the
+BIOS967 organization on github here: <a
+href="https://github.com/BIOS967">https://github.com/BIOS967</a>. If
+you’re just doing this independently, you can just log into github
+normally.</strong></p>
 <p>click on “Repositories” on the top ribbon</p>
 <p>Then click the big green “New repository” button</p>
 <ul>
@@ -609,26 +686,9 @@ it!</em></li>
 <li>Initialize this repository with: Check Add a README file.</li>
 </ul>
 <p>Click on “Create Repository”</p>
-<p>Now, click on the green button that says “&lt;&gt;Code”</p>
-<p>Copy the clone URL to your clipboard. Use the HTTPS URL.</p>
-<p><img src="images/github-https-or-ssh-url-annotated.png"
-style="width:50.0%" /></p>
-</div>
-<div id="clone-the-github-repository-to-your-computer-via-rstudio"
-class="section level3">
-<h3>3.2.6. Clone the GitHub repository to your computer via RStudio</h3>
-<p>In RStudio, start a new project: File &gt; New Project &gt; Version
-Control &gt; Git. In “Repository URL”, paste the URL of your new GitHub
-repository.</p>
-<p>Determine where your project will be saved locally. Be intentional. I
-have all of my GitHub repositories saved in my Documents folder in a
-subfolder called “GitHub”.</p>
-<p>Check “Open in new session”</p>
-<p>Click “Create Project”.</p>
-<p><strong>At some point in this process, you will be asked to
-authenticate. At that point, you will enter your GitHub account name,
-and then enter the Personal Access Token that you created in step
-3.2.4.</strong></p>
+<p>Now, clone the repository on your computer following the directions
+in section 3.2.5 above.</p>
+<p><br></p>
 </div>
 </div>
 <div id="working-with-github-pull-stage-commit-push"

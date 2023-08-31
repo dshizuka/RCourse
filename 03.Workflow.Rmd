@@ -1,5 +1,5 @@
 ---
-title: "Module 3: File Organization with RStudio Projects, Version Control, and GitHub Workflow"
+title: "File Organization with RStudio Projects, Version Control, and GitHub Workflow"
 subtitle: "BIOS 967: Intro to R for Biologists"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
@@ -73,7 +73,7 @@ Additionally, I highly recommend that this "project directory" folder includes a
 
 Setting up a project directory in this way allows you to keep everything organized and up to date, and it also helps with collaborations or sharing code, because it is easy to follow where things are. It is also nice for your "future self"--if you come back to a project after some time, it is easy to pick up where you left off without wondering where you left all of the relevant files. 
 
-Finally, the more important reason to set up an Rstudio project folder is that it will allow anyone to run the code you are developing in this folder because you all of your pathnames will be "relative" to the parent directory. By using "relative path" names in your code, it becomes much more reproducible and enables collaboration. 
+Finally, the more important reason to set up an Rstudio project folder is that it will allow anyone to run the code you are developing in this folder because you all of your pathnames will be "relative" to the parent directory. By using *relative path* names in your code, it becomes much more reproducible and enables collaboration. 
 
 ### 2.1. Setting up a new Rstudio project folder
 
@@ -91,18 +91,41 @@ Here is what I recommend for every project you start:
 
 5. Open that .rproj file. This will open up a new RStudio window. 
 
-6. 
-
 Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
 
-Try this out by saving a pre-loaded data frame as a spreadsheet file:
-Here, we'll save the "iris" data set as a .csv file.
+Let's try this out:
 
+* Go find the "SampleData.csv" file that you downloaded earlier and drop it into a subfolder called "data" in your "trial" project folder. 
+![](images/screen_trial.png)
+
+* Now click on the "refresh" button ![](images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window 
+
+You should now see that there is a "data" folder in your project directory, and that "SampleData.csv" is in that folder. 
+
+Now, you can use `read.csv()` again to read your file. But this time, you only need a *relative pathname*--that is, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
+
+Let's call this version of the data `dat2`
 ```{r}
-write.csv(iris, file="iris.csv")
+dat2=read.csv("data/SampleData.csv")
 ```
 
-You see this new .csv file in your project folder. 
+```{r}
+dat2
+```
+
+The beauty of this system is that, as long as the project directory structure is the same the computer, you can run this exact same code to import the data on any computer. In turn, that means that this entire project and code are portable in multiple ways. You could:
+
+* send a collaborator your whole project directory, or
+
+* copy the project directory on a thumbdrive, or
+
+* sync the project directory on DropBox, OneDrive, or other cloud storage that syncs with multiple computers...
+
+and you should be able to run the code as-is.
+
+*However, the most elegant way to have your project run on multiple computers across multiple collaborators is to use a version control system, such as GitHub...*
+
+<br>
 
 ## 3. Version control and collaboration using Git and GitHub ![](images/github-mark.png){width=10%}
 
@@ -112,6 +135,8 @@ You see this new .csv file in your project folder.
 
 ***GitHub*** is a service that facilitates Git-based projects. There are other popular similar services, such as Bitbucket and GitLab 
 
+<br>
+
 ### 3.1. Why are we using version control and GitHub
 
 * For practical purposes, **this system will help me teach this class**. If we do this right, it will help tremendously with the process of troubleshooting your code when we get to independent projects! It will allow me to access your projects on my computer, help make edits, and keep track of those edits. 
@@ -120,7 +145,9 @@ You see this new .csv file in your project folder.
 
 * It will expand the scope of your work. Once you make a project repository, you can make it private or public. If you make a public repository, then you can share it with colleagues. Likewise, you can *fork* any other public repository--this is increasingly the way people disseminate new software or packages for cutting-edge analysis techniques. 
 
-* **You'll impress people!** 
+* It could be a nice thing to add to your CV
+
+<br>
 
 ### 3.2. Set up a GitHub repository for this course, and set it up to talk to Rstudio
 
@@ -130,7 +157,21 @@ You see this new .csv file in your project folder.
 
 Go to [github.com](https://github.com/) and sign up for an account.
 
-### 3.2.2 Check if you have Git installed
+<br>
+
+### 3.2.2. Install a Git Client
+
+There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
+
+Git Clients provide a graphical user interface (GUI) that facilitates the processes of committing, pushing, pulling and other tasks. It also allows you to see the history of changes to your repository.
+
+To install GitHub Desktop, go to https://desktop.github.com/ and follow their directions.
+
+<br>
+
+### 3.2.3 Check if you now have Git installed
+
+If you've installed a Git Client, it probably installed Git on your computer also. But let's check to make sure.
 
 The simplest way to do this is use the **Shell** on your computer. You have this already, whether or not you know it. 
 
@@ -164,11 +205,7 @@ git --version
 ```
 It should give you the version number. 
 
-### 3.2.3. Install a Git Client
-
-There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
-
-Git Clients provide a graphical user interface (GUI) that facilitates the processes of committing, pushing, pulling and other tasks. It also allows you to see the history of changes to your repository.
+<br>
 
 ### 3.2.4. Create a Personal Access Token on GitHub
 
@@ -178,10 +215,37 @@ When linking a GitHub repository with Rstudio, you will need to be able to authe
 
 *(The longer way to go is to sign in to github, Click on your avatar on the top-right corner, then go to Settings > Developer settings (at the very bottom) > Personal access tokens > Tokens (classic))*
 
-### 3.2.5. Make a repository ("repo") on the "course organization" on GitHub.
+<br>
 
-Log into the BIOS967 organization on github here: [https://github.com/BIOS967](https://github.com/BIOS967) (if you are doing this in the course right now. If you're just doing this independently, you can just log into github normally. 
+### 3.2.5. Clone a repository
 
+Go to the BIOS967 organization on GitHub: https://github.com/BIOS967
+
+At the top of the page, click on "Repositories"
+
+Click on "BIOS967_Fall2023" (for the Fall 2023 semester)
+
+Now, click on the green button that says "<>Code"
+
+Copy the clone URL to your clipboard. Use the HTTPS URL. 
+
+![](images/Github_clone.png)
+In RStudio, start a new project:
+File > New Project > Version Control > Git. In “Repository URL”, paste the URL of your new GitHub repository. 
+
+Determine where your project will be saved locally. Be intentional. I have all of my GitHub repositories saved in my Documents folder in a subfolder called "GitHub". 
+
+Check "Open in new session"
+
+Click "Create Project".
+
+**At some point in this process, you will be asked to authenticate. At that point, you will enter your GitHub account name, and then enter the Personal Access Token that you created in step 3.2.4.**
+
+<br>
+
+### 3.2.6. Make a repository ("repo") on on GitHub.
+
+**If you are doing this for the BIOS967 course, log into the BIOS967 organization on github here: [https://github.com/BIOS967](https://github.com/BIOS967). If you're just doing this independently, you can just log into github normally.**
 
 click on “Repositories” on the top ribbon
 
@@ -193,24 +257,9 @@ Then click the big green “New repository” button
 
 Click on "Create Repository"
 
-Now, click on the green button that says "<>Code"
+Now, clone the repository on your computer following the directions in section 3.2.5 above. 
 
-Copy the clone URL to your clipboard. Use the HTTPS URL. 
-
-![](images/github-https-or-ssh-url-annotated.png){width=50%}
-
-### 3.2.6. Clone the GitHub repository to your computer via RStudio
-
-In RStudio, start a new project:
-File > New Project > Version Control > Git. In “Repository URL”, paste the URL of your new GitHub repository. 
-
-Determine where your project will be saved locally. Be intentional. I have all of my GitHub repositories saved in my Documents folder in a subfolder called "GitHub". 
-
-Check "Open in new session"
-
-Click "Create Project".
-
-**At some point in this process, you will be asked to authenticate. At that point, you will enter your GitHub account name, and then enter the Personal Access Token that you created in step 3.2.4.**
+<br>
 
 ## 4. Working with GitHub: Pull, Stage, Commit, Push 
 
