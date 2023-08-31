@@ -344,21 +344,33 @@ div.tocify {
 Projects, Version Control, and GitHub Workflow</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/24/23</h4>
+<h4 class="date">updated 08/31/23</h4>
 
 </div>
 
 
-<p><em>Note: You can get a lot of this information from Hadley Wickham’s
-“R for Data Science” book, Chapter 8: <a
+<p><br></p>
+<p><strong><em>Note: You can get a lot of this information from Hadley
+Wickham’s “R for Data Science” book, Chapter 8: <a
 href="https://r4ds.had.co.nz/workflow-projects.html">here</a>, and the
 <a href="https://happygitwithr.com/">https://happygitwithr.com/</a>
-tutorials.</em></p>
+tutorials.</em></strong></p>
+<p><br></p>
+<blockquote>
+<p><span style="color:purple"><strong>Do this before you start this
+section!</strong></span></p>
+<ul>
+<li>Click on the following link to download this file: <a
+href="data/SampleData.csv">SampleData.csv</a></li>
+<li>Save this file somewhere on your computer where you can find
+it.</li>
+</ul>
+</blockquote>
 <div
-id="navigating-folders-and-files-using-absolute-paths-but-dont-do-this"
+id="navigating-folders-and-files-using-absolute-pathnames-to-read-a-file-but-never-do-this-again"
 class="section level2">
-<h2>1. Navigating folders and files using absolute paths (but don’t do
-this!)</h2>
+<h2>1. Navigating folders and files using absolute pathnames to read a
+file (but never do this again!)</h2>
 <p>As explained in the previous module, the Working Directory defines
 where R will look for files, or where it will save files that you
 generate. R uses pathnames to arrange these files (as do all programming
@@ -375,12 +387,46 @@ look like this: <code>/Users/daishizuka/Desktop/data.csv</code></p>
 desktop of one of my lab computers (Windows), the path name might look
 like this: <code>C:\Users\ShizukaLab\Desktop\data.csv</code></p>
 <p>This means that if your code script references this dataset, you
-can’t just run the same code to import data on different computers. Now,
-this might not feel like a big problem for you if you plan to do all of
-your analyses on your own computer, and you know where all the files on
-your computer are. HOWEVER, this is a major hindrance to collaboration.
-Also, it is a major hindrance to me teaching this class, as I can’t
-easily try out your code to help you troubleshoot.</p>
+can’t just run the same code to import data on different computers.</p>
+<p>To demonstrate this, let’s try importing the sample data file that
+you downloaded at the top of this page.</p>
+<ul>
+<li><p>Find the file on your computer.</p></li>
+<li><p>If you are on a Mac, Right-click (or Control-click) on the file
+to bring up a menu, then click “Option”. This should give you a menu
+item that says “Copy ‘sample.csv’ as Pathname”. Click on that.</p></li>
+<li><p>If you are on Windows, Right-Click on the file and choose
+“Properties”. In the Properties window, you will see the pathname under
+“Location”. Copy the pathname.</p></li>
+<li><p>Now, run this code to read in the data file and look at it in R.
+Here, you are going to assign the data to an object called “dat”. Note
+that inside the <code>read.csv()</code> function, the pathname has to be
+in quotes. You have to use the pathname for the file ON YOUR
+COMPUTER.</p></li>
+</ul>
+<pre class="r"><code>#For my computer, it would be this. Remember to replace the pathname with how it appears on your computer.
+dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre>
+<p>Now let’s look at the data, simply by running <code>dat</code></p>
+<pre class="r"><code>dat</code></pre>
+<pre><code>##    Indiv.ID    sex      age size weight
+## 1     20-01   male    adult 29.5   66.5
+## 2     20-02   male juvenile 28.0   58.5
+## 3     20-03 female    adult 26.0   57.0
+## 4     20-04 female    adult 25.0   55.5
+## 5     20-05 female juvenile 25.0   62.0
+## 6     20-06   male juvenile 28.0   61.0
+## 7     20-07 female    adult 26.0   58.0
+## 8     20-08   male    adult 28.5   65.0
+## 9     20-09   male juvenile 27.5   60.0
+## 10    20-10 female juvenile 26.0   59.0
+## 11    20-11   male    adult 25.5   62.0
+## 12    20-12 female    adult 27.0   59.0
+## 13    20-13 female    adult 26.5   60.0</code></pre>
+<p>Now, this might not feel like a big problem for you if you plan to do
+all of your analyses on your own computer, and you know where the file
+will always be on your computer. HOWEVER, this is a major hindrance to
+collaboration. Also, it is a major hindrance to me teaching this class,
+as I can’t easily try out your code to help you troubleshoot.</p>
 <p>That’s where RStudio Projects come in…</p>
 </div>
 <div id="using-rstudio-projects-and-organizing-your-files."
