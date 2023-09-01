@@ -290,7 +290,7 @@ Now, clone the repository on your computer following the directions in section 3
 
 <br>
 
-### 3.5. Using a Git Client
+### 3.5. Using a Git Client (as another option)
 
 There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
 
@@ -300,18 +300,23 @@ To install GitHub Desktop, go to https://desktop.github.com/ and follow their di
 
 <br>
 
-#### 3.5.1. Opening your repository in GitHub Desktop
+#### 3.5.1. Opening your repository in GitHub Desktop 
 
-Let's open a repository on GitHub Desktop. Here, we'll start by using a repository that you've already cloned onto your computer.
+Let's open a repository on GitHub Desktop. Here, we'll start by using a repository that you've already cloned onto your computer. Then, on the right-hand side, you will be able to push the commit(s) to GitHub. 
 
 * Open GitHub Desktop and go to File > Add Local Repository. 
 
 * When it asks for the local path, click Choose and find the folder for BIOS967_Fall2023 repository that you downloaded earlier (or equivalent for the semester you're in).
 
-Once you do this, any changes you make to your local files that are not yet pushed to GitHub will appear on the right-hand side of the window. 
-
 
 #### 3.5.2. Using a GitHub Desktop to Pull, Commit and Push.
+
+Once the local repository is added, any changes you make to your local files that are not yet pushed to GitHub will appear on the right-hand side of the window, and a list of changes will appear on the left-hand side. You can choose all or some of the changes and write a commit message and commit. 
+
+If you want to pull from GitHub, click "Fetch from Origin" on the top right-hand corner. If there are any changes to pull, then it will give you that option. 
+
+If you try it, you might find that you like this interface better than pull-commit-pushing from within RStudio. You are free to do it this way. It's just that it will require to have both RStudio and GitHub Desktop apps open to update your codes. Ultimately, you should choose the way that makes the most sense to you.
+
 
 
 
