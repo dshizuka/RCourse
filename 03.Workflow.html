@@ -14,7 +14,7 @@
 
 <title>File Organization with RStudio Projects, Version Control, and GitHub Workflow</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -405,7 +405,7 @@ in quotes. You have to use the pathname for the file ON YOUR
 COMPUTER.</p></li>
 </ul>
 <pre class="r"><code>#For my computer, it would be this. Remember to replace the pathname with how it appears on your computer.
-dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre>
+dat=read.csv(&quot;/Users/dshizuka/Downloads/SampleData.csv&quot;)</code></pre>
 <p>Now let’s look at the data, simply by running <code>dat</code></p>
 <pre class="r"><code>dat</code></pre>
 <pre><code>##    Indiv.ID    sex      age size weight
@@ -565,66 +565,37 @@ techniques.</p></li>
 </ul>
 <p><br></p>
 </div>
-<div
-id="set-up-a-github-repository-for-this-course-and-set-it-up-to-talk-to-rstudio"
+<div id="clone-a-github-repository-and-set-it-up-to-talk-to-rstudio"
 class="section level3">
-<h3>3.2. Set up a GitHub repository for this course, and set it up to
-talk to Rstudio</h3>
+<h3>3.2. Clone a GitHub repository and set it up to talk to Rstudio</h3>
 <p><em>Here, we are following the directions on <a
-href="https://happygitwithr.com/install-git">Chapter 6-13 of the Happy
-git with R website, here</a></em></p>
+href="https://happygitwithr.com/">Chapter 6-13 of the Happy git with R
+website, here</a></em></p>
+<div id="install-git" class="section level4">
+<h4>3.2.1. Install Git</h4>
+<p>Here, I highly recommend following the directions on Chapter 6 of
+Happy Git with R: <a href="https://happygitwithr.com/install-git"
+class="uri">https://happygitwithr.com/install-git</a></p>
+<p>To take from their directions:</p>
+<ul>
+<li><p>If you are using Mac, download XCode from the App store or here:
+<a href="https://developer.apple.com/xcode/"
+class="uri">https://developer.apple.com/xcode/</a>. This includes Git
+and also may come in handy later.</p></li>
+<li><p>If you are using Windows, download <a
+href="https://gitforwindows.org/">Git for Windows</a></p></li>
+</ul>
+<p><br></p>
 </div>
-<div id="create-a-github-account" class="section level3">
-<h3>3.2.1. Create a GitHub account</h3>
+<div id="create-a-github-account" class="section level4">
+<h4>3.2.2. Create a GitHub account</h4>
 <p>Go to <a href="https://github.com/">github.com</a> and sign up for an
 account.</p>
 <p><br></p>
 </div>
-<div id="install-a-git-client" class="section level3">
-<h3>3.2.2. Install a Git Client</h3>
-<p>There are many Git clients out there. Personally, I just use <a
-href="https://desktop.github.com/">GitHub Desktop</a> <img
-src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
-<p>Git Clients provide a graphical user interface (GUI) that facilitates
-the processes of committing, pushing, pulling and other tasks. It also
-allows you to see the history of changes to your repository.</p>
-<p>To install GitHub Desktop, go to <a
-href="https://desktop.github.com/"
-class="uri">https://desktop.github.com/</a> and follow their
-directions.</p>
-<p><br></p>
-</div>
-<div id="check-if-you-now-have-git-installed" class="section level3">
-<h3>3.2.3 Check if you now have Git installed</h3>
-<p>If you’ve installed a Git Client, it probably installed Git on your
-computer also. But let’s check to make sure.</p>
-<p>The simplest way to do this is use the <strong>Shell</strong> on your
-computer. You have this already, whether or not you know it.</p>
-<ul>
-<li>On a Mac, search for “Terminal” on your computer. You can either
-look in the Applications folder or search for “Terminal.app” in
-Spotlight</li>
-</ul>
-<p><img src="images/Spotlight_terminal.png" style="width:50.0%" /></p>
-<ul>
-<li>On a Windows computer, search for “Shell”</li>
-</ul>
-<p>Either way, the Shell/Terminal window often looks something like
-this, with a black background and courier or monaco font.k</p>
-<p><img src="images/Shell_window.png" style="width:50.0%" /></p>
-<p>Then type in this window:</p>
-<pre eval="F"><code>which git</code></pre>
-<p>If it responds with something like:</p>
-<pre><code>## /usr/bin/git</code></pre>
-<p>then it means you have Git installed already.</p>
-<p>Now check the version:</p>
-<pre eval="F"><code>git --version</code></pre>
-<p>It should give you the version number.</p>
-<p><br></p>
-</div>
 <div id="create-a-personal-access-token-on-github"
-class="section level3">
-<h3>3.2.4. Create a Personal Access Token on GitHub</h3>
+class="section level4">
+<h4>3.2.3. Create a Personal Access Token on GitHub</h4>
 <p>When linking a GitHub repository with Rstudio, you will need to be
 able to authenticate your connection. To increase security, GitHub no
 longer supports access using a simple password. Instead, it requires you
@@ -645,8 +616,8 @@ settings (at the very bottom) &gt; Personal access tokens &gt; Tokens
 (classic))</em></p>
 <p><br></p>
 </div>
-<div id="clone-a-repository" class="section level3">
-<h3>3.2.5. Clone a repository</h3>
+<div id="clone-a-repository" class="section level4">
+<h4>3.2.4. Clone a repository</h4>
 <p>Go to the BIOS967 organization on GitHub: <a
 href="https://github.com/BIOS967"
 class="uri">https://github.com/BIOS967</a></p>
@@ -654,9 +625,10 @@ class="uri">https://github.com/BIOS967</a></p>
 <p>Click on “BIOS967_Fall2023” (for the Fall 2023 semester)</p>
 <p>Now, click on the green button that says “&lt;&gt;Code”</p>
 <p>Copy the clone URL to your clipboard. Use the HTTPS URL.</p>
-<p><img src="images/Github_clone.png" /> In RStudio, start a new
-project: File &gt; New Project &gt; Version Control &gt; Git. In
-“Repository URL”, paste the URL of your new GitHub repository.</p>
+<p><img src="images/Github_clone.png" /></p>
+<p>In RStudio, start a new project: File &gt; New Project &gt; Version
+Control &gt; Git. In “Repository URL”, paste the URL of your new GitHub
+repository.</p>
 <p>Determine where your project will be saved locally. Be intentional. I
 have all of my GitHub repositories saved in my Documents folder in a
 subfolder called “GitHub”.</p>
@@ -666,34 +638,22 @@ subfolder called “GitHub”.</p>
 authenticate. At that point, you will enter your GitHub account name,
 and then enter the Personal Access Token that you created in step
 3.2.4.</strong></p>
-</div>
-<div id="make-a-repository-repo-on-on-github." class="section level3">
-<h3>3.2.6. Make a repository (“repo”) on on GitHub.</h3>
-<p><strong>If you are doing this for the BIOS967 course, log into the
-BIOS967 organization on github here: <a
-href="https://github.com/BIOS967">https://github.com/BIOS967</a>. If
-you’re just doing this independently, you can just log into github
-normally.</strong></p>
-<p>click on “Repositories” on the top ribbon</p>
-<p>Then click the big green “New repository” button</p>
-<ul>
-<li>Repository name: <code>BIOS967_YourLastName_YourFirstName</code>
-<strong><em>please follow this template for naming your repository–this
-allows me to easily find your repo on my end</em></strong></li>
-<li>Preferably, select “Public”. <em>But if you select “Private”, you
-will then have to add me to the repository once you’ve created
-it!</em></li>
-<li>Initialize this repository with: Check Add a README file.</li>
-</ul>
-<p>Click on “Create Repository”</p>
-<p>Now, clone the repository on your computer following the directions
-in section 3.2.5 above.</p>
+<p>Congratulations! Now you have successfully cloned a GitHub repository
+on your computer.</p>
+<p>This means that, whenever I make an update or create new files on
+this repository, you can download those changes by “pulling” this
+repository.</p>
+<p>Let’s try that out. I’m going to make some change on the repository
+and upload (“commit” and “push”) those changes up to GitHub. Then, I
+want you to “pull” those changes.</p>
+<p>To pull changes from a GitHub repository, click on the “Git” tab on
+the top right window in Rstudio, and click the “Pull” button.</p>
 <p><br></p>
 </div>
 </div>
 <div id="working-with-github-pull-stage-commit-push"
-class="section level2">
-<h2>4. Working with GitHub: Pull, Stage, Commit, Push</h2>
+class="section level3">
+<h3>3.3. Working with GitHub: Pull, Stage, Commit, Push</h3>
 <p>Once you have finished the set up process, you are ready to start
 your workflow!</p>
 <p>First, notice that you should now have a tab called “Git” in the
@@ -735,8 +695,8 @@ collaborators) to understand what changes you have made.</p></li>
 are ready to <strong>push</strong> those changes onto your remote
 repository–i.e., the copy that is stored in GitHub.</p></li>
 </ul>
-<div id="pull-from-the-repository" class="section level3">
-<h3>4.1. Pull from the repository</h3>
+<div id="pull-from-the-repository" class="section level4">
+<h4>3.3.1. Pull from the repository</h4>
 <p>First, click “Pull” in the Git window. This will pull any changes
 that are stored in the remote directory (i.e., on GitHub) that you don’t
 already have on your local version.</p>
@@ -744,8 +704,8 @@ already have on your local version.</p>
 <p>It will most likely say “You are already up to date”. But again, get
 in the habit of doing this when you open your project.</p>
 </div>
-<div id="make-some-changes" class="section level3">
-<h3>4.2. Make some changes</h3>
+<div id="make-some-changes" class="section level4">
+<h4>3.3.2. Make some changes</h4>
 <p>Now you can make any change on your project. Let’s just start by
 editing the readme file.</p>
 <p>On the bottom right window, click on the “Files” tab and select the
@@ -755,8 +715,8 @@ readme.txt file.</p>
 <p>Now go to the Git window (top right window). You should see the
 change reflected in the window.</p>
 </div>
-<div id="commit-changes" class="section level3">
-<h3>4.3. Commit changes</h3>
+<div id="commit-changes" class="section level4">
+<h4>3.3.3. Commit changes</h4>
 <p>Click on “Commit” in the Git window</p>
 <p>A new window will pop out. Check all the boxes that represent each
 change you’ve made.</p>
@@ -764,10 +724,52 @@ change you’ve made.</p>
 “add a line to readme file”.</p>
 <p>Press “Commit”.</p>
 </div>
-<div id="push-changes-to-github." class="section level3">
-<h3>4.4. Push changes to GitHub.</h3>
+<div id="push-changes-to-github." class="section level4">
+<h4>3.3.4. Push changes to GitHub.</h4>
 <p>Click “Push” to upload the changes to the remote repository on
 GitHub.</p>
+<p><br></p>
+</div>
+</div>
+<div
+id="make-a-repository-repo-on-on-github-and-clone-it-to-your-computer."
+class="section level3">
+<h3>3.4. Make a repository (“repo”) on on GitHub and clone it to your
+computer.</h3>
+<p><strong>If you are doing this for the BIOS967 course, log into the
+BIOS967 organization on github here: <a
+href="https://github.com/BIOS967">https://github.com/BIOS967</a>. If
+you’re just doing this independently, you can just log into github
+normally.</strong></p>
+<p>click on “Repositories” on the top ribbon</p>
+<p>Then click the big green “New repository” button</p>
+<ul>
+<li>Repository name: <code>BIOS967_YourLastName_YourFirstName</code>
+<strong><em>please follow this template for naming your repository–this
+allows me to easily find your repo on my end</em></strong></li>
+<li>Preferably, select “Public”. <em>But if you select “Private”, you
+will then have to add me to the repository once you’ve created
+it!</em></li>
+<li>Initialize this repository with: Check Add a README file.</li>
+</ul>
+<p>Click on “Create Repository”</p>
+<p>Now, clone the repository on your computer following the directions
+in section 3.2.5 above.</p>
+<p><br></p>
+</div>
+<div id="using-a-git-client" class="section level3">
+<h3>3.5. Using a Git Client</h3>
+<p>There are many Git clients out there. Personally, I just use <a
+href="https://desktop.github.com/">GitHub Desktop</a> <img
+src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
+<p>Git Clients provide a graphical user interface (GUI) that facilitates
+the processes of committing, pushing, pulling and other tasks. It also
+allows you to see the history of changes to your repository.</p>
+<p>To install GitHub Desktop, go to <a
+href="https://desktop.github.com/"
+class="uri">https://desktop.github.com/</a> and follow their
+directions.</p>
+<p><br></p>
 </div>
 </div>
 
