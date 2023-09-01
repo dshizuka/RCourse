@@ -300,5 +300,18 @@ To install GitHub Desktop, go to https://desktop.github.com/ and follow their di
 
 <br>
 
+#### 3.5.1. Opening your repository in GitHub Desktop
+
+Let's open a repository on GitHub Desktop. Here, we'll start by using a repository that you've already cloned onto your computer.
+
+* Open GitHub Desktop and go to File > Add Local Repository. 
+
+* When it asks for the local path, click Choose and find the folder for BIOS967_Fall2023 repository that you downloaded earlier (or equivalent for the semester you're in).
+
+Once you do this, any changes you make to your local files that are not yet pushed to GitHub will appear on the right-hand side of the window. 
+
+
+#### 3.5.2. Using a GitHub Desktop to Pull, Commit and Push.
+
 
 
