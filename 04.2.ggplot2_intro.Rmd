@@ -70,13 +70,13 @@ We can break down the layers of any graphic to different components (see [this p
 
 1. The **data**
 
-2. The **geom, or geometric object**: the type of visual object you want to make
-
 2. **Mapping**: how the variables in the data are converted to "aesthetics" of the figure
 
-3. **Scaling:** i.e., how different values of variables are represented
+3. The **geom, or geometric object**: the type of visual object you want to make
 
-4. **Faceting:** i.e., representing subsets of data as subplots
+4. **Scaling:** i.e., how different values of variables are represented
+
+5. **Faceting:** i.e., representing subsets of data as subplots
 
 ### 3.2. The basic workflow of ggplot2
 
