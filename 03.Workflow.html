@@ -14,7 +14,7 @@
 
 <title>File Organization with RStudio Projects, Version Control, and GitHub Workflow</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -344,7 +344,7 @@ div.tocify {
 Version Control, and GitHub Workflow</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/31/23</h4>
+<h4 class="date">updated 09/21/23</h4>
 
 </div>
 
@@ -405,7 +405,7 @@ in quotes. You have to use the pathname for the file ON YOUR
 COMPUTER.</p></li>
 </ul>
 <pre class="r"><code>#For my computer, it would be this. Remember to replace the pathname with how it appears on your computer.
-dat=read.csv(&quot;/Users/dshizuka/Downloads/SampleData.csv&quot;)</code></pre>
+dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre>
 <p>Now let’s look at the data, simply by running <code>dat</code></p>
 <pre class="r"><code>dat</code></pre>
 <pre><code>##    Indiv.ID    sex      age size weight
@@ -731,32 +731,6 @@ GitHub.</p>
 <p><br></p>
 </div>
 </div>
-<div
-id="make-a-repository-repo-on-on-github-and-clone-it-to-your-computer."
-class="section level3">
-<h3>3.4. Make a repository (“repo”) on on GitHub and clone it to your
-computer.</h3>
-<p><strong>If you are doing this for the BIOS967 course, log into the
-BIOS967 organization on github here: <a
-href="https://github.com/BIOS967">https://github.com/BIOS967</a>. If
-you’re just doing this independently, you can just log into github
-normally.</strong></p>
-<p>click on “Repositories” on the top ribbon</p>
-<p>Then click the big green “New repository” button</p>
-<ul>
-<li>Repository name: <code>BIOS967_YourLastName_YourFirstName</code>
-<strong><em>please follow this template for naming your repository–this
-allows me to easily find your repo on my end</em></strong></li>
-<li>Preferably, select “Public”. <em>But if you select “Private”, you
-will then have to add me to the repository once you’ve created
-it!</em></li>
-<li>Initialize this repository with: Check Add a README file.</li>
-</ul>
-<p>Click on “Create Repository”</p>
-<p>Now, clone the repository on your computer following the directions
-in section 3.2.5 above.</p>
-<p><br></p>
-</div>
 <div id="using-a-git-client-as-another-option" class="section level3">
 <h3>3.5. Using a Git Client (as another option)</h3>
 <p>There are many Git clients out there. Personally, I just use <a
@@ -800,8 +774,49 @@ than pull-commit-pushing from within RStudio. You are free to do it this
 way. It’s just that it will require to have both RStudio and GitHub
 Desktop apps open to update your codes. Ultimately, you should choose
 the way that makes the most sense to you.</p>
+<p><br></p>
 </div>
 </div>
+</div>
+<div
+id="make-a-repository-for-your-independent-project-on-on-github-and-clone-it-to-your-computer."
+class="section level2">
+<h2>4. Make a repository for your independent project on on GitHub and
+clone it to your computer.</h2>
+<ul>
+<li><p>Log in to your GitHub account</p></li>
+<li><p>click on “Repositories” on the top ribbon</p></li>
+<li><p>Then click the big green “New repository” button</p>
+<ul>
+<li><p>Repository name: <code>YourLastName_YourProjectName</code>
+<strong><em>please follow this template for naming your repository–this
+allows me to easily find your repo on my end</em></strong></p></li>
+<li><p>Preferably, select “Public”. <em>But if you select “Private”, you
+will then have to add me to the repository once you’ve created
+it!</em></p></li>
+<li><p>Initialize this repository with: Check Add a README
+file.</p></li>
+</ul></li>
+<li><p>Click on “Create Repository”</p></li>
+<li><p>Now, clone the repository on your computer following the
+directions in section 3.2.5 above.</p></li>
+<li><p>Finally, add me as a collaborator on your project.</p>
+<ul>
+<li>First, go to your repository and click on “Settings”</li>
+</ul></li>
+</ul>
+<p><img src="images/GitHub_1.png" /></p>
+<p><br></p>
+<ul>
+<li>Then, click on “Collaborators” on the navigation panel on the left
+side</li>
+</ul>
+<p><img src="images/GitHub_2.png" /> <br></p>
+<ul>
+<li>Click on “Add People” and add “dshizuka”.</li>
+</ul>
+<p><img src="images/GitHub_3.png" /></p>
+<p><br></p>
 </div>
 
 

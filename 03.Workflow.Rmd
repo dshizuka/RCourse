@@ -53,7 +53,7 @@ To demonstrate this, let's try importing the sample data file that you downloade
 
 ```{r}
 #For my computer, it would be this. Remember to replace the pathname with how it appears on your computer.
-dat=read.csv("/Users/dshizuka/Downloads/SampleData.csv")
+dat=read.csv("/Users/daishizuka/Downloads/SampleData.csv")
 ```
 
 Now let's look at the data, simply by running `dat`
@@ -272,23 +272,7 @@ Click "Push" to upload the changes to the remote repository on GitHub.
 
 <br>
 
-### 3.4. Make a repository ("repo") on on GitHub and clone it to your computer.
 
-**If you are doing this for the BIOS967 course, log into the BIOS967 organization on github here: [https://github.com/BIOS967](https://github.com/BIOS967). If you're just doing this independently, you can just log into github normally.**
-
-click on “Repositories” on the top ribbon
-
-Then click the big green “New repository” button
-
-* Repository name: `BIOS967_YourLastName_YourFirstName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
-* Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
-* Initialize this repository with: Check Add a README file.
-
-Click on "Create Repository"
-
-Now, clone the repository on your computer following the directions in section 3.2.5 above. 
-
-<br>
 
 ### 3.5. Using a Git Client (as another option)
 
@@ -317,6 +301,44 @@ If you want to pull from GitHub, click "Fetch from Origin" on the top right-hand
 
 If you try it, you might find that you like this interface better than pull-commit-pushing from within RStudio. You are free to do it this way. It's just that it will require to have both RStudio and GitHub Desktop apps open to update your codes. Ultimately, you should choose the way that makes the most sense to you.
 
+<br>
 
+## 4. Make a repository for your independent project on on GitHub and clone it to your computer.
+
+* Log in to your GitHub account
+
+* click on “Repositories” on the top ribbon
+
+* Then click the big green “New repository” button
+
+  * Repository name: `YourLastName_YourProjectName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
+  
+  * Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
+  
+  * Initialize this repository with: Check Add a README file.
+
+* Click on "Create Repository"
+
+* Now, clone the repository on your computer following the directions in section 3.2.5 above. 
+
+* Finally, add me as a collaborator on your project.
+
+  * First, go to your repository and click on "Settings"
+
+![](images/GitHub_1.png)
+
+<br>
+
+  * Then, click on "Collaborators" on the navigation panel on the left side
+
+![](images/GitHub_2.png)
+<br>
+
+  * Click on "Add People" and add "dshizuka". 
+  
+![](images/GitHub_3.png)
+
+
+<br>
 
 
