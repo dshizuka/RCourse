@@ -311,7 +311,7 @@ If you try it, you might find that you like this interface better than pull-comm
 
 * Then click the big green “New repository” button
 
-  * Repository name: `YourLastName_YourProjectName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
+  * Repository name: `BIOS967_YourLastName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
   
   * Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
   
@@ -338,7 +338,8 @@ If you try it, you might find that you like this interface better than pull-comm
   
 ![](images/GitHub_3.png)
 
-
 <br>
+
+Once you've created and cloned your repository, I suggest you make a "data" subfolder and "scripts" subfolder so that you can get organized with your files from the beginning!
 
 
