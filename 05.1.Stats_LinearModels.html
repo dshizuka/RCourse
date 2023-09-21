@@ -14,7 +14,7 @@
 
 <title>Module 6: Intro to Stats in R: Linear Models (GLM), including ANOVA</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -145,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -178,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -187,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -346,7 +343,7 @@ div.tocify {
 <h1 class="title toc-ignore">Module 6: Intro to Stats in R: Linear
 Models (GLM), including ANOVA</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/15/22</h4>
+<h4 class="date">updated 09/21/23</h4>
 
 </div>
 
@@ -426,6 +423,8 @@ Quasi-binomial” family</p></li>
 <li><p><strong><em>If you have a categorical predictor AND continuous
 response variable…</em></strong> use ANOVA (or t-test, if you are just
 comparing means), which can be run as linear model or GLM.</p></li>
+<li><p><strong><em>If you have categorical predictor AND counts as
+response variable…</em></strong> use Chi-square tests.</p></li>
 <li><p><strong><em>If you have multiple predictors, with some continuous
 and some categorical variables…</em></strong> You can still use linear
 regression / GLM!</p></li>
@@ -438,7 +437,10 @@ GLM!</strong></span></p>
 and goes beyond a lot of the “parametric statistics” that you may first
 learn in basic stats class. It is one of the most common forms of
 statistical analyses in biology (I think… at least in my fields of
-ecology/evolution/behavior), so it is a good place to start!</p>
+ecology/evolution/behavior), so it is a good place to start! Here is a
+link to a page by Jonas Kristoffer Lindeløv that I have found quite
+helpful: <a href="https://lindeloev.github.io/tests-as-linear/"
+class="uri">https://lindeloev.github.io/tests-as-linear/</a></p>
 </blockquote>
 <hr />
 <p><br></p>
@@ -543,7 +545,7 @@ geometric objects (i.e., <code>geom_point()</code> and
 <pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg)) +
   geom_point() +
   geom_smooth(method=&quot;lm&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 <p>You will notice that ggplot adds the confidence interval (the shaded
 part) by default. If you don’t want that, you can remove it within the
@@ -555,7 +557,7 @@ plot settings:</p>
   theme_classic() +
   ylab(&quot;Miles Per Gallon&quot;) +
   xlab(&quot;Vehicle Weight&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
 <p>You can also do this in base R, though admittedly it’s a bit more
 complex. Basically, you Here’s a version in base R:</p>
@@ -608,10 +610,6 @@ function!</p>
 ## Call:
 ## glm(formula = mpg ~ wt, family = &quot;gaussian&quot;, data = mtcars)
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -4.5432  -2.3647  -0.1252   1.4096   6.8727  
-## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
 ## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
@@ -633,7 +631,7 @@ a list:</p>
 <pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg)) +
   geom_point() +
   geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;gaussian&quot;))</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
 <blockquote>
 <p><span style="color:purple"><strong>pssst… There ARE differences
@@ -847,7 +845,7 @@ default to <code>geom_smooth()</code> also).</p>
   xlab(&quot;Vehicle Weight&quot;) +
   theme_bw() +
   geom_smooth(method=&quot;lm&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-25-1.png" width="50%" />
 Now, we actually see some interesting patterns here.</p>
 <ol style="list-style-type: decimal">
@@ -940,7 +938,7 @@ associated attributes.</p>
 ##  8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
 ##  9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
 ## 10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
-## # … with 53,930 more rows</code></pre>
+## # ℹ 53,930 more rows</code></pre>
 <p>Let’s say we want to predict when a diamond will cost above a certain
 threshold price (let’s say $10,000). To do this, let’s make a new
 variable called “expensive”, which is TRUE if the diamond is priced at
@@ -958,10 +956,6 @@ summary(glm.fit)</code></pre>
 <pre><code>## 
 ## Call:
 ## glm(formula = expensive ~ carat, data = diamonds)
-## 
-## Deviance Residuals: 
-##      Min        1Q    Median        3Q       Max  
-## -1.03657  -0.17896   0.00801   0.09337   0.82104  
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)    
@@ -997,7 +991,7 @@ summary(glm.fit)</code></pre>
 <pre class="r"><code>ggplot(diamonds, aes(x=carat, y=expensive+0))+
   geom_point() +
   geom_smooth(method=&quot;glm&quot;, method.args = list(family = &quot;binomial&quot;))</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-33-1.png" width="50%" /></p>
 </div>
 <div id="glm-with-count-and-proportional-data" class="section level3">
@@ -1030,10 +1024,6 @@ summary(count.fit)</code></pre>
 ## glm(formula = Deaths ~ Temp, family = &quot;poisson&quot;, data = snails, 
 ##     subset = which(Exposure &gt;= 3))
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.8309  -1.1110  -0.4584   0.7083   3.2154  
-## 
 ## Coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    
 ## (Intercept)  0.82914    0.25375   3.268  0.00108 ** 
@@ -1056,7 +1046,7 @@ of overlapping data points.</p>
 <pre class="r"><code>ggplot(snails[which(snails$Exposure&gt;=3),], aes(x=Temp, Deaths)) +
   geom_count() +
   geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;poisson&quot;))</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="05.1.Stats_LinearModels_files/figure-html/unnamed-chunk-36-1.png" width="50%" />
 We can also run the model with the response variable as proportion of
 deaths / N (though in this case it should make little difference since N
@@ -1067,10 +1057,6 @@ summary(prop.fit)</code></pre>
 ## Call:
 ## glm(formula = cbind(Deaths, N) ~ Temp, family = binomial(link = &quot;logit&quot;), 
 ##     data = snails, subset = which(Exposure &gt;= 3))
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.7016  -1.0290  -0.4111   0.6136   2.8184  
 ## 
 ## Coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    

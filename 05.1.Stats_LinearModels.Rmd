@@ -67,11 +67,14 @@ Statistical analyses seek to determine the effect of the **predictor variable(s)
 
 * ***If you have a categorical predictor AND continuous response variable...*** use ANOVA (or t-test, if you are just comparing means), which can be run as linear model or GLM.
 
+* ***If you have categorical predictor AND counts as response variable...*** use Chi-square tests.
+
 * ***If you have multiple predictors, with some continuous and some categorical variables...*** You can still use linear regression / GLM!
 
 ><span style="color:purple">**Everything is a GLM!**</span>
 >
 > You will notice from above that everything I've listed falls under "GLM" or Generalized Linear Model. GLMs are super useful and flexible, and goes beyond a lot of the "parametric statistics" that you may first learn in basic stats class. It is one of the most common forms of statistical analyses in biology (I think... at least in my fields of ecology/evolution/behavior), so it is a good place to start!
+> Here is a link to a page by Jonas Kristoffer Lindeløv that I have found quite helpful: https://lindeloev.github.io/tests-as-linear/
 
 
 
