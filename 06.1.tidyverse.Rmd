@@ -238,6 +238,7 @@ The minimal arguments that are required in here are:
 
 ***
 
+
 ### 3.6. Group and Summarize data
 
 *dplyr* makes the craft of summarizing data much easier... if you get comfortable with the grammar. Here, I will show you how to use `group_by()` and `summarise()` functions to get summary data by artist, like their best ranking and how many weeks they spent on the Top 100 chart.
@@ -318,6 +319,22 @@ left_join(billboard, artist_dat) %>%
 You can see that whenever the artist has multiple songs on the list, the "artist.weeks" and "artist.best" variables are repeated (because these are the stats for the artist).
 
 <br>
+
+
+### 3.9 Why do we need to know how to deal with long- vs. wide-format data, and how to plot results of time-varying data in ggplot.
+
+Long- and Wide-format data have different strengths and weaknesses.
+
+In some ways, wide-format data is easier for us to keep track, especially if you have something that is repeatedly measured for each subject across time (like weekly rankings of a song). However, it is not necessarily the easiest way for R to handle your data. 
+
+Long-format data is what packages like ggplot likes to deal with. 
+
+```{r}
+library(stringr)
+bb_long=bb_long %>% mutate(week=as.numeric(str_replace(week, "wk", "")))
+ggplot(bb_long, aes(x=week, y=-rank, group=track)) +
+  geom_line(alpha=0.5)
+```
 
 ## Get more practice with Worked Examples
 
