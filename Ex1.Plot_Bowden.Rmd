@@ -136,7 +136,7 @@ plot_grid(p1, p2, p3, align="v", nrow=3)
 ```
 Now let's clean up the theme and axis labels.
 
-```{r, messages=F, fig.height=8, fig.width=3}
+```{r, warning=F, message=F, fig.height=8, fig.width=3}
 p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
   geom_point() +
   stat_smooth(method="lm", se=FALSE, color="black") +
@@ -186,24 +186,15 @@ Notice that we replace the equal sign (=) with a tilde (~) and remove the paramt
 ### 3.1. Fitting a linear model and getting the results
 
 Now, let's use the simple linear regression to ask the question: what is the relationship between snowmelt date (dependent variable) and year (independent variable).[^2]
-To do this, we will create an object using the `lm()` function and then see what the resulting object looks like:
+To do this, we will create an object using the `lm()` function, and get the summary output of the model using the `summary()` function:
 
 ```{r, results='hold'}
 fit.snow=lm(mean.snow~year, data=year.dat)
-class(fit.snow)
-```
-
-So, you can see that the `lm()` function creates an 'lm object'. The `fit.snow` object actually contains much more information. To see all of the components of this model object, see:
-
-```{r, eval=F, echo=T}
-str(fit.snow) #output not shown
-```
-This will yield a very long output that details all of the components of the model fitting results that we might want. Ok, so how do we extract the information we want from this statistical analysis? One convenient function is the `summary()` function:
-
-```{r}
 summary(fit.snow)
 ```
-So this gives us a good overview of the statistical outpu, but it gives us a lot of information, and you have to know what to look for. Let's look at these values closely:
+
+
+So this gives us a good overview of the statistical output, but it gives us a lot of information, and you have to know what to look for. Let's look at these values closely:
 
 ```{r, echo=FALSE, fig.align="left", out.width="50%"}
 knitr::include_graphics("images/Ex1_summary_fit.snow.png")
@@ -213,16 +204,24 @@ knitr::include_graphics("images/Ex1_summary_fit.snow.png")
 The values reported in the caption of Figure 1 of the paper are in the rectangles:
 
 * "Estimate" for the independent variable (year) is the **slope parameter $b$** (red rectangle). The intercept parameter $a$ is above that.
+
 * **F-statistic** (green rectangle): Ratio of Mean of squares. Compares the amount of variation explained by the regression model and the "left-over variation" (residual sum of squares). The associated **degrees of freedom (DF)**--i.e., how many independent observations we have of a given variable that can be used to estimate a statistical parameter--are the "regression degrees of freedom"" (# parameters -1) and the "residual degrees of freedom" (sample size - # of parmeters - 1)
+
 * **P-value**: Calculated by comparing the F-ratio with expected distribution of this value. 
 
 ***NOTE:*** There are also t-statistics and P-values associated with each parameter (in purple circle). These are P-values associated with the null hypotheses that the intercept and slope are equal to 0. This is different than the P-value for the test for the fit of the linear regression model to the data. Thus, those circled values are NOT relevant for us right now.
 
 **Now compare these values in the rectangles to the values presented in the figure captions to Figure 1 in the paper. Do you notice that they are slightly different? Can you figure out why they are slightly different?[^3]**
 
+<br>
+
 ### 3.2. Fitting all three models and organizing the outputs as a table
 
-We can extract all of the values that are reported by in the `summary()` function (i.e., rather than copying them down by hand). But this takes a little sleuthing. To get started, let's look at what is actually included in the output of the `summary()` function by using the `str()` function: 
+Now, how we take these kinds of model results and organize them for publication? Well, you could simply copy the relevant numbers from each model and paste them into a table.
+
+Here, we'll do one better: we will write a function to extract all of the values that are reported by in the `summary()` function and organize them into a table. But this takes a little sleuthing to understand how to look "under the hood" of these model fits to extract the information we want. 
+
+To get started, let's look at what is actually included in the output of the `summary()` function by using the `str()` function: 
 
 ```{r}
 str(summary(fit.snow))
@@ -235,13 +234,11 @@ For example, the F value is listed as `$ fstatistic`. To get that, you have to d
 summary(fit.snow)$fstatistic
 ```
 
-Then, you see that actually, this contains three values: (1) The F-value, and (2,3) are the degrees of freedom of the model. We want to save all of these, so we do:
+Then, you see that actually, this contains three values: (1) The F-value, and (2,3) the degrees of freedom of the model. We want to save all of these, so we do:
 
 ```{r}
 F.snow=round(summary(fit.snow)$fstatistic[1],3)
 dfs.snow=summary(fit.snow)$fstatistic[2:3]
-F.snow
-dfs.snow
 ```
 
 We can do the same with R^2, Slope and P-value:
@@ -319,23 +316,21 @@ Now, we will work on re-creating Figure 2, which is a 4-panel figure with the av
 
 ### 4.1 Panels (a) and (b): Plotting the mean wing lengths by year, species and sex
 
-First thing we need to do to construct this figure is to calculate the mean wing lengths for each year for each species and sex. We can do this with `group_by()` and `summarize()` functions that we used in a previous module:
+First thing we need to do to construct this figure is to calculate the mean wing lengths for each year for each species and sex. We also want to get the Standard Error of the Mean for these estimates. We can do this with `group_by()` and `summarize()` functions that we used in a previous module, plus the hand `mean_se()` function that will generate both the mean and standard errors.
 
 Let's start with *Colias hecla* since that is the first panel.
 
 ```{r}
-wl.colias=colias %>% group_by(year, sex) %>% summarise(mean.WL=mean(WL)) #calculate the mean of WL by year and sex for the colias dataset.
-head(wl.colias)
+wl.colias=colias %>% group_by(year, sex) %>% summarise(mean_se(WL)) #calculate the mean of WL by year and sex for the colias dataset.
 ```
 
-Ok, so now we have the data that we need to plot the means for each year. 
+You can see that this generates three columns: "y", which is the mean, and "ymin" and "ymax", which correspond to the lower and upper ends of the standard error. 
 
-
-Let's start building panel *a*. What we want to do is plot the data for one sex (say female), and then add the points for the second sex (male) on that same plot. To do this, a useful function is `subset()`, which allows us to easily specify a subset of data. 
+So now we have the data that we need to generate the plot for Panel A. Let's start building it! What we want to do is plot the data for one sex (say female), and then add the points for the second sex (male) on that same plot. To do this, a useful function is `subset()`, which allows us to easily specify a subset of data. 
 Try this to plot the data for just the females:
 
 ```{r}
-ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
   geom_path() +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white"))
@@ -345,65 +340,23 @@ Note that I plot the `geom_path()` (i.e., the lines) here first before the point
 
 #### Notice that there is one problem here, which is that the plot connects the dots between the years 2009 and 2011, even though the data for 2010 is missing. The figure in the publication correctly omits this line. We will address this later.
 
-***
-
-### 4.2 Creating a custom function to calculate standard error of the mean
-Figure 2(a) and 2(b) have standard error bars associated with each mean value. Let's work on adding those.  The base package in R famously does not have a built-in function for calculating standard error of the mean, but it is very easy to calculate it. 
-
-So, what is standard error? Simply, it is the standard deviation $\sigma$ divided by the square-root of the sample size $n$:
-$$SE = \frac{\sigma}{\sqrt n}$$
-In turn, standard deviation $\sigma$ is simply the square-root of the variance $\sigma^2$. Thus, 
-$$SE = \sqrt{\frac{\sigma^2}{n}}$$
-So, to calculate the standard error of the mean of a vector, say WL, we simply need to do:
-```{r}
-sqrt(var(colias$WL)/length(colias$WL)) #the standard error of the mean of WL for the entire sample of Colias butterflies. 
-```
-
-So, what we need to do is figure out an easy way to do this calculation for each year-species-sex. The best way to do this is to ***build a custom function*** to calculate the standard error, and then use this function within the `summarize()` function (like we did to calculate the means)!
-
-To create a custom function, we need to use `function()`. Inside the parentheses, we designate some variable(s). Here, we will call this variable `x`. Then, we use curly brackets `{}` to tell R what this function will do. Here is how to build a custom function called `se()` that will calculate the standard error of the mean. 
-Note: I use `na.rm=T` inside the `mean()` function to skip NAs when calculating the mean, and I take the length of values that are NOT NAs for the denominator:
-
-```{r}
-se=function(x) {sqrt(var(x, na.rm=T)/length(which(is.na(x)==F)))} #create a new function called se() that will take a vector, x, and divide the variance of the vector by its length, then take its square-root.
-```
-
-Now, let's implement this function to the global sample of wing lengths in *Colias*:
-```{r}
-se(colias$WL)
-```
-
-This should give us the same value as our manual calculation above. 
-
-Now, we can calculate the standard error for each year, species and sex:
-
-```{r}
-wl.colias=colias %>% group_by(year, sex) %>% summarise(mean.WL=mean(WL), se.WL=se(WL)) #calculate the mean of WL by year and sex for the colias dataset.
-wl.colias
-```
-
-Now we have the standard error values that correspond with each of the dots on the plot in our dataframe!
-
-***
-
-### 4.3 Plotting the standard error bars on the line plots
 
 We can add errorbars to the points on our figure by simply adding `geom_errorbar()`. Here, we specify the minimum and maximum values of the error bar by subtracting or adding the standard error to the mean, respectively.
 
 ```{r}
-ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
   geom_path() +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL))
+  geom_errorbar(aes(ymin=ymin, ymax=ymax))
 ```
 
 Now, let's make it look a bit prettier and save the plot as `p.2a'
 
 ```{r}
-p.2a=ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+p.2a=ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
   geom_path() +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   theme_cowplot() +
@@ -416,15 +369,15 @@ Now, let's do the same with Boloria (Figure 2b):
 
 Create the summary data with standard error included:
 ```{r}
-wl.boloria=boloria %>% group_by(year, sex) %>% summarise(mean.WL=mean(WL), se.WL=se(WL)) 
+wl.boloria=boloria %>% group_by(year, sex) %>% summarise(mean_se(WL)) 
 ```
 
 Create the plot as you did with the Figure 2a, but now save it as `p.2b`:
 
 ```{r}
-p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
+p.2b=ggplot(wl.boloria, aes(x=year, y=y, group=sex)) +
   geom_path() +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   theme_cowplot() +
@@ -432,29 +385,15 @@ p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
 p.2b
 ```
 
-*You'll notice that there is the data for 2003 is missing for females.* This is because there is a missing data point, and therefore the `mean()` function is returning NA. We can get around this by telling the `mean()` function to skip the NA using the argument `na.rm=T`. So redo the plot:
-```{r}
-wl.boloria=boloria %>% group_by(year, sex) %>% summarise(mean.WL=mean(WL, na.rm=T), se.WL=se(WL)) #calculate the mean of WL by year and sex for the colias dataset.
-
-p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
-  geom_path() +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
-  geom_point(aes(fill=sex), pch=21, size=2) +
-  scale_fill_manual(values=c("black", "white")) +
-  theme_cowplot() +
-  labs(y="Average Wing Length (mm)")
-p.2b
-```
-
-### 4.4. Further tweaking the plot: 
+### 4.2. Further tweaking the plot: 
 
 To go further, we can fix the details like skipping the year 2010 by plotting the points for years <2010 and years >2010 separately for each sex and each species, all in two vertical panels. I'll also adjust the tick marks a bit:
 
 ```{r}
-p.2a=ggplot(wl.colias, aes(x=year, y=mean.WL, group=sex)) +
+p.2a=ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
   geom_path(data=wl.colias %>% filter(year<2010)) +
   geom_path(data=wl.colias %>% filter(year>2010)) +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   theme_cowplot() +
@@ -463,10 +402,10 @@ p.2a
 ```
 
 ```{r}
-p.2b=ggplot(wl.boloria, aes(x=year, y=mean.WL, group=sex)) +
+p.2b=ggplot(wl.boloria, aes(x=year, y=y, group=sex)) +
   geom_path(data=wl.boloria %>% filter(year<2010)) +
   geom_path(data=wl.boloria %>% filter(year>2010)) +
-  geom_errorbar(aes(ymin=mean.WL-se.WL, ymax=mean.WL+se.WL), width=0.5) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
   geom_point(aes(fill=sex), pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   theme_cowplot() +
@@ -491,11 +430,23 @@ Ok, let's start. Note that we have created several different dataframes so far.
 
 * One called `wl.boloria` contains data on annual average + standard error of wing length for **Boloria chariclea**
 
-Now, we want to combine the winglength data for each species with the snowmelt/temperature data. We can do that using a `_join()` function in dplyr. Here, we'll use `left_join()`:
+Let's take a quick look at the `year.dat` and `wl.colias` dataframes:
+
+```{r}
+year.dat
+```
+
+```{r}
+wl.colias
+```
+Note that both of these dataframes have a common variable: the year. So, we can use that variable as a link to merging these to dataframes together. That is, we can create a dataframe that includes the wing length data AND the climate variables. To do this, we can use a `_join()` function in dplyr to merge data.
+
+Here, we'll use `left_join()`:
 ```{r}
 wl.colias %>% left_join(., year.dat)
 ```
 
+So let's do this for each species and save the dataframes.
 
 ```{r}
 wl.colias=wl.colias %>% left_join(., year.dat)
@@ -505,7 +456,7 @@ wl.boloria=wl.boloria %>% left_join(., year.dat)
 Now, we can make a scatterplot for each species' winglength by the annual average temperature (May-August) where the average female wing lengths are filled black and males are filled white + add the linear regression line as we did with Figure 1.
 
 ```{r}
-ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+ggplot(wl.colias, aes(x=mean.mayaug, y=y, fill=sex)) +
   geom_point(pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   stat_smooth(method="lm", se=F, color="black") 
@@ -514,7 +465,7 @@ ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
 Let's make it prettier and save it as `p.2c`
 
 ```{r}
-p.2c=ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+p.2c=ggplot(wl.colias, aes(x=mean.mayaug, y=y, fill=sex)) +
   geom_point(pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   stat_smooth(method="lm", se=F, color="black") +
@@ -528,7 +479,7 @@ We can do the same thing with *Boloria*:
 
 
 ```{r}
-p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
+p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=y, fill=sex)) +
   geom_point(pch=21, size=2) +
   scale_fill_manual(values=c("black", "white")) +
   stat_smooth(method="lm", se=F, color="black") +
