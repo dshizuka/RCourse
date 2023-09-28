@@ -14,7 +14,7 @@
 
 <title>Worked Example: Plotting the change in butterfly size with climate change</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -182,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -191,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -350,7 +343,7 @@ div.tocify {
 <h1 class="title toc-ignore">Worked Example: Plotting the change in
 butterfly size with climate change</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 11/15/22</h4>
+<h4 class="date">updated 09/28/23</h4>
 
 </div>
 
@@ -384,10 +377,11 @@ id="fnref1"><sup>1</sup></a> This study used a 17-year dataset on wing
 lengths of two butterfly species in Greenland to show that both species
 follow the “temperature-size” rule, which posits that higher
 temperatures generally select for smaller adult body size.</p>
-<div class="figure">
-<img src="images/butterflies.png" alt="" />
-<p class="caption"><em>Boloria chariclea</em> and <em>Colias
-hecla</em></p>
+<div class="float">
+<img src="images/butterflies.png"
+alt="Boloria chariclea and Colias hecla" />
+<div class="figcaption"><em>Boloria chariclea</em> and <em>Colias
+hecla</em></div>
 </div>
 <p>Aside from it being an interesting story, I chose this paper as an
 example for several reasons. First, the data are pretty
@@ -446,12 +440,13 @@ panels and shows how the snowmelt dat, average May-June temperature, and
 average May-August temperature (of the previous year) has changed across
 the study period. They present this as a scatterplot and a simple linear
 regression fit line.</p>
-<div class="figure">
-<img src="images/Ex1_Fig1.png" alt="" />
-<p class="caption">Figure 1 from Bowden et al. (2015): (a) Timing of
-snowmelt (<span class="math inline">\(F_{1,16}\)</span> = 8.92, estimate
-= -1.05, <span class="math inline">\(R^2_{Adj}\)</span> = 0.32, <span
-class="math inline">\(p\)</span> &lt; 0.008), (b) <span
+<div class="float">
+<img src="images/Ex1_Fig1.png"
+alt="Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt (F_{1,16} = 8.92, estimate = -1.05, R^2_{Adj} = 0.32, p &lt; 0.008), (b) May-June_t temperature (F_{1,16} = 10.87, estimate = 0.11, R^2_{Adj} = 0.37, p &lt; 0.005) and (c) May-June_{t-1} temperature (F_{1,16} = 22.52, estimate = 0.11, R^2_{Adj} = 0.56, p &lt; 0.001) from 1996-2013 at Zackenberg, Greenland" />
+<div class="figcaption">Figure 1 from Bowden et al. (2015): (a) Timing
+of snowmelt (<span class="math inline">\(F_{1,16}\)</span> = 8.92,
+estimate = -1.05, <span class="math inline">\(R^2_{Adj}\)</span> = 0.32,
+<span class="math inline">\(p\)</span> &lt; 0.008), (b) <span
 class="math inline">\(May-June_t\)</span> temperature (<span
 class="math inline">\(F_{1,16}\)</span> = 10.87, estimate = 0.11, <span
 class="math inline">\(R^2_{Adj}\)</span> = 0.37, <span
@@ -460,7 +455,7 @@ class="math inline">\(May-June_{t-1}\)</span> temperature (<span
 class="math inline">\(F_{1,16}\)</span> = 22.52, estimate = 0.11, <span
 class="math inline">\(R^2_{Adj}\)</span> = 0.56, <span
 class="math inline">\(p\)</span> &lt; 0.001) from 1996-2013 at
-Zackenberg, Greenland</p>
+Zackenberg, Greenland</div>
 </div>
 <p><strong>Alright, let’s try to re-create this!</strong></p>
 <div id="multi-panel-scatterplot-using-ggplot-and-cowplot"
@@ -518,29 +513,29 @@ this plot by using <code>stat_smooth(method="lm")</code>:</p>
   geom_point() +
   stat_smooth(method=&quot;lm&quot;)
 p1</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
 <p>Let’s get rid of the confidence interval and make the line black.</p>
 <pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
 p1</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
 <p>We can plot the other two panels in the same way:</p>
 <pre class="r"><code>p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
 p2</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
 <pre class="r"><code>p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;)
 p3</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
 <p>Now, we’ve created 3 different scatterplots. But what we want is to
 make one figure with 3 panels arranged vertically. How do we do
@@ -549,12 +544,13 @@ that?</p>
 making multi-panel plots very easy (The “cow” in “cowplot” stands for
 Claus O. Wilkes, who wrote the package).</p>
 <pre class="r"><code>plot_grid(p1, p2, p3, align=&quot;v&quot;, nrow=3) </code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
-## `geom_smooth()` using formula &#39;y ~ x&#39;
-## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-9-1.png" width="288" /></p>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
+<p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-9-1.png" width="288" />
+Now let’s clean up the theme and axis labels.</p>
 <pre class="r"><code>p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
@@ -566,7 +562,7 @@ p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
   theme_cowplot() +
-  labs(expression(paste(&quot;Average Temperature&quot;[&quot;t&quot;], 
+  labs(y=expression(paste(&quot;Average Temperature&quot;[&quot;t&quot;], 
     &quot; &quot;, (~degree * C))), x=&quot;Year&quot;) +
   theme(axis.title.y = element_text(size=12))
 
@@ -574,18 +570,17 @@ p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
   geom_point() +
   stat_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;black&quot;) +
   theme_cowplot() +
-  labs(expression(paste(&quot;Average Temperature&quot;[&quot;t-1&quot;], &quot; &quot;, 
+  labs(y=expression(paste(&quot;Average Temperature&quot;[&quot;t-1&quot;], &quot; &quot;, 
         (~degree * C))), x=&quot;Year&quot;) + 
   theme(axis.title.y = element_text(size=12))
 
 plot_grid(p1, p2, p3, nrow=3)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
-## `geom_smooth()` using formula &#39;y ~ x&#39;
-## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-10-1.png" width="288" /></p>
-<p>We won’t worry about the minutiae of the axis labels.</p>
 <hr />
 </div>
 </div>
@@ -873,14 +868,15 @@ with the average wing length of males and females (and error bars) for
 each species (panels <em>a</em> and <em>b</em>), and the relationship
 between average wing length and the average May-August temperature of
 the previous year (panels <em>c</em> and <em>d</em>).</p>
-<div class="figure">
-<img src="images/Ex1_Fig2.png" alt="" />
-<p class="caption">Figure 2 from Bowden et al. (2015): <em>Inter-annual
-variation in average male (open circles) and female (filled circles)
-wing length over the sampling period for (a) Colias hecla and (b)
-Boloria chariclea and their responses (c,d, respectively) to average
-May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are
-not available.</em></p>
+<div class="float">
+<img src="images/Ex1_Fig2.png"
+alt="Figure 2 from Bowden et al. (2015): Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available." />
+<div class="figcaption">Figure 2 from Bowden et al. (2015):
+<em>Inter-annual variation in average male (open circles) and female
+(filled circles) wing length over the sampling period for (a) Colias
+hecla and (b) Boloria chariclea and their responses (c,d, respectively)
+to average May–Augustt21 temperature. Error bars represent s.e. Data for
+2010 are not available.</em></div>
 </div>
 <hr />
 <div
@@ -995,7 +991,7 @@ sex:</p>
 ##  8  1999 m        22.4 0.191
 ##  9  2000 f        22.9 0.258
 ## 10  2000 m        22.5 0.150
-## # … with 24 more rows</code></pre>
+## # ℹ 24 more rows</code></pre>
 <p>Now we have the standard error values that correspond with each of
 the dots on the plot in our dataframe!</p>
 <hr />
@@ -1039,7 +1035,7 @@ p.2a</code></pre>
   theme_cowplot() +
   labs(y=&quot;Average Wing Length (mm)&quot;)
 p.2b</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <p><em>You’ll notice that there is the data for 2003 is missing for
 females.</em> This is because there is a missing data point, and
@@ -1115,7 +1111,7 @@ chariclea</strong></p></li>
 snowmelt/temperature data. We can do that using a <code>_join()</code>
 function in dplyr. Here, we’ll use <code>left_join()</code>:</p>
 <pre class="r"><code>wl.colias %&gt;% left_join(., year.dat)</code></pre>
-<pre><code>## Joining, by = &quot;year&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(year)`</code></pre>
 <pre><code>## # A tibble: 34 × 7
 ## # Groups:   year [17]
 ##     year sex   mean.WL se.WL mean.snow mean.mayjun mean.mayaug
@@ -1130,11 +1126,11 @@ function in dplyr. Here, we’ll use <code>left_join()</code>:</p>
 ##  8  1999 m        22.4 0.191      167.       -1.32       0.894
 ##  9  2000 f        22.9 0.258      155.       -1.82       1.64 
 ## 10  2000 m        22.5 0.150      155.       -1.82       1.64 
-## # … with 24 more rows</code></pre>
+## # ℹ 24 more rows</code></pre>
 <pre class="r"><code>wl.colias=wl.colias %&gt;% left_join(., year.dat)</code></pre>
-<pre><code>## Joining, by = &quot;year&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(year)`</code></pre>
 <pre class="r"><code>wl.boloria=wl.boloria %&gt;% left_join(., year.dat)</code></pre>
-<pre><code>## Joining, by = &quot;year&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(year)`</code></pre>
 <p>Now, we can make a scatterplot for each species’ winglength by the
 annual average temperature (May-August) where the average female wing
 lengths are filled black and males are filled white + add the linear
@@ -1143,9 +1139,9 @@ regression line as we did with Figure 1.</p>
   geom_point(pch=21, size=2) +
   scale_fill_manual(values=c(&quot;black&quot;, &quot;white&quot;)) +
   stat_smooth(method=&quot;lm&quot;, se=F, color=&quot;black&quot;) </code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
 <p>Let’s make it prettier and save it as <code>p.2c</code></p>
 <pre class="r"><code>p.2c=ggplot(wl.colias, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
@@ -1155,9 +1151,9 @@ regression line as we did with Figure 1.</p>
   theme_cowplot() +
   labs(x = &quot;May-Aug temp (t-1)&quot;, y = &quot;average wing length (mm)&quot;)
 p.2c</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <p>We can do the same thing with <em>Boloria</em>:</p>
 <pre class="r"><code>p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=mean.WL, fill=sex)) +
@@ -1167,9 +1163,9 @@ p.2c</code></pre>
   theme_cowplot() +
   labs(x = &quot;May-Aug temp (t-1)&quot;, y = &quot;average wing length (mm)&quot;)
 p.2d</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="Ex1.Plot_Bowden_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 </div>
 <div id="create-figure-2" class="section level2">

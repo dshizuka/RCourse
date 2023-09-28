@@ -134,9 +134,9 @@ The R package called **cowplot** makes the task of making multi-panel plots very
 ```{r, fig.height=8, fig.width=3}
 plot_grid(p1, p2, p3, align="v", nrow=3) 
 ```
+Now let's clean up the theme and axis labels.
 
-
-```{r, fig.height=8, fig.width=3}
+```{r, messages=F, fig.height=8, fig.width=3}
 p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
   geom_point() +
   stat_smooth(method="lm", se=FALSE, color="black") +
@@ -148,7 +148,7 @@ p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
   geom_point() +
   stat_smooth(method="lm", se=FALSE, color="black") +
   theme_cowplot() +
-  labs(expression(paste("Average Temperature"["t"], 
+  labs(y=expression(paste("Average Temperature"["t"], 
     " ", (~degree * C))), x="Year") +
   theme(axis.title.y = element_text(size=12))
 
@@ -156,14 +156,13 @@ p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
   geom_point() +
   stat_smooth(method="lm", se=FALSE, color="black") +
   theme_cowplot() +
-  labs(expression(paste("Average Temperature"["t-1"], " ", 
+  labs(y=expression(paste("Average Temperature"["t-1"], " ", 
         (~degree * C))), x="Year") + 
   theme(axis.title.y = element_text(size=12))
 
 plot_grid(p1, p2, p3, nrow=3)
 ```
 
-We won't worry about the minutiae of the axis labels. 
 
 ***
 
