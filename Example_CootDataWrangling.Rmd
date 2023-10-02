@@ -204,10 +204,12 @@ sum.dat=use.dat2 %>%
 ```
 
 ```{r}
-ggplot(sum.dat, aes(x=Release.Order, y=y)) +
-  geom_point(size=5) +
+ggplot(sum.dat, aes(x=Release.Order, y=y, fill=y)) +
   geom_path() +
   geom_errorbar(aes(ymax=ymax, ymin=ymin), width=0.2) +
-  theme_classic()
+  geom_point(size=5, pch=21) +
+  scale_fill_gradient(low="yellow", high="red") +
+  theme_classic() +
+  ylab("Color (PC1)") +
+  xlab("Hatching Order")
 ```
-#####

@@ -630,11 +630,14 @@ class="section level2">
 <pre class="r"><code>sum.dat=use.dat2 %&gt;%
   group_by(Release.Order) %&gt;%
   summarise(mean_se(pc1))</code></pre>
-<pre class="r"><code>ggplot(sum.dat, aes(x=Release.Order, y=y)) +
-  geom_point(size=5) +
+<pre class="r"><code>ggplot(sum.dat, aes(x=Release.Order, y=y, fill=y)) +
   geom_path() +
   geom_errorbar(aes(ymax=ymax, ymin=ymin), width=0.2) +
-  theme_classic()</code></pre>
+  geom_point(size=5, pch=21) +
+  scale_fill_gradient(low=&quot;yellow&quot;, high=&quot;red&quot;) +
+  theme_classic() +
+  ylab(&quot;Color (PC1)&quot;) +
+  xlab(&quot;Hatching Order&quot;)</code></pre>
 <p><img src="Example_CootDataWrangling_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 #####</p>
 </div>
