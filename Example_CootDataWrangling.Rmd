@@ -26,10 +26,8 @@ One weird thing is that they are 'conspecific brood parasites'--i.e., they make 
 
 The other very weird thing is that they have **extremely bright ornamental juvenile traits (red beaks, red head, orange plumes around the neck, etc.)** when they hatch. They then lose these traits over the first few weeks of life. By the time they have fledged, they are black and gray with white beaks, and the only color they retain is a small patch or red on their forehead. Birds commonly have bright ornamental traits related to sexual selection, but it is relatively rare to have such bright ornaments as babies (probably because it could make them easy targets for predators).
 
-```{r, out.width="40%", echo=F}
+```{r, out.width="40%", echo=F, fig.align="center", fig.cap="Figure 1: Adult coots are black and gray with a white beak. Baby coots have bright ornamentation ranging from orange to red."}
 knitr::include_graphics("images/CootFeeding_lowres.jpg")
-
-knitr::include_graphics("images/cootnest.jpg")
 ```
 
 Past work (Lyon et al. 1994) has shown that, if you artificially remove some of these ornaments (i.e., the orange tips of feathers around neck), parents discriminate against these 'dull' chicks and preferentially feed chicks that retain the ornaments.
@@ -38,76 +36,159 @@ In Lyon & Shizuka (2020), we investigate the causes and consequences of variatio
 
 ### 2: The Data
 
-To do this, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. This is provided in the "ChickColor_extracted.csv" file. 
+In this study, we monitored nests and eggs until hatching, and then measured color of juvenile ornaments using a spectrometer (which measures reflectance of light at different wavelengths) from ~1,500 chicks. For each chick, we got 3-5 measurements from 5 traits: pate (bald spot on top of their head), frontal shield (fleshy part at the base of the beak), papillae (ornamental feathers surrounding the base of the beak), beak, and feathers surrounding the chin and neck. We have condensed data to several key color metrics, including the 'red chroma' (i.e., amount of light reflected at the red wavelengths: approx 600-700nm) of the feathers around the chin. This is provided in the "ChickColor_extracted.csv" file. 
+
+```{r, echo=F,  fig.align="center", out.width="50%", fig.cap="Figure 2: We took color measurements for 5 different traits: pate, frontal shield, papillae, beak and chin feathers. (From Lyon & Shizuka 2020)"}
+knitr::include_graphics("images/cootchick.png")
+```
+
+
 We also have a separate file of relevant (non-color) data for each chick, such "Egg ID", which brood they were released at (the same as the nest the egg was laid in for control treatment, but chicks were swapped across nests in some experiments), the experimental treatment of the brood, the nest it was laid in as an egg (Clutch), the date it was released in the nest, the order in which they hatched in the nest/were released at the nest, the wetland the nest is in, and whether or not the chick is a known brood parasite.
 
 Finally, we also have data for each chick as an egg, including nest, "Egg ID", "Chick ID", the volume of the egg, and the laying sequence of the egg (if known).
 
-Here is the [link to data](data/coot_example/ChickMaster.csv). Save this in your course folder in the "data" subfolder.
+Here is the [link to the data .zip file](data/coot_example.zip). Download this file and extract the contents. There should be three .csv files. Save these files in the "data" subfolder within the project folder you are working in.
 
 Then import this data to R:
 
 ```{r}
 eggs=read.csv("data/coot_example/EggMaster.csv")
+head(eggs)
+```
+
+```{r}
 chicks=read.csv("data/coot_example/ChickMaster.csv")
+head(chicks)
 ```
 
 ```{r}
-dat=read.csv("data/chickcolor_Rclass.csv")
-head(dat)
+color.dat=read.csv("data/coot_example/chickcolor_extracted.csv")
+head(color.dat)
 ```
 
-Let's also load the entire `tidyverse` series of packages
-```{r, eval=F, echo=F}
-install.packages('tidyverse')
+## 3. Let's get coding!
+
+### 3.1. Load the packages you need
+
+```{r, message=F}
+library(tidyverse)
 ```
+
+### 3.2. Correlations between color traits
+
+I will select just the columns of the color data that contains the word "chroma". Then, I will rename the variables to add a number in front of the name. This will just help me customize the order of the rows and columns on the matrix that I generate. 
 ```{r}
-library('tidyverse')
+chroma.dat=color.dat %>% dplyr::select(contains("_chroma")) %>% 
+  rename(`5_pate`=pate_chroma, `4_shield`=shield_chroma, `3_beak`=beak_chroma, `2_papillae`=papillae_chroma, `1_chin`=chin_chroma)
 ```
 
-###task 1: filter out parasite chicks and then calculate mean chick color for each brood
+set up correlation matrix for plotting
+```{r}
+cor.m=cor(chroma.dat, use="complete.obs")
+cor.m=cor.m[order(rownames(cor.m)),order(rownames(cor.m))] #reorder columns and rows
+```
+
+Convert the data in the correlation matrix into a two-column format that ggplot likes.
+```{r}
+cor.data.frame=data.frame(expand.grid(colnames(cor.m), rownames(cor.m)), value=as.vector(cor.m))
+```
+
+generate correlation plots for chroma
+```{r}
+ggplot(cor.data.frame, aes(x=Var1, y=Var2, fill=value)) +
+  geom_tile() +
+  scale_fill_gradient2(limits=c(0, 1), low="white", high="red")
+```
+
+
+## Look at how chick colors differ between broods
+
+
+## make a global dataset that contains chick color, chick master, and egg data...
+
+We are going to use a set of `left_join()` functions to create a global dataset. 
 
 ```{r}
-#old way
-dat.a=dat
-dat.b=dat.a[which(dat.a$is.parasite==F),]
-dat.c=aggregate(dat.b$chin_chroma, by=list(dat.b$nest), mean, na.rm=T)
-names(dat.c)=c("nest", "mean.col")
-head(dat.c)
+all.dat=left_join(chicks, color.dat, by=join_by(new.id==new.id)) %>%
+  left_join(., eggs, by=join_by(new.id==Chick.ID)) %>%
+  tibble()
+
+```
+
+## 
+
+Only chick color data variables contain "_" 
+
+```{r}
+pca.result=all.dat%>% select(contains("_")) %>% drop_na() %>% prcomp(.,  scale=T)
 ```
 
 ```{r}
-#dplyr way, option 1
-x=filter(dat.a, is.parasite==FALSE)
-y=group_by(x, nest)
-z=summarise(y, mean(chin_chroma))
-z
+str(pca.result)
 ```
 
 ```{r}
+#just look at the "upper left corner" of the PCA results, which is stored in the pca.result object 
+pca.result$x[1:10, 1:5]
+```
+
+We can extract the first PCA axis
+```{r}
+head(pca.result$x[,1])
+```
+
+So we can add this to the global dataset:
+```{r}
+use.dat = all.dat %>% 
+  select(new.id, Clutch, contains("_"), pc1) %>%
+  drop_na() %>%
+  mutate(pc1=pca.result$x[,1]) %>%
+  mutate(Clutch=factor(Clutch)) %>%
+  data.frame()
+```
+
+##Table 1
+
+```{r}
+color.columns=as.numeric(c(grep("_",colnames(use.dat)), grep("pc", colnames(use.dat))))
+aov.results=list()
+for (i in 1:length(color.columns)){
+  aov.results[[i]]=summary(aov(use.dat[,color.columns[i]]~as.factor(use.dat$Clutch)))
+}
+```
+
+```{r}
+result.dat=data.frame(trait=names(use.dat)[color.columns], Fvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]][[1]]$`F value`[1]), digits=3), Pvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]][[1]]$`Pr(>F)`[1]), digits=5))
+result.dat$p.adjust=p.adjust(result.dat$Pvalue, method="fdr")
+result.dat #Table 1
+```
+
+### 3.2. See how chick coloration is affected by hatching sequence 
+
+### Filter out parasite chicks and then calculate mean chick color for each brood
+
+
+```{r, eval=F}
 #dplyr way, with piping
-dat %>% filter(is.parasite==FALSE) %>% group_by(nest) %>% summarise(mean.col=mean(chin_chroma))
+sum.dat=all.dat %>% dplyr::filter(is.parasite==FALSE) %>% 
+  group_by(Brood) %>% 
+  summarise(mean.col=mean(chin_chroma, na.rm=T))
+
 ```
 
 
-###task 2: standardize each chick's color measure against average of its nest.
+### task 2: standardize each chick's color measure against average of its nest.
 
-```{r}
-#old way
-dat.a$nest.mean.col=dat.c[match(dat.a$nest, dat.c$nest), 2]
-dat.a$std.col=dat.a$chin_chroma-dat.a$nest.mean.col
-head(dat.a)
-```
 
-```{r}
-#with merge()
-dat.merge=merge(dat.a, dat.c, by="nest")
-head(dat.merge)
-```
-
-```{r}
+```{r, eval=F}
 #with dyplr
-dat.a=left_join(dat.a, dat.c, by="nest") %>% mutate(std.chick.col=chin_chroma-mean.col)
-head(dat.a)
+#left_join(dat, sum.dat, by="nest") %>% tibble()
+```
+
+```{r, eval=F}
+
+#left_join(dat, sum.dat, by="nest") %>%
+  mutate(std.chick.col=chin_chroma-mean.col)
+#head(dat)
 ```
 #####
