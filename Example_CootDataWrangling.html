@@ -343,7 +343,7 @@ div.tocify {
 <h1 class="title toc-ignore">Worked Example: Data Wrangling practice
 with coot chick color data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/29/23</h4>
+<h4 class="date">updated 10/02/23</h4>
 
 </div>
 
@@ -362,8 +362,8 @@ href="https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.ns1rn8pnv">(here)<
 But to simplify things, I will provide the necessary datasets below.</p>
 <p>First, let’s give you a quick background on the study system:</p>
 <div id="background-extreme-juvenile-ornamentation-in-american-coots"
-class="section level3">
-<h3>1. Background: Extreme juvenile ornamentation in American coots</h3>
+class="section level2">
+<h2>1. Background: Extreme juvenile ornamentation in American coots</h2>
 <p>American coots (<em>Fulica americana</em>), a waterbird of the Rail
 family. Coots lay a relatively large number of eggs (6-12 eggs) in nests
 built out of old vegetation on top of water in wetlands across western
@@ -399,8 +399,8 @@ consequences of variation in color (i.e., how ‘red’ the chicks are)
 within and between broods. We also link this data to patterns of
 parental favoritism and survival.</p>
 </div>
-<div id="the-data" class="section level3">
-<h3>2: The Data</h3>
+<div id="the-data" class="section level2">
+<h2>2: The Data</h2>
 <p>In this study, we monitored nests and eggs until hatching, and then
 measured color of juvenile ornaments using a spectrometer (which
 measures reflectance of light at different wavelengths) from ~1,500
@@ -435,64 +435,66 @@ the egg (if known).</p>
 file</a>. Download this file and extract the contents. There should be
 three .csv files. Save these files in the “data” subfolder within the
 project folder you are working in.</p>
+<p>First, load the packages you need</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
 <p>Then import this data to R:</p>
 <pre class="r"><code>eggs=read.csv(&quot;data/coot_example/EggMaster.csv&quot;)
-head(eggs)</code></pre>
-<pre><code>##   Nest Egg.Number Egg.ID Chick.ID Egg.Volume True.Lay.Seq
-## 1 5001          1 5001-1   5001-1   30.88715          1.5
-## 2 5001          2 5001-2   5001-2   34.48371          1.5
-## 3 5001          3 5001-3   5001-3   35.03021          3.0
-## 4 5001          4 5001-4   5001-4   32.17131          4.0
-## 5 5001          5 5001-5   5001-5   34.42925          5.0
-## 6 5001          6 5001-6   5001-6   33.62230          6.0</code></pre>
+tibble(eggs)</code></pre>
+<pre><code>## # A tibble: 4,623 × 6
+##    Nest  Egg.Number Egg.ID  Chick.ID Egg.Volume True.Lay.Seq
+##    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt;        &lt;dbl&gt;
+##  1 5001  1          5001-1  5001-1         30.9          1.5
+##  2 5001  2          5001-2  5001-2         34.5          1.5
+##  3 5001  3          5001-3  5001-3         35.0          3  
+##  4 5001  4          5001-4  5001-4         32.2          4  
+##  5 5001  5          5001-5  5001-5         34.4          5  
+##  6 5001  6          5001-6  5001-6         33.6          6  
+##  7 5001  7          5001-7  5001-7         32.8          7  
+##  8 5001  8          5001-8  5001-8         32.4          8  
+##  9 5001  9          5001-9  5001-9         32.2          9  
+## 10 5001  10         5001-10 5001-10        31.2         10  
+## # ℹ 4,613 more rows</code></pre>
 <pre class="r"><code>chicks=read.csv(&quot;data/coot_example/ChickMaster.csv&quot;)
-head(chicks)</code></pre>
-<pre><code>##   new.id Egg.ID Brood Brood.Treatment Clutch Release.Date Release.Order
-## 1 5001-1      1  5001         Control   5001      5/31/09             1
-## 2 5001-3      3  5001         Control   5001      5/31/09             1
-## 3 5001-2      2  5001         Control   5001       6/1/09             2
-## 4 5001-4      4  5001         Control   5001       6/1/09             2
-## 5 5001-5      5  5001         Control   5001       6/1/09             2
-## 6 5001-6      6  5001         Control   5001       6/1/09             2
-##    Wetland Year is.parasite
-## 1 Jaimeson 2005       FALSE
-## 2 Jaimeson 2005       FALSE
-## 3 Jaimeson 2005       FALSE
-## 4 Jaimeson 2005       FALSE
-## 5 Jaimeson 2005       FALSE
-## 6 Jaimeson 2005       FALSE</code></pre>
+tibble(chicks)</code></pre>
+<pre><code>## # A tibble: 2,465 × 10
+##    new.id Egg.ID Brood Brood.Treatment Clutch Release.Date Release.Order Wetland
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;                &lt;int&gt; &lt;chr&gt;  
+##  1 5001-1 1       5001 Control         5001   5/31/09                  1 Jaimes…
+##  2 5001-3 3       5001 Control         5001   5/31/09                  1 Jaimes…
+##  3 5001-2 2       5001 Control         5001   6/1/09                   2 Jaimes…
+##  4 5001-4 4       5001 Control         5001   6/1/09                   2 Jaimes…
+##  5 5001-5 5       5001 Control         5001   6/1/09                   2 Jaimes…
+##  6 5001-6 6       5001 Control         5001   6/1/09                   2 Jaimes…
+##  7 5001-7 7       5001 Control         5001   6/1/09                   2 Jaimes…
+##  8 5001-8 8       5001 Control         5001   6/2/09                   3 Jaimes…
+##  9 5001-9 9       5001 Control         5001   6/3/09                   4 Jaimes…
+## 10 5001-… 10      5001 Control         5001   6/4/09                   5 Jaimes…
+## # ℹ 2,455 more rows
+## # ℹ 2 more variables: Year &lt;int&gt;, is.parasite &lt;lgl&gt;</code></pre>
 <pre class="r"><code>color.dat=read.csv(&quot;data/coot_example/chickcolor_extracted.csv&quot;)
-head(color.dat)</code></pre>
-<pre><code>##    new.id beak_brightness beak_chroma beak_hue chin_brightness chin_chroma
-## 1  5001-1       10115.318   0.8532340 582.1150       12648.380   0.6659823
-## 2 5001-10       10977.933   0.7953767 594.1525        9211.256   0.7001972
-## 3 5001-11       10969.117   0.8613368 588.8400       11616.203   0.7429716
-## 4 5001-12        9497.939   0.7500069 592.8750       10057.130   0.6928042
-## 5  5001-2        9923.183   0.8040354 593.9125        7949.278   0.6054178
-## 6  5001-3       14946.204   0.7637146 578.6500        8907.490   0.6780352
-##   chin_hue papillae_brightness papillae_chroma papillae_hue pate_brightness
-## 1 570.3617            9325.070       0.7890137     580.3625       15474.545
-## 2 573.5717           10188.617       0.7627703     576.8100        9317.368
-## 3 578.9867            8165.336       0.8307054     588.9350       14178.030
-## 4 564.5883            7749.599       0.8482111     583.8225        7336.676
-## 5 563.4117            8355.776       0.7464439     581.0875       12269.134
-## 6 568.0750           10786.379       0.7750680     580.6625       17211.539
-##   pate_chroma pate_hue shield_brightness shield_chroma shield_hue
-## 1   0.4914841 587.1125          8704.063     0.6595279   599.1200
-## 2   0.5277203 587.5950          2850.588     0.8956101   608.4767
-## 3   0.4947311 586.1775                NA            NA         NA
-## 4   0.4649026 590.1575          4964.597     0.8694237   591.1200
-## 5   0.4618946 588.8775          2605.885     0.9783022   605.1800
-## 6   0.4502956 588.4325          7074.740     0.7431128   594.1650</code></pre>
+tibble(color.dat)</code></pre>
+<pre><code>## # A tibble: 1,459 × 16
+##    new.id  beak_brightness beak_chroma beak_hue chin_brightness chin_chroma
+##    &lt;chr&gt;             &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;
+##  1 5001-1           10115.       0.853     582.          12648.       0.666
+##  2 5001-10          10978.       0.795     594.           9211.       0.700
+##  3 5001-11          10969.       0.861     589.          11616.       0.743
+##  4 5001-12           9498.       0.750     593.          10057.       0.693
+##  5 5001-2            9923.       0.804     594.           7949.       0.605
+##  6 5001-3           14946.       0.764     579.           8907.       0.678
+##  7 5001-4           11380.       0.813     587.           9092.       0.642
+##  8 5001-5           14091.       0.778     591.          10383.       0.721
+##  9 5001-6           11434.       0.760     588.           6023.       0.719
+## 10 5001-7            9370.       0.867     586.          14346.       0.737
+## # ℹ 1,449 more rows
+## # ℹ 10 more variables: chin_hue &lt;dbl&gt;, papillae_brightness &lt;dbl&gt;,
+## #   papillae_chroma &lt;dbl&gt;, papillae_hue &lt;dbl&gt;, pate_brightness &lt;dbl&gt;,
+## #   pate_chroma &lt;dbl&gt;, pate_hue &lt;dbl&gt;, shield_brightness &lt;dbl&gt;,
+## #   shield_chroma &lt;dbl&gt;, shield_hue &lt;dbl&gt;</code></pre>
 </div>
-<div id="lets-get-coding" class="section level2">
-<h2>3. Let’s get coding!</h2>
-<div id="load-the-packages-you-need" class="section level3">
-<h3>3.1. Load the packages you need</h3>
-<pre class="r"><code>library(tidyverse)</code></pre>
-</div>
-<div id="correlations-between-color-traits" class="section level3">
-<h3>3.2. Correlations between color traits</h3>
+<div id="correlations-between-color-traits-figure-1"
+class="section level2">
+<h2>3. Correlations between color traits (Figure 1)</h2>
 <p>I will select just the columns of the color data that contains the
 word “chroma”. Then, I will rename the variables to add a number in
 front of the name. This will just help me customize the order of the
@@ -511,115 +513,130 @@ that ggplot likes.</p>
   scale_fill_gradient2(limits=c(0, 1), low=&quot;white&quot;, high=&quot;red&quot;)</code></pre>
 <p><img src="Example_CootDataWrangling_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
-</div>
-<div id="look-at-how-chick-colors-differ-between-broods"
+<div id="analyze-how-chick-colors-differ-between-broods-table-1"
 class="section level2">
-<h2>Look at how chick colors differ between broods</h2>
-</div>
+<h2>4. Analyze how chick colors differ between broods (Table 1)</h2>
 <div
 id="make-a-global-dataset-that-contains-chick-color-chick-master-and-egg-data"
-class="section level2">
-<h2>make a global dataset that contains chick color, chick master, and
-egg data…</h2>
+class="section level3">
+<h3>4.1. Make a global dataset that contains chick color, chick master,
+and egg data</h3>
 <p>We are going to use a set of <code>left_join()</code> functions to
 create a global dataset.</p>
 <pre class="r"><code>all.dat=left_join(chicks, color.dat, by=join_by(new.id==new.id)) %&gt;%
   left_join(., eggs, by=join_by(new.id==Chick.ID)) %&gt;%
   tibble()</code></pre>
 </div>
-<div id="section" class="section level2">
-<h2></h2>
+<div id="conduct-pca-to-get-a-color-variable" class="section level3">
+<h3>4.2. Conduct PCA to get a color variable</h3>
+<p>One problem with having measured a lot of different color variables
+is that</p>
 <p>Only chick color data variables contain “_”</p>
-<pre class="r"><code>pca.result=all.dat%&gt;% select(contains(&quot;_&quot;)) %&gt;% drop_na() %&gt;% prcomp(.,  scale=T)</code></pre>
-<pre class="r"><code>str(pca.result)</code></pre>
-<pre><code>## List of 5
-##  $ sdev    : num [1:15] 1.78 1.36 1.3 1.14 1.07 ...
-##  $ rotation: num [1:15, 1:15] 0.265 -0.293 -0.164 0.209 -0.419 ...
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:15] &quot;beak_brightness&quot; &quot;beak_chroma&quot; &quot;beak_hue&quot; &quot;chin_brightness&quot; ...
-##   .. ..$ : chr [1:15] &quot;PC1&quot; &quot;PC2&quot; &quot;PC3&quot; &quot;PC4&quot; ...
-##  $ center  : Named num [1:15] 1.13e+04 7.89e-01 5.86e+02 1.20e+04 6.96e-01 ...
-##   ..- attr(*, &quot;names&quot;)= chr [1:15] &quot;beak_brightness&quot; &quot;beak_chroma&quot; &quot;beak_hue&quot; &quot;chin_brightness&quot; ...
-##  $ scale   : Named num [1:15] 2.37e+03 5.23e-02 9.80 2.53e+03 3.92e-02 ...
-##   ..- attr(*, &quot;names&quot;)= chr [1:15] &quot;beak_brightness&quot; &quot;beak_chroma&quot; &quot;beak_hue&quot; &quot;chin_brightness&quot; ...
-##  $ x       : num [1:1437, 1:15] 0.2833 1.4934 0.4125 0.387 -0.0496 ...
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : NULL
-##   .. ..$ : chr [1:15] &quot;PC1&quot; &quot;PC2&quot; &quot;PC3&quot; &quot;PC4&quot; ...
-##  - attr(*, &quot;class&quot;)= chr &quot;prcomp&quot;</code></pre>
+<pre class="r"><code>pca.result=all.dat%&gt;% select(contains(&quot;chin&quot;), contains(&quot;papillae&quot;), contains(&quot;beak&quot;)) %&gt;% drop_na() %&gt;% prcomp(.,  center=T, scale=T)</code></pre>
+<p>You can look at the details of the <code>prcomp()</code> function
+using <code>?prcomp</code>. Under “Value” in the help file, you’ll see
+that this function returns a list in which “x” is the rotated data. We
+can check out a little bit of that matrix:</p>
 <pre class="r"><code>#just look at the &quot;upper left corner&quot; of the PCA results, which is stored in the pca.result object 
 pca.result$x[1:10, 1:5]</code></pre>
-<pre><code>##               PC1        PC2         PC3        PC4         PC5
-##  [1,]  0.28334272  1.2027289 -2.47263375 -0.8195446  0.47769007
-##  [2,]  1.49341123  1.2148421 -1.29198351  1.3383028 -0.08978199
-##  [3,]  0.41249201  0.1436609  2.62136790 -1.6983799 -0.26963890
-##  [4,]  0.38697092  1.3665532  0.23732485 -0.9882036 -0.72247396
-##  [5,] -0.04955557  1.0288544 -0.02626878  0.7272486  0.49097141
-##  [6,] -1.17586007 10.8977734 -8.58085104  0.9455950  1.99997349
-##  [7,] -0.30400310 -0.3557295 -1.59851521 -1.3690483  0.44316677
-##  [8,] -0.68635256  0.3886334  0.78856939  1.2003471 -0.01947650
-##  [9,] -0.73026492  1.1107476  2.22399541 -1.1424960 -0.81175298
-## [10,] -0.98494569  1.2953843  0.44568157 -0.7403225 -2.03084378</code></pre>
-<p>We can extract the first PCA axis</p>
+<pre><code>##               PC1        PC2        PC3        PC4        PC5
+##  [1,]  0.15563752 -0.9096121 -0.5551098  0.2240269  0.7313733
+##  [2,] -1.08256364  1.0799289  0.9836269  0.9390664  1.2726829
+##  [3,] -0.88700758  1.4117492 -2.2472509 -0.2587771  1.0359437
+##  [4,] -0.42522677  0.7434949 -0.8975176  0.7476596  1.0716827
+##  [5,]  0.01855970  0.9858997  0.4679448  1.9539550  0.1464993
+##  [6,]  2.55414248  2.2694434  0.6576348  0.4348294  0.8414584
+##  [7,]  0.47403292 -2.3134839 -0.3599670  2.3396399 -0.4639107
+##  [8,]  0.37483620  0.2428154  1.4383682  1.2333483 -0.3268253
+##  [9,]  0.07805023  0.9279929 -0.8234554  1.3611125  1.2913388
+## [10,]  2.98404071 -0.2299321  0.5409242  1.0688361  0.0353071</code></pre>
+<p>We can extract the first PCA axis as the first column of this
+object:</p>
 <pre class="r"><code>head(pca.result$x[,1])</code></pre>
-<pre><code>## [1]  0.28334272  1.49341123  0.41249201  0.38697092 -0.04955557 -1.17586007</code></pre>
-<p>So we can add this to the global dataset:</p>
-<pre class="r"><code>all.dat= all.dat %&gt;% 
-  select(new.id, Clutch, contains(&quot;_&quot;)) %&gt;%
+<pre><code>## [1]  0.1556375 -1.0825636 -0.8870076 -0.4252268  0.0185597  2.5541425</code></pre>
+<p>Now that we know how to get the PC1 variable, we will create a new
+data subset, which we will call <code>use.dat</code> that includes the
+chick ID, the clutch (i.e., nest) it came from, and the color variables
+(i.e., all variables that include “_“) and the PC1 variable. We want to
+also convert Clutch into a factor (it is currently classified as
+Character).</p>
+<pre class="r"><code>use.dat = all.dat %&gt;% 
+  select(new.id, Clutch, contains(&quot;beak&quot;), contains(&quot;papillae&quot;), contains(&quot;chin&quot;)) %&gt;%
   drop_na() %&gt;%
   mutate(pc1=pca.result$x[,1]) %&gt;%
-  mutate(Clutch=factor(Clutch)) %&gt;%
-  data.frame()</code></pre>
-<p>##Table 1</p>
-<pre class="r"><code>color.columns=as.numeric(c(grep(&quot;_&quot;,colnames(all.dat)), grep(&quot;PC&quot;, colnames(all.dat))))
+  mutate(Clutch=factor(Clutch)) </code></pre>
+</div>
+<div id="table-1" class="section level3">
+<h3>Table 1</h3>
+<p>Now, we can use an apply function <code>sapply()</code> to run ANOVAs
+with each color variable as the response variable, and clutch as the
+predictor variable. To do this, we will first define which columns of
+the data are the color variables (i.e., all variables that include “_”
+in the name, as well as the one that includes “pc” in the name). Then,
+we will use the <code>sapply()</code> function to run the ANOVA with
+each variable in turn.</p>
+<p><em>Note: One difference between data.frame and tibble is how we call
+variables using their column name. In dataframe, we would use the single
+square bracket to index, so we would call the third column as: df$[,1].
+In tibble, we use the double square bracket: df[[3]].</em></p>
+<pre class="r"><code>color.columns=as.numeric(c(grep(&quot;_&quot;,colnames(use.dat)), grep(&quot;pc&quot;, colnames(use.dat))))
+aov.results=sapply(color.columns, function(x) summary(aov(use.dat[[x]]~as.factor(use.dat$Clutch))))</code></pre>
+<p><strong>For kicks, here is an alternative version using a for loop
+(result not shown, but it would look the same):</strong></p>
+<pre class="r"><code>color.columns=as.numeric(c(grep(&quot;_&quot;,colnames(use.dat)), grep(&quot;pc&quot;, colnames(use.dat))))
 aov.results=list()
 for (i in 1:length(color.columns)){
-  aov.results[[i]]=summary(aov(all.dat[,color.columns[i]]~as.factor(all.dat$Clutch)))
+  aov.results[[i]]=summary(aov(use.dat[[color.columns[i]]]~as.factor(use.dat$Clutch)))
 }</code></pre>
-<pre class="r"><code>result.dat=data.frame(trait=names(all.dat)[color.columns], Fvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]][[1]]$`F value`[1]), digits=3), Pvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]][[1]]$`Pr(&gt;F)`[1]), digits=5))
+<p>Now, we can extract the F values and P values (and calculate P values
+adjusted for False Discovery Rate) from the <code>aov.results</code>
+object (i.e., list of ANOVA model fits) and organize them into a
+table.</p>
+<pre class="r"><code>result.dat=data.frame(trait=names(use.dat)[color.columns], Fvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]]$`F value`[1]), digits=3), Pvalue=round(sapply(1:length(color.columns), function(x) aov.results[[x]]$`Pr(&gt;F)`[1]), digits=5))
 result.dat$p.adjust=p.adjust(result.dat$Pvalue, method=&quot;fdr&quot;)
 result.dat #Table 1</code></pre>
-<pre><code>##                  trait Fvalue  Pvalue     p.adjust
-## 1      beak_brightness  2.298 0.00000 0.0000000000
-## 2          beak_chroma  2.529 0.00000 0.0000000000
-## 3             beak_hue  2.099 0.00000 0.0000000000
-## 4      chin_brightness  2.779 0.00000 0.0000000000
-## 5          chin_chroma  4.248 0.00000 0.0000000000
-## 6             chin_hue  3.895 0.00000 0.0000000000
-## 7  papillae_brightness  2.023 0.00000 0.0000000000
-## 8      papillae_chroma  2.245 0.00000 0.0000000000
-## 9         papillae_hue  2.758 0.00000 0.0000000000
-## 10     pate_brightness  1.933 0.00000 0.0000000000
-## 11         pate_chroma  3.186 0.00000 0.0000000000
-## 12            pate_hue  0.816 0.98536 0.9853600000
-## 13   shield_brightness  1.238 0.00797 0.0085392857
-## 14       shield_chroma  1.556 0.00000 0.0000000000
-## 15          shield_hue  1.387 0.00010 0.0001153846</code></pre>
-<div
-id="filter-out-parasite-chicks-and-then-calculate-mean-chick-color-for-each-brood"
-class="section level3">
-<h3>3.2. Filter out parasite chicks and then calculate mean chick color
-for each brood</h3>
-<pre class="r"><code>#dplyr way, with piping
-#sum.dat=dat %&gt;% dplyr::filter(is.parasite==FALSE) %&gt;% 
-  group_by(nest) %&gt;% 
-  summarise(mean.col=mean(chin_chroma))
-#sum.dat</code></pre>
-</div>
-<div
-id="task-2-standardize-each-chicks-color-measure-against-average-of-its-nest."
-class="section level3">
-<h3>task 2: standardize each chick’s color measure against average of
-its nest.</h3>
-<pre class="r"><code>#with dyplr
-#left_join(dat, sum.dat, by=&quot;nest&quot;) %&gt;% tibble()</code></pre>
-<pre class="r"><code>#left_join(dat, sum.dat, by=&quot;nest&quot;) %&gt;%
-  mutate(std.chick.col=chin_chroma-mean.col)
-#head(dat)</code></pre>
-<div id="section-1" class="section level5">
-<h5></h5>
+<pre><code>##                  trait Fvalue Pvalue p.adjust
+## 1      beak_brightness  2.254      0        0
+## 2          beak_chroma  2.528      0        0
+## 3             beak_hue  2.167      0        0
+## 4  papillae_brightness  1.959      0        0
+## 5      papillae_chroma  2.215      0        0
+## 6         papillae_hue  2.775      0        0
+## 7      chin_brightness  2.758      0        0
+## 8          chin_chroma  4.234      0        0
+## 9             chin_hue  3.941      0        0
+## 10                 pc1  4.965      0        0</code></pre>
 </div>
 </div>
+<div id="see-how-chick-coloration-is-affected-by-hatching-sequence"
+class="section level2">
+<h2>5. See how chick coloration is affected by hatching sequence</h2>
+<pre class="r"><code>use.dat2=left_join(all.dat, use.dat, by=&quot;new.id&quot;) %&gt;%
+  select(new.id, Brood, Release.Order, is.parasite, pc1) %&gt;%
+  mutate(Release.Order=replace(Release.Order, Release.Order&gt;7, 7)) %&gt;%
+  drop_na()</code></pre>
+<pre><code>## Warning in left_join(all.dat, use.dat, by = &quot;new.id&quot;): Detected an unexpected many-to-many relationship between `x` and `y`.
+## ℹ Row 86 of `x` matches multiple rows in `y`.
+## ℹ Row 81 of `y` matches multiple rows in `x`.
+## ℹ If a many-to-many relationship is expected, set `relationship =
+##   &quot;many-to-many&quot;` to silence this warning.</code></pre>
+<pre class="r"><code>ggplot(use.dat2, aes(x=factor(Release.Order), y=pc1)) +
+  geom_boxplot()</code></pre>
+<p><img src="Example_CootDataWrangling_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(use.dat2, aes(x=factor(Release.Order), y=pc1, fill=Release.Order)) +
+  geom_boxplot() +
+  scale_fill_gradient(low=&quot;yellow&quot;, high=&quot;red&quot;)</code></pre>
+<p><img src="Example_CootDataWrangling_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>sum.dat=use.dat2 %&gt;%
+  group_by(Release.Order) %&gt;%
+  summarise(mean_se(pc1))</code></pre>
+<pre class="r"><code>ggplot(sum.dat, aes(x=Release.Order, y=y)) +
+  geom_point(size=5) +
+  geom_path() +
+  geom_errorbar(aes(ymax=ymax, ymin=ymin), width=0.2) +
+  theme_classic()</code></pre>
+<p><img src="Example_CootDataWrangling_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+#####</p>
 </div>
 
 
@@ -671,7 +688,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
