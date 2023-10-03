@@ -40,25 +40,10 @@ mean.custom(1:10)
 
 ## 2. Using If-Else statements to add arguments inside functions
 
-### 2.1 What are arguments?
-You will notice that many R functions have a set of arguments that you use to control how the function is executed. Take, for example the `plot()` function--it has a lot of arguments that can be used to change the output. 
+### 2.1 A digression into If-else statements
 
-Let's try plotting the change in atmospheric concentration of CO2 in two different ways. We know that this can be done with a simple argument, `type=`.
-
-```{r, out.width="50%"}
-plot(co2, type="p", pch=20) #with points
-```
-
-```{r, out.width="50%"}
-plot(co2, type="l") #with a line
-```
-
-To add arguments to your custom function, you can add an input variable that will act as your argument, and then you need to include if-else statements inside your function to control the output.
-
-### 2.2 A digression into If-else statements
-
-So, to include arguments into your custom functions, you will need to know a little bit about if-else statements. 
-Let's start with the simple "If Statment". This follows a structure like this:
+To learn how to include arguments into your custom functions, you will need to know a little bit about if-else statements. 
+Let's start with the simple "If Statement". This follows a structure like this:
 
 `if(condition) code`
 
@@ -69,22 +54,40 @@ knitr::include_graphics("images/if.png")
 ```
 
 Let's do an example:
-Let's say we have an object called `answer`, that holds a number. We are going to make an 'if statement' that says, if `answer` is equal to the mean of the numbers 1 through 10, tell me I am correct.
 
-Now try it with the correct answer, `answer=5.5`
+Let's ask R if a given number is even or odd. 
+
+A number is odd if you can divide it by 2 with no remainder. An odd number has a remainder of 1 when it is divided by 2. 
+
+The operator for getting the remainder in R is `%%`
+
+So if you use this to divide an even number by 2, you will get 0. 
 ```{r}
-answer=5.5
-if (answer==mean(1:10)) print("you are correct")
+4 %% 2
 ```
 
+Whereas for an odd number, you will get 1
 
-Now try it with a wrong answer:
 ```{r}
-answer=5
-if (answer==mean(1:10)) print("you are correct")
+5 %% 2
 ```
 
-What you will find is that this will not give you any output. This is because the if statement only executes the code when the condition is true, and does not execute the code otherwise. 
+So let's say you want R to tell you if a number is odd or even. 
+
+Let's assign `num` to be a number. Here, we will say it is 4. 
+Then, we can use an if statement to tell us if the number is even. 
+```{r}
+num=4
+if (num %% 2 == 0) print ("the number is even")
+```
+
+But this if statement won't give you an output if the number is odd:
+```{r}
+num=5
+if (num %% 2 == 0) print ("the number is even")
+```
+
+The reason this won't give you an output is because the **if statement only executes the code when the condition is true**, and does not execute the code otherwise. 
 
 To get an output when the answer is wrong, you need to use both an "If" statement and an "Else" statement. 
 
@@ -94,61 +97,156 @@ knitr::include_graphics("images/if-else.png")
 
 Try this:
 
-If-Else statement with correct answer
+If-Else statement that will work with even OR odd number:
 ```{r}
-answer=5.5
-if (answer==mean(1:10)) print("you are correct") else print("you are incorrect")
+num=4
+if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
 ```
 
-If-Else statement with wrong answer
+Try the same statement with odd number
 ```{r}
-answer=5
-if (answer==mean(1:10)) print("you are correct") else print("you are incorrect")
+num=5
+if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
 ```
 
 ***
 
-### 2.3. The `ifelse()` function
+### 2.2. The `ifelse()` function
 
 Often, you can simplify the if-else syntax using the `ifelse()` function. 
 This function takes the format: `ifelse(<a logical test>, <value if yes>, <value if no>)`. So, if I take the if-else statement from above, I can use this function to save the answer as an object:
 ```{r}
-answer=5
-response=ifelse(answer==mean(1:10), "you are correct", "you are incorrect")
+num=4
+response=ifelse(num %% 2 == 0, "the number is even", "the number is odd")
 response
 ```
 
 ***
 
-### 2.4. Create a function with the if else statement
+### 2.3 Create a custom function that includes if-else statements
 
-Now, you can actually make this into a function:
+Now, you can actually make this into a function.
+Let's call this function `even.or.odd()`
 
-You can do this with the full if()... else format:
+Here is what the function will look like. Our function will take in a variable called "num", which will be a number. We then use the if statement and say IF the number divided by 2 has a remainder of 0, then tell us that it is even. Otherwise, tell us it is odd. 
 ```{r}
-mean.1to10=function(answer) {if (answer==mean(1:10)) print("you are correct") else print("you are incorrect")}
+even.or.odd=function(num) {
+  if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
+}
+```
+
+Then, we can use the function!
+
+```{r}
+even.or.odd(4)
+
+even.or.odd(5)
+
+even.or.odd(1111089)
+```
+
+<br>
+
+You can also make this function with the `ifelse()` function as well. This will give identical results.
+```{r}
+even.or.odd=function(num) {
+  ifelse(num %% 2 == 0, "the number is even", "the number is odd")
+}
+```
+
+<br>
+
+### 2.4 Being specific is important when using if-else statements
+
+Now, notice that we have taken a pretty quick-and-dirty way of coding this if else statement. The code above implies that anything that is not an even number IS an odd number. But that is not strictly true because **even vs. odd categorization only applies to integers**. 
+
+But the way we have coded this, the function will mislead you by saying anything with decimal points is an odd number!
+```{r}
+even.or.odd(2.5)
+
+even.or.odd(2.4)
+```
+
+So how can we fix this? There are two simple ways:
+
+* **Option 1:** tell us that it is odd ONLY when the remainder = 1
+
+* **Option 2:** run the command only when the input is an integer
+
+<br>
+
+#### Let's try option 1:
+
+We can add another if statement after else:
+```{r}
+even.or.odd=function(num) {
+  if (num %% 2 == 0) print ("the number is even") else if (num %% 2 == 1) print("the number is odd")
+}
+```
+
+Then, it won't run the command if the remainder is neither 0 nor 1. 
+
+```{r}
+even.or.odd(2.5)
+```
+
+But maybe you want R to say something even if neither is true, if only to make sure that the function is running. Then you can add another else statement:
+```{r}
+even.or.odd=function(num) {
+  if (num %% 2 == 0) print ("the number is even") else if (num %% 2 == 1) print("the number is odd") else print("the number is neither even nor odd")
+}
 ```
 
 ```{r}
-mean.1to10(answer=5.5)
-mean.1to10(answer=5)
+even.or.odd(2.5)
 ```
 
-Or, you can do this with the `ifelse()` function:
+You can make the code a bit easier to read by having a line break after "else" 
+```{r}
+even.or.odd=function(num) {
+  if (num %% 2 == 0) print ("the number is even") else 
+    if (num %% 2 == 1) print("the number is odd") else 
+      print("the number is neither even nor odd")
+}
+```
+
+<br>
+
+#### Let's now try option 2:
+
+Here, we can add a new if statement at the beginning to ask whether the input is an integer. I can use a convenient function called `is.integer()`, which gives TRUE if it is and FALSE if not. 
+I'm going to set it up so that, if the input is NOT an integer, then it will tell me so. But if the number is an integer, then it will run the original if-else statement:
 
 ```{r}
-mean.1to10_alt=function(answer) ifelse(answer==mean(1:10), "you are correct", "you are incorrect")
+even.or.odd=function(num) {
+  if (is.integer(num) == FALSE) print("the number is not an integer") else
+    if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
+}
 ```
 
 ```{r}
-mean.1to10_alt(answer=5.5)
-mean.1to10_alt(answer=5)
+even.or.odd(2.5)
 ```
+
+So the lesson is, **IT IS IMPORTANT** to consider when using if else statements is to anticipate all the different ways in which people might
+
+<br>
 
 ## 3. Custom function for calculating averages in different ways
 
+### 3.1 Making a function that can calculate arithmetic OR geometric mean.
 Ok, so now you know how if-else statements work. Let's now build a better function for calculating averages. Let's say we want to be able to calculate the **geometric mean**, which is the *n*th root of the product of *n* numbers, as well as the arithmetic mean.
 
+Here are the differences in how you would calculate the arithmetic vs. geometric mean.
+```{r}
+#arithmetic mean of 1:10
+sum(1:10)/length(1:10)
+
+#geometric mean of 1:10
+prod(1:10)^(1/length(1:10))
+```
+
+Now let's make a function called `average()` where you can specify which kind of mean you want to calculate:
 ```{r}
 average=function(x, type="arithmetic"){
   if(type=="arithmetic") sum(x)/length(x)
@@ -169,19 +267,66 @@ Note also that in the function, we have set the default type to be arithmetic:
 average(1:10)
 ```
 
-One problem is that, if we choose a different type of average, say median (or if we simply misspell the type), then the code simply won't run.
 
+### 3.2 Medians
+
+Ok, now let's add another common type of average: the median. 
+
+The median is tricky because the way you calculate it is different when you have odd or even set of numbers! 
+* When you have an odd set of numbers, then you sort the numbers by value (e.g., from smallest to largest) and then take the middle number. 
+* When you have an even set of numbers, you sort the numbers by value and add the middle two numbers and divide by 2. 
+
+Ok, so we know how to deal with odd and even numbers now (see above). What we need then are to (1) sort the numbers by value, and (2) get the middle number.
+
+Let's take numbers 1 through 9 but jumble the order:
 ```{r}
-average(1:10, type="median")
+v=c(1,4,7,2,9,3,8,5,6)
 ```
 
-So a good practice is to also include an error message if something in the arguments doesn't work correctly. We can do this by layering another if-else statement below the previous one:
+Now let's look at this vector, and then look at it when we use the `sort()` function
+```{r}
+v
+sort(v)
+```
+
+Great. So `sort()` makes sense. 
+
+Now, to get the middle number--that is, the 5th number in a set of 9 numbers.
+When n = the length of this number set, then the middle number corresponds to the [n/2+1]th spot in the sorted vector:
+```{r}
+v.sort=sort(v) #save the sorted vector
+n=length(v.sort) #get the length of the sorted vector
+v.sort[n/2+1] #get the middle number (when there are odd set of numbers)
+```
+
+If you want to do this with an even set of numbers, then you add the [n/2]th number and [n/2+1]th number and divide by 2.
+Let's add the number 10 to the vector (to make it an even set of numbers) and do it. We'll call the new vector "w"
+```{r}
+w=c(v, 10)
+w
+w.sort=sort(w) #save the sorted vector
+n=length(w.sort) #get the length of the sorted vector
+(w.sort[n/2]+w.sort[n/2+1])/2 #get the middle number (when there are odd set of numbers)
+```
+
+
+### 3.3 Adding median as an option in our custom function for calculating averages.
+
+Now, we're ready to add this into the `average()` function. 
+
+**NOTE:** Because the calculation of median requires multiple lines of code, we need to use a {} after the else if statement and include the sequence of commands within those curly brackets. 
+First, we will get the length of the vector, then we will sort the vector. Then, we will calculate the median differently depending on whether there are odd or even set of numbers. 
 
 ```{r}
 average=function(x, type="arithmetic"){
   if(type=="arithmetic") sum(x)/length(x)
   else if (type=="geometric") prod(x)^(1/length(x))
-  else "we can't handle that type of average"
+  else if (type=="median"){
+    n=length(x)
+    x.sort=sort(x)
+  if(n %% 2 == 1) x.sort[n/2+1] else
+  if(n %% 2 ==0) (x.sort[n/2]+x.sort[n/2+1])/2
+  }
 }
 ```
 
@@ -190,49 +335,29 @@ Now:
 average(1:10, type="median")
 ```
 
-## 4. Building a custom function for measuring standard error of the mean
+### 3.4 Adding in an error message
 
-A common thing people find out about R is that there is no built-in function for calculating standard error of the mean, a pretty common statistic. There are probably a lot of theoretical reasons for that ('standard error' can mean different things to different people), but we won't delve into that. 
-
-Standard Error of the Mean is simply the standard deviation divided by the square root of the sample size. This is also equivalent to taking the square root of the variance divided by the sample size. So, let's make the function:
+One problem is that, if we choose a different type of average, say mode (or if we simply misspell the type), then the code simply won't run.
 
 ```{r}
-se=function(x) sqrt(var(x)/length(x))
-se(1:10)
+average(1:10, type="mode")
 ```
 
-
-Let's include in this function an option to remove NAs before calculating the standar error:
+So a good practice is to also include an error message if something in the arguments doesn't work correctly. We can do this by layering another if-else statement below the previous one:
 ```{r}
-se=function(x, na.rm=F) {
-  if(na.rm==F) sqrt(var(x)/length(x))
-  else if (na.rm==T) sqrt(var(x[is.na(x)==F])/length(x[is.na(x)==F]))
+average=function(x, type="arithmetic"){
+  if(type=="arithmetic") sum(x)/length(x)
+  else if (type=="geometric") prod(x)^(1/length(x))
+  else if (type=="median"){
+    n=length(x)
+  if(n %% 2 == 1) x[n/2+1] else
+  if(n %% 2 ==0) (x[n/2]+x[n/2+1])/2
+  }
+  else ("I don't know that one")
 }
 ```
 
-Now we can calculate standard error and mean from some continuous variable. Let's take Sepal Width from the `iris` dataset. We can use the `group_by()` and `summarise()` functions from *dplyr*
-
-
+Now, if you try to call "mode", it will give you an error message.
 ```{r}
-library(dplyr)
-iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
-```
-
-
-Let's use this to make barplots with error bars:
-
-```{r}
-library(ggplot2)
-summary.dat=iris %>% group_by(Species) %>% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
-
-ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
-  geom_bar(stat="identity")
-  
-```
-Now add the error bars as mean +/- standard error.
-
-```{r}
-ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
-  geom_bar(stat="identity") +
-  geom_errorbar(aes(ymin=mean.SW-se.SW, ymax=mean.SW+se.SW), width=0.2)
+average(1:10, type="mode")
 ```

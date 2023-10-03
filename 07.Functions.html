@@ -14,7 +14,7 @@
 
 <title>Module 7: Custom Functions (and If-Else statements)</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -182,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -191,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -350,7 +343,7 @@ div.tocify {
 <h1 class="title toc-ignore">Module 7: Custom Functions (and If-Else
 statements)</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/29/22</h4>
+<h4 class="date">updated 10/03/23</h4>
 
 </div>
 
@@ -387,28 +380,11 @@ a vector:</p>
 <div id="using-if-else-statements-to-add-arguments-inside-functions"
 class="section level2">
 <h2>2. Using If-Else statements to add arguments inside functions</h2>
-<div id="what-are-arguments" class="section level3">
-<h3>2.1 What are arguments?</h3>
-<p>You will notice that many R functions have a set of arguments that
-you use to control how the function is executed. Take, for example the
-<code>plot()</code> function–it has a lot of arguments that can be used
-to change the output.</p>
-<p>Let’s try plotting the change in atmospheric concentration of CO2 in
-two different ways. We know that this can be done with a simple
-argument, <code>type=</code>.</p>
-<pre class="r"><code>plot(co2, type=&quot;p&quot;, pch=20) #with points</code></pre>
-<p><img src="07.Functions_files/figure-html/unnamed-chunk-3-1.png" width="50%" /></p>
-<pre class="r"><code>plot(co2, type=&quot;l&quot;) #with a line</code></pre>
-<p><img src="07.Functions_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
-<p>To add arguments to your custom function, you can add an input
-variable that will act as your argument, and then you need to include
-if-else statements inside your function to control the output.</p>
-</div>
 <div id="a-digression-into-if-else-statements" class="section level3">
-<h3>2.2 A digression into If-else statements</h3>
-<p>So, to include arguments into your custom functions, you will need to
-know a little bit about if-else statements. Let’s start with the simple
-“If Statment”. This follows a structure like this:</p>
+<h3>2.1 A digression into If-else statements</h3>
+<p>To learn how to include arguments into your custom functions, you
+will need to know a little bit about if-else statements. Let’s start
+with the simple “If Statement”. This follows a structure like this:</p>
 <p><code>if(condition) code</code></p>
 <p>This is going to execute the code if the condition = TRUE</p>
 <div class="figure" style="text-align: center">
@@ -417,20 +393,31 @@ know a little bit about if-else statements. Let’s start with the simple
 The If statement
 </p>
 </div>
-<p>Let’s do an example: Let’s say we have an object called
-<code>answer</code>, that holds a number. We are going to make an ‘if
-statement’ that says, if <code>answer</code> is equal to the mean of the
-numbers 1 through 10, tell me I am correct.</p>
-<p>Now try it with the correct answer, <code>answer=5.5</code></p>
-<pre class="r"><code>answer=5.5
-if (answer==mean(1:10)) print(&quot;you are correct&quot;)</code></pre>
-<pre><code>## [1] &quot;you are correct&quot;</code></pre>
-<p>Now try it with a wrong answer:</p>
-<pre class="r"><code>answer=5
-if (answer==mean(1:10)) print(&quot;you are correct&quot;)</code></pre>
-<p>What you will find is that this will not give you any output. This is
-because the if statement only executes the code when the condition is
-true, and does not execute the code otherwise.</p>
+<p>Let’s do an example:</p>
+<p>Let’s ask R if a given number is even or odd.</p>
+<p>A number is odd if you can divide it by 2 with no remainder. An odd
+number has a remainder of 1 when it is divided by 2.</p>
+<p>The operator for getting the remainder in R is <code>%%</code></p>
+<p>So if you use this to divide an even number by 2, you will get 0.</p>
+<pre class="r"><code>4 %% 2</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Whereas for an odd number, you will get 1</p>
+<pre class="r"><code>5 %% 2</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>So let’s say you want R to tell you if a number is odd or even.</p>
+<p>Let’s assign <code>num</code> to be a number. Here, we will say it is
+4. Then, we can use an if statement to tell us if the number is
+even.</p>
+<pre class="r"><code>num=4
+if (num %% 2 == 0) print (&quot;the number is even&quot;)</code></pre>
+<pre><code>## [1] &quot;the number is even&quot;</code></pre>
+<p>But this if statement won’t give you an output if the number is
+odd:</p>
+<pre class="r"><code>num=5
+if (num %% 2 == 0) print (&quot;the number is even&quot;)</code></pre>
+<p>The reason this won’t give you an output is because the <strong>if
+statement only executes the code when the condition is true</strong>,
+and does not execute the code otherwise.</p>
 <p>To get an output when the answer is wrong, you need to use both an
 “If” statement and an “Else” statement.</p>
 <div class="figure" style="text-align: center">
@@ -440,55 +427,148 @@ The If-Else statement
 </p>
 </div>
 <p>Try this:</p>
-<p>If-Else statement with correct answer</p>
-<pre class="r"><code>answer=5.5
-if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)</code></pre>
-<pre><code>## [1] &quot;you are correct&quot;</code></pre>
-<p>If-Else statement with wrong answer</p>
-<pre class="r"><code>answer=5
-if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)</code></pre>
-<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
+<p>If-Else statement that will work with even OR odd number:</p>
+<pre class="r"><code>num=4
+if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)</code></pre>
+<pre><code>## [1] &quot;the number is even&quot;</code></pre>
+<p>Try the same statement with odd number</p>
+<pre class="r"><code>num=5
+if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)</code></pre>
+<pre><code>## [1] &quot;the number is odd&quot;</code></pre>
 <hr />
 </div>
 <div id="the-ifelse-function" class="section level3">
-<h3>2.3. The <code>ifelse()</code> function</h3>
+<h3>2.2. The <code>ifelse()</code> function</h3>
 <p>Often, you can simplify the if-else syntax using the
 <code>ifelse()</code> function. This function takes the format:
 <code>ifelse(&lt;a logical test&gt;, &lt;value if yes&gt;, &lt;value if no&gt;)</code>.
 So, if I take the if-else statement from above, I can use this function
 to save the answer as an object:</p>
-<pre class="r"><code>answer=5
-response=ifelse(answer==mean(1:10), &quot;you are correct&quot;, &quot;you are incorrect&quot;)
+<pre class="r"><code>num=4
+response=ifelse(num %% 2 == 0, &quot;the number is even&quot;, &quot;the number is odd&quot;)
 response</code></pre>
-<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
+<pre><code>## [1] &quot;the number is even&quot;</code></pre>
 <hr />
 </div>
-<div id="create-a-function-with-the-if-else-statement"
+<div id="create-a-custom-function-that-includes-if-else-statements"
 class="section level3">
-<h3>2.4. Create a function with the if else statement</h3>
-<p>Now, you can actually make this into a function:</p>
-<p>You can do this with the full if()… else format:</p>
-<pre class="r"><code>mean.1to10=function(answer) {if (answer==mean(1:10)) print(&quot;you are correct&quot;) else print(&quot;you are incorrect&quot;)}</code></pre>
-<pre class="r"><code>mean.1to10(answer=5.5)</code></pre>
-<pre><code>## [1] &quot;you are correct&quot;</code></pre>
-<pre class="r"><code>mean.1to10(answer=5)</code></pre>
-<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
-<p>Or, you can do this with the <code>ifelse()</code> function:</p>
-<pre class="r"><code>mean.1to10_alt=function(answer) ifelse(answer==mean(1:10), &quot;you are correct&quot;, &quot;you are incorrect&quot;)</code></pre>
-<pre class="r"><code>mean.1to10_alt(answer=5.5)</code></pre>
-<pre><code>## [1] &quot;you are correct&quot;</code></pre>
-<pre class="r"><code>mean.1to10_alt(answer=5)</code></pre>
-<pre><code>## [1] &quot;you are incorrect&quot;</code></pre>
+<h3>2.3 Create a custom function that includes if-else statements</h3>
+<p>Now, you can actually make this into a function. Let’s call this
+function <code>even.or.odd()</code></p>
+<p>Here is what the function will look like. Our function will take in a
+variable called “num”, which will be a number. We then use the if
+statement and say IF the number divided by 2 has a remainder of 0, then
+tell us that it is even. Otherwise, tell us it is odd.</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)
+}</code></pre>
+<p>Then, we can use the function!</p>
+<pre class="r"><code>even.or.odd(4)</code></pre>
+<pre><code>## [1] &quot;the number is even&quot;</code></pre>
+<pre class="r"><code>even.or.odd(5)</code></pre>
+<pre><code>## [1] &quot;the number is odd&quot;</code></pre>
+<pre class="r"><code>even.or.odd(1111089)</code></pre>
+<pre><code>## [1] &quot;the number is odd&quot;</code></pre>
+<p><br></p>
+<p>You can also make this function with the <code>ifelse()</code>
+function as well. This will give identical results.</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  ifelse(num %% 2 == 0, &quot;the number is even&quot;, &quot;the number is odd&quot;)
+}</code></pre>
+<p><br></p>
+</div>
+<div id="being-specific-is-important-when-using-if-else-statements"
+class="section level3">
+<h3>2.4 Being specific is important when using if-else statements</h3>
+<p>Now, notice that we have taken a pretty quick-and-dirty way of coding
+this if else statement. The code above implies that anything that is not
+an even number IS an odd number. But that is not strictly true because
+<strong>even vs. odd categorization only applies to
+integers</strong>.</p>
+<p>But the way we have coded this, the function will mislead you by
+saying anything with decimal points is an odd number!</p>
+<pre class="r"><code>even.or.odd(2.5)</code></pre>
+<pre><code>## [1] &quot;the number is odd&quot;</code></pre>
+<pre class="r"><code>even.or.odd(2.4)</code></pre>
+<pre><code>## [1] &quot;the number is odd&quot;</code></pre>
+<p>So how can we fix this? There are two simple ways:</p>
+<ul>
+<li><p><strong>Option 1:</strong> tell us that it is odd ONLY when the
+remainder = 1</p></li>
+<li><p><strong>Option 2:</strong> run the command only when the input is
+an integer</p></li>
+</ul>
+<p><br></p>
+<div id="lets-try-option-1" class="section level4">
+<h4>Let’s try option 1:</h4>
+<p>We can add another if statement after else:</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  if (num %% 2 == 0) print (&quot;the number is even&quot;) else if (num %% 2 == 1) print(&quot;the number is odd&quot;)
+}</code></pre>
+<p>Then, it won’t run the command if the remainder is neither 0 nor
+1.</p>
+<pre class="r"><code>even.or.odd(2.5)</code></pre>
+<p>But maybe you want R to say something even if neither is true, if
+only to make sure that the function is running. Then you can add another
+else statement:</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  if (num %% 2 == 0) print (&quot;the number is even&quot;) else if (num %% 2 == 1) print(&quot;the number is odd&quot;) else print(&quot;the number is neither even nor odd&quot;)
+}</code></pre>
+<pre class="r"><code>even.or.odd(2.5)</code></pre>
+<pre><code>## [1] &quot;the number is neither even nor odd&quot;</code></pre>
+<p>You can make the code a bit easier to read by having a line break
+after “else”</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  if (num %% 2 == 0) print (&quot;the number is even&quot;) else 
+    if (num %% 2 == 1) print(&quot;the number is odd&quot;) else 
+      print(&quot;the number is neither even nor odd&quot;)
+}</code></pre>
+<p><br></p>
+</div>
+<div id="lets-now-try-option-2" class="section level4">
+<h4>Let’s now try option 2:</h4>
+<p>Here, we can add a new if statement at the beginning to ask whether
+the input is an integer. I can use a convenient function called
+<code>is.integer()</code>, which gives TRUE if it is and FALSE if not.
+I’m going to set it up so that, if the input is NOT an integer, then it
+will tell me so. But if the number is an integer, then it will run the
+original if-else statement:</p>
+<pre class="r"><code>even.or.odd=function(num) {
+  if (is.integer(num) == FALSE) print(&quot;the number is not an integer&quot;) else
+    if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)
+}</code></pre>
+<pre class="r"><code>even.or.odd(2.5)</code></pre>
+<pre><code>## [1] &quot;the number is not an integer&quot;</code></pre>
+<p>So the lesson is, <strong>IT IS IMPORTANT</strong> to consider when
+using if else statements is to anticipate all the different ways in
+which people might</p>
+<p><br></p>
+</div>
 </div>
 </div>
 <div id="custom-function-for-calculating-averages-in-different-ways"
 class="section level2">
 <h2>3. Custom function for calculating averages in different ways</h2>
+<div
+id="making-a-function-that-can-calculate-arithmetic-or-geometric-mean."
+class="section level3">
+<h3>3.1 Making a function that can calculate arithmetic OR geometric
+mean.</h3>
 <p>Ok, so now you know how if-else statements work. Let’s now build a
 better function for calculating averages. Let’s say we want to be able
 to calculate the <strong>geometric mean</strong>, which is the
 <em>n</em>th root of the product of <em>n</em> numbers, as well as the
 arithmetic mean.</p>
+<p>Here are the differences in how you would calculate the arithmetic
+vs. geometric mean.</p>
+<pre class="r"><code>#arithmetic mean of 1:10
+sum(1:10)/length(1:10)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<pre class="r"><code>#geometric mean of 1:10
+prod(1:10)^(1/length(1:10))</code></pre>
+<pre><code>## [1] 4.528729</code></pre>
+<p>Now let’s make a function called <code>average()</code> where you can
+specify which kind of mean you want to calculate:</p>
 <pre class="r"><code>average=function(x, type=&quot;arithmetic&quot;){
   if(type==&quot;arithmetic&quot;) sum(x)/length(x)
   else if(type==&quot;geometric&quot;) prod(x)^(1/length(x))
@@ -502,77 +582,98 @@ arithmetic mean.</p>
 arithmetic:</p>
 <pre class="r"><code>average(1:10)</code></pre>
 <pre><code>## [1] 5.5</code></pre>
-<p>One problem is that, if we choose a different type of average, say
-median (or if we simply misspell the type), then the code simply won’t
-run.</p>
+</div>
+<div id="medians" class="section level3">
+<h3>3.2 Medians</h3>
+<p>Ok, now let’s add another common type of average: the median.</p>
+<p>The median is tricky because the way you calculate it is different
+when you have odd or even set of numbers! * When you have an odd set of
+numbers, then you sort the numbers by value (e.g., from smallest to
+largest) and then take the middle number. * When you have an even set of
+numbers, you sort the numbers by value and add the middle two numbers
+and divide by 2.</p>
+<p>Ok, so we know how to deal with odd and even numbers now (see above).
+What we need then are to (1) sort the numbers by value, and (2) get the
+middle number.</p>
+<p>Let’s take numbers 1 through 9 but jumble the order:</p>
+<pre class="r"><code>v=c(1,4,7,2,9,3,8,5,6)</code></pre>
+<p>Now let’s look at this vector, and then look at it when we use the
+<code>sort()</code> function</p>
+<pre class="r"><code>v</code></pre>
+<pre><code>## [1] 1 4 7 2 9 3 8 5 6</code></pre>
+<pre class="r"><code>sort(v)</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6 7 8 9</code></pre>
+<p>Great. So <code>sort()</code> makes sense.</p>
+<p>Now, to get the middle number–that is, the 5th number in a set of 9
+numbers. When n = the length of this number set, then the middle number
+corresponds to the [n/2+1]th spot in the sorted vector:</p>
+<pre class="r"><code>v.sort=sort(v) #save the sorted vector
+n=length(v.sort) #get the length of the sorted vector
+v.sort[n/2+1] #get the middle number (when there are odd set of numbers)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>If you want to do this with an even set of numbers, then you add the
+[n/2]th number and [n/2+1]th number and divide by 2. Let’s add the
+number 10 to the vector (to make it an even set of numbers) and do it.
+We’ll call the new vector “w”</p>
+<pre class="r"><code>w=c(v, 10)
+w</code></pre>
+<pre><code>##  [1]  1  4  7  2  9  3  8  5  6 10</code></pre>
+<pre class="r"><code>w.sort=sort(w) #save the sorted vector
+n=length(w.sort) #get the length of the sorted vector
+(w.sort[n/2]+w.sort[n/2+1])/2 #get the middle number (when there are odd set of numbers)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+</div>
+<div
+id="adding-median-as-an-option-in-our-custom-function-for-calculating-averages."
+class="section level3">
+<h3>3.3 Adding median as an option in our custom function for
+calculating averages.</h3>
+<p>Now, we’re ready to add this into the <code>average()</code>
+function.</p>
+<p><strong>NOTE:</strong> Because the calculation of median requires
+multiple lines of code, we need to use a {} after the else if statement
+and include the sequence of commands within those curly brackets. First,
+we will get the length of the vector, then we will sort the vector.
+Then, we will calculate the median differently depending on whether
+there are odd or even set of numbers.</p>
+<pre class="r"><code>average=function(x, type=&quot;arithmetic&quot;){
+  if(type==&quot;arithmetic&quot;) sum(x)/length(x)
+  else if (type==&quot;geometric&quot;) prod(x)^(1/length(x))
+  else if (type==&quot;median&quot;){
+    n=length(x)
+    x.sort=sort(x)
+  if(n %% 2 == 1) x.sort[n/2+1] else
+  if(n %% 2 ==0) (x.sort[n/2]+x.sort[n/2+1])/2
+  }
+}</code></pre>
+<p>Now:</p>
 <pre class="r"><code>average(1:10, type=&quot;median&quot;)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+</div>
+<div id="adding-in-an-error-message" class="section level3">
+<h3>3.4 Adding in an error message</h3>
+<p>One problem is that, if we choose a different type of average, say
+mode (or if we simply misspell the type), then the code simply won’t
+run.</p>
+<pre class="r"><code>average(1:10, type=&quot;mode&quot;)</code></pre>
 <p>So a good practice is to also include an error message if something
 in the arguments doesn’t work correctly. We can do this by layering
 another if-else statement below the previous one:</p>
 <pre class="r"><code>average=function(x, type=&quot;arithmetic&quot;){
   if(type==&quot;arithmetic&quot;) sum(x)/length(x)
   else if (type==&quot;geometric&quot;) prod(x)^(1/length(x))
-  else &quot;we can&#39;t handle that type of average&quot;
+  else if (type==&quot;median&quot;){
+    n=length(x)
+  if(n %% 2 == 1) x[n/2+1] else
+  if(n %% 2 ==0) (x[n/2]+x[n/2+1])/2
+  }
+  else (&quot;I don&#39;t know that one&quot;)
 }</code></pre>
-<p>Now:</p>
-<pre class="r"><code>average(1:10, type=&quot;median&quot;)</code></pre>
-<pre><code>## [1] &quot;we can&#39;t handle that type of average&quot;</code></pre>
+<p>Now, if you try to call “mode”, it will give you an error
+message.</p>
+<pre class="r"><code>average(1:10, type=&quot;mode&quot;)</code></pre>
+<pre><code>## [1] &quot;I don&#39;t know that one&quot;</code></pre>
 </div>
-<div
-id="building-a-custom-function-for-measuring-standard-error-of-the-mean"
-class="section level2">
-<h2>4. Building a custom function for measuring standard error of the
-mean</h2>
-<p>A common thing people find out about R is that there is no built-in
-function for calculating standard error of the mean, a pretty common
-statistic. There are probably a lot of theoretical reasons for that
-(‘standard error’ can mean different things to different people), but we
-won’t delve into that.</p>
-<p>Standard Error of the Mean is simply the standard deviation divided
-by the square root of the sample size. This is also equivalent to taking
-the square root of the variance divided by the sample size. So, let’s
-make the function:</p>
-<pre class="r"><code>se=function(x) sqrt(var(x)/length(x))
-se(1:10)</code></pre>
-<pre><code>## [1] 0.9574271</code></pre>
-<p>Let’s include in this function an option to remove NAs before
-calculating the standar error:</p>
-<pre class="r"><code>se=function(x, na.rm=F) {
-  if(na.rm==F) sqrt(var(x)/length(x))
-  else if (na.rm==T) sqrt(var(x[is.na(x)==F])/length(x[is.na(x)==F]))
-}</code></pre>
-<p>Now we can calculate standard error and mean from some continuous
-variable. Let’s take Sepal Width from the <code>iris</code> dataset. We
-can use the <code>group_by()</code> and <code>summarise()</code>
-functions from <em>dplyr</em></p>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   Species    mean.SW  se.SW
-##   &lt;fct&gt;        &lt;dbl&gt;  &lt;dbl&gt;
-## 1 setosa        3.43 0.0536
-## 2 versicolor    2.77 0.0444
-## 3 virginica     2.97 0.0456</code></pre>
-<p>Let’s use this to make barplots with error bars:</p>
-<pre class="r"><code>library(ggplot2)
-summary.dat=iris %&gt;% group_by(Species) %&gt;% summarise(mean.SW=mean(Sepal.Width), se.SW=se(Sepal.Width))
-
-ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
-  geom_bar(stat=&quot;identity&quot;)</code></pre>
-<p><img src="07.Functions_files/figure-html/unnamed-chunk-25-1.png" width="672" />
-Now add the error bars as mean +/- standard error.</p>
-<pre class="r"><code>ggplot(summary.dat, aes(x=Species, y=mean.SW, fill=Species)) +
-  geom_bar(stat=&quot;identity&quot;) +
-  geom_errorbar(aes(ymin=mean.SW-se.SW, ymax=mean.SW+se.SW), width=0.2)</code></pre>
-<p><img src="07.Functions_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 
 
