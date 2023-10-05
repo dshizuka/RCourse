@@ -8,10 +8,6 @@ output:
     toc_depth: 4
     toc_float: true
 ---
-```{r setup, include=F}
-library(knitr)
-opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
-```
 
 ***
 In this module, we will go over several useful R tricks that allow you to speed up tasks and scale up your analyses!
@@ -20,9 +16,9 @@ Let's load the packages we'll need here:
 
 ```{r, message=F}
 library(tidyverse)
-library(ggplot2)
 library(cowplot)
 ```
+
 ***
 
 ## 1. The "apply-family" of functions
@@ -43,44 +39,76 @@ The "apply family" function--which includes `apply()`, `sapply()`, `lapply()` an
 
 ### 1.1 Applying a function to a set of elements using `sapply()` and `lapply()`
 
-#### 1.1.1: The basic difference between `sapply()` and `lapply()`
-Here, we will use the `sapply()` function, which can take a series of elements, run a function on it, and then save the output in the simplest format ("s" in "sapply" is for "simplify").
 \
-Let's try out a really simple application:
+
+#### 1.1.1 The syntax of `sapply()` and `lapply()` functions:
+
+These two functions take the syntax: sapply("elements to apply the function to", "function"). 
+
+Let's try out a really simple application of the `sapply()` function:
+
+Here, I'm going to define a very simple custom function to take a number and multiply it by 2:
+```{r}
+mult.2=function(x) x*2
+```
+
+Now, you can apply that new function to a vector of numbers 1 through 5:
+```{r}
+sapply(1:5, mult.2)
+```
+
+You can actually do the same thing without first defining a function. You can instead just create the function WITHIN the sapply function. 
+
+So this will do the same thing:
+
 ```{r}
 sapply(1:5, function(x) x*2)
 ```
-Here, what we did was to:
 
-(1) Take each element of `1:10` (integers from 1 to 10) and multiply each element by 2
-(2) Store the output in the simplest form, which is a vector
+\
 
+#### 1.1.2: The basic difference between `sapply()` and `lapply()`
+
+The difference between the `sapply()` and `lapply()` functions is the format of the output.
+
+* The `sapply()` function takes a series of elements, run a function on it, and then save the output in the simplest format ("s" in "sapply" is for "simplify").
+
+* The `lapply()` function takes the series of elements, runs a function on it, and then saves the output as a list.
+
+Let's try the same line of code again:
+
+```{r}
+sapply(1:5, function(x) x*2)
+```
+
+Because the output is a set of numbers, the `sapply()` function returns the simplest format for that--a vector.
 
 Compare that with the `lapply()` function, which saves the output as a list.
 ```{r, eval=T}
-lapply(1:5, function(x) x*2)
+lapply(1:5, mult.2)
 ```
 
+You can see that `lapply()` automatically generates the output as a list. 
 
 Here's another example:
 ```{r}
-var=c(1,2,3)
-sapply(1:10, function(x) x*var)
+v=c(1,2,3)
+sapply(1:5, function(x) x*v)
 ```
 What have we done here?
 
-(1) Set up an object called `var`, which is a vector of three numbers: 1, 2 and 3
+(1) Set up an object called `v`, which is a vector of three numbers: 1, 2 and 3
 (2) Then, take each element of `1:10` and multiply by `var`, which itself is 3 numbers. 
 (3) Organize the results as a matrix, which is the simplest format to store a 2-dimensional set of numbers. In this case, there will be 3 rows of 10 numbers. 
 
 
-Again, compare this result with the output of `lapply()` (output not shown):
-```{r, eval=F}
-var=c(1,2,3)
-lapply(1:10, function(x) x*var)
+Again, compare this result with the output of `lapply()`:
+```{r, eval=T}
+v=c(1,2,3)
+lapply(1:5, function(x) x*v)
 ```
 
-So you can see that the output of `sapply()` is more user-friendly than the output of `lapply()` in general. 
+\
 
 #### 1.1.2. `lapply()` is really useful when your output is complex, like a model output of dataframe:
 
@@ -120,7 +148,8 @@ sapply(spp.mods.summary, function(x) x$coefficients[2,1])
 ```
 
 You can see that the three species vary in their relationships between sepal length and petal length. 
-Here's one way to visualize it simply using ggplot (you can just use the original iris data set to do this):
+Here's one way to visualize it simply using ggplot.
+Here, I'm using just the original iris data set to do this, but I've added the `facet_wrap()` function to show the results for each species separately:
 ```{r, message=F, fig.height=3, fig.width=8}
 ggplot(iris, aes(x=Sepal.Length, y=Petal.Length, color=Species)) + 
   geom_point() + 
@@ -242,6 +271,8 @@ apply(a, c(1,2), sum)
 
 A “for loop” is another way to repeat a function or series of functions many times. The idea here is to request that an index (e.g., i) take on a series of values, and that a lines of commands are executed as many times as there are different values of i.
 
+\
+
 ### 2.1. Set up an empty object (e.g., vector or list) to store the values in:
 Here’s a simple example for just repeating a command 5 times:
 ```{r}
@@ -256,6 +287,8 @@ for (i in 1:times) v[i]=i*2
 v
 ```
 
+\
+
 ### 2.2. If the output of each loop is a vector, then you have to store the output in a matrix of the appropriate size:
 
 Let's say you want to multiply a vector of numbers 1 through 10 by a series of numbers 1 through 5. Then, your output needs to be a matrix that is 5 x 10. Here, I'll set up an empty matrix with 5 rows and 10 columns to save the output:
@@ -266,12 +299,14 @@ for (i in 1:times) m[i,]=(1:10)*i
 m
 ```
 
+\
+
 ### 2.3. You can use loops with output as a list to run a series of complex tasks:
 
 Let's take the same example as we used in the `lapply()` example (Section 1.1 above). We'll split the iris dataset by species, then run a series of linear regressions with Sepal Length as the predictor variable and Petal Length as the response variable:
 
 Let's just do the `split()` function again to make sure we have the same setup:
-```{r}
+```{r, results="hide"}
 iris.list=split(iris, iris$Species)
 iris.list
 ```
