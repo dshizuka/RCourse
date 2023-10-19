@@ -354,7 +354,7 @@ So, let's get the gender from those columns.
 We can see that the code for gender ("f" for female, "m" for male) is ALWAYS the 8th character of the string. This makes our life easy--we just need to get the 8th character. We can do that using `str_sub()` to extract the substring:
 
 ```{r}
-who_long %>% pull(name) %>% str_sub(start=8, end=8)
+who_long %>% pull(name) %>% str_sub(start=8, end=8) %>% unique()
 ```
 So we can use this to create a new column called "gender" in the who_long dataset.
 
