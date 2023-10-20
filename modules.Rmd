@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
     + ### [6.1. Data Wrangling with Tidyverse Packages](06.1.tidyverse.html)
     
-    + ### [6.2. Parsing Text](06.2.stringr_WHO.html)
+    + ### [6.2. Parsing Dates and Text](06.2.stringr_WHO.html)
 
 * ### [7. Custom Functions (and if-else statements)](07.Functions.html)
 
@@ -55,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #### [Worked Example: Wrangling World Bank Data](Ex_WorldBank.html)
 
-#### Worked Example: Data wrangling with coot chick color data (soon to come: page being rebuilt)
+#### [Worked Example: Data wrangling with coot chick color data](Example_CootDataWrangling.html)
 
 #### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
 
