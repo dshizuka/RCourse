@@ -46,9 +46,9 @@ The main reason to use R Markdown is that it allows you to produce **reproducibl
 
 Download a couple of examples of this here:
 
-1. [A reproducibility document from Shizuka & Hudson (2020) in which we used a model to describe how the threshold of species recognition evolves. Look at it](rmd_examples/Shizuka_Hudson_supplemental_materials.html)
+1. [A reproducibility document from Shizuka & Hudson (2020) in which we used a model to describe how the threshold of species recognition evolves. Look at it](resources/rmd_examples/Shizuka_Hudson_supplemental_materials.html)
 
-2. [Supplemental Materials from Shizuka et al. (2022), which describes the complete workflow for a creating social networks from automated telemetry data.](rmd_examples/Shizuka_etal_2022_Telemetry_AppendixS1.html)
+2. [Supplemental Materials from Shizuka et al. (2022), which describes the complete workflow for a creating social networks from automated telemetry data.](resources/rmd_examples/Shizuka_etal_2022_Telemetry_AppendixS1.html)
 
 To render HTML documents, R Markdown uses Markdown, a simple formatting syntax (aka *markup language*) that can then be converted to HTML. To render PDF documents, R Markdown will use LaTex, a different markup language used to format manuscripts. 
 
