@@ -61,4 +61,4 @@ There are other ways to make pretty tables, but we'll just go with the simple ma
 ---
 
 #### When you are ready for the answer: 
-You can download the .Rmd document by *right-clicking* [here](10.e.RMDExercise.Rmd) and selecting "Save Link as..."
+You can download the .Rmd document by *right-clicking* [here](11.e.RMDExercise.Rmd) and selecting "Save Link as..."
