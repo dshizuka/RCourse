@@ -398,30 +398,15 @@ who_long %>% pull(name) %>% str_sub(start=9) %>%
   str_replace("1524", "15-24") %>%
   str_replace("2534", "25-34") %>%
   str_replace("3544", "35-44") %>%
-  str_replace("4544", "45-54") %>%
+  str_replace("4554", "45-54") %>%
   str_replace("5564", "55-64") %>%
   str_replace("65", "65+") %>%
-  as_factor()
+  as_factor() %>%
+  head()
 ```
 
 We can use this within a `mutate` function:
-```{r}
-who_long %>%
-  mutate(gender=str_sub(name, start=8, end=8)) %>%
-  mutate(method=str_sub(name, 4, 6)) %>%
-  mutate(method=str_replace(method, "_", "")) %>%
-  mutate(age=str_sub(name, start=9) %>%
-           str_replace("014", "0-14") %>%
-           str_replace("1524", "15-24") %>%
-           str_replace("2534", "25-34") %>%
-           str_replace("3544", "35-44") %>%
-           str_replace("4544", "45-54") %>%
-           str_replace("5564", "55-64") %>%
-           str_replace("65", "65+") %>%
-           as_factor())
-```
-
-This looks good. Let's save it as a new dataframe:
+Let's do that and save it as a new dataframe:
 ```{r}
 who_use=who_long %>%
   mutate(gender=str_sub(name, start=8, end=8)) %>%
@@ -437,6 +422,7 @@ who_use=who_long %>%
            str_replace("65", "65+") %>%
            as_factor())
 
+who_use
 ```
 
 Now, we can plot some trends, making use of out new variables for filtering data and using them as variables of interest:
