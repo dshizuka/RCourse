@@ -17,9 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
-* #### 08/18/22: Welcome to the Fall 2023 semester! I may post some updates here, but most of our communications will happen via Canvas this year. 
-
-
 ---
 
 ## Quick Links:
