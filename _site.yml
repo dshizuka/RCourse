@@ -6,7 +6,7 @@ navbar:
   title: "Intro to R"
   left:
     - text: "Home"
-      href: pages/index.html
+      href: index.html
     - text: "Syllabus"
       href: pages/syllabus.html
     - text: "Modules"
