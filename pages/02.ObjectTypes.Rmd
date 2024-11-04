@@ -1,0 +1,288 @@
+---
+title: "Part 2: Types of Objects in R"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+#knitr::opts_chunk$set(out.width="3.5in")
+```
+
+
+## 1. Overview: Types of Objects
+
+The main purpose of R is to manipulate 'objects' to accomplish tasks. Your goal is to assign objects and then use functions to manipulate them.  
+There are many types (or classes) of objects. Many functions are specifically tailored to deal with specific types of objects. Therefore, it is critical that you understand the distinctions between different types of objects, and how to best make use of each. Some packages generate special types of objects, which can then be manipulated or analyzed in special ways. Here, we will cover some of the most common types of objects you will encounter.  
+
+Object Type   | Detail
+-----------|----------------------------------------------------------
+**Numeric**| Numbers
+**Character**| Text
+**Factor** | A set of characters with finite levels
+**Logical**| TRUE or FALSE
+**Date**| Dates and times can take on special formats 
+**Vector** | A variable with multiple values of the *same type* (i.e., numeric, character, factor, logical, etc.)
+**Matrix** | A two-dimensional array of numbers
+**Array** | A set of numbers arranged in any number of dimensions. For example, you can have a three-dimentional array, which is essentially a stack of matrices. 
+**Data frame** | A two-dimensional object with each column consisting of a numerica vector or character string. What you typically thing of as a spreadsheet. 
+**List** | A bundle of any set of components. Each element in a list can be whatever object. Once you get used to them, lists are very useful.  
+
+
+
+> <span style="color:purple">**Other types of objects**</span>  
+>
+>*Aside from these common types of objects, there are all sorts of other specialized objects that are outputs of specific functions. For example, the output of a specific statistical analysis (say, linear models, using the function `lm()`). But at the end of the day, even these are typically customized lists composed of the objects described above*
+
+***
+
+## 2. Vectors
+Vectors are essentially a one-dimensional set of elements. The elements can be numbers (numeric vectors), characters, etc. 
+
+### 2.1 Vectors of different types
+Let's try making a **numeric** vector using a function called `c()` (for 'combine'):
+```{r}
+v=c(4,3,5,3,2,3,1)
+v
+```
+
+Objects can also be text. Text objects are called **character strings**. In R, all text needs to be contained within quotes (single or double quotes are allowed). Otherwise, it will just try to give you an object with that name. 
+
+We can combine multiple character strings into a vector. Each element can be a single letter, word, phrase, or entire sentences. 
+```{r}
+chars=c("a", "word", "or a phrase")
+chars
+```
+
+If you try to combine letters and numbers into a single vector, it will turn into a character vector, with numbers treated as text:
+```{r}
+numbersletters=c(1,2,3, "one", "two", "three")
+numbersletters
+```
+
+**Factors** are different from chracters in that they have levels. This will become a bit more important later when we start playing with dataframes. 
+```{r}
+factors=as.factor(numbersletters) #convert the vector above to factors
+factors
+```
+
+Objects can also be **logical** objects, i.e., TRUE or FALSE. Note all capitals. This class can be really important and useful.
+```{r}
+logic=c(TRUE, TRUE, FALSE, FALSE)
+logic
+```
+
+One cool thing to note is that we can convert logical objects into numerics by adding a number:
+```{r}
+logic+0
+```
+You can see that TRUE becomes 1 and FALSE becomes 0
+
+
+### 2.2 Vector Functions
+You can measure various attributes of this vector. For example, let’s find out how many numbers there are in this vector and add up all of the numbers. Try:
+```{r}
+length(v)
+sum(v)
+```
+From this, we can calculate the mean.
+```{r}
+sum(v)/length(v)
+```
+Of course, there is a pre-packaged function that calculates the mean of a vector, so this is simpler:
+```{r}
+mean(v)
+```
+
+Here are some more mathematical functions you can try out. Try typing these, and also try looking at the details of the functions using ?’functionname':
+
+function        | meaning
+-----------|-------------------------------------------------------------------
+`max()`         | maximum value
+`min()`         | minimum value
+`sum()`         | sum
+`mean()`        | average
+`median()`      | median
+`range()`       | returns vector of min and max values
+`var()`         | sample variance
+
+
+
+We can manipulate vectors as a whole. for example, let's multiply the vector by 10.
+```{r}
+v*10
+```
+
+### 2.3 Indexing: The importance of [ ]
+For multi-element objects (i.e., anything that is a combination of numbers, letters, etc.), we can locate specific elements within objects using square brackets `[]`. For example, we can ask what is the 6th number in the numeric vector `v`, or the second element in the character vector `chars` from above.
+```{r}
+v[6]
+chars[2]
+```
+
+
+***
+
+## 3. Matrices
+Ok, now let’s try a matrix. This is a two-dimensional set of numbers, so when we create a matrix, we also need to specify the dimensions. Let's demonstrate the difference beween vectors and matrices:
+```{r}
+1:9 #colon create vector of integers
+vec=1:9
+mat=matrix(1:9,nrow=3)
+```
+Now look at the objects `vec` and `mat`
+```{r}
+vec
+mat
+```
+Note that R arranges the number series going up to down. This is important to remember when you are creating matrices. You can make R construct matrices by rows (which is more intuitive to me) by:
+```{r}
+mat2=matrix(1:9,nrow=3,byrow=TRUE)
+mat2
+```
+
+Now, try a slight variation:
+```{r}
+mat3=matrix(1:10,nrow=2,byrow=TRUE)
+rownames(mat3)=c("row1","row2")
+colnames(mat3)=c("A","B","C","D","E")
+mat3
+```
+You can see that matrices can be “rectangular”, and also you can name the dimensions (rows & columns) of the matrix using `rownames()` and `colnames()`. 
+  
+### 3.1. Indexing with a matrix
+
+Indexing in a matrix requires two values inside the square brackets: `[row, column]`. You can also use this to look at entire rows or columns. 
+For example:
+```{r}
+mat3[2,3] #what is the number in row 2, column 3?
+mat3[2,] #what are the values of row 2?
+mat3[,4] #what are the values of column 4?
+```
+  
+
+You can conduct mathematical operations on matrices:
+```{r}
+mat3*10 #multiply all values in mat3 by 10
+```
+
+> <span style="color:purple">**Arrays**</span>  
+> Technically, a matrix is simply a two-dimensional *array* (and vectors are one-dimensional arrays). More generally, an *array* can be any number of dimensions. A three-dimensional array would be a stack of matrices, and a four-dimensional arrays would be yet another stack of those... Arrays can be very useful for fast computing, but it can also be very confusing, so I'm going to avoid the issue here. We may come back to the idea of three-dimensional arrays later in the course.  
+
+***
+## 4. Dataframes
+
+For most cases, your data will be organized in the form of a **dataframe**. A **dataframe** is an object with rows and columns in which each row represents an observation (sometimes called *cases*), and each column is a measurement of a variable (sometimes called *fields*). Whereas the values of a matrix can only be numbers, the values of a variable in a dataframe can be numeric, character,factor, or other formats (e.g., dates, logical variables such as TRUE and FALSE).
+
+Let's try creating a dataframe by combining a factor (categorical variable) and a numeric vector.
+```{r}
+sex=c(rep("M",5), rep("F",5))
+size=c(9,8,8,9,7,5,4,4,3,4)
+dat=data.frame(sex, size)
+dat
+```
+Notice that the columns already have names. The `data.frame` function uses the object name as the default column names. However, you can also assign column names using arguments inside the function:
+```{r}
+dat=data.frame(Sex=sex, Size=size) #Notice the capitalization
+dat
+```
+
+### 4.1. Indexing in dataframes
+We can refer to each row or columns in the dataframe using square brackets, just as with the other objects we have learned already.
+```{r, echo=TRUE}
+dat[1,] #first row
+dat[,2] #third column
+```
+
+You can also get the columns of the dataframe using the `$` operator:
+```{r}
+dat$Sex
+```
+Here, the output shows the "levels" available in this column because it is a factor.  
+
+You can find out the type of variable for each column using the function `class()`
+```{r}
+class(dat$Sex)
+class(dat$Size)
+```
+
+Two more useful functions: `str()` gives you the structure of the object, and `summary()` gives you some basic info on each column.
+```{r}
+str(dat)
+summary(dat)
+```
+
+### 4.2. Built-in data sets
+The base R program comes with a bunch of datasets as part of the program. To load a specific data set, you simply use the function `data()`. For example, to load the data set called 'iris':
+```{r}
+data("iris")
+```
+Now let's look at this dataset. Here, I'm going to use the function `head()`, which will display only the first 6 lines of the dataset:
+```{r}
+head(iris)
+```
+
+Built-in datasets are often useful for learning how functions work. You will often see examples within help files make use of built-in data sets to demonstrate how something works. You will also see some R packages will include some built-in data sets for this same reason. 
+
+***
+## 5. Lists
+A **List** object is a powerful and flexible tool in R. Dataframes, matrices and array have many constraints -- e.g., each row must have the same number of columns. In contrast, you can combine any set of objects together into a list.  
+As an example, let's create three vectors that are of different lengths with different types of elements (number, logical, and character).
+```{r}
+apples=c(1,2,3,4,5)
+oranges=c(TRUE, FALSE)
+grapes=c("grape", "Grape", "GRAPE")
+```
+
+We can try to combine these objects into a dataframe, but we won't be able to because the vectors are different lengths:
+```{r, error=TRUE}
+data.frame(apples, oranges, grapes)
+```
+
+However, we can combine these into a list:
+```{r}
+mylist=list(apples, oranges, grapes) 
+mylist
+```
+
+Lists are structured differently than other objects. In a list, each component or item is indexed using a double bracket `[[]]`. So the first item in the list (i.e., apples) is:
+```{r}
+mylist[[1]]
+```
+
+... and the second element within the third item (i.e., grapes) would be:
+```{r}
+mylist[[3]][2]
+```
+
+You can name the items within a list when creating it, or afterwards:
+```{r}
+#These do the same thing
+mylist=list(apples=apples, oranges=oranges, grapes=grapes) 
+names(mylist)=c("apples", "oranges", "grapes")
+mylist
+```
+
+Once you name the items in a list, you can use the `$` operator to call a specific item:
+```{r}
+mylist$grapes
+```
+
+You can even combine different dataframes into a list. Let's do this by loading several built-in data sets and then combining them into a list (output hidden):
+```{r, results='hide'}
+data("iris")
+data("trees")
+data("Loblolly")
+mydata=list(iris, trees, Loblolly)
+mydata
+```
+Lists may not be intuitive to you yet, but you will see how convenient this type of object can be when we get around to more complex tasks such as batch processessing and apply functions. 
+
+\pagebreak
+
+***
