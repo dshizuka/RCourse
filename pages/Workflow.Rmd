@@ -135,7 +135,7 @@ and you should be able to run the code as-is.
 
 <br>
 
-## 3. Version control and collaboration using Git and GitHub ![](images/github-mark.png){width=10%}
+## 3. Version control and collaboration using Git and GitHub ![](../images/github-mark.png){width=10%}
 
 ***Version control*** is a system by which you can keep track of changes to collaborative projects. One common example is Google Doc, which is an online document that multiple people can collaborate on. Importantly, Google Doc automatically saves versions of the document when changes are made, and users can revert back to earlier versions if they want. 
 
@@ -201,7 +201,7 @@ Now, click on the green button that says "<>Code"
 
 Copy the clone URL to your clipboard. Use the HTTPS URL. 
 
-![](images/Github_clone.png)
+![](../images/Github_clone.png)
 
 In RStudio, start a new project:
 File > New Project > Version Control > Git. In “Repository URL”, paste the URL of your new GitHub repository. 
@@ -230,7 +230,7 @@ Once you have finished the set up process, you are ready to start your workflow!
 
 First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right). If you click on that tab, it'll look like this:
 
-![](images/gitwindow.png){width=100%}
+![](../images/gitwindow.png){width=100%}
 
 The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
 
@@ -248,7 +248,7 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 
 First, click "Pull" in the Git window. This will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
 
-![](images/gitwindow_pull.png){width=50%}
+![](../images/gitwindow_pull.png){width=50%}
 
 It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
 
@@ -284,7 +284,7 @@ Click "Push" to upload the changes to the remote repository on GitHub.
 
 ### 3.5. Using a Git Client (as another option)
 
-There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
+There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](../images/Github-desktop-logo.png){width=10%}
 
 Git Clients provide a graphical user interface (GUI) that facilitates the processes of committing, pushing, pulling and other tasks. It also allows you to see the history of changes to your repository.
 
@@ -333,18 +333,18 @@ If you try it, you might find that you like this interface better than pull-comm
 
   * First, go to your repository and click on "Settings"
 
-![](images/GitHub_1.png)
+![](../images/GitHub_1.png)
 
 <br>
 
   * Then, click on "Collaborators" on the navigation panel on the left side
 
-![](images/GitHub_2.png)
+![](../images/GitHub_2.png)
 <br>
 
   * Click on "Add People" and add "dshizuka". 
   
-![](images/GitHub_3.png)
+![](../images/GitHub_3.png)
 
 <br>
 
