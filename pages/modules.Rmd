@@ -1,5 +1,5 @@
 ---
-title: "Modules"
+title: "Learning Modules"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: html_document
@@ -8,8 +8,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## Learning Modules
 
 * ### 1. Getting Started
 
