@@ -11,9 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Learning Modules
 
-* ### [1. Let's get started with R!](pages/01.Intro.html)
+* ### [1. Let's get started with R!](01.Intro.html)
 
-* ### [2. Types of Objects (vectors, strings, matrices, dataframes, lists)](pages/02.ObjectTypes.html)
+* ### [2. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
 
 * ### [*New Module: Workflow with RStudio Projects and GitHub](03.Workflow.html)
 
