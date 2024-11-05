@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Basics of Plots</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Basics of Plots</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 11/05/24</h4>
+
+</div>
+
+
+<hr />
+<p>R is amazing for graphics–i.e., visualizing data. Once you learn how
+to play around with the codes, it is almost infinitely customizable. In
+fact, R has become a major tool for graphics departments at major
+journalism outlets such as the <a
+href="https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535">BBC</a>.
+There are also many wonderful resources for how to make compelling and
+clear visualizations of data <a
+href="https://serialmentor.com/dataviz/index.html">(e.g., this book by
+Claus Wilke)</a></p>
+<p>But let’s not get ahead of ourselves. In this module, we will cover
+the basics of the plotting functions in the base package of R. There are
+many additional packages that help you produce fancier plots (e.g.,
+‘ggplot2’ and ‘lattice’). We may cover ggplot2 later in the course.</p>
+<hr />
+<div id="first-question-what-do-you-want-to-show"
+class="section level2">
+<h2>5.1 First Question: What do you want to show?</h2>
+<p>There many, many different ways to visualize data (see <a
+href="https://datavizproject.com/">datavizproject.com</a>). In fact,
+“data visualization” is an industry in and of itself at this point. What
+we need is some directory of different kinds of ways to visualize a
+given set of data.</p>
+<p><a
+href="https://serialmentor.com/dataviz/directory-of-visualizations.html">The
+directory of visualizations presented in Claus Wilke’s online version of
+his book</a> is as good as any I’ve seen.</p>
+<div id="types-of-data-continuous-count-and-categorical"
+class="section level3">
+<h3>5.1.1 Types of data: Continuous, Count, and Categorical</h3>
+<ul>
+<li><p><strong>Continuous data</strong> are quantitative measurements
+that can take any value. That is, it can be divided and reduced to finer
+levels. For example, take weight, height, or length. In R, these types
+of data would be handled as numerical vectors.</p></li>
+<li><p><strong>Count data</strong> or frequencies are also quantitative
+measurements, but they cannot be divided into smaller levels. They are
+counts of whole things. These are typically integers. In R, they would
+be either numerical vectors or integers.</p></li>
+<li><p><strong>Categorical data</strong> are <em>qualitative data</em>
+are characteristics, descriptors or labels that are not numerical. In R,
+these would be stored as factors or character strings.</p></li>
+</ul>
+<p>Depending on the mix of different variables, you can display them in
+different ways.</p>
+<hr />
+</div>
+</div>
+<div id="the-basics" class="section level2">
+<h2>5.2 The Basics</h2>
+<p>We will start with the generic <code>plot()</code> function. This
+function can produce a variety of basic plots. The function can take two
+different syntax:</p>
+<ul>
+<li><code>plot(x , y)</code> – The Cartesian format will take two
+variables and plot the first element on the x-axis and the second
+element on the y-axis. The plot this produces will depend on the type of
+variables (i.e., numeric or factor) that you put in.</li>
+<li><code>plot(y~x)</code> is an alternative syntax (“formula” syntax)
+which will produce the same plot as above. In this case, you are
+plotting a relationship–i.e., <code>y</code> as a function of
+<code>x</code></li>
+</ul>
+<p>R will automatically detect the type of vector (variable) you are
+trying to plot.</p>
+<hr />
+<div id="lets-try-it-out-scatterplots-and-boxplots"
+class="section level3">
+<h3>5.2.1 Let’s try it out: Scatterplots and boxplots</h3>
+<p>Try plotting two numerical vectors (i.e., continuous variables) that
+we create:</p>
+<pre class="r"><code>a=seq(1,15, 1) #continuous variable 1
+b=seq(16,30,1) #continuous variable 2
+plot(a, b) #plot two continuous variables</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
+<p>You can see that R automatically detects the two vectors
+(<code>a</code> and <code>b</code>) as continuous variables and creates
+a scatter plot.<br />
+<br> Now, let’s create a fictitious factor vector (i.e., discrete
+variable) and plot one of the continuous variables against that.</p>
+<pre class="r"><code>fac=factor(c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 5), rep(&quot;C&quot;, 5))) #a factor
+plot(fac, a) #plot factor on x-axis and continuous variable on y-axis</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
+<p>Here, R recognizes that we want to plot a factor on the x-axis and
+continuous variable on y-axis and defaults to a box plot.</p>
+<p>You can also plot using a <em>formula syntax</em>, using a
+<code>~</code>:</p>
+<pre class="r"><code>plot(a~fac) #formula syntax using &quot;~&quot;</code></pre>
+<p>Notice that, in the formula syntax, the order of the variables is
+different. Here, you are saying “plot <code>a</code> as a function of
+<code>fac</code>”, so the first variable will show up on the y-axis and
+the second variable will be plotted on the x-axis.</p>
+<hr />
+</div>
+<div id="line-plots" class="section level3">
+<h3>5.2.2 Line plots</h3>
+<p>If you have a timeseries, you sometimes want to create a <strong>line
+plot</strong>. You can do this simply by designating the plot ‘type’
+inside the <code>plot()</code> function:</p>
+<pre class="r"><code>t=seq(1,10,1) # time sequence, from 1 to 10
+response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
+plot(t, response, type=&quot;l&quot;) #plot a line plot</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
+<p>You can plot the same figure with both lines and points by using
+<code>type="b"</code> for “both”</p>
+<pre class="r"><code>t=seq(1,10,1) # time sequence, from 1 to 10
+response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
+plot(t, response, type=&quot;b&quot;) #plot a line plot</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
+<p>You can plot the same figure using a few other formats (you can look
+these up using <code>?plot()</code>). Try these out (outputs not
+shown):</p>
+<pre class="r"><code>plot(t, response, type=&quot;p&quot;) #plot just points
+plot(t, response, type=&quot;h&quot;) #Make a histogram-like plot with thin lines
+plot(t, response, type=&quot;s&quot;) #Make stair steps</code></pre>
+<hr />
+</div>
+<div id="bar-plots" class="section level3">
+<h3>5.2.3 Bar plots</h3>
+<p>Now let’s try making a simple barplot showing frequencies of some
+categorical variable. Here, we’ll just set up some fictional set of
+observations of individuals belonging to some groups (say species), “a”,
+“b” and “c”</p>
+<pre class="r"><code>groups=c(rep(&quot;a&quot;, 10), rep(&quot;b&quot;, 5), rep(&quot;c&quot;, 2))</code></pre>
+<p>We can plot the frequencies of these groups as a barplot:</p>
+<pre class="r"><code>groups.table=table(groups) #create a frequency table
+groups.table #look at it</code></pre>
+<pre><code>## groups
+##  a  b  c 
+## 10  5  2</code></pre>
+<pre class="r"><code>barplot(groups.table) #plot it</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="plotting-data-from-a-dataframe" class="section level2">
+<h2>5.3 Plotting data from a dataframe</h2>
+<p>Let’s practice plotting data from a dataframe.<br />
+First, we need some data to play with. For this exercise, we will use a
+dataset called <code>iris</code>, which is pre-loaded in R:</p>
+<pre class="r"><code>iris #see all the data
+str(iris) #see the structure of the iris dataset
+?iris #learn more about the dataset</code></pre>
+<p>The basic structure of the dataset is that there are 4 continuous
+variables (length &amp; width of sepals and Sepals) measured for
+individuals in 3 different species of iris (Figure 1). This dataset is
+useful for demonstrating the basics of plotting because it has both
+continuous and discrete variables.</p>
+<div class="float">
+<img src="../images/iris.png"
+alt="Figure 1: Iris setosa, I. versicolor and I. virginica" />
+<div class="figcaption">Figure 1: <em>Iris setosa</em>, <em>I.
+versicolor</em> and <em>I. virginica</em></div>
+</div>
+<p>Let’s try plotting two continuous variables against each other:</p>
+<pre class="r"><code>plot(iris$Sepal.Length, iris$Sepal.Width)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-15-1.png" width="384" /></p>
+<p>Compare this with what happens when you plot a continuous variable
+(sepal length) against a factor (iris species):</p>
+<pre class="r"><code>plot(iris$Species, iris$Sepal.Width)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-17-1.png" width="384" /></p>
+<p>You can also use the <em>formula syntax</em> to do the same thing.
+Try:</p>
+<pre class="r"><code>plot(iris$Sepal.Width~iris$Sepal.Length) #scatterplot
+plot(iris$Sepal.Width~iris$Species) #box plot</code></pre>
+<p>One useful feature of the formula syntax is that it allows you to
+specify a dataframe you are using with the <code>data=</code> argument.
+Then, you can refer to the column name for that dataframe instead of
+specifying both the dataframe and column name with the <code>$</code>
+operator. This can simplify the code a little bit:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-20-1.png" width="384" /></p>
+<hr />
+</div>
+<div id="formatting-the-plot" class="section level2">
+<h2>5.4 Formatting the plot</h2>
+<p>R presents many many ways to customize the format of your plots. We
+will go through several of these, and then we will learn how to find out
+more.</p>
+<div id="axis-labels-and-plot-title" class="section level4">
+<h4>5.4.1 Axis labels and plot title</h4>
+<p>You can relabel the axes using the arguments <code>xlab=</code> and
+<code>ylab=</code>:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-22-1.png" width="384" /></p>
+<p>Now add a plot title using <code>main=</code> and change re-orient
+the y-axis values to be horizontal using <code>las=</code>:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, main=&quot;Length vs. width of sepals in Iris&quot;, las=1)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-24-1.png" width="384" /></p>
+<p>You can change the x- and y-axis ranges by using <code>xlim=</code>
+and <code>ylim=</code>. These arguments each take a vector of two
+numbers representing the minimum and maximum values. Let’s make the same
+plot, but with different axis limits:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, main=&quot;Length vs. width of sepals in Iris&quot;, las=1, xlim=c(0,10), ylim=c(0,5))</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-26-1.png" width="384" /></p>
+</div>
+<div id="types-of-points" class="section level3">
+<h3>5.4.2 Types of points</h3>
+<p>You can specify the types of points you want to use with the
+<code>pch=</code> argument. Try this:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=4)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-28-1.png" width="384" /></p>
+<p>Here are what the symbols look like for ‘pch’ values ranging from 1
+to 25.
+<img src="Plot_basics_files/figure-html/unnamed-chunk-29-1.png" width="1008" /></p>
+<p>You can manipulate the sizes of points by using the argument
+<code>cex=</code>:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=1, cex=3)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-31-1.png" width="384" /></p>
+<hr />
+</div>
+</div>
+<div id="colors" class="section level2">
+<h2>5.5 Colors!</h2>
+<p>You can specify the colors of the points using the argument
+<code>col=</code> inside the <code>plot()</code> function. This argument
+can take many different types of inputs:</p>
+<ul>
+<li>numerical values from 1:8</li>
+<li>names of colors (you need to know the specific name that R
+recognizes)</li>
+<li>hexadecimal RGB color specification</li>
+<li>create a color palette</li>
+<li>the <code>rgb()</code> function</li>
+</ul>
+<div id="using-numerical-values" class="section level3">
+<h3>5.5.1 Using numerical values:</h3>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;,  las=1, pch=19, col=4)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-33-1.png" width="384" /></p>
+<p>However, using numerical values is pretty limiting. R only uses
+values of 1 through 8 to assign colors. Here are those colors:
+<img src="Plot_basics_files/figure-html/unnamed-chunk-34-1.png" width="576" /></p>
+</div>
+<div id="using-named-colors" class="section level3">
+<h3>5.5.2 Using named colors:</h3>
+<p>You can also specify colors using just the names of colors as
+characters. For example, to make a plot with red dots:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;,  las=1, pch=19, col=&quot;red&quot;)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-36-1.png" width="384" /></p>
+<p>There are infinite possibilities for color in R. Many colors have
+straightforward names (e.g., like “blue”), but there are also lots of
+crazy color names. Here is one useful page for named colors: <a
+href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf</a></p>
+<p>Here are some examples:
+<img src="Plot_basics_files/figure-html/unnamed-chunk-37-1.png" width="960" /></p>
+</div>
+<div id="using-hexadecimal-color-specification" class="section level3">
+<h3>5.5.3 Using hexadecimal color specification:</h3>
+<p>You can use the standard hexadecimal color specification. For
+example, the hexadecimal code for green is #00FF00:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;,  las=1, pch=19, col=&quot;#00FF00&quot;)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-39-1.png" width="384" /></p>
+<p>You can look up hex color codes here: <a
+href="http://www.color-hex.com/">http://www.color-hex.com/</a></p>
+<p>###5.5.4 Creating a color palette: There are several functions to
+create color palettes from a template. For example, we can use a
+<code>rainbow()</code> function. You can put the number of colors you
+want, and the function will pick three colors that are the most
+different from each other within the specified spectrum.</p>
+<p>Try it out by plotting 12 different colors:</p>
+<pre class="r"><code>my.colors=rainbow(12) #set up color palette of rainbow colors with n = 12
+plot(1:12, pch=19, cex=2, col=my.colors) #plot dots, each with different colors</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-41-1.png" width="384" /></p>
+<p>Other examples of color palettes include: <code>heat.colors()</code>,
+<code>terrain.colors()</code>, <code>topo.colors()</code> and
+<code>cm.colors()</code></p>
+<pre class="r"><code>my.colors=topo.colors(12) #set up color palette of topo colors with n = 12
+plot(1:12, pch=19, cex=2, col=my.colors) #plot dots, each with different colors</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-43-1.png" width="384" /></p>
+<p>Try the same with <code>heat.colors()</code>,
+<code>topo.colors()</code>, and <code>cm.colors()</code>.</p>
+<p>You can get more color palettes from other R Packages such as
+RColorBrewer.</p>
+</div>
+<div id="using-the-rgb-to-produce-different-colors"
+class="section level3">
+<h3>5.5.5 Using the rgb() to produce different colors</h3>
+<p>There are a couple of ways to create color gradients. First, you can
+use the <code>rgb()</code> function to create custom colors. This
+function takes four arguments: intensities of red, green, blue, and the
+alpha transparency value. Thus, you can create any color with any
+opacity. Here are some examples of colors that you can produce with the
+<code>rgb()</code> function.
+<img src="Plot_basics_files/figure-html/unnamed-chunk-44-1.png" width="576" /></p>
+<p>Let’s try plotting the figure with enlarged points and transparent
+color:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=1, cex=3, col=rgb(1, 0, 0, 0.5))</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-46-1.png" width="384" /></p>
+<hr />
+</div>
+</div>
+<div id="setting-up-the-plotting-region-using-par"
+class="section level2">
+<h2>5.6 Setting up the plotting region using <code>par()</code></h2>
+<p>The <code>par()</code> function is used <em>before</em> the
+<code>plot()</code> function to set up aspects of the plotting region.
+For example, you can set the plotting region to be two columns and plot
+two different plots using <code>mfrow=</code> argument inside the
+<code>par()</code> function.</p>
+<pre class="r"><code>par(mfrow=c(1,2)) #set up a plotting region with one row and two columns:
+plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;,  las=1, pch=19, col=&quot;#00FF00&quot;) #first plot
+plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=&quot;tomato&quot;) #secon plot</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-48-1.png" width="768" /></p>
+<hr />
+<div id="how-to-learn-more-about-plot-and-par-functions"
+class="section level3">
+<h3>5.6.1 How to learn more about <code>plot()</code> and
+<code>par()</code> functions</h3>
+<p>So we have learned some ways to customize plots in the sections
+above. As you might imagine, there are many, many more ways to customize
+plots. Most of the graphical parameters you need can be found by looking
+in the help file for the function <code>par()</code>. Take a look at
+this help file:</p>
+<pre class="r"><code>?par</code></pre>
+<p>Many of the arguments presented in this help file can be called
+within the <code>plot()</code> function or the <code>par()</code>
+function. However, as noted near the beginning of the “Details” section,
+there are several arguments that can only be called from the
+<code>par()</code> function, and there are also several argumnets that
+produce slightly different results based on whether they are called
+within the <code>plot()</code> or <code>par()</code> function.<br />
+I have included an <strong>Appendix</strong> to this module that
+contains a table of all graphical parameters I know of and their
+usage.</p>
+<hr />
+</div>
+</div>
+<div id="plotting-data-by-factors-and-using-legends"
+class="section level2">
+<h2>5.7 Plotting data by factors and using legends</h2>
+<p>So far, we have plotted all items within a plot using the same
+symbols. Howevever, we may often want to display more information in a
+figure. For example, the <code>iris</code> dataset contains information
+about three different species. How about we plot data from different
+species in different colors?<br />
+Let’s think about how we might do this. Recall that the dataframe has a
+column for species:</p>
+<pre class="r"><code>head(iris$Species) #recall that head() shows the first three elements of a vector</code></pre>
+<pre><code>## [1] setosa setosa setosa setosa setosa setosa
+## Levels: setosa versicolor virginica</code></pre>
+<p>So what we want to do is convert this information to colors. There
+are a couple of ways to do this. First, we can convert species into
+numbers, and then use that to assign colors… like this:</p>
+<pre class="r"><code>as.numeric(iris$Species) #convert species into numbers.</code></pre>
+<pre><code>##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3
+## [112] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [149] 3 3</code></pre>
+<p>So, we can use this trick to assign different colors to dots for
+different species.</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=as.numeric(iris$Species))</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-53-1.png" width="384" /></p>
+<p>You can look above to where we discussed colors and see that col=1 is
+black, col=2 is red, and col=3 is green.</p>
+<p>However, you may want to assign your own custom color sets to the
+plots. If so, what you need to do is come up with three colors that you
+want to use, say from the <code>topo.colors()</code> function. Then, we
+can use <code>as.numeric(iris$Species)</code> (remember: these values
+range from 1 to 3) as the index to point to the color that will
+correspond to the species. Try this:</p>
+<pre class="r"><code>colorset=rainbow(3) #create a palette of 3 colors
+pt.cols=colorset[as.numeric(iris$Species)] #This is now a vector of colors for each point</code></pre>
+<p>Now, you can use this new set of colors, <code>pt.cols</code>, for
+the plot.</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-56-1.png" width="384" /></p>
+<p>Of course, if you start using different colors for different
+information, you need to add a legend. You can do that with the
+<code>legend()</code> function. Take a quick look at the help file by
+using <code>?legend</code>. This function has arguments to assign the
+location (either using a keyword or x-y coordinates) within the plotting
+region where you want to put the legend, what the legends are, and
+several parameters to assign the symbols. Here is an example:</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols)
+legend(&quot;bottomright&quot;, legend=c(&quot;I. setosa&quot;, &quot;I. versicolor&quot;, &quot;I. virginica&quot;), pch=19, col=colorset)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-58-1.png" width="480" /></p>
+<p>Here, I just told R to plot the legend on the bottom right, but you
+can also tell it the x-y coordinates of the top left corner of the
+legend. Often, just using the key words (“bottomright”, “bottom”,
+“bottomleft”, “left”, “topleft”, “top”, “topright”, “right” or “center”)
+works well.</p>
+<p>Ok, the legend looks good, but it’s on top of some of the points.
+What I would really like to do is plot the legend outside of the plot.
+To do this, I have to do two things to set up the plotting region using
+the <code>par()</code> function: Tell it to allow me to plot something
+outside the axes (<code>xpd=TRUE</code>), and expand the margins of the
+plotting region, especially to the right of the plot. This can be
+specified using the <code>mar=</code> argument (see <code>?par</code>
+for details). Then, you can set the legend plotting region to be outside
+the plot (say at x = 8.2 and y = 3):</p>
+<pre class="r"><code>par(mar=c(4,4,1,7), xpd=TRUE) #make the margin wider, and allow me to plot outside the box.
+
+plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols)
+
+legend(8.2, 3, legend=c(&quot;I. setosa&quot;, &quot;I. versicolor&quot;, &quot;I. virginica&quot;), pch=19, col=colorset)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-59-1.png" width="480" /></p>
+<hr />
+</div>
+<div id="adding-more-elements-to-existing-plots" class="section level2">
+<h2>5.8 Adding more elements to existing plots</h2>
+<p>Sometimes, you want to add extra things like special points or lines
+to an existing plot. You can do this using the <code>points()</code>,
+<code>lines()</code>, <code>text()</code> and <code>abline()</code>
+functions. When you get comfortable with adding elements to plots, you
+can start to create really nice plots with lots of information.</p>
+<p>To start, let’s assign the plot the we created above (without the
+legend) to an object. This will save us from having to run the plotting
+function each time we add an element. To do this, we generate the plot,
+and then use the <code>recordPlot()</code> function to save it as an
+object (output not shown):</p>
+<pre class="r"><code>plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols) #make the plot again without the legend
+
+example.plot=recordPlot() #save the plot as an object called &#39;example.plot&#39;</code></pre>
+<p>Now, let’s say we want to add some information about the average
+Sepal length and width for each species here. We will first calculate
+those average values using the <code>tapply()</code> function:</p>
+<pre class="r"><code>mean.Sepal.length=tapply(iris$Sepal.Length, iris$Species, mean)
+mean.Sepal.width=tapply(iris$Sepal.Width, iris$Species, mean)
+mean.Sepal.length</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+##      5.006      5.936      6.588</code></pre>
+<pre class="r"><code>mean.Sepal.width</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+##      3.428      2.770      2.974</code></pre>
+<p>We will now use the <code>points()</code> function to add “x” at the
+mean values for all three species:</p>
+<pre class="r"><code>example.plot
+points(x=mean.Sepal.length, y=mean.Sepal.width, pch=&quot;x&quot;, cex=2) #add an &quot;x&quot; at the mean Sepal length &amp; width for all three species</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-64-1.png" width="384" /></p>
+<p>We can add text too. The <code>text()</code> function takes arguments
+for where the text should be centered, but you can specify whether the
+text goes below, left, above or right of the point (using the
+<code>pos=</code> argument), and how far it should be offset from the
+point (<code>offset=</code> argument):</p>
+<pre class="r"><code>example.plot
+points(x=mean.Sepal.length, y=mean.Sepal.width, pch=&quot;x&quot;, cex=2)
+text(x=mean.Sepal.length, y=mean.Sepal.width, labels=c(&quot;setosa&quot;, &quot;versicolor&quot;, &quot;virginica&quot;), pos=1, offset=0.5) #add text below each of the &quot;x&quot; (pos=1), and how far it should be offset (offset = 0.5)</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-66-1.png" width="384" /></p>
+<p>You can also add lines to plots. There are two functions to add
+lines: <code>abline()</code> and <code>lines()</code>. The
+<code>abline()</code> function is a bit more straightforward. This
+function can be used to draw a line that is vertical, horizontal, or
+with a specific slope and intercept. Let’s use this function to draw a
+vertical line at the mean Sepal length for <em>I. setosa</em> using the
+<code>v=</code> argument within the function. We will use the
+<code>lty=3</code> argument to make a dotted line.</p>
+<pre class="r"><code>example.plot
+abline(v=mean.Sepal.length, lty=3) #add a vertical lines at the mean Sepal length for each species. </code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-68-1.png" width="384" /></p>
+<p>We can also add lines for the mean Sepal widths, and make the line
+colors correspond to the point colors:</p>
+<pre class="r"><code>example.plot
+abline(v=mean.Sepal.length, lty=3, col=colorset) #add vertical lines at the mean Sepal lengths for each species. 
+abline(h=mean.Sepal.width, lty=3, col=colorset) #add horizontal lines at the mean Sepal widths for each species.</code></pre>
+<p><img src="Plot_basics_files/figure-html/unnamed-chunk-70-1.png" width="384" /></p>
+<hr />
+</div>
+<div id="saving-plots" class="section level2">
+<h2>5.9 Saving Plots</h2>
+<p>Of course, you will want to sometimes save the figures you generated.
+There are two simple ways to do that: using the RStudio interface, or
+using a command.</p>
+<p>####4.5.1 Using the RStudio interface Use the “Export” button under
+“Plots”. I would recommend saving the file as a pdf. Or, if you are just
+looking to quickly embed a plot in a word file, you can just copy to the
+clipboard and paste.</p>
+<p><img src="../images/Saving_plot.png" width="500" style="display: block; margin: auto auto auto 0;" /></p>
+<p>####4.5.2 Using R command You can save graphics in many different
+formats using R commands. This procedure takes three steps:<br />
+1. open up a ‘graphical device’ using a function (e.g.,
+<code>pdf()</code> or <code>png()</code>)<br />
+2. plot a figure into that graphical device<br />
+3. close the graphical device</p>
+<p>Only after you ‘close’ the graphical device can you see the output.
+For example, to save a figure as a pdf, you will follw these three lines
+of code:</p>
+<pre class="r"><code>pdf(file=&quot;exampleplot.pdf&quot;) #open up a pdf &#39;graphical device&#39;
+plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols) #draw the plot
+dev.off() # close the graphical device</code></pre>
+<hr />
+</div>
+<div id="appendix-useful-graphical-parameters" class="section level2">
+<h2>Appendix: Useful Graphical Parameters</h2>
+<table>
+<colgroup>
+<col width="10%" />
+<col width="13%" />
+<col width="12%" />
+<col width="63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>How To Call</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>adj</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>0.5 (center)</td>
+<td>text justification</td>
+</tr>
+<tr class="even">
+<td>ann</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>TRUE</td>
+<td>axis label on or off</td>
+</tr>
+<tr class="odd">
+<td>ask</td>
+<td><code>par()</code></td>
+<td>FALSE</td>
+<td>ask before plotting</td>
+</tr>
+<tr class="even">
+<td>bg</td>
+<td><code>par()</code> or <code>plot()</code>**</td>
+<td>white</td>
+<td>if called in <code>par()</code>: background of plot; if called in
+<code>plot()</code>: background of symbol, only if pch=21 through 25
+(filled symbols)</td>
+</tr>
+<tr class="odd">
+<td>bty</td>
+<td><code>plot()</code></td>
+<td>o</td>
+<td>the type of box around the plot. Select from “o”, “l”, “7”, “c”, “u”
+or “]”</td>
+</tr>
+<tr class="even">
+<td>cex</td>
+<td><code>par()</code> or <code>plot()</code>**</td>
+<td>1</td>
+<td>character size expansion (i.e., magnification). If called in
+<code>par()</code>: magnifies both symbols and text; if in
+<code>plot()</code>: magnifies symbols only</td>
+</tr>
+<tr class="odd">
+<td>cex.axis</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>axis magnification</td>
+</tr>
+<tr class="even">
+<td>cex.lab</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>axis label magnification</td>
+</tr>
+<tr class="odd">
+<td>cex.main</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>title magnification</td>
+</tr>
+<tr class="even">
+<td>cex.sub</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>subtitle magnification</td>
+</tr>
+<tr class="odd">
+<td>col</td>
+<td><code>par()</code> or <code>plot()</code>**</td>
+<td>black</td>
+<td>color. If in <code>par()</code>: color of symbols and box; in plot:
+color of symbols</td>
+</tr>
+<tr class="even">
+<td>col.axis</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>black</td>
+<td>color of axis values</td>
+</tr>
+<tr class="odd">
+<td>col.lab</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>black</td>
+<td>color of axis labels</td>
+</tr>
+<tr class="even">
+<td>col.main</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>black</td>
+<td>color of main title</td>
+</tr>
+<tr class="odd">
+<td>col.sub</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>black</td>
+<td>color of sub-title</td>
+</tr>
+<tr class="even">
+<td>family</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>“”</td>
+<td>font family: can be “serif”, “sans”, “mono”, “symbol”</td>
+</tr>
+<tr class="odd">
+<td>fg</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>black</td>
+<td>foreground color.</td>
+</tr>
+<tr class="even">
+<td>fig</td>
+<td><code>par()</code></td>
+<td></td>
+<td>set region of the display device in which to plot. Use vector of
+form c(x1,x2,y1,y2), with values ranging from 0 to 1. E.g.,
+par(fig=c(0,0.5,0,0.5)) will put the subsequent plot in the lower left
+corner of the plotting window. You need to also specify new=TRUE to add
+more plots to the same window.</td>
+</tr>
+<tr class="odd">
+<td>fin</td>
+<td><code>par()</code></td>
+<td></td>
+<td>Same as fig=, but in inches</td>
+</tr>
+<tr class="even">
+<td>font</td>
+<td><code>plot()</code></td>
+<td>1</td>
+<td>font type: 1 = plain text, 2 = bold, 3 = italic, 4 = bold
+italic</td>
+</tr>
+<tr class="odd">
+<td>font.axis</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>font type of axis values</td>
+</tr>
+<tr class="even">
+<td>font.lab</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>font type of axis labels</td>
+</tr>
+<tr class="odd">
+<td>font.main</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>2</td>
+<td>font type of main title</td>
+</tr>
+<tr class="even">
+<td>font.sub</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>font type of sub-title</td>
+</tr>
+<tr class="odd">
+<td>las</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>0</td>
+<td>axis annotation type: 0 = parallel to axis, 1 = horizontal, 2 =
+perpendicular to axis, 3 = vertical</td>
+</tr>
+<tr class="even">
+<td>log</td>
+<td><code>plot()</code></td>
+<td></td>
+<td>can set axes to be log by log=“x”, log=“y” or log=“xy”</td>
+</tr>
+<tr class="odd">
+<td>lty</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>line type. Specify by integer (0=blank, 1=solid, 2=dashed, 3=dotted,
+4=dotdash, 5=longdash, 6=twodash) or character (“blank”, “solid”,
+“dashed”, “dotted”, “dotdash”, “longdash”, or “twodash”)</td>
+</tr>
+<tr class="even">
+<td>lwd</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>line width. If called in <code>par()</code>: include line width of
+symbols &amp; box. In <code>plot()</code> or lines(): only line width of
+plotted lines</td>
+</tr>
+<tr class="odd">
+<td>mai</td>
+<td><code>par()</code></td>
+<td></td>
+<td>margin size in inches. Use vector form c(bottom, left, top,
+right)</td>
+</tr>
+<tr class="even">
+<td>mar</td>
+<td><code>par()</code></td>
+<td>c(5,4,4,2)+0.1</td>
+<td>margin size in number of lines of text</td>
+</tr>
+<tr class="odd">
+<td>mfcol</td>
+<td><code>par()</code></td>
+<td>c(1,1)</td>
+<td>specify number of rows and columns to split the plotting device in
+the form c(nrow,ncol). Will plot in order by columns</td>
+</tr>
+<tr class="even">
+<td>mfrow</td>
+<td><code>par()</code></td>
+<td>c(1,1)</td>
+<td>Same as above, but will plot in order by rows</td>
+</tr>
+<tr class="odd">
+<td>mfg</td>
+<td><code>par()</code></td>
+<td>set the order of figures to be plotted from an array</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>mgp</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>c(3,1,0)</td>
+<td>margin lines for axis title, label and line</td>
+</tr>
+<tr class="odd">
+<td>new</td>
+<td><code>par()</code></td>
+<td>FALSE</td>
+<td>if TRUE, plot the next plot over the pre-existing one</td>
+</tr>
+<tr class="even">
+<td>oma</td>
+<td><code>par()</code></td>
+<td></td>
+<td>set outer margin size in lines of text c(bottom, left, top,
+right)</td>
+</tr>
+<tr class="odd">
+<td>omd</td>
+<td><code>par()</code></td>
+<td>set outer margin in “device coordinates” (values of 0 to 1): form
+c(x1, x2, y1, y2)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>omi</td>
+<td><code>par()</code></td>
+<td>set outer margin in inches</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>pch</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>1</td>
+<td>symbol type. See class notes</td>
+</tr>
+<tr class="even">
+<td>tck</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td>-0.05</td>
+<td>length of tick marks. If tck=1, shows grid lines</td>
+</tr>
+<tr class="odd">
+<td>xaxp</td>
+<td><code>plot()</code></td>
+<td></td>
+<td>can set cordinates of extreme tick marks and intervals.</td>
+</tr>
+<tr class="even">
+<td>xaxt</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td></td>
+<td>if xaxt=“n”, suppresses plotting x-axis</td>
+</tr>
+<tr class="odd">
+<td>xlim</td>
+<td><code>plot()</code></td>
+<td></td>
+<td>set the x-axis limits by c(x1,x2)</td>
+</tr>
+<tr class="even">
+<td>xpd</td>
+<td><code>par()</code></td>
+<td>FALSE</td>
+<td>plot clipping. If FALSE, clips to plot region. if TRUE, clips to
+figure region, if NA, clips to device region</td>
+</tr>
+<tr class="odd">
+<td>yaxp</td>
+<td><code>plot()</code></td>
+<td></td>
+<td>can set cordinates of extreme tick marks and intervals.</td>
+</tr>
+<tr class="even">
+<td>yaxt</td>
+<td><code>par()</code> or <code>plot()</code></td>
+<td></td>
+<td>if “n”, suppresses plotting y-axis by c(y1,y2)</td>
+</tr>
+<tr class="odd">
+<td>ylim</td>
+<td><code>plot()</code></td>
+<td>set the y-axis limits by c(y1,y2)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
