@@ -59,7 +59,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #### [Worked Example: Simulating Population Growth](example_PopGrowth.html)
 
-#### [Worked Example: Wrangling World Bank Data](Ex_WorldBank.html)
+#### [Worked Example: Wrangling World Bank Data](example_WorldBank.html)
 
 #### [Worked Example: Data wrangling with coot chick color data](Example_CootDataWrangling.html)
 
