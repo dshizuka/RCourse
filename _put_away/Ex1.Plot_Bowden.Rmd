@@ -1,0 +1,506 @@
+---
+title: 'Worked Example: Plotting the change in butterfly size with climate change' 
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+***
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+#### Things you will learn in this module:
+
+* **Using publicly available datasets**
+* **Implementing a simple statistical analysis (simple linear regression)**
+* **Making publication-quality figures**
+* **Build custom functions for some simple tasks**
+
+
+***Note: This module uses ggplot to generate figures. If you prefer doing everything in Base R, there is an older version of this module [here](Ex1.Plot_Bowden_baseR.html).***
+
+***
+
+## 1. Using data associated with published papers
+Today, we will learn a bit more about plots by trying to re-create a plot from a recent publication. I find playing with open-access data and re-creating analyses & figures to be a very fruitful exercise because you get to learn codes, but you also get to really understand the studies much better. 
+
+For this exercise, I have chosen a paper by Bowden et al. (2015) in *Biology Letters*.[^1] This study used a 17-year dataset on wing lengths of two butterfly species in Greenland to show that both species follow the "temperature-size" rule, which posits that higher temperatures generally select for smaller adult body size.  
+
+![*Boloria chariclea* and *Colias hecla*](images/butterflies.png)
+
+Aside from it being an interesting story, I chose this paper as an example for several reasons. First, the data are pretty straightforward--wing lengths of individuals, sex of individuals, and a few climatic data such as snowmelt day, average spring temperature and average spring/summer temperature of the previous year. More importantly, the authors made the raw data publicly available through the Dryad data repoistory ([datadryad.org](datadryad.org)).
+Here is the link to the raw data for this particular study:  [http://dx.doi.org/10.5061/dryad.43gt3](http://dx.doi.org/10.5061/dryad.43gt3) (you can find this information under "Data accessibility", right before References).
+
+You can see that there is a link to an excel file (in .xlsx format) that contains the wing length data. In this case, there is no associated readme file (though it is encouraged by Dryad to include one), but the data are self-explanatory enough. **Go ahead and download the data file and open it in Microsoft Excel.**  
+
+What you will see is a single worksheet with both species data. For each species, there are 9 columns: year, site, sex, WL (wing length), DOY (day of year of capture), snow (day of snowmelt), snow.1 (day of snowmelt in the previous year), mayjun (average May-June temperature), mayaug.1 (Average May-Aug temperature of previous year).  
+
+Now, since R will have a hard time reading this data, let's manually create two separate data files and save them as .csv files. **Follow these directions:**
+
+1. Select and copy the 9 columns of data for *Boloria chariclea*
+2. Open a New Workbook (command-N) and paste the data
+3. Save the file as "boloria.csv" in your folder for this week.
+4. Do the same for Colias hecla, and save that file as "colias.csv"
+
+Now, let's import these data to R:
+```{r}
+#import the data
+boloria=read.csv("data/boloria.csv")
+colias=read.csv("data/colias.csv")
+head(boloria) #look at one of the dataframes
+```
+
+Let's also load the R packages we will use:
+```{r, message=F}
+library(tidyverse)
+library(cowplot)
+```
+
+Now, we can proceed with our exercise. 
+
+## 2. Recreating Figure 1: Scatterplot with fit line
+
+The first thing we will try is to re-create Figure 1, which has three panels and shows how the snowmelt dat, average May-June temperature, and average May-August temperature (of the previous year) has changed across the study period. They present this as a scatterplot and a simple linear regression fit line.
+
+![Figure 1 from Bowden et al. (2015): (a) Timing of snowmelt ($F_{1,16}$ = 8.92, estimate = -1.05, $R^2_{Adj}$ = 0.32, $p$ < 0.008), (b) $May-June_t$ temperature ($F_{1,16}$ = 10.87, estimate = 0.11, $R^2_{Adj}$ = 0.37, $p$ < 0.005) and (c) $May-June_{t-1}$ temperature ($F_{1,16}$ = 22.52, estimate = 0.11, $R^2_{Adj}$ = 0.56, $p$ < 0.001) from 1996-2013 at Zackenberg, Greenland](images/Ex1_Fig1.png)
+
+**Alright, let's try to re-create this!**  
+
+### 5.2.1 Multi-panel scatterplot using ggplot and cowplot
+First thing we'll do is re-create the scatterplot of Figure 1a: The date of snowmelt by year. Close reading of the supplemental methods section tells us that this is the first day of the year that less than 50% of the site was covered in snow. 
+
+The dataset we have downloaded is organized by individual butterflies that were caught during the study. However, the snowmelt and temperature information are the same for all rows for a given year (and this info is the same for both species of butterfly). 
+
+So we can actually extract all of the information we need for this figure from this data. All we need to do is to **group the data by year** and **summarize** the snowmelt and temperature data for each year by taking the mean. To do this, we will can use the `group_by()` and `summarize()` functions in the *dplyr* package (included in the *tidyverse* package we loaded). 
+
+Let's use this to create a dataframe that has all of the information we need: year, average snowmelt day, average May-June temperature of that year, and average May-August temperature of the previous year:
+
+
+```{r}
+year.dat=boloria %>% group_by(year) %>% summarise(mean.snow=mean(snow), mean.mayjun=mean(mayjun), mean.mayaug=mean(mayaug.1))
+year.dat
+```
+
+Let's try plotting on of the panels of Figure 1 here using this data. Here is the plot for average snowmelt date across years.
+
+```{r, fig.width=4, fig.height=3}
+p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point()
+p1
+```
+
+In ggplot, it's also easy to add the simple linear regression line on this plot by using `stat_smooth(method="lm")`: 
+
+```{r, fig.width=4, fig.height=3}
+p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method="lm")
+p1
+```
+
+Let's get rid of the confidence interval and make the line black.
+
+```{r, fig.width=4, fig.height=3}
+p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black")
+p1
+```
+
+We can plot the other two panels in the same way:
+
+```{r, fig.width=4, fig.height=3}
+p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black")
+p2
+```
+
+```{r, fig.width=4, fig.height=3}
+p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black")
+p3
+```
+
+Now, we've created 3 different scatterplots. But what we want is to make one figure with 3 panels arranged vertically. How do we do that?
+
+The R package called **cowplot** makes the task of making multi-panel plots very easy (The "cow" in "cowplot" stands for Claus O. Wilkes, who wrote the package). 
+
+```{r, fig.height=8, fig.width=3}
+plot_grid(p1, p2, p3, align="v", nrow=3) 
+```
+Now let's clean up the theme and axis labels.
+
+```{r, warning=F, message=F, fig.height=8, fig.width=3}
+p1=ggplot(year.dat, aes(x=year, y=mean.snow)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black") +
+  theme_cowplot() +
+  labs(y="Snowmelt (DOY)", x="Year") +
+  theme(axis.title.y = element_text(size=12))
+
+p2=ggplot(year.dat, aes(x=year, y=mean.mayjun)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black") +
+  theme_cowplot() +
+  labs(y=expression(paste("Average Temperature"["t"], 
+    " ", (~degree * C))), x="Year") +
+  theme(axis.title.y = element_text(size=12))
+
+p3=ggplot(year.dat, aes(x=year, y=mean.mayaug)) +
+  geom_point() +
+  stat_smooth(method="lm", se=FALSE, color="black") +
+  theme_cowplot() +
+  labs(y=expression(paste("Average Temperature"["t-1"], " ", 
+        (~degree * C))), x="Year") + 
+  theme(axis.title.y = element_text(size=12))
+
+plot_grid(p1, p2, p3, nrow=3)
+```
+
+
+***
+
+## 3. Getting model results for linear regression using `lm()`
+
+ggplot has allowed us to put a linear regression fit line on our plots very easily, but we also want to get the statistical results to report in the main text. So let's do this. 
+
+Let's start from the beginning: what is a linear regression? A lot of people think that linear regression is a form of a *linear model*. A linear model is a class of statistic models in which the value of interest is described by a linear combination of a series of parameters (regression slopes and intercept). This can actually include curvilinear relationships between the dependent and independent variables.
+
+My aim here is not to provide a thorough lesson on statistics. For that, I suggest you take a proper statistics class or consult a statistics textbook. 
+
+Here, we will just tackle the problem of fitting a ***simple linear regression*** with one continuous dependent variable ($y$) and one continuous independent variable ($x$). Thus, we want to fit the linear function
+$$y=a+bx$$
+where $a$ is the intercept and $b$ is the slope of the line. 
+
+To fit this model, we use a model formula syntax inside the appropriate statistical function. In this case, the appropriate formula is  
+`y~x`  
+
+Notice that we replace the equal sign (=) with a tilde (~) and remove the paramters ($a$ and $b$). All R needs to understand our statistical model is the dependent variable(s) ($y$ in this case) and the independent variable(s) ($x$ in this case). We will address the formula syntax for more complex statistical models later.  
+
+### 3.1. Fitting a linear model and getting the results
+
+Now, let's use the simple linear regression to ask the question: what is the relationship between snowmelt date (dependent variable) and year (independent variable).[^2]
+To do this, we will create an object using the `lm()` function, and get the summary output of the model using the `summary()` function:
+
+```{r, results='hold'}
+fit.snow=lm(mean.snow~year, data=year.dat)
+summary(fit.snow)
+```
+
+
+So this gives us a good overview of the statistical output, but it gives us a lot of information, and you have to know what to look for. Let's look at these values closely:
+
+```{r, echo=FALSE, fig.align="left", out.width="50%"}
+knitr::include_graphics("images/Ex1_summary_fit.snow.png")
+```
+
+
+The values reported in the caption of Figure 1 of the paper are in the rectangles:
+
+* "Estimate" for the independent variable (year) is the **slope parameter $b$** (red rectangle). The intercept parameter $a$ is above that.
+
+* **F-statistic** (green rectangle): Ratio of Mean of squares. Compares the amount of variation explained by the regression model and the "left-over variation" (residual sum of squares). The associated **degrees of freedom (DF)**--i.e., how many independent observations we have of a given variable that can be used to estimate a statistical parameter--are the "regression degrees of freedom"" (# parameters -1) and the "residual degrees of freedom" (sample size - # of parmeters - 1)
+
+* **P-value**: Calculated by comparing the F-ratio with expected distribution of this value. 
+
+***NOTE:*** There are also t-statistics and P-values associated with each parameter (in purple circle). These are P-values associated with the null hypotheses that the intercept and slope are equal to 0. This is different than the P-value for the test for the fit of the linear regression model to the data. Thus, those circled values are NOT relevant for us right now.
+
+**Now compare these values in the rectangles to the values presented in the figure captions to Figure 1 in the paper. Do you notice that they are slightly different? Can you figure out why they are slightly different?[^3]**
+
+<br>
+
+### 3.2. Fitting all three models and organizing the outputs as a table
+
+Now, how we take these kinds of model results and organize them for publication? Well, you could simply copy the relevant numbers from each model and paste them into a table.
+
+Here, we'll do one better: we will write a function to extract all of the values that are reported by in the `summary()` function and organize them into a table. But this takes a little sleuthing to understand how to look "under the hood" of these model fits to extract the information we want. 
+
+To get started, let's look at what is actually included in the output of the `summary()` function by using the `str()` function: 
+
+```{r}
+str(summary(fit.snow))
+```
+
+There is actually a tremendous amount of information stored in here. We just have to go through one by one and figure out where the values we want are. 
+
+For example, the F value is listed as `$ fstatistic`. To get that, you have to do:
+```{r}
+summary(fit.snow)$fstatistic
+```
+
+Then, you see that actually, this contains three values: (1) The F-value, and (2,3) the degrees of freedom of the model. We want to save all of these, so we do:
+
+```{r}
+F.snow=round(summary(fit.snow)$fstatistic[1],3)
+dfs.snow=summary(fit.snow)$fstatistic[2:3]
+```
+
+We can do the same with R^2, Slope and P-value:
+```{r}
+r2.snow=round(summary(fit.snow)$adj.r.squared,3)
+slope.snow=round(summary(fit.snow)$coefficients[2,1],3)
+p.snow=round(summary(fit.snow)$coefficients[2,4],3)
+```
+
+Now let's put all of that as a dataframe.
+```{r}
+table.dat=data.frame(F.value=F.snow, df=paste(dfs.snow[1], dfs.snow[2], sep=","), r2=r2.snow, slope=slope.snow, p.value=p.snow)
+table.dat
+```
+
+Now, we want to do this for all three models we want to fit: the change across years in snowmelt date, may-june temperature, and may-august temperature. But doing the whole routine three times is kind of annoying, so I'm going to make a little function that will extract the relevant output values from any linear model with one response variable and one predictor variable:
+
+```{r}
+make.mod.table=function(model) {
+  F.value=round(summary(model)$fstatistic[1],3)
+  dfs=summary(model)$fstatistic[2:3]
+  r2=round(summary(model)$adj.r.squared,3)
+  slope=round(summary(model)$coefficients[2,1],3)
+  P.value=round(summary(model)$coefficients[2,4],3)
+  data.frame(F.value=F.value, df=paste(dfs[1], dfs[2], sep=","), r2=r2, slope=slope, P.value=P.value)
+}
+
+```
+
+Now, let's go ahead and fit those other two models:
+```{r}
+fit.mayjun=lm(mean.mayjun~year, data=year.dat)
+fit.mayaug=lm(mean.mayaug~year, data=year.dat)
+```
+
+Now, I'm going to run the custom `make.mod.table()` function here to all three models using an `lapply()` function. The output will be a list of dataframes. 
+```{r}
+table.dats=lapply(list(fit.snow, fit.mayjun, fit.mayaug), make.mod.table)
+table.dats
+```
+
+Now, I want to combine them into one data frame. I will use the `bind_rows()` function from dplyr:
+```{r}
+table.all=bind_rows(table.dats)
+table.all
+```
+
+I'll make a quick edit to add a model names as row names:
+```{r}
+rownames(table.all)=c("snow", "may-june", "may-august")
+table.all
+```
+
+Just for kicks, I'll display the table in Rmarkdown in a somewhat pretty format:
+```{r}
+knitr::kable(table.all, format="pipe", align='c')
+```
+
+If you want to export this table to excel, you can write it as a .csv file:
+```{r, eval=F}
+
+write.csv(table.all, "summary_table.csv")
+```
+
+
+***
+
+## 4. Recreating Figure 2a,b
+
+Now, we will work on re-creating Figure 2, which is a 4-panel figure with the average wing length of males and females (and error bars) for each species (panels *a* and *b*), and the relationship between average wing length and the average May-August temperature of the previous year (panels *c* and *d*). 
+
+![Figure 2 from Bowden et al. (2015): *Inter-annual variation in average male (open circles) and female (filled circles) wing length over the sampling period for (a) Colias hecla and (b) Boloria chariclea and their responses (c,d, respectively) to average May–Augustt21 temperature. Error bars represent s.e. Data for 2010 are not available.*](images/Ex1_Fig2.png)
+
+***
+
+### 4.1 Panels (a) and (b): Plotting the mean wing lengths by year, species and sex
+
+First thing we need to do to construct this figure is to calculate the mean wing lengths for each year for each species and sex. We also want to get the Standard Error of the Mean for these estimates. We can do this with `group_by()` and `summarize()` functions that we used in a previous module, plus the hand `mean_se()` function that will generate both the mean and standard errors.
+
+Let's start with *Colias hecla* since that is the first panel.
+
+```{r}
+wl.colias=colias %>% group_by(year, sex) %>% summarise(mean_se(WL)) #calculate the mean of WL by year and sex for the colias dataset.
+```
+
+You can see that this generates three columns: "y", which is the mean, and "ymin" and "ymax", which correspond to the lower and upper ends of the standard error. 
+
+So now we have the data that we need to generate the plot for Panel A. Let's start building it! What we want to do is plot the data for one sex (say female), and then add the points for the second sex (male) on that same plot. To do this, a useful function is `subset()`, which allows us to easily specify a subset of data. 
+Try this to plot the data for just the females:
+
+```{r}
+ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
+  geom_path() +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white"))
+```
+
+Note that I plot the `geom_path()` (i.e., the lines) here first before the points. This makes it so that the lines show up behind the points.
+
+#### Notice that there is one problem here, which is that the plot connects the dots between the years 2009 and 2011, even though the data for 2010 is missing. The figure in the publication correctly omits this line. We will address this later.
+
+
+We can add errorbars to the points on our figure by simply adding `geom_errorbar()`. Here, we specify the minimum and maximum values of the error bar by subtracting or adding the standard error to the mean, respectively.
+
+```{r}
+ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
+  geom_path() +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax))
+```
+
+Now, let's make it look a bit prettier and save the plot as `p.2a'
+
+```{r}
+p.2a=ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
+  geom_path() +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  theme_cowplot() +
+  labs(y="Average Wing Length (mm)")
+p.2a
+```
+
+
+Now, let's do the same with Boloria (Figure 2b):
+
+Create the summary data with standard error included:
+```{r}
+wl.boloria=boloria %>% group_by(year, sex) %>% summarise(mean_se(WL)) 
+```
+
+Create the plot as you did with the Figure 2a, but now save it as `p.2b`:
+
+```{r}
+p.2b=ggplot(wl.boloria, aes(x=year, y=y, group=sex)) +
+  geom_path() +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  theme_cowplot() +
+  labs(y="Average Wing Length (mm)")
+p.2b
+```
+
+### 4.2. Further tweaking the plot: 
+
+To go further, we can fix the details like skipping the year 2010 by plotting the points for years <2010 and years >2010 separately for each sex and each species, all in two vertical panels. I'll also adjust the tick marks a bit:
+
+```{r}
+p.2a=ggplot(wl.colias, aes(x=year, y=y, group=sex)) +
+  geom_path(data=wl.colias %>% filter(year<2010)) +
+  geom_path(data=wl.colias %>% filter(year>2010)) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  theme_cowplot() +
+  labs(y="Average Wing Length (mm)")
+p.2a
+```
+
+```{r}
+p.2b=ggplot(wl.boloria, aes(x=year, y=y, group=sex)) +
+  geom_path(data=wl.boloria %>% filter(year<2010)) +
+  geom_path(data=wl.boloria %>% filter(year>2010)) +
+  geom_errorbar(aes(ymin=ymin, ymax=ymax), width=0.5) +
+  geom_point(aes(fill=sex), pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  theme_cowplot() +
+  labs(y="Average Wing Length (mm)")
+p.2b
+```
+
+***
+
+## 5. Recreating Figure 2c,d
+
+Ok, the final plots to make are the Figures 2(c,d), which are plots of the relationships between average wing length of a population/year/sex and the May-August temperature of the previous year.  
+The good news is that **we have covered everything you need to know to make these figures!** Think about it for a minute and see if you can visualize the steps you need to complete to get this data
+
+***
+
+Ok, let's start. Note that we have created several different dataframes so far. 
+
+* One called `year.dat` contains the average snowmelt date, average May-June temperature, and average May-August temperature across years.
+
+* One called `wl.colias` contains data on annual average + standard error of wing length for **Colias hecla**
+
+* One called `wl.boloria` contains data on annual average + standard error of wing length for **Boloria chariclea**
+
+Let's take a quick look at the `year.dat` and `wl.colias` dataframes:
+
+```{r}
+year.dat
+```
+
+```{r}
+wl.colias
+```
+Note that both of these dataframes have a common variable: the year. So, we can use that variable as a link to merging these to dataframes together. That is, we can create a dataframe that includes the wing length data AND the climate variables. To do this, we can use a `_join()` function in dplyr to merge data.
+
+Here, we'll use `left_join()`:
+```{r}
+wl.colias %>% left_join(., year.dat)
+```
+
+So let's do this for each species and save the dataframes.
+
+```{r}
+wl.colias=wl.colias %>% left_join(., year.dat)
+wl.boloria=wl.boloria %>% left_join(., year.dat)
+```
+
+Now, we can make a scatterplot for each species' winglength by the annual average temperature (May-August) where the average female wing lengths are filled black and males are filled white + add the linear regression line as we did with Figure 1.
+
+```{r}
+ggplot(wl.colias, aes(x=mean.mayaug, y=y, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  stat_smooth(method="lm", se=F, color="black") 
+```
+
+Let's make it prettier and save it as `p.2c`
+
+```{r}
+p.2c=ggplot(wl.colias, aes(x=mean.mayaug, y=y, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  stat_smooth(method="lm", se=F, color="black") +
+  theme_cowplot() +
+  labs(x = "May-Aug temp (t-1)", y = "average wing length (mm)")
+p.2c
+```
+
+
+We can do the same thing with *Boloria*:
+
+
+```{r}
+p.2d=ggplot(wl.boloria, aes(x=mean.mayaug, y=y, fill=sex)) +
+  geom_point(pch=21, size=2) +
+  scale_fill_manual(values=c("black", "white")) +
+  stat_smooth(method="lm", se=F, color="black") +
+  theme_cowplot() +
+  labs(x = "May-Aug temp (t-1)", y = "average wing length (mm)")
+p.2d
+```
+
+## 6. Create Figure 2
+
+Now organize these into a multi-panel plot!
+
+```{r, warning=F, message=F}
+plot_grid(p.2a, p.2c, p.2b, p.2d, nrow=2)
+
+```
+
+***
+
+Ok, I hope you feel like you learned some things by going through this exercise!
+
+[^1]: Bowden, JJ, Eskildsen, A., et al. (2016) High-Arctic butterflies become smaller with rising temperatures. *Biology Letters* 11: 20150574.
+[^2]: Here, notice that technically speaking, "year" is not a continuous variable... one might conceivably argue that there are more appropriate statistical approach to analyzing this type of time-series data. 
+[^3]: The discrepancy between the values that come out of our analysis and what is reported in the publication arises because the supplementary data is actually missing one data point for the climate variables that is included in the final publication (year 2010). This seems to be due to the fact that butterflies were not measured in 2010, and so that year does not appear in the supplemental data. However, the climate data for that year is available, so it is included in the analysis presented in Figure 1. 
