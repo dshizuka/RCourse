@@ -466,21 +466,21 @@ this:</p>
 <pre class="r"><code>colorset=rainbow(3) #create a palette of 3 colors
 pt.cols=colorset[as.numeric(iris$Species)] #This is now a vector of colors for each point
 plot(Sepal.Width~Sepal.Length, data=iris, xlab=&quot;Sepal Length&quot;, ylab=&quot;Sepal Width&quot;, las=1, pch=19, col=pt.cols)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
 <p>Here, we will go through step-by-step on how to recreate this figure,
 but in ggplot2</p>
 <div id="step-1-define-the-data-and-aesthetics." class="section level4">
 <h4>step 1: Define the data and aesthetics.</h4>
 <p>This will only create a blank plot</p>
 <pre class="r"><code>ggplot(data=iris, mapping=aes(x=Sepal.Length, y=Sepal.Width))</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
 </div>
 <div id="step-2-add-scatter-plot-using-geom_point"
 class="section level4">
 <h4>step 2: add scatter plot using <code>geom_point()</code></h4>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point()</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 </div>
 <div
 id="step-3-change-point-size-by-defining-additional-parameters-within-the-geom_-function."
@@ -489,7 +489,7 @@ class="section level4">
 the <code>geom_</code> function.</h4>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(size=2)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
 </div>
 <div
 id="step-4-color-the-points-by-species-by-defining-it-in-the-aesthetics-aes-argument"
@@ -498,7 +498,7 @@ class="section level4">
 (<code>aes()</code> argument)</h4>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
 </div>
 <div id="step-5-define-the-color-scaling" class="section level4">
 <h4>step 5: Define the color scaling</h4>
@@ -510,7 +510,7 @@ while to get familiar with them.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3))</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
 </div>
 <div id="step-6-set-up-a-simple-theme" class="section level4">
 <h4>step 6: set up a simple “theme”</h4>
@@ -518,7 +518,7 @@ while to get familiar with them.</p>
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3)) +
   theme_bw() </code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-10-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-10-1.png" width="50%" /></p>
 </div>
 <div id="step-7-additional-adjustments-in-theme-to-remove-grid-lines"
 class="section level4">
@@ -529,7 +529,7 @@ lines</h4>
   scale_color_discrete(type=rainbow(3)) +
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
 </div>
 <div id="step-8-edit-the-x--and-y-axis-labels." class="section level4">
 <h4>step 8: Edit the x- and y-axis labels.</h4>
@@ -542,7 +542,7 @@ change the periods into spaces:</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
 </div>
 <div id="step-9-remove-legend" class="section level4">
 <h4>step 9: Remove legend</h4>
@@ -558,7 +558,7 @@ function.</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = &quot;none&quot;) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" /></p>
 </div>
 <div id="alternative-syntax" class="section level4">
 <h4>Alternative syntax:</h4>
@@ -574,7 +574,7 @@ when you are doing more complex visualizations.</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = &quot;none&quot;) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-14-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-14-1.png" width="50%" /></p>
 <hr />
 </div>
 </div>
@@ -612,7 +612,7 @@ then save it. Here, we will assign the plot with the legend as
 
 #display the plot
 p</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-17-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-17-1.png" width="50%" /></p>
 <pre class="r"><code>#save the plot
 ggsave(&quot;scatterplot_w_legend.pdf&quot;, width=8, height=4, units=&quot;in&quot;)</code></pre>
 <hr />
@@ -649,17 +649,17 @@ The typical boxplot
   geom_boxplot() +
   scale_fill_brewer(palette=&quot;RdYlBu&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(y= Species, x=Sepal.Width, fill=Species)) +
   geom_boxplot(notch=T) +
   scale_fill_brewer(palette=&quot;RdYlBu&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-20-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-20-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
   geom_violin() +
   scale_fill_brewer(palette=&quot;Blues&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-21-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-21-1.png" width="50%" /></p>
 </div>
 <div id="histogram-density-plot" class="section level3">
 <h3>Histogram &amp; Density Plot:</h3>
@@ -669,22 +669,22 @@ of a continuous value.</p>
   geom_histogram(aes(x=Sepal.Width)) +
   theme_classic()</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-22-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-22-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width, fill=Species)) +
   geom_histogram(alpha=0.7, position=&#39;identity&#39;, color=&quot;black&quot;) +
   scale_fill_manual(values=c(&quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;)) +
   facet_grid(rows=vars(Species)) +
   theme_classic()</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-23-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-23-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width)) +
   geom_density() +
   theme_classic()</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-24-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-24-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width, fill=Species)) +
   geom_density(alpha=0.5) +
   theme_classic()</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
 </div>
 <div id="line-chart" class="section level3">
 <h3>Line chart</h3>
@@ -734,7 +734,7 @@ orange trees across different ages.</p>
 ## 35    5 1582           177</code></pre>
 <pre class="r"><code>ggplot(Orange, aes(x=age, y=circumference, color=Tree)) +
   geom_line()</code></pre>
-<p><img src="ggplot2_intro_files/figure-html/unnamed-chunk-27-1.png" width="50%" /></p>
+<p><img src="ggplot_intro_files/figure-html/unnamed-chunk-27-1.png" width="50%" /></p>
 </div>
 </div>
 
