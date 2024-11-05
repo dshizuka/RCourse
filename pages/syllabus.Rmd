@@ -2,8 +2,7 @@
 title: 'BIOS 967: Intro to R for Biologists'
 subtitle: Syllabus, Fall 2023
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
-output:
-  html_document: default
+output: html_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
