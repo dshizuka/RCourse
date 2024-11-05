@@ -45,8 +45,6 @@ knitr::opts_chunk$set(echo = TRUE)
     
   + ### [Randomizations and Sampling From Distributions](RandomNumbers.html)
 
-    + #### [Apply & Loops example: Population Growth Models](PopGrowth.html)
-
   + ### [Batch Processing (Example using Flack et al. 2014)](batch.html) 
 
 * ### Reports
@@ -58,6 +56,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ***
 
 ## Worked Examples:
+
+#### [Worked Example: Simulating Population Growth](example_PopGrowth.html)
 
 #### [Worked Example: Wrangling World Bank Data](Ex_WorldBank.html)
 

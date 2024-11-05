@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Apply Functions and Loops</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Apply Functions and Loops</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 11/05/24</h4>
+
+</div>
+
+
+<hr />
+<p>In this module, we will go over several useful R tricks that allow
+you to speed up tasks and scale up your analyses!</p>
+<p>Let’s load the packages we’ll need here:</p>
+<pre class="r"><code>library(tidyverse)
+library(cowplot)</code></pre>
+<hr />
+<div id="the-apply-family-of-functions" class="section level2">
+<h2>1. The “apply-family” of functions</h2>
+<p>The “apply family” function–which includes <code>apply()</code>,
+<code>sapply()</code>, <code>lapply()</code> and
+<code>tapply()</code>–takes a series of elements and applies a given
+function to it. The function to be applied can be defined within the
+‘apply’ function.</p>
+<p>“apply” functions take X, and applies a function to each element
+along the length of X (with the exception of <code>apply()</code>, which
+can apply the function along an array, and <code>tapply()</code>: see
+below). Each apply-family function varies slightly in its syntax or
+output format:</p>
+<ul>
+<li><code>lapply()</code> returns the output as a list</li>
+<li><code>sapply()</code> returns the output in the simplest format
+possible (e.g., it will be a vector if the output is a series of
+numbers)</li>
+<li><code>vapply()</code> allows you to pre-specify a type of return
+value.</li>
+<li><code>apply()</code> is slightly different in that it allows you to
+apply the function on an array–e.g., you can apply a function on rows of
+a matrix, or columns, or on each cell.</li>
+<li><code>tapply()</code> applies a function to an variable in a
+dataframe grouped by a factor. (<em>I don’t think I ever really use this
+one because I prefer to use the <code>group_by()</code> %&gt;%
+<code>summarise()</code> pipeline from dplyr</em>)</li>
+</ul>
+<hr />
+<div
+id="applying-a-function-to-a-set-of-elements-using-sapply-and-lapply"
+class="section level3">
+<h3>1.1 Applying a function to a set of elements using
+<code>sapply()</code> and <code>lapply()</code></h3>
+<p><br />
+</p>
+<div id="the-syntax-of-sapply-and-lapply-functions"
+class="section level4">
+<h4>1.1.1 The syntax of <code>sapply()</code> and <code>lapply()</code>
+functions:</h4>
+<p>These two functions take the syntax: sapply(“elements to apply the
+function to”, “function”).</p>
+<p>Let’s try out a really simple application of the
+<code>sapply()</code> function:</p>
+<p>Here, I’m going to define a very simple custom function to take a
+number and multiply it by 2:</p>
+<pre class="r"><code>mult.2=function(x) x*2</code></pre>
+<p>Now, you can apply that new function to a vector of numbers 1 through
+5:</p>
+<pre class="r"><code>sapply(1:5, mult.2)</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p>You can actually do the same thing without first defining a function.
+You can instead just create the function WITHIN the sapply function.</p>
+<p>So this will do the same thing:</p>
+<pre class="r"><code>sapply(1:5, function(x) x*2)</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p><br />
+</p>
+</div>
+<div id="the-basic-difference-between-sapply-and-lapply"
+class="section level4">
+<h4>1.1.2: The basic difference between <code>sapply()</code> and
+<code>lapply()</code></h4>
+<p>The difference between the <code>sapply()</code> and
+<code>lapply()</code> functions is the format of the output.</p>
+<ul>
+<li><p>The <code>sapply()</code> function takes a series of elements,
+run a function on it, and then save the output in the simplest format
+(“s” in “sapply” is for “simplify”).</p></li>
+<li><p>The <code>lapply()</code> function takes the series of elements,
+runs a function on it, and then saves the output as a list.</p></li>
+</ul>
+<p>Let’s try the same line of code again:</p>
+<pre class="r"><code>sapply(1:5, function(x) x*2)</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p>Because the output is a set of numbers, the <code>sapply()</code>
+function returns the simplest format for that–a vector.</p>
+<p>Compare that with the <code>lapply()</code> function, which saves the
+output as a list.</p>
+<pre class="r"><code>lapply(1:5, mult.2)</code></pre>
+<pre><code>## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 6
+## 
+## [[4]]
+## [1] 8
+## 
+## [[5]]
+## [1] 10</code></pre>
+<p>You can see that <code>lapply()</code> automatically generates the
+output as a list.</p>
+<p>Here’s another example:</p>
+<pre class="r"><code>v=c(1,2,3)
+sapply(1:5, function(x) x*v)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    2    3    4    5
+## [2,]    2    4    6    8   10
+## [3,]    3    6    9   12   15</code></pre>
+<p>What have we done here?</p>
+<ol style="list-style-type: decimal">
+<li>Set up an object called <code>v</code>, which is a vector of three
+numbers: 1, 2 and 3</li>
+<li>Then, take each element of <code>1:10</code> and multiply by
+<code>var</code>, which itself is 3 numbers.</li>
+<li>Organize the results as a matrix, which is the simplest format to
+store a 2-dimensional set of numbers. In this case, there will be 3 rows
+of 10 numbers.</li>
+</ol>
+<p>Again, compare this result with the output of
+<code>lapply()</code>:</p>
+<pre class="r"><code>v=c(1,2,3)
+lapply(1:5, function(x) x*v)</code></pre>
+<pre><code>## [[1]]
+## [1] 1 2 3
+## 
+## [[2]]
+## [1] 2 4 6
+## 
+## [[3]]
+## [1] 3 6 9
+## 
+## [[4]]
+## [1]  4  8 12
+## 
+## [[5]]
+## [1]  5 10 15</code></pre>
+<p><br />
+</p>
+</div>
+<div
+id="lapply-is-really-useful-when-your-output-is-complex-like-a-model-output-of-dataframe"
+class="section level4">
+<h4>1.1.2. <code>lapply()</code> is really useful when your output is
+complex, like a model output of dataframe:</h4>
+<p><code>lapply()</code> is really useful when you want to apply a
+function whose output is not a neat set of values.</p>
+<p>As an example, let’s use the <code>lapply()</code> function to run a
+linear regression on a list of dataframes. First, we will create such a
+list by “splitting” the familiar <code>iris</code> dataset by species
+(output not shown):</p>
+<pre class="r"><code>iris.list=split(iris, iris$Species)
+iris.list</code></pre>
+<p>Now we have a list object with three dataframes. Let’s now use the
+<code>lapply()</code> function to conduct the same linear regression
+model <code>Petal.Length~Sepal.Length</code> on each dataset. The output
+will be the <code>anova()</code> tables that show the F-statistic and
+overall model fits.</p>
+<pre class="r"><code>spp.mods=lapply(iris.list, function(x) lm(Petal.Length~Sepal.Length, data=x))
+spp.mods</code></pre>
+<pre><code>## $setosa
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.8031        0.1316  
+## 
+## 
+## $versicolor
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.1851        0.6865  
+## 
+## 
+## $virginica
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.6105        0.7501</code></pre>
+<p>Now, let’s then use the <code>lapply()</code> function again to get
+the summary:</p>
+<pre class="r"><code>spp.mods.summary=lapply(spp.mods, function(x) summary(x))
+spp.mods.summary</code></pre>
+<pre><code>## $setosa
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.40856 -0.08027 -0.00856  0.11708  0.46512 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   0.80305    0.34388   2.335   0.0238 *
+## Sepal.Length  0.13163    0.06853   1.921   0.0607 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1691 on 48 degrees of freedom
+## Multiple R-squared:  0.07138,    Adjusted R-squared:  0.05204 
+## F-statistic:  3.69 on 1 and 48 DF,  p-value: 0.0607
+## 
+## 
+## $versicolor
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68611 -0.22827 -0.04123  0.19458  0.79607 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.18512    0.51421   0.360     0.72    
+## Sepal.Length  0.68647    0.08631   7.954 2.59e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3118 on 48 degrees of freedom
+## Multiple R-squared:  0.5686, Adjusted R-squared:  0.5596 
+## F-statistic: 63.26 on 1 and 48 DF,  p-value: 2.586e-10
+## 
+## 
+## $virginica
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = x)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68603 -0.21104  0.06399  0.18901  0.66402 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.61047    0.41711   1.464     0.15    
+## Sepal.Length  0.75008    0.06303  11.901  6.3e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2805 on 48 degrees of freedom
+## Multiple R-squared:  0.7469, Adjusted R-squared:  0.7416 
+## F-statistic: 141.6 on 1 and 48 DF,  p-value: 6.298e-16</code></pre>
+</div>
+<div
+id="you-can-use-sapply-to-efficiently-extract-the-coefficients-from-a-series-of-models-stored-in-a-list."
+class="section level4">
+<h4>1.1.3. You can use <code>sapply()</code> to efficiently extract the
+coefficients from a series of models stored in a list.</h4>
+<p>Every model output and/or summary objects contain lots of
+information. Let’s see what is in the model summary for “setosa” (the
+first element of the spp.mods.summary list) using the function
+<code>str()</code>:</p>
+<pre class="r"><code>str(spp.mods.summary[[1]])</code></pre>
+<pre><code>## List of 11
+##  $ call         : language lm(formula = Petal.Length ~ Sepal.Length, data = x)
+##  $ terms        :Classes &#39;terms&#39;, &#39;formula&#39;  language Petal.Length ~ Sepal.Length
+##   .. ..- attr(*, &quot;variables&quot;)= language list(Petal.Length, Sepal.Length)
+##   .. ..- attr(*, &quot;factors&quot;)= int [1:2, 1] 0 1
+##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. .. ..$ : chr [1:2] &quot;Petal.Length&quot; &quot;Sepal.Length&quot;
+##   .. .. .. ..$ : chr &quot;Sepal.Length&quot;
+##   .. ..- attr(*, &quot;term.labels&quot;)= chr &quot;Sepal.Length&quot;
+##   .. ..- attr(*, &quot;order&quot;)= int 1
+##   .. ..- attr(*, &quot;intercept&quot;)= int 1
+##   .. ..- attr(*, &quot;response&quot;)= int 1
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: 0x13af87398&gt; 
+##   .. ..- attr(*, &quot;predvars&quot;)= language list(Petal.Length, Sepal.Length)
+##   .. ..- attr(*, &quot;dataClasses&quot;)= Named chr [1:2] &quot;numeric&quot; &quot;numeric&quot;
+##   .. .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Petal.Length&quot; &quot;Sepal.Length&quot;
+##  $ residuals    : Named num [1:50] -0.0744 -0.048 -0.1217 0.0914 -0.0612 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:50] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##  $ coefficients : num [1:2, 1:4] 0.8031 0.1316 0.3439 0.0685 2.3353 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##   .. ..$ : chr [1:4] &quot;Estimate&quot; &quot;Std. Error&quot; &quot;t value&quot; &quot;Pr(&gt;|t|)&quot;
+##  $ aliased      : Named logi [1:2] FALSE FALSE
+##   ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##  $ sigma        : num 0.169
+##  $ df           : int [1:3] 2 48 2
+##  $ r.squared    : num 0.0714
+##  $ adj.r.squared: num 0.052
+##  $ fstatistic   : Named num [1:3] 3.69 1 48
+##   ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;value&quot; &quot;numdf&quot; &quot;dendf&quot;
+##  $ cov.unscaled : num [1:2, 1:2] 4.136 -0.822 -0.822 0.164
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##   .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;Sepal.Length&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;summary.lm&quot;</code></pre>
+<p>You can see there are lots of info in here. Let’s extract the
+“estimate” of the –i.e., the slope of the relationship. This value is
+stored inside the “coefficients” section of the summary. If you look at
+the output above, you can kind of see that the coefficients are arranged
+in a matrix of 2 rows (intercept and Sepal.Length) and 4 columns
+(Estimate, Std. Error, t-value, and p-value). So, the slope of the
+relationship between Sepal Length and Petal Length is in the 2nd row,
+1st column.</p>
+<p>Use this knowledge and an <code>sapply()</code> function to get those
+slopes!</p>
+<pre class="r"><code>sapply(spp.mods.summary, function(x) x$coefficients[2,1])</code></pre>
+<pre><code>##     setosa versicolor  virginica 
+##  0.1316317  0.6864698  0.7500808</code></pre>
+<p>You can see that the three species vary in their relationships
+between sepal length and petal length. Here’s one way to visualize it
+simply using ggplot. Here, I’m using just the original iris data set to
+do this, but I’ve added the <code>facet_wrap()</code> function to show
+the results for each species separately:</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Petal.Length, color=Species)) + 
+  geom_point() + 
+  geom_smooth(method=&quot;lm&quot;) +
+  facet_wrap(~Species)</code></pre>
+<p><img src="Apply_files/figure-html/unnamed-chunk-14-1.png" width="768" />
+You can see how the slopes of “versicolor” and “virginica” are steeper
+than for “setosa”.</p>
+<hr />
+</div>
+</div>
+<div id="tapply-and-comparing-it-to-aggregate-and-dplyr"
+class="section level3">
+<h3>1.2 <code>tapply()</code> (and comparing it to
+<code>aggregate()</code> and dplyr)</h3>
+<p>The <code>tapply()</code> function applies a function to a set of
+values that are grouped by some factor. This is pretty much the same as
+the <code>aggregate()</code> function, but the output format is
+different. As a demo, let’s first set up a dataframe:</p>
+<pre class="r"><code>fac=c(rep(&quot;A&quot;, 4), rep(&quot;B&quot;, 4), rep(&quot;C&quot;, 4))
+num=1:12
+dat=data.frame(num, fac)
+dat</code></pre>
+<pre><code>##    num fac
+## 1    1   A
+## 2    2   A
+## 3    3   A
+## 4    4   A
+## 5    5   B
+## 6    6   B
+## 7    7   B
+## 8    8   B
+## 9    9   C
+## 10  10   C
+## 11  11   C
+## 12  12   C</code></pre>
+<p>Now, we’ll sum the values associated each factor (A, B or C). We’ll
+do this using <code>tapply()</code>, <code>aggregate()</code>, and the
+dplyr pipeline <code>group_by() %&gt;% summarise()</code> and compare
+the outputs:</p>
+<pre class="r"><code>output_tapply=tapply(dat$num, list(dat$fac), sum)
+output_aggregate=aggregate(num, list(fac=fac), sum)
+output_dplyr=dat %&gt;% group_by(fac) %&gt;% summarise(sum(num))</code></pre>
+<p>Let’s see what <code>tapply()</code> did:</p>
+<pre class="r"><code>output_tapply</code></pre>
+<pre><code>##  A  B  C 
+## 10 26 42</code></pre>
+<pre class="r"><code>class(output_tapply)</code></pre>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<p>You can see that <code>tapply()</code> returns an array (in this
+case, since it’s a one-dimensional array, it is basically a vector) with
+the names of the elements as the factor you used to group the
+values.</p>
+<p>How about what <code>aggregate()</code> did?:</p>
+<pre class="r"><code>output_aggregate</code></pre>
+<pre><code>##   fac  x
+## 1   A 10
+## 2   B 26
+## 3   C 42</code></pre>
+<pre class="r"><code>class(output_aggregate)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>As you can see, <code>aggregate()</code> returns a dataframe with the
+factor as one column and values as a second column.</p>
+<p>Finally, let’s what the dplyr pipeline of
+<code>group_by() %&gt;% summarise()</code> did:</p>
+<pre class="r"><code>output_dplyr</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   fac   `sum(num)`
+##   &lt;chr&gt;      &lt;int&gt;
+## 1 A             10
+## 2 B             26
+## 3 C             42</code></pre>
+<p>This is essentially the same as <code>aggregate()</code> but in a
+tibble format.</p>
+<hr />
+</div>
+<div id="working-with-arrays-using-apply" class="section level3">
+<h3>1.3 Working with arrays using <code>apply()</code></h3>
+<p>The <code>apply()</code> function is useful when you want to apply a
+function on an array (i.e., an n-dimensional set of numbers). Here, the
+syntax is apply(X, MARGIN, FUN, …), where X is a matrix or array, MARGIN
+is the direction in which the function will applied—for a matrix,
+<code>MARGIN=1</code> indicates rows, and <code>MARGIN=2</code>
+indicates columns. For example:</p>
+<pre class="r"><code>m=matrix(1:20, nrow=5, byrow=TRUE) 
+m</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    2    3    4
+## [2,]    5    6    7    8
+## [3,]    9   10   11   12
+## [4,]   13   14   15   16
+## [5,]   17   18   19   20</code></pre>
+<pre class="r"><code>apply(m,1,sum) #sum the rows</code></pre>
+<pre><code>## [1] 10 26 42 58 74</code></pre>
+<pre class="r"><code>apply(m,2,sum) #sum the columns</code></pre>
+<pre><code>## [1] 45 50 55 60</code></pre>
+<p>Or you can set the margin to <code>c(1,2)</code> to apply a function
+to row/column combinations (i.e., each cell)</p>
+<pre class="r"><code>apply(m,c(1,2),function(x) x^2)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    9   16
+## [2,]   25   36   49   64
+## [3,]   81  100  121  144
+## [4,]  169  196  225  256
+## [5,]  289  324  361  400</code></pre>
+<p>Where <code>apply()</code> really shines is when working with
+larger-dimensional arrays. For example, consider a 3x4x5 3-D array.</p>
+<p><img src="images/array.png" style="width:50.0%" /> We can sum across
+each of those dimensions:</p>
+<pre class="r"><code>a=array(1:60, dim=c(5, 4, 3)) </code></pre>
+<p>This creates a 3-dimensional array that is 5 values high, 4 values
+wide, and 3 values deep.</p>
+<p>The first “layer” of this matrix along dimension 1 (i.e., the matrix
+you can see on the front face of the diagram) would be:</p>
+<pre class="r"><code>a[,,1]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    6   11   16
+## [2,]    2    7   12   17
+## [3,]    3    8   13   18
+## [4,]    4    9   14   19
+## [5,]    5   10   15   20</code></pre>
+<p>The second “layer” would be:</p>
+<pre class="r"><code>a[,,2]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   21   26   31   36
+## [2,]   22   27   32   37
+## [3,]   23   28   33   38
+## [4,]   24   29   34   39
+## [5,]   25   30   35   40</code></pre>
+<p>etc…</p>
+<p>Now, let’s try out the <code>apply()</code> function along each
+dimension. First, let’s calculate the sum across the “depth” dimension…
+This should return three values:</p>
+<pre class="r"><code>apply(a, 3, sum)</code></pre>
+<pre><code>## [1]  210  610 1010</code></pre>
+<p>This corresponds to the sums of each matrix if we sliced the matrices
+like I’m showing on the diagram above:</p>
+<pre class="r"><code>sum(a[,,1])</code></pre>
+<pre><code>## [1] 210</code></pre>
+<pre class="r"><code>sum(a[,,2])</code></pre>
+<pre><code>## [1] 610</code></pre>
+<pre class="r"><code>sum(a[,,3])</code></pre>
+<pre><code>## [1] 1010</code></pre>
+<p>If we want to sum the matrices as we cut the array along the “height”
+dimension (i.e., along rows), we should get 5 values:</p>
+<pre class="r"><code>apply(a, 1, sum)</code></pre>
+<pre><code>## [1] 342 354 366 378 390</code></pre>
+<p>If we sum the matrices as we cut the array along the “width”
+dimension (i.e., along columns), we should get 4 values:</p>
+<pre class="r"><code>apply(a, 2, sum)</code></pre>
+<pre><code>## [1] 345 420 495 570</code></pre>
+<p>We can also sum the array along two dimensions. Let’s say we want to
+“collapse” the array into the 5-row x 4-column matrix–i.e., we sum each
+corresponding cell of the three “layers” of the matrices in the figure
+above:</p>
+<pre class="r"><code>apply(a, c(1,2), sum)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   63   78   93  108
+## [2,]   66   81   96  111
+## [3,]   69   84   99  114
+## [4,]   72   87  102  117
+## [5,]   75   90  105  120</code></pre>
+<hr />
+</div>
+</div>
+<div id="for-loops" class="section level2">
+<h2>2. For-Loops</h2>
+<p>A “for loop” is another way to repeat a function or series of
+functions many times. The idea here is to request that an index (e.g.,
+i) take on a series of values, and that a lines of commands are executed
+as many times as there are different values of i.</p>
+<p><br />
+</p>
+<div
+id="set-up-an-empty-object-e.g.-vector-or-list-to-store-the-values-in"
+class="section level3">
+<h3>2.1. Set up an empty object (e.g., vector or list) to store the
+values in:</h3>
+<p>Here’s a simple example for just repeating a command 5 times:</p>
+<pre class="r"><code>for (i in 1:5) print(i*2)</code></pre>
+<pre><code>## [1] 2
+## [1] 4
+## [1] 6
+## [1] 8
+## [1] 10</code></pre>
+<p>Sometimes, it is useful to store the results of a loop to an object.
+Here, let’s repeat the above command, but we will save the result as a
+vector. To do this, we will have to first create an empty vector and
+then request that the output of the command is stored in order. Here, I
+recommend that you first establish the number of iterations you want to
+run the command. You’ll see what you mean here:</p>
+<pre class="r"><code>times=5 
+v=numeric(length=times)
+for (i in 1:times) v[i]=i*2
+v</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p><br />
+</p>
+</div>
+<div
+id="if-the-output-of-each-loop-is-a-vector-then-you-have-to-store-the-output-in-a-matrix-of-the-appropriate-size"
+class="section level3">
+<h3>2.2. If the output of each loop is a vector, then you have to store
+the output in a matrix of the appropriate size:</h3>
+<p>Let’s say you want to multiply a vector of numbers 1 through 10 by a
+series of numbers 1 through 5. Then, your output needs to be a matrix
+that is 5 x 10. Here, I’ll set up an empty matrix with 5 rows and 10
+columns to save the output:</p>
+<pre class="r"><code>times=5 
+m=matrix(nrow=times, ncol=10)
+for (i in 1:times) m[i,]=(1:10)*i
+m</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+## [1,]    1    2    3    4    5    6    7    8    9    10
+## [2,]    2    4    6    8   10   12   14   16   18    20
+## [3,]    3    6    9   12   15   18   21   24   27    30
+## [4,]    4    8   12   16   20   24   28   32   36    40
+## [5,]    5   10   15   20   25   30   35   40   45    50</code></pre>
+<p><br />
+</p>
+</div>
+<div
+id="you-can-use-loops-with-output-as-a-list-to-run-a-series-of-complex-tasks"
+class="section level3">
+<h3>2.3. You can use loops with output as a list to run a series of
+complex tasks:</h3>
+<p>Let’s take the same example as we used in the <code>lapply()</code>
+example (Section 1.1 above). We’ll split the iris dataset by species,
+then run a series of linear regressions with Sepal Length as the
+predictor variable and Petal Length as the response variable:</p>
+<p>Let’s just do the <code>split()</code> function again to make sure we
+have the same setup:</p>
+<pre class="r"><code>iris.list=split(iris, iris$Species)
+iris.list</code></pre>
+<p>Now, use loops to run the analyses. Here, I’m going to save the
+output as a list. To set up an empty list, all I have to do is
+<code>list()</code>:</p>
+<pre class="r"><code>spp.mods.loop=list()
+for(i in 1:length(iris.list)){
+  spp.mods.loop[[i]]=lm(Petal.Length~Sepal.Length, data=iris.list[[i]])
+}
+spp.mods.loop</code></pre>
+<pre><code>## [[1]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.8031        0.1316  
+## 
+## 
+## [[2]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.1851        0.6865  
+## 
+## 
+## [[3]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Coefficients:
+##  (Intercept)  Sepal.Length  
+##       0.6105        0.7501</code></pre>
+<p>We can generate the model summaries and extract the slopes in the
+same loop if we want:</p>
+<pre class="r"><code>spp.mods.summary.loop=list()
+slopes.loop=vector(length=length(iris.list))
+for(i in 1:length(iris.list)){
+  spp.mods.summary.loop[[i]]=summary(spp.mods.loop[[i]])
+  slopes.loop[i] = spp.mods.summary.loop[[i]]$coefficients[2,1]
+}</code></pre>
+<p>Here are the model summaries:</p>
+<pre class="r"><code>spp.mods.summary.loop</code></pre>
+<pre><code>## [[1]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.40856 -0.08027 -0.00856  0.11708  0.46512 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   0.80305    0.34388   2.335   0.0238 *
+## Sepal.Length  0.13163    0.06853   1.921   0.0607 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1691 on 48 degrees of freedom
+## Multiple R-squared:  0.07138,    Adjusted R-squared:  0.05204 
+## F-statistic:  3.69 on 1 and 48 DF,  p-value: 0.0607
+## 
+## 
+## [[2]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68611 -0.22827 -0.04123  0.19458  0.79607 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.18512    0.51421   0.360     0.72    
+## Sepal.Length  0.68647    0.08631   7.954 2.59e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3118 on 48 degrees of freedom
+## Multiple R-squared:  0.5686, Adjusted R-squared:  0.5596 
+## F-statistic: 63.26 on 1 and 48 DF,  p-value: 2.586e-10
+## 
+## 
+## [[3]]
+## 
+## Call:
+## lm(formula = Petal.Length ~ Sepal.Length, data = iris.list[[i]])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68603 -0.21104  0.06399  0.18901  0.66402 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.61047    0.41711   1.464     0.15    
+## Sepal.Length  0.75008    0.06303  11.901  6.3e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2805 on 48 degrees of freedom
+## Multiple R-squared:  0.7469, Adjusted R-squared:  0.7416 
+## F-statistic: 141.6 on 1 and 48 DF,  p-value: 6.298e-16</code></pre>
+<p>Here are the slopes:</p>
+<pre class="r"><code>slopes.loop</code></pre>
+<pre><code>## [1] 0.1316317 0.6864698 0.7500808</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
