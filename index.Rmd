@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+### Nov 5, 2024: I'm currently reorganizing my files. Apologies if any links don't work!
 ---
 
 ## Quick Links:

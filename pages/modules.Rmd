@@ -11,41 +11,47 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Learning Modules
 
-* ### [1. Let's get started with R!](01.Intro.html)
+* ### 1. Getting Started
 
-* ### [2. Types of Objects (vectors, strings, matrices, dataframes, lists)](02.ObjectTypes.html)
+  + ### [Let's get started with R!](Intro.html)
 
-* ### [*New Module: Workflow with RStudio Projects and GitHub](03.Workflow.html)
+  + ### [Types of Objects (vectors, strings, matrices, dataframes, lists)](ObjectTypes.html)
 
-* ### [3. Importing and Navigating Data](03.Data.html)
+  + ### [Workflow with RStudio Projects and GitHub](Workflow.html)
 
-* ### 4. Plotting in R:
+  + ### [Importing and Navigating Data](Data.html)
 
-    + ### [4.1 Basics of Plots](04.1.Plots_1.html)
+* ### 2. Plotting in R:
+
+    + ### [Basics of Plots](Plots_basics.html)
     
-    + ### [4.2 Intro to ggplot2](04.2.ggplot2_intro.html)
+    + ### [Intro to ggplot2](ggplot_intro.html)
 
-* ### 5. Stats in R:
+* ### Stats in R:
 
-    + ### [5.1 Linear Models in R (including ANOVA, GLM)](05.1.Stats_LinearModels.html)
+    + ### [Linear Models in R (including ANOVA, GLM)](Stats_LinearModels.html)
 
-* ### 6. Wrangling data in R:
+* ### Wrangling data in R:
 
-    + ### [6.1. Data Wrangling with Tidyverse Packages](06.1.tidyverse.html)
+    + ### [Data Wrangling with Tidyverse Packages](tidyverse.html)
     
-    + ### [6.2. Parsing Dates and Text](06.2.stringr_WHO.html)
+    + ### [Parsing Dates and Text](stringr_WHO.html)
 
-* ### [7. Custom Functions (and if-else statements)](07.Functions.html)
+* ### Functions, Sampling, and Batch Processing
 
-* ### [8. Apply Fuctions and Loops](08.Apply.html)
+  + ### [Custom Functions (and if-else statements)](Functions.html)
+
+  + ### [Apply Fuctions and Loops](Apply.html)
     
-* ### [9. Randomizations and Sampling From Distributions](09.RandomNumbers.html)
+  + ### [Randomizations and Sampling From Distributions](RandomNumbers.html)
 
-  + #### [9.2 Apply & Loops example: Population Growth Models](09.2.PopGrowth.html)
+    + #### [9.2 Apply & Loops example: Population Growth Models](PopGrowth.html)
 
-* ### [10. Batch Processing (Example using Flack et al. 2014)](10.batch.html) 
+  + ### [10. Batch Processing (Example using Flack et al. 2014)](batch.html) 
 
-* ### [11. Generating reports with RMarkdown](11.Rmarkdown.html)
+* ### Reports
+
+  + ### [11. Generating reports with RMarkdown](Rmarkdown.html)
 
 * ### [What now? More resources for continuing to learn R](resources.html)
 
