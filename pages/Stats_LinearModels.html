@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Module 6: Intro to Stats in R: Linear Models (GLM), including ANOVA</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Module 6: Intro to Stats in R: Linear
+Models (GLM), including ANOVA</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 11/05/24</h4>
+
+</div>
+
+
+<p>Many, if not most users of R take advantage of the powerful set of
+statistical tools available in the programming language. Particularly
+powerful are the myriad of user-generated packages (over 18,000 as of
+September 2022). It is pretty much true that, if there is a package for
+any conceivable type of statistical analysis!</p>
+<p>There is no way that I can write modules to cover all of the types of
+statistical analyses out there. Here, my goal will be to outline the
+basics of how to conduct one of the most flexible and widely-used
+statistical analyses across biology: Linear Models. I will cover the
+basics of how to implement these in base R. Hopefully this will give you
+a baseline knowledge of how analyses work, and the basic syntax that is
+pretty common across most stats packages. I will also cover the basics
+of how to implement visualizations of statistical tests (where
+appropriate).</p>
+<p><br></p>
+<hr />
+<div id="load-packages-you-will-need-for-this-module"
+class="section level2">
+<h2>Load packages you will need for this module:</h2>
+<pre class="r"><code>library(ggplot2)
+library(MASS)</code></pre>
+<p><em>if you dont’ have the package installed on your computer,
+remember to run the <code>install.packages()</code> function (e.g.,
+`install.packages(“MASS”))</em></p>
+<p><br></p>
+<hr />
+</div>
+<div id="choosing-statistical-models-based-on-data-properties"
+class="section level2">
+<h2>1. Choosing statistical models based on data properties</h2>
+<p>It is worth first considering what kind of data you have, and which
+one(s) is/are predictor variable(s) and which one is the response
+variable.</p>
+<div id="what-kind-of-data-do-you-have" class="section level3">
+<h3>1.1. What kind of data do you have?</h3>
+<ul>
+<li><p><strong>Numbers</strong></p>
+<ul>
+<li><p><em>Continuous data</em>: Numbers that can take on any
+value.</p></li>
+<li><p><em>Binary data</em>: Data that are 0/1 (e.g., death/survival,
+below/above a threshold, etc.)</p></li>
+<li><p><em>Count data</em>: Integers (e.g., number of plants, number of
+hits, etc.)</p></li>
+<li><p><em>Proportion data</em>: These can take a value between 0 and
+1.</p></li>
+</ul></li>
+<li><p><strong>Factors (i.e., Categorical Data)</strong></p></li>
+</ul>
+</div>
+<div id="predictor-vs.-response-variable" class="section level3">
+<h3>1.2. Predictor vs. response variable</h3>
+<p>Statistical analyses seek to determine the effect of the
+<strong>predictor variable(s)</strong> on a <strong>response
+variable</strong> (or, for multivariate analyses, multiple response
+variables).</p>
+<div id="here-are-some-of-the-most-common-scenarios"
+class="section level4">
+<h4>Here are some of the most common scenarios:</h4>
+<ul>
+<li><p><strong><em>If you have a continuous predictor AND continuous
+response variable…</em></strong> use linear regression or Generalized
+Linear Model (GLM) with Gaussian distribution</p></li>
+<li><p><strong><em>If you have a continuous predictor AND binary
+response variable…</em></strong> use GLM w/ “binomial” family (aka
+logistic regression)</p></li>
+<li><p><strong><em>If you have a continuous predictor AND counts as
+response variable…</em></strong> use GLM w/ “Poisson” family (aka
+Poisson regression)</p></li>
+<li><p><strong><em>If you have a continuous predictor AND proportions as
+response variable…</em></strong> use GLM w/ “binomial” or
+Quasi-binomial” family</p></li>
+<li><p><strong><em>If you have a categorical predictor AND continuous
+response variable…</em></strong> use ANOVA (or t-test, if you are just
+comparing means), which can be run as linear model or GLM.</p></li>
+<li><p><strong><em>If you have categorical predictor AND counts as
+response variable…</em></strong> use Chi-square tests.</p></li>
+<li><p><strong><em>If you have multiple predictors, with some continuous
+and some categorical variables…</em></strong> You can still use linear
+regression / GLM!</p></li>
+</ul>
+<blockquote>
+<p><span style="color:purple"><strong>Everything is a
+GLM!</strong></span></p>
+<p>You will notice from above that everything I’ve listed falls under
+“GLM” or Generalized Linear Model. GLMs are super useful and flexible,
+and goes beyond a lot of the “parametric statistics” that you may first
+learn in basic stats class. It is one of the most common forms of
+statistical analyses in biology (I think… at least in my fields of
+ecology/evolution/behavior), so it is a good place to start! Here is a
+link to a page by Jonas Kristoffer Lindeløv that I have found quite
+helpful: <a href="https://lindeloev.github.io/tests-as-linear/"
+class="uri">https://lindeloev.github.io/tests-as-linear/</a></p>
+</blockquote>
+<hr />
+<p><br></p>
+</div>
+</div>
+</div>
+<div id="linear-regression-an-example-with-mtcars"
+class="section level2">
+<h2>2. Linear Regression, an example with <code>mtcars</code></h2>
+<div id="fitting-a-linear-model-and-seeing-the-results"
+class="section level3">
+<h3>2.1. Fitting a linear model and seeing the results</h3>
+<p>Let’s start by exploring the effect of one continuous variable on
+another continuous variable using a linear regression.</p>
+<p>One easy way to think about linear regression is that it is
+appropriate whenever your predictor and response variables can be
+plotted as a scatterplot.</p>
+<p>To demonstrate linear regression, we will use a dataset called
+<code>mtcars</code>. This is a dataset on the performance of car models
+from 1974 <em>Motor Trend US</em> magazine.</p>
+<pre class="r"><code>?mtcars</code></pre>
+<pre class="r"><code>head(mtcars)</code></pre>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<p>First, let’s plot something… like the relationship between the weight
+of the car (variable “wt”) and its fuel efficiency (variable “mpg”)</p>
+<pre class="r"><code>plot(mpg~wt, data=mtcars, pch=19)</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
+<p>You can see there is going to be some strong relationship here. Let’s
+investigate this as a linear regression using the function
+<code>lm()</code>.</p>
+<p>First, try just running the <code>lm()</code> function. Here, you are
+going to use the syntax <code>y~x</code> for the formula argument. This
+format where the response and predictor variables are linked with the
+tilde (~) is pretty much the default in statistical functions in R:</p>
+<pre class="r"><code>lm(mpg~wt, data=mtcars)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)           wt  
+##      37.285       -5.344</code></pre>
+<p>You see that this function gives you pretty minimal output, with just
+the coefficients corresponding to the intercept value and the slope.
+This corresponds to <code>a</code> and <code>b</code> in the traditional
+equation for simple linear regression:</p>
+<p><span class="math inline">\(y = a + bx\)</span></p>
+<p>But to get other parameters such as <span
+class="math inline">\(R^2\)</span> and P-value, you need to use the
+<code>summary()</code> function. A typical way to do this is to assign
+the linear model to an object, and then get the summary for this
+object</p>
+<pre class="r"><code>lm.mod=lm(mpg~wt, data=mtcars)
+
+summary(lm.mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+<p>You can see this is a very strong relationship, with <span
+class="math inline">\(R^2 = 0.74\)</span> and very low P-value.</p>
+<p><br></p>
+</div>
+<div id="visualizing-the-results-best-fit-line-on-a-scatterplot"
+class="section level3">
+<h3>2.2. Visualizing the results: Best fit line on a scatterplot</h3>
+<p>We can plot this relationship onto the scatterplot.</p>
+<p>ggplot2 makes fitting the line quite easy for generic statistical
+models. The basic work flow is to:</p>
+<ol style="list-style-type: decimal">
+<li><p>Assign the data and aesthetic mapping</p></li>
+<li><p>Plot scatterplot using <code>geom_point()</code></p></li>
+<li><p>Add fit line using <code>geom_smooth()</code>. Here, you will use
+the argument <code>method=</code> to tell it that you want to use a
+linear model (“lm”)</p></li>
+</ol>
+<p>*Note: you will need to assign the aesthetic mapping in the
+<code>ggplot()</code> function rather than the <code>geom_point()</code>
+function here, because you want to use the same mapping for two
+geometric objects (i.e., <code>geom_point()</code> and
+<code>geom_smooth()</code>)</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point() +
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p>You will notice that ggplot adds the confidence interval (the shaded
+part) by default. If you don’t want that, you can remove it within the
+<code>geom_smooth()</code> function. Let’s do that and also clean up the
+plot settings:</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point(size=4, color=&quot;tomato&quot;) +
+  geom_smooth(method=&quot;lm&quot;, se=FALSE, color=&quot;tomato&quot;) +
+  theme_classic() +
+  ylab(&quot;Miles Per Gallon&quot;) +
+  xlab(&quot;Vehicle Weight&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+<p>You can also do this in base R, though admittedly it’s a bit more
+complex. Basically, you Here’s a version in base R:</p>
+<pre class="r"><code>lm.mod=lm(mpg~wt, data=mtcars) # fit the linear model
+xv=seq(min(mtcars$wt), max(mtcars$wt), length=2) # set a series of values along the x-axis
+yv=predict(lm.mod, data.frame(wt=xv)) # use predict() to get what the y-axis value should be along each of those x-axis values
+
+plot(mpg~wt, data=mtcars, pch=19) #plot the scatterplot
+lines(xv, yv) #add the fit line </code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
+</div>
+<div id="linear-regression-as-a-form-of-glm" class="section level3">
+<h3>2.3. Linear regression as a form of GLM</h3>
+<p>I mentioned in Section 1.2 above that linear regression is the same
+as GLM with a “Gaussian” family (when we assume that the residuals are
+distributed in a “Gaussian” distribution – i.e., normal
+distribution)</p>
+<p>To demonstrate this, let’s just fit the same model using two
+different functions, the <code>lm()</code> function and
+<code>glm()</code> function. For the <code>glm()</code> function, we
+include the argument that we want to use the “gaussian” family. This
+argument will become important later, when we use different forms of
+GLMs.</p>
+<pre class="r"><code>lm.fit=lm(mpg~wt, mtcars)
+glm.fit=glm(mpg~wt, mtcars, family=&quot;gaussian&quot;)</code></pre>
+<p>Here is the output from the <code>lm()</code> function.</p>
+<pre class="r"><code>summary(lm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+<p>We get the exact same output from the <code>glm()</code>
+function!</p>
+<pre class="r"><code>summary(glm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = mpg ~ wt, family = &quot;gaussian&quot;, data = mtcars)
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 9.277398)
+## 
+##     Null deviance: 1126.05  on 31  degrees of freedom
+## Residual deviance:  278.32  on 30  degrees of freedom
+## AIC: 166.03
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>This also means that we can use the glm function to plot the fit line
+(if you want). To do this, you can specify the argument inside the stats
+function using <code>method.args=</code> and specifying the arguments as
+a list:</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_point() +
+  geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;gaussian&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-13-1.png" width="50%" /></p>
+<blockquote>
+<p><span style="color:purple"><strong>pssst… There ARE differences
+between the output of <code>lm()</code> and
+<code>glm()</code></strong></span></p>
+<p>Ok, in this simple example with one predictor variable, we see that
+there is no difference between <code>lm()</code> and <code>glm()</code>.
+However, that’s not the whole truth… While it is true that the model fit
+here are identical, there ARE subtle differences in how the output of
+the model is packaged when you run these two different functions. But we
+will cross that bridge when we come to it!</p>
+</blockquote>
+<p><br></p>
+<hr />
+</div>
+</div>
+<div id="anova-comparing-a-continuous-variable-across-groups"
+class="section level2">
+<h2>3. ANOVA: Comparing a continuous variable across groups</h2>
+<div id="fitting-an-anova" class="section level3">
+<h3>3.1. Fitting an ANOVA</h3>
+<p>Analysis of Variance (ANOVA) is a way to compare whether groups
+(e.g., different sites, different treatments, etc.) differ in some
+measured continuous variable. What ANOVA does is partition variation
+into within-group and across-group variation. We conclude that groups
+are different if the variation across groups is much larger than the
+variation within groups.</p>
+<p>Let’s take another look at the <code>mtcars</code> data, but this
+time let’s look at the effect of shape of the engine on fuel efficiency
+(“mpg”).</p>
+Engines come in two kinds of shapes: v-shape and straight (or inline)
+<div class="figure" style="text-align: center">
+<img src="../images/engine_shape.jpg" alt="straigh engine and v-shaped engine" width="50%" />
+<p class="caption">
+straigh engine and v-shaped engine
+</p>
+</div>
+<p>The help file for the mtcars dataset (get this with
+<code>?mtcars</code>) says that this variable is binary, with 0 =
+v-shape and 1 = straight.</p>
+<p><strong>IMPORTANT</strong> thing to notice here before we delve in…
+Since this variable is coded as 0/1, R actually thinks it is a ‘numeric’
+variable.</p>
+<pre class="r"><code>class(mtcars$vs)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>This means that we want to be careful about fitting ANOVAs using this
+variable. In this case, 0 and 1 are different categories, but we don’t
+care that 0 &lt; 1. This will matter later. For now, know that we can
+simply have R interpret this variable as a category (or ‘factor’) by
+using the <code>factor()</code> function:</p>
+<pre class="r"><code>class(factor(mtcars$vs))</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>Ok, now let’s visualize the pattern using a simple boxplot. Remember
+to use indicate that we want “vs” to be interpreted as factor. We can
+actually use the formula synatx inside the generic <code>plot()</code>
+function, and R will know to plot it as a boxplot if we have a factor as
+the predictor variable:</p>
+<pre class="r"><code>plot(mpg~factor(vs), data=mtcars)</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-17-1.png" width="50%" />
+*Note: contrast this with the case if we don’t use <code>factor()</code>
+in the function (not displaying the plot here)</p>
+<pre class="r"><code>plot(mpg~vs, data=mtcars)</code></pre>
+<p>… plotting with ggplot</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=factor(vs), y=mpg)) +
+  geom_boxplot()</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
+<div id="running-anova" class="section level4">
+<h4>Running ANOVA</h4>
+<p>We get the sense that there are some differences in fuel efficiency
+based on engine shape. Let’s test this hypothesis with ANOVA using the
+<code>aov()</code> function. The basic syntax is the same as
+<code>lm()</code></p>
+<pre class="r"><code>aov.mod=aov(mpg~factor(vs), data=mtcars) 
+summary(aov.mod)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## factor(vs)   1  496.5   496.5   23.66 3.42e-05 ***
+## Residuals   30  629.5    21.0                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The output answers are major question: Yes, there is a significant
+difference in fuel efficiency based on engine shape.</p>
+<p><br></p>
+</div>
+</div>
+<div id="anova-is-a-linear-model-which-is-a-glm" class="section level3">
+<h3>3.2. ANOVA is a Linear Model, which is a GLM…</h3>
+<p>It turns out that ANOVAs are just a type of linear model in which the
+predictor variable is categorical. This means that we can actually run
+the ANOVA using the <code>lm()</code> function as well! However, there
+is a slight difference in how to get the results of test.</p>
+<p>First, let’s fit the model using <code>lm()</code>. We’ll call is
+lm.mod2 to distinguish from the model we’ve already done above:</p>
+<pre class="r"><code>lm.mod2=lm(mpg~factor(vs), data=mtcars) 
+lm.mod2</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ factor(vs), data = mtcars)
+## 
+## Coefficients:
+## (Intercept)  factor(vs)1  
+##       16.62         7.94</code></pre>
+<p>So far so good. Let’s use the <code>summary()</code> function
+again:</p>
+<pre class="r"><code>summary(lm.mod2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ factor(vs), data = mtcars)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.757 -3.082 -1.267  2.828  9.383 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   16.617      1.080  15.390 8.85e-16 ***
+## factor(vs)1    7.940      1.632   4.864 3.42e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.581 on 30 degrees of freedom
+## Multiple R-squared:  0.4409, Adjusted R-squared:  0.4223 
+## F-statistic: 23.66 on 1 and 30 DF,  p-value: 3.416e-05</code></pre>
+<p>I want you to notie two things. First, under “coefficients”, you see
+the variable is listed as “eshapev” instead “eshape”. Second, the test
+statistic is a ‘t-value’ instead of ‘F value’ that we got when we ran
+the <code>aov()</code> function.</p>
+<p>This is because when you use the <code>summary()</code> function to
+test a linear model with categorical variables, it picks a ‘reference
+value’ of that variable, which is simply the first level (if you haven’t
+set it manually, it would just be the first value based on alphabetical
+order), and then conducts pairwise comparisons between that reference
+value and other values to generate t-statistics. In this case, it
+matters little because there are only two values (“s” and “v”), but it
+becomes more complicated when there are more than two levels of a
+categorical variable (more examples below). To put it simply, it’s doing
+a t-test.</p>
+<p>Ok, now contrast that with results we get when we test the model fit
+using a different function, <code>anova()</code>.</p>
+<pre class="r"><code>anova(lm.mod2)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: mpg
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## factor(vs)  1 496.53  496.53  23.662 3.416e-05 ***
+## Residuals  30 629.52   20.98                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Now, we get identical results as when we ran <code>aov()</code>, with
+F value as the test statistic. This is a proper ANOVA.</p>
+<p><br></p>
+<div id="anova-lm-glm" class="section level4">
+<h4>ANOVA = LM = GLM</h4>
+<p>Since ANOVA is a linear model/regression, then we ought to be able to
+do this whole thing in GLM also… and we can! The only difference is
+that, when we run the <code>anova()</code> function, we have to make
+sure we use the argument <code>test="F</code> to get the F
+statistic.</p>
+<pre class="r"><code>glm.mod2=glm(mpg~factor(vs), data=mtcars, family=&quot;gaussian&quot;) 
+anova(glm.mod2, test=&quot;F&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: gaussian, link: identity
+## 
+## Response: mpg
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##            Df Deviance Resid. Df Resid. Dev      F    Pr(&gt;F)    
+## NULL                          31    1126.05                     
+## factor(vs)  1   496.53        30     629.52 23.662 3.416e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="multiple-predictor-variables-in-a-linear-model"
+class="section level2">
+<h2>4. Multiple predictor variables in a Linear Model</h2>
+<p>In many cases, you will be fitting a model in which you have multiple
+predictor variables. You can do this easily by adding variables to your
+formula.</p>
+<p>Since we have looked at the relationships between fuel efficiency and
+vehicle weight, as well as engine shape above, let’s combine those into
+one model in which we look at how each of these variables contribute to
+explaining fuel efficiency of cars:</p>
+<p>Let’s actually begin by visualizing these relationships. You can
+actually do this easily with ggplot. Here, we will plot mpg against
+weight, and then use engine shape as the point color. I’m adding info in
+the color scaling that the two levels for engine shape are “v-shape” and
+“straight” (in that order).</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg, color=factor(vs))) +
+  geom_point() +
+  scale_color_discrete(name=&quot;Engine Shape&quot;,labels=c(&quot;v-shape&quot;, &quot;straight&quot;)) +
+  ylab(&quot;Miles per Gallon&quot;) +
+  xlab(&quot;Vehicle Weight&quot;) +
+  theme_bw()</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
+<p>We can now actually add the fit lines using
+<code>geom_smooth()</code> on top of this, and you will get two lines:
+one for each engine shape. Note that this works because we’ve mapped the
+aesthetics in the <code>ggplot()</code> function rather than the
+<code>geom_point()</code> function (thus, the aesthetics apply as
+default to <code>geom_smooth()</code> also).</p>
+<pre class="r"><code>ggplot(mtcars, aes(x=wt, y=mpg, color=factor(vs))) +
+  geom_point() +
+  scale_color_discrete(name=&quot;Engine Shape&quot;,labels=c(&quot;v-shape&quot;, &quot;straight&quot;)) +
+  ylab(&quot;Miles per Gallon&quot;) +
+  xlab(&quot;Vehicle Weight&quot;) +
+  theme_bw() +
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-26-1.png" width="50%" />
+Now, we actually see some interesting patterns here.</p>
+<ol style="list-style-type: decimal">
+<li><p>We see that there v-shaped engines are primarily used in heavy
+cars… So is the difference we saw in mpg between the engine shapes
+actually driven by vehicle weight?</p></li>
+<li><p>But it also seems like the mpg is systematically lower for
+v-shaped cars (the red line is below the teal line), so maybe there
+still is an effect after accounting for engine weight?</p></li>
+<li><p>Finally, it looks like the slope of the two lines is a bit
+difference. Does that mean that the relationship between weight and mpg
+contingent on engine shape?</p></li>
+</ol>
+<p>If we were just addressing the first two questions, we could run a
+model where we just add the two predictor variables in the formula:</p>
+<pre class="r"><code>lm.mod3=lm(mpg~ wt + factor(vs), data=mtcars)
+anova(lm.mod3)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: mpg
+##            Df Sum Sq Mean Sq  F value    Pr(&gt;F)    
+## wt          1 847.73  847.73 109.7042 2.284e-11 ***
+## factor(vs)  1  54.23   54.23   7.0177   0.01293 *  
+## Residuals  29 224.09    7.73                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This model output suggests that most of the variation in mpg is
+explained by vehicle weight, but that there is also additional effect of
+engine shape. This is because the F value for weight is larger (and
+P-value is lower) than for engine shape.</p>
+<p>However, what about pattern #3? Is the relationship between weight
+&amp; mpg contingent on the engine shape? To ask this question, we add
+what is called the “interaction term” for weight and engine shape. We do
+this by using <code>*</code> in the formula. This automatically each
+variable AND their interaction term to the model:</p>
+<pre class="r"><code>lm.mod4=lm(mpg~ wt * factor(vs), data=mtcars)
+anova(lm.mod4)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: mpg
+##               Df Sum Sq Mean Sq  F value    Pr(&gt;F)    
+## wt             1 847.73  847.73 127.5924 6.121e-12 ***
+## factor(vs)     1  54.23   54.23   8.1619  0.007978 ** 
+## wt:factor(vs)  1  38.06   38.06   5.7287  0.023634 *  
+## Residuals     28 186.03    6.64                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>So, the take away is that there is a significant interaction between
+vehicle weight and engine shape on their effect on fuel efficiency.</p>
+<blockquote>
+<p><span style="color:purple"><strong>What we did is called an
+ANCOVA</strong></span></p>
+<p>ANCOVA (Analysis of Covariance) is a linear model in which you have
+one continuous predictor variable and one categorical predictor
+variable, and you analyze whether the relationship between the
+continuous predictor and the continuour response variable is contingent
+on the categorical variable (i.e., whether there is covariance between
+the two predictor variables)</p>
+</blockquote>
+<p><br></p>
+<hr />
+</div>
+<div
+id="glms-with-binary-count-and-proportion-data-as-response-variable"
+class="section level2">
+<h2>5. GLMs with binary, count and proportion data as response
+variable</h2>
+<p>GLMs extend the capability of Linear Models to data that are not
+distributed continuously. Here, I’ll briefly introduce how to handle
+those kinds of models with the <code>glm()</code> function.</p>
+<div id="binary-response-variable-logistic-regression"
+class="section level3">
+<h3>4.1 Binary response variable (Logistic regression)</h3>
+<p>Logistic regression is used when the response variable is a binary
+0/1.</p>
+<p>Let’s use the <code>diamonds</code> dataset included in the ggplot2
+package. This dataset shows the prices of over 50,000 diamonds with
+associated attributes.</p>
+<pre class="r"><code>diamonds</code></pre>
+<pre><code>## # A tibble: 53,940 × 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # ℹ 53,930 more rows</code></pre>
+<p>Let’s say we want to predict when a diamond will cost above a certain
+threshold price (let’s say $10,000). To do this, let’s make a new
+variable called “expensive”, which is TRUE if the diamond is priced at
+or above $10,000, and FALSE if not.</p>
+<pre class="r"><code>diamonds$expensive=diamonds$price &gt;= 10000</code></pre>
+<p>We can actually run the logistic regression with this FALSE/TRUE
+logical variable, but let’s go ahead and convert this variable to 0/1.
+We can do this by adding 0 to the logical variable. This will convert
+FALSE to 0 and TRUE to 1:</p>
+<pre class="r"><code>diamonds$expensive = diamonds$expensive + 0</code></pre>
+<p>Now, we can test if the probability that a diamond is worth &gt;
+$10,000 is dependent on its “carat”, or unit weight.</p>
+<pre class="r"><code>glm.fit=glm(expensive~carat, data=diamonds)
+summary(glm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = expensive ~ carat, data = diamonds)
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.227495   0.001891  -120.3   &lt;2e-16 ***
+## carat        0.406453   0.002038   199.4   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.05033729)
+## 
+##     Null deviance: 4717.3  on 53939  degrees of freedom
+## Residual deviance: 2715.1  on 53938  degrees of freedom
+## AIC: -8148.1
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>If we want an F statistic:</p>
+<pre class="r"><code>anova(glm.fit, test=&quot;F&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: gaussian, link: identity
+## 
+## Response: expensive
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##       Df Deviance Resid. Df Resid. Dev     F    Pr(&gt;F)    
+## NULL                  53939     4717.3                    
+## carat  1   2002.2     53938     2715.1 39775 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Here is how you can visualize this type of regression:</p>
+<pre class="r"><code>ggplot(diamonds, aes(x=carat, y=expensive+0))+
+  geom_point() +
+  geom_smooth(method=&quot;glm&quot;, method.args = list(family = &quot;binomial&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-34-1.png" width="50%" /></p>
+</div>
+<div id="glm-with-count-and-proportional-data" class="section level3">
+<h3>4.2. GLM with count and proportional data</h3>
+<p>Here we will use the “snail” dataset from the “MASS” package. This
+dataset includes the results of an experiment in which snails were held
+for 1,2, 3, or 4 weeks under controlled temperature and relative
+humidity.</p>
+<pre class="r"><code>head(snails)</code></pre>
+<pre><code>##   Species Exposure Rel.Hum Temp Deaths  N
+## 1       A        1    60.0   10      0 20
+## 2       A        1    60.0   15      0 20
+## 3       A        1    60.0   20      0 20
+## 4       A        1    65.8   10      0 20
+## 5       A        1    65.8   15      0 20
+## 6       A        1    65.8   20      0 20</code></pre>
+<p>Notice that “Deaths” is count data. There is also the total number of
+snails exposed under each condition (N), so the death data can also be
+converted to proportions.</p>
+<p>Let’s fit the Poisson regression using the count of deaths as the
+response variable. I’m going to restrict the analysis to snails held for
+3 or 4 weeks because we expect the effect to be less apparent if the
+snails are kept in the experiment for a short amount of time. We can do
+that by using the <code>subset</code> argument within
+<code>glm()</code>. We also set <code>family="poisson</code>.</p>
+<pre class="r"><code>count.fit=glm(Deaths~Temp, data=snails, subset=which(Exposure&gt;=3), family=&quot;poisson&quot;)
+summary(count.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Deaths ~ Temp, family = &quot;poisson&quot;, data = snails, 
+##     subset = which(Exposure &gt;= 3))
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  0.82914    0.25375   3.268  0.00108 ** 
+## Temp         0.05589    0.01546   3.615  0.00030 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 130.86  on 47  degrees of freedom
+## Residual deviance: 117.53  on 46  degrees of freedom
+## AIC: 276.11
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>Here’s a way to visualize the results in ggplot. Since there are
+going to be multiple data points that overlap (common to see this in
+count data), we will use the <code>geom_count()</code> function, which
+makes a bubble plot with the size of bubbles corresponding to the number
+of overlapping data points.</p>
+<pre class="r"><code>ggplot(snails[which(snails$Exposure&gt;=3),], aes(x=Temp, Deaths)) +
+  geom_count() +
+  geom_smooth(method=&quot;glm&quot;, method.args=list(family=&quot;poisson&quot;))</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="Stats_LinearModels_files/figure-html/unnamed-chunk-37-1.png" width="50%" />
+We can also run the model with the response variable as proportion of
+deaths / N (though in this case it should make little difference since N
+is the same across the board). Here is how I might do that:</p>
+<pre class="r"><code>prop.fit=glm(cbind(Deaths, N)~Temp, data=snails, subset=which(Exposure&gt;=3), family=binomial(link=&quot;logit&quot;))
+summary(prop.fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Deaths, N) ~ Temp, family = binomial(link = &quot;logit&quot;), 
+##     data = snails, subset = which(Exposure &gt;= 3))
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -2.16897    0.28286  -7.668 1.75e-14 ***
+## Temp         0.05604    0.01742   3.216   0.0013 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 104.606  on 47  degrees of freedom
+## Residual deviance:  94.093  on 46  degrees of freedom
+## AIC: 241.71
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
