@@ -68,7 +68,7 @@ Using this, I can read in the .csv file using a function called `read.csv()`, wi
 dat=read.csv("data/SampleData.csv")
 ```
 
-```{r, eval=T}
+```{r, eval=T, echo=F}
 dat=read.csv("../data/SampleData.csv")
 ```
 
@@ -338,7 +338,7 @@ errdat=read.csv("data/SampleData_w_errors.csv") #assuming your working directory
 errdat
 ```
 
-```{r, eval=T}
+```{r, eval=T, echo=F}
 errdat=read.csv("../data/SampleData_w_errors.csv") #assuming your working directory is set to the sample data folder
 errdat
 ```

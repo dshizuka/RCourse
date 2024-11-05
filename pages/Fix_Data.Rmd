@@ -1,0 +1,124 @@
+---
+title: 'Data Module Group Exercise Answers'
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Group Exercise 1: Fixing the `SampleData_w_errors.csv` in R
+
+In Group Exercise 1 for Module 4, I asked you to fix the following in the spreadsheet:
+
+* The column called "sex" only has "female" and "male".
+* The column called "size" is numeric
+* The column called "weight" is numeric
+* The column called "X" is removed.
+
+In reality, it is better if you can **keep the raw data raw** and fix these errors in R. This is because fixing data errors in R will leave a reproducible record of how you changed the data. In contrast, if you go and fix these errors in the spreadsheet, you will likely eventually forget how the original data was changed and you'll never be able to "unfix" it. Also, if you have a backup copy of this data, you will now have two versions of the data, which will be confusing later. Finally, this prevents any scientific malpractice. So, to the extent that I can, I try to NOT change things in my original data!
+
+Here are how I would fix the problems in the example data:
+
+```{r, eval=F}
+dat=read.csv("data/SampleData_w_errors.csv")
+dat
+```
+
+```{r, echo=F}
+dat=read.csv("../data/SampleData_w_errors.csv")
+dat
+```
+
+Setting "#N/A!" as N/A value
+
+```{r, eval=F}
+dat=read.csv("data/SampleData_w_errors.csv", na.strings=c("#N/A!", "**"))
+dat
+```
+
+```{r, echo=F}
+dat=read.csv("../data/SampleData_w_errors.csv", na.strings=c("#N/A!", "**"))
+dat
+```
+
+Remove the mystery column "X"
+```{r}
+dat=dat[,which(names(dat)!="X")]
+dat
+```
+
+Remove lines for which we have no Individual ID
+```{r}
+dat=dat[which(dat$Indiv_ID!=""),]
+dat
+```
+
+
+### Group Exercise 2: Fixing errors in the egg measurement data:
+
+In Group Exercise 2, I provided you with data I collected on American coot eggs before I became practiced in using R... And there are a lot of thigns that need to be fixed here.
+
+#### 1. Periods used as N/A data. 
+
+```{r, eval=F}
+eggs=read.csv("data/EggMeasurements_example.csv")
+head(eggs)
+str(eggs)
+```
+
+```{r, eval=T, echo=F}
+eggs=read.csv("../data/EggMeasurements_example.csv")
+head(eggs)
+str(eggs)
+```
+
+First, you can tell that variables like "mass", "length" and "width" should be numbers, but they are read as characters.
+
+One way to see what is going on here is to have R show you all of the unique values of the variable. Let's do this for mass:
+```{r}
+unique(eggs$mass)
+```
+
+You can see that at least one of the things that is going on is that "." is a value here. That is not a number--so that could be the cause of the problem. You can see that this is the same problem for length and width too.
+
+```{r}
+unique(eggs$length)
+unique(eggs$width)
+```
+
+Fix this by telling R that "." is an na.string
+
+```{r, eval=F}
+eggs=read.csv("data/EggMeasurements_example.csv", na.strings=".")
+unique(eggs$mass)
+```
+
+```{r, eval=T, echo=F}
+eggs=read.csv("../data/EggMeasurements_example.csv", na.strings=".")
+unique(eggs$mass)
+```
+Now, you can tell that R is interpreting mass as a number (it's not in quotes), and conveniently, it correctly interprets missing values as "NA".
+
+You can see that mass, length and width all show up as numerics now:
+```{r}
+str(eggs)
+```
+
+#### 2. Wrong dates
+
+LayDate is the date that the egg was laid, if known. We only have this data for nests that were checked in subsequent dates (because if there are two new eggs two days later, we don't know which one was laid on which date).
+
+Let's look at what values this takes:
+```{r}
+sort(unique(eggs$LayDate))
+```
+
+There are a bunch of eggs that were apparently laid on May 18th and 19th, 1999! That can't be right... 
+
