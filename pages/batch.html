@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Batch Processing:</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Batch Processing:</h1>
+<h3 class="subtitle">How Pigeons Learn Routes</h3>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 11/05/24</h4>
+
+</div>
+
+
+<hr />
+<p><img src="../images/batch/title.png" /></p>
+<p><br />
+</p>
+<p>Today, we will be using a study from <strong>Flack, Guilford and Biro
+(2014)</strong> called <em>Learning multiple routes in homing
+pigeons</em> <a href="http://dx.doi.org/10.1098/rsbl.2014.0119"
+class="uri">http://dx.doi.org/10.1098/rsbl.2014.0119</a>. You can also
+download the paper as pdf <a href="pdfs/Flack2014.pdf">here</a>.</p>
+<p>In this study, the researchers trained pigeons to home from three
+different release sites. Each individual was trained on each route 6
+times. There were three different training methods: (A) ‘sequential site
+training’: each individual gets released 6 consecutive trials at each
+release site, (B) ‘rotation training’: each individual is relased at
+different sites sequentially, and rotating through the three sites, and
+(C) ‘random training’: individual is released at different sites in
+semi-random order. The goal was to determine if these training regimes
+had different effects on the route learning speed of individuals.</p>
+<p>I have chosen this study because (1) it’s super interesting and (2)
+the complete associated data on each trial for each individual has been
+made available. This will make for a great exercise on how to batch
+process multiple data files in R.</p>
+<hr />
+<div id="download-the-data-files" class="section level2">
+<h2>12.1 Download the data files</h2>
+<ul>
+<li><p>Go to the Dryad database for the associated data files: <a
+href="http://dx.doi.org/10.5061/dryad.j444n"
+class="uri">http://dx.doi.org/10.5061/dryad.j444n</a>.</p></li>
+<li><p>Go ahead and download the entire .zip file to your
+computer.</p></li>
+<li><p>Unzip and save the folder within the “data” subfolder in your
+Rprojects folder.</p></li>
+</ul>
+<p>Here is a visualization of the folder structure of the data inside
+your data subfolder:</p>
+<p><img src="../images/batch/folderlayout.png" /></p>
+<p>You can see that there is a nested set of folders. The first three
+folders (R1, R2, and R3) represents the three routes that each
+individual was trained on. Inside each of these folders, there are
+separate folders for each individual bird. The first letter of the foler
+represents the training regime (e.g., “A_A35” means that individual went
+through protocol “A”: the sequential-site training). Inside that folder
+are separate data files for each trial.</p>
+<p>Now, we will learn how to navigate through this type of folder
+structure and import sets of data.</p>
+</div>
+<div id="navigating-the-data-folders" class="section level2">
+<h2>12.2 Navigating the data folders</h2>
+<p>First, load all the libraries we will need. If you don’t have some of
+these, install them using <code>install.packages()</code></p>
+<pre class="r"><code>library(RColorBrewer)
+library(ggplot2)
+library(ggmap)
+library(mapproj)
+library(dplyr)
+library(lubridate)</code></pre>
+<p><br />
+</p>
+<p>The <code>list.dirs()</code> function lists the <em>paths of all
+folders (aka directories)</em> that are contained within the working
+directory (in this case, your Rproject folder)</p>
+<pre class="r"><code>list.dirs()</code></pre>
+<p><em>I’m not showing the results because it’s very long</em></p>
+<p><br />
+</p>
+<p>The <code>list.files()</code> function lists just the <em>names of
+the files or folders contained within the working directory.</em></p>
+<pre class="r"><code>list.files()</code></pre>
+<p><em>Your output will look different from mine. But it should include
+the “Flack et al_Biology Letters” folder.</em><br />
+The files are named with the extnsion that indicates the file format
+(e.g., .pdf or .R).If the name does not end with an extension name, that
+means the item is a folder.</p>
+<p><br />
+</p>
+<p>You can specify which files/folders to return by giving the command a
+“pattern” argument. For example, let’s list only the .R script
+files.</p>
+<pre class="r"><code>list.files(pattern=&quot;.R&quot;)</code></pre>
+<p><em>This will only list a file if you have a .R script file in your
+folder</em></p>
+<p><br />
+</p>
+<p>You can list the files inside a subdirectory (folder) within the
+working directory. For example:</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters&quot;)</code></pre>
+<pre><code>## [1] &quot;R1&quot; &quot;R2&quot; &quot;R3&quot;</code></pre>
+<p>Use this to list the files inside the “R1” folder, which is another
+set of folders that contain the performance of individuals at Route
+1.</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1&quot;)</code></pre>
+<pre><code>##  [1] &quot;A_A35&quot; &quot;A_A38&quot; &quot;A_A45&quot; &quot;A_D06&quot; &quot;A_D09&quot; &quot;A_D16&quot; &quot;A_D83&quot; &quot;A_D94&quot; &quot;A_D96&quot;
+## [10] &quot;B_A31&quot; &quot;B_A34&quot; &quot;B_D04&quot; &quot;B_D12&quot; &quot;B_D86&quot; &quot;B_D90&quot; &quot;B_D98&quot; &quot;C_A39&quot; &quot;C_A43&quot;
+## [19] &quot;C_A47&quot; &quot;C_D00&quot; &quot;C_D01&quot; &quot;C_D08&quot; &quot;C_D10&quot; &quot;C_D15&quot; &quot;C_D88&quot; &quot;C_D93&quot;</code></pre>
+<p>Or, we can go inside the “R1” folder and list only the individuals in
+experimental treatment “A”</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1&quot;, pattern=&quot;A_&quot;)</code></pre>
+<pre><code>## [1] &quot;A_A35&quot; &quot;A_A38&quot; &quot;A_A45&quot; &quot;A_D06&quot; &quot;A_D09&quot; &quot;A_D16&quot; &quot;A_D83&quot; &quot;A_D94&quot; &quot;A_D96&quot;</code></pre>
+<p><br />
+</p>
+<p>Let’s list all of the .csv files from individual A_A35 for Route
+1:</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35/&quot;, pattern=&quot;.csv&quot;)</code></pre>
+<pre><code>## [1] &quot;A_A35_R1_01.csv&quot; &quot;A_A35_R1_02.csv&quot; &quot;A_A35_R1_03.csv&quot; &quot;A_A35_R1_04.csv&quot;
+## [5] &quot;A_A35_R1_05.csv&quot; &quot;A_A35_R1_06.csv&quot;</code></pre>
+<p><em>In this specific case, there are only .csv files in this folder,
+so it will return all files. However, specifying the file type is often
+useful when you are extracting data from folders that contain a bunch of
+ther files.</em></p>
+<p>Finally, we can get the full path for these files by specifying
+“full.names=T”</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;, pattern=&quot;.csv&quot;, full.name=T)</code></pre>
+<pre><code>## [1] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_01.csv&quot;
+## [2] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_02.csv&quot;
+## [3] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_03.csv&quot;
+## [4] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_04.csv&quot;
+## [5] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_05.csv&quot;
+## [6] &quot;../data/Flack et al_Biology Letters/R1/A_A35/A_A35_R1_06.csv&quot;</code></pre>
+<p>We will use variations on this function to import data in batches
+below.</p>
+<hr />
+</div>
+<div
+id="extracting-information-from-file-names-using-substr-and-assembling-metadata"
+class="section level2">
+<h2>12.3 Extracting information from file names using
+<code>substr()</code> and assembling metadata</h2>
+<p>In a well-organized data set, the file names often contains useful
+information that can be interpreted when reading in the files. For
+example, let’s look at the file names of the R1 results from individual
+A35 again:</p>
+<pre class="r"><code>list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;)</code></pre>
+<pre><code>## [1] &quot;A_A35_R1_01.csv&quot; &quot;A_A35_R1_02.csv&quot; &quot;A_A35_R1_03.csv&quot; &quot;A_A35_R1_04.csv&quot;
+## [5] &quot;A_A35_R1_05.csv&quot; &quot;A_A35_R1_06.csv&quot;</code></pre>
+<p>We can see that we can get four pieces of information here:</p>
+<ol style="list-style-type: decimal">
+<li>The experimental treatment (“A”)</li>
+<li>Individual ID (“A35”)</li>
+<li>Route (“R1”)</li>
+<li>Trial number (“01”, “02”, etc.)</li>
+</ol>
+<p>Let’s extract this information and organize it as a dataframe.<br />
+The first step is to use the <code>substr()</code> function to extract
+pieces of the file names. This function takes a character string and
+returns the characters given at the specified positions. The syntax is
+<code>substr(x, start, stop)</code></p>
+<p>For example, to get the treatment group, simply get the first
+character of the file name:</p>
+<pre class="r"><code>group=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 1,1)
+group</code></pre>
+<pre><code>## [1] &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot;</code></pre>
+<p>Now get the rest of the info and assemble a dataframe:</p>
+<pre class="r"><code>id=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 3,5)
+route=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;), 7,8)
+trial=substr(list.files(&quot;data/Flack et al_Biology Letters/R1/A_A35&quot;),10,11)
+metadata=data.frame(group=group, id=id, route=route, trial=trial)
+metadata</code></pre>
+<pre><code>##   group  id route trial
+## 1     A A35    R1    01
+## 2     A A35    R1    02
+## 3     A A35    R1    03
+## 4     A A35    R1    04
+## 5     A A35    R1    05
+## 6     A A35    R1    06</code></pre>
+<p>Now let’s do this for ALL individuals in the R1 folder. To list all
+of the files in all folders within “R1”, we can nest the
+<code>list.file()</code> function within another
+<code>list.file()</code> function:</p>
+<pre class="r"><code>list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T))</code></pre>
+<p><em>result not shown because it’s too long</em></p>
+<p>So we can assemble the whole metadata for Route 1 as:</p>
+<pre class="r"><code>all.files=list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T))
+group=substr(all.files, 1,1)
+id=substr(all.files, 3,5)
+route=substr(all.files, 7,8)
+trial=substr(all.files,10,11)
+metadata.R1=data.frame(group=group, id=id, route=route, trial=trial)</code></pre>
+<pre class="r"><code>metadata.R1</code></pre>
+<p><em>results not shown because it’s too long…</em></p>
+</div>
+<div id="analyzing-performance-of-individuals-over-repeated-trials"
+class="section level2">
+<h2>12.4 Analyzing performance of individuals over repeated trials</h2>
+<div id="importing-data-for-each-individual-for-each-route"
+class="section level3">
+<h3>12.4.1 Importing data for each individual for each route</h3>
+<p>Now that we have learned a bit about how to deal with file names, we
+are ready to import datasets in batches!<br />
+First, let’s try importing all of the data for a given bird on a given
+route. This means we will import all 6 .csv files within an individual
+folder within the “R1” folder, like this. To do this, we can use the
+<code>lapply()</code> function, and we just need to use the .csv file
+paths as the elements:</p>
+<pre class="r"><code>dats.R1A35=lapply(list.files(&quot;../data/Flack et al_Biology Letters/R1/A_A35&quot;, full.name=T), function(x) read.csv(x))
+summary(dats.R1A35)</code></pre>
+<pre><code>##      Length Class      Mode
+## [1,] 10     data.frame list
+## [2,] 10     data.frame list
+## [3,] 10     data.frame list
+## [4,] 10     data.frame list
+## [5,] 10     data.frame list
+## [6,] 10     data.frame list</code></pre>
+<p>You can see that the <code>dats.R1A35</code> object now contains 6
+data frames with 10 columns each. Let’s look at the first of those data
+frames:</p>
+<pre class="r"><code>head(dats.R1A35[[1]])</code></pre>
+<pre><code>##         Date      Time Latitude Longitude Altitude Speed Course Type Distance
+## 1 2011/05/05  12:25:22 51.85829 -1.406301   111.61   216    217   -2     0.00
+## 2 2011/05/05  12:25:23 51.85827 -1.406295   115.00   180    234    0     2.48
+## 3 2011/05/05  12:25:24 51.85829 -1.406339   116.07     0    262    0     3.89
+## 4 2011/05/05  12:25:25 51.85829 -1.406339   116.07     0    315    0     0.00
+## 5 2011/05/05  12:25:26 51.85829 -1.406339   116.07     0    333    0     0.00
+## 6 2011/05/05  12:25:27 51.85829 -1.406339   116.07     0     32    0     0.00
+##   Essential
+## 1         1
+## 2        NA
+## 3        NA
+## 4        NA
+## 5        NA
+## 6        NA</code></pre>
+<p>You can see that each of those data frames contain the GPS position
+(Latitude and Longitude) of each individual each second during the
+trial. Thie means that we have the complete data for each individual
+down to the second!</p>
+</div>
+<div id="plotting-the-routes-for-successive-trials"
+class="section level3">
+<h3>12.4.2 Plotting the routes for successive trials</h3>
+<p>With the data we have organized, we can draw the route that the bird
+took in each trial using these latitudes and longitudes. Let’s try
+that:</p>
+<div id="with-base-r-plotting" class="section level4">
+<h4>with base R plotting</h4>
+<pre class="r"><code># Use RColorBrewer color set that &quot;PuBu&quot; (purple to blue)
+new.palette=brewer.pal(length(dats.R1A35), &quot;PuBu&quot;)
+
+#set the extremes of the plotting ranges: 0.01 degrees beyond the starting and ending points
+lats=c(min(dats.R1A35[[1]]$Latitude)-0.01, max(dats.R1A35[[1]]$Latitude)+0.01)
+longs=c(min(dats.R1A35[[1]]$Longitude)-0.01, max(dats.R1A35[[1]]$Longitude)+0.01)
+
+#establish empty plot, and then draw line for each trajectory
+plot(longs, lats, type=&quot;n&quot;, las=1, xlab=&quot;Longitude&quot;, ylab=&quot;Latitude&quot;)
+for(i in 1:length(dats.R1A35)){
+  points(dats.R1A35[[i]]$Longitude, dats.R1A35[[i]]$Latitude, type=&quot;l&quot;, col=new.palette[i])
+}
+legend(&quot;topright&quot;, legend=1:6, title=&quot;Trial&quot;, lty=1, lwd=2, col=new.palette, cex=0.8)</code></pre>
+<p><img src="batch_files/figure-html/12.4.2-1.png" width="384" /></p>
+</div>
+<div id="with-ggplot" class="section level4">
+<h4>with ggplot</h4>
+<p>To make the same plot using ggplot2, we need to first combine the
+dataframes in the list into a single dataframe (i.e., all data for that
+individual for that route). To do this, we will use the function
+<code>do.call()</code>, which takes a function as input and then
+executes it on a list as a whole. The only time I’ve ever used this
+function is to use it to collapse a list of data frames into a single
+data frame:</p>
+<pre class="r"><code>all.dat.R1A35=do.call(&quot;rbind&quot;, dats.R1A35) %&gt;%
+  mutate(Date=ymd(Date))</code></pre>
+<p>Now, we can use the <code>geom_path()</code> function (Note: NOT
+geom_line()) in ggplot2 to plot longitude on x-axis, latitude on y-axis,
+grouping the data by Date, and coloring the lines using those dates on a
+scale from “gold” to “red”.</p>
+<pre class="r"><code>p = ggplot(all.dat.R1A35) + geom_path(aes(x=Longitude, y=Latitude, group=Date, color=as.numeric(Date)) )+ scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
+p</code></pre>
+<p><img src="batch_files/figure-html/unnamed-chunk-25-1.png" width="576" /></p>
+</div>
+<div id="with-ggmap" class="section level4">
+<h4>with ggmap</h4>
+<p>We can make this even fancier, and overlay these results on a terrain
+map using the package ‘ggmap’:</p>
+<p><strong><em>Note: This code doesn’t work anymore without an API
+key…</em></strong></p>
+<pre class="r"><code>#use the get_map() function to download a map centered on the mean long/lat position of the bird, with a given zoom factor
+location = c(long=mean(longs), lat=mean(lats))
+map=get_stadiamap(bbox=c(left=-1.5, bottom=51.7, right=-1.2, top=51.9), zoom=10, maptype=&quot;stamen_terrain&quot;, filetype=&quot;png&quot;)
+#now add this map as the base, and then plot the geom_path on top of it.
+map_lines=ggmap(map) + geom_path(aes(x=Longitude, y=Latitude, group=Date, colour=as.numeric(Date)), data=all.dat.R1A35) +scale_colour_gradient(low=&quot;gold&quot;, high=&quot;red&quot;)
+map_lines</code></pre>
+<ul>
+<li>Note: You used to be able to directly plot onto a google map, but
+this now requires an API key. It’s possible to do this for free but I’m
+not going to go through this in this tutorial.</li>
+</ul>
+<p>###12.4.3 Calculating the distance traveled over successive
+trials</p>
+<p>Now let’s get down to the data. The main focus here is to figure out
+how pigeons improve the efficiency of their route over successive
+attempts. In this study, they use a metric they call “Flight Path
+Efficiency” (FPE), defined as the straight path distance divided by the
+travelled distance.<br />
+For Route 1, we know that the straight path distance = 10.4km, or
+10,400m (from text). What we need to know is how many meters the pigeon
+travelled during each trial.</p>
+<p>Now, we COULD calculate the distance travelled each second from just
+the change in GPS position of the bird at each time step… but the
+authors have been kind enough to actually include that data in their
+.csv files. This is the “Distance” column in their data set, and the
+unit is meters.</p>
+<pre class="r"><code>head(dats.R1A35[[1]])</code></pre>
+<pre><code>##         Date      Time Latitude Longitude Altitude Speed Course Type Distance
+## 1 2011/05/05  12:25:22 51.85829 -1.406301   111.61   216    217   -2     0.00
+## 2 2011/05/05  12:25:23 51.85827 -1.406295   115.00   180    234    0     2.48
+## 3 2011/05/05  12:25:24 51.85829 -1.406339   116.07     0    262    0     3.89
+## 4 2011/05/05  12:25:25 51.85829 -1.406339   116.07     0    315    0     0.00
+## 5 2011/05/05  12:25:26 51.85829 -1.406339   116.07     0    333    0     0.00
+## 6 2011/05/05  12:25:27 51.85829 -1.406339   116.07     0     32    0     0.00
+##   Essential
+## 1         1
+## 2        NA
+## 3        NA
+## 4        NA
+## 5        NA
+## 6        NA</code></pre>
+<p>So, we simply need to sum the values of this column to get the actual
+distance travelled:</p>
+<pre class="r"><code>sum(dats.R1A35[[1]]$Distance)</code></pre>
+<pre><code>## [1] 37881.73</code></pre>
+<p>Now, we just need to calculate the sum of the distance for each data
+set in the list <code>dats.R1A35</code>. We can use the
+<code>sapply()</code> function for this!</p>
+<pre class="r"><code>dist.R1A35=sapply(dats.R1A35, function(x) sum(x$Distance))
+plot(dist.R1A35/1000, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;Distance Travelled (km)&quot;)</code></pre>
+<p><img src="batch_files/figure-html/unnamed-chunk-29-1.png" width="480" /></p>
+<p>We can plot this as FPE, using 10.4km as the straigh-line
+distance:</p>
+<pre class="r"><code>fpe.R1A35=10400/dist.R1A35
+plot(1:6, fpe.R1A35, pch=19, type=&quot;o&quot;, las=1, xlab=&quot;Trial&quot;, ylab=&quot;FPE&quot;)</code></pre>
+<p><img src="batch_files/figure-html/unnamed-chunk-30-1.png" width="480" /></p>
+</div>
+</div>
+<div
+id="calculate-and-plot-fpe-across-trials-for-all-individuals-for-route-1"
+class="section level3">
+<h3>12.4.4 Calculate and plot FPE across trials for all individuals for
+Route 1</h3>
+<p>Ok, here is where it gets challenging. Now what we want to do is
+calculate the total distance travelled for each bird for each trial on
+Route 1. For reasons that will become clearer later, we are going to do
+this as a list of a list, which will replicate the file structure of the
+dataset we are playing with:</p>
+<pre class="r"><code>all.files.R1=list.files(list.files(&quot;data/Flack et al_Biology Letters/R1/&quot;, full.name=T), full.name=T)
+all.R1=lapply(all.files.R1, function(x) read.csv(x))</code></pre>
+<pre class="r"><code>distances=sapply(all.R1, function(x) sum(x$Distance))
+head(distances)</code></pre>
+<pre><code>## [1] 37881.73 28738.05 15015.55 21837.51 20811.76 22663.92</code></pre>
+<p>We can simply add this data to the <code>metadata.R1</code> data
+frame we created in Section 12.3.3. We can also calculate that FPE based
+on those distances.</p>
+<pre class="r"><code>metadata.R1$distance=distances
+metadata.R1$fpe=10400/metadata.R1$distance
+head(metadata.R1)</code></pre>
+<pre><code>##   group  id route trial distance       fpe
+## 1     A A35    R1    01 37881.73 0.2745387
+## 2     A A35    R1    02 28738.05 0.3618896
+## 3     A A35    R1    03 15015.55 0.6926153
+## 4     A A35    R1    04 21837.51 0.4762448
+## 5     A A35    R1    05 20811.76 0.4997175
+## 6     A A35    R1    06 22663.92 0.4588791</code></pre>
+<p>Now, it’s just a matter of plotting these FPE values by group.</p>
+<div id="plot-all-individuals-by-group" class="section level4">
+<h4>Plot all individuals by group</h4>
+<p>Here is one way:</p>
+<pre class="r"><code>groups=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+layout(matrix(1:3, ncol=1))
+par(mar=c(4,4,2,4))
+for (i in 1:3){
+  plot(fpe~as.numeric(trial), data=subset(metadata.R1, group==groups[i]), cex=2, pch=21, bg=gray(0.5, 0.5), ylim=c(0,1), las=1, ylab=&quot;FPE&quot;, xlab=&quot;Trial&quot;, main=paste(&quot;Group&quot;, groups[i]))
+}</code></pre>
+<p><img src="batch_files/figure-html/plot%20individuals-1.png" width="240" /></p>
+<p>This is essentially what is plotted in panels (g)-(i) in Figure
+1.</p>
+</div>
+<div id="plot-group-means-and-standard-errors" class="section level4">
+<h4>Plot group means and standard errors</h4>
+<p>Here, we will plot a slightly different from of Figure 1 panels
+(d)-(f). To do this, we first have create summary data–for each group
+and trial, we will calculate the mean and s.e.m. of FPE (flight path
+efficiency).</p>
+<pre class="r"><code>se=function(x) sqrt(var(x)/length(x))
+summ.dat=metadata.R1 %&gt;% group_by(group, trial) %&gt;% summarise(mean.fpe=mean(fpe), se.fpe=se(fpe))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;group&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>summ.dat$trial=as.numeric(summ.dat$trial)
+head(summ.dat)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+## # Groups:   group [1]
+##   group trial mean.fpe se.fpe
+##   &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+## 1 A         1    0.314 0.0553
+## 2 A         2    0.363 0.0421
+## 3 A         3    0.488 0.0468
+## 4 A         4    0.604 0.0420
+## 5 A         5    0.508 0.0407
+## 6 A         6    0.506 0.0705</code></pre>
+<p>Then, we can plot these data in a single plot. The following code is
+annotated:</p>
+<pre class="r"><code>#set up groups and colors
+groups=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+colors=brewer.pal(3, &quot;Set1&quot;)
+
+#generate empty plot with the appropriate axes (1 through 6 on x-axis, 0 to 1 on y=axis). Draw a dotted line along FPE = 0.75 for comparison purposes
+plot(1:6, seq(0, 1, length=6), type=&quot;n&quot;, las=1, ylab=&quot;FPE&quot;, xlab=&quot;Trial for Route 1&quot;)
+abline(h=0.75, lty=3, lwd=2)
+
+#using a loop function, subset the data by treatment group, then plot the standard error bars and means. Use different colors for different treatment groups.
+for (i in 1:3){
+use.dat=subset(summ.dat, group==groups[i])
+arrows(use.dat$trial, use.dat$mean.fpe-use.dat$se.fpe, use.dat$trial, use.dat$mean.fpe+use.dat$se.fpe, angle=90, code=3, length=0.1)
+points(mean.fpe~trial, data=use.dat, type=&quot;o&quot;, cex=2, pch=21, bg=colors[i])
+}
+
+#add legend
+legend(&quot;topleft&quot;, legend=c(&quot;A: Sequential&quot;, &quot;B: Rotation&quot;, &quot;C: Random&quot;), pch=21, pt.bg=colors, title=&quot;Group&quot;, cex=0.8)</code></pre>
+<p><img src="batch_files/figure-html/unnamed-chunk-35-1.png" width="480" /></p>
+<p>What’s really interesting here is that Treatements B &amp; C perform
+better than Group A by the 5th and 6th release. By that point, the
+individuals in groups B and C have the same experience with this
+particular route as individuals in group A, but they have experienced
+more releases overall.</p>
+<p>Same plot with ggplot:</p>
+<pre class="r"><code>p = ggplot(summ.dat, aes(x=trial, y=mean.fpe, color=group)) +
+  geom_point(size=3) + 
+  geom_line() + 
+  geom_errorbar(aes(ymin=mean.fpe-se.fpe, ymax=mean.fpe+se.fpe), width=0.3)
+p</code></pre>
+<p><img src="batch_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p>This result doesn’t necessarily hold up for Routes 2 and 3 though,
+possibly because the “group A” birds have had enough general practice in
+finding homing routes.</p>
+<p><img src="images/batch/Route2.png" style="width:40.0%"
+alt="Route 2" /> <img src="images/batch/Route3.png" style="width:40.0%"
+alt="Route 3" /></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
