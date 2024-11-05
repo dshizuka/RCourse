@@ -64,8 +64,11 @@ knitr::include_graphics("../images/folderorganization1.png")
 In this case, my data files are inside a subfolder called "data", so the pathname is `data/SampleData.csv`
 Using this, I can read in the .csv file using a function called `read.csv()`, with the path name. ***Note that the path name needs to be inside quotes***.
 
+```{r, eval=F}
+dat=read.csv("data/SampleData.csv")
+```
 
-```{r}
+```{r, eval=T}
 dat=read.csv("../data/SampleData.csv")
 ```
 
