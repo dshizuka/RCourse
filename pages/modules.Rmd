@@ -65,6 +65,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
 
-#### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](E2_Wale.html)
+#### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](example_Wale.html)
 
     
