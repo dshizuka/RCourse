@@ -1,0 +1,23 @@
+---
+title: "Welcome to the R Course!"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+---
+
+### This is the course website for **BIOS 967: Intro to R for Biologists**. I will post course modules here each week.
+
+---
+
+## Updates
+
+---
+
+## Quick Links:
+
