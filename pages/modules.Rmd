@@ -51,20 +51,24 @@ knitr::opts_chunk$set(echo = TRUE)
 
   + ### [Generating reports with RMarkdown](Rmarkdown.html)
 
-* ### [What now? More resources for continuing to learn R](resources.html)
+* ### Extras
+  + ### [What now? More resources for continuing to learn R](resources.html)
 
 ***
 
-## Worked Examples:
+## Worked Examples: 
 
-#### [Worked Example: Simulating Population Growth](example_PopGrowth.html)
+#### *These are lessons that use real or simulated data to demonstrate skills that are covered in the learning modules above.*
 
-#### [Worked Example: Wrangling World Bank Data](example_WorldBank.html)
 
-#### [Worked Example: Data wrangling with coot chick color data](example_CootDataWrangling.html)
+* #### [Worked Example: Simulating Population Growth](example_PopGrowth.html)
 
-#### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
+* #### [Worked Example: Wrangling World Bank Data](example_WorldBank.html)
 
-#### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](example_Wale.html)
+* #### [Worked Example: Data wrangling with coot chick color data](example_CootDataWrangling.html)
+
+* #### [Worked Example: Plotting the change of butterfly size under climate change](Ex1.Plot_Bowden.html)
+
+* #### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](example_Wale.html)
 
     
