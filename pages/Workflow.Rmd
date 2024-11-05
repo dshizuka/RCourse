@@ -100,16 +100,20 @@ Now, whenever you create any file within this R Project, the files will automati
 Let's try this out:
 
 * Go find the "SampleData.csv" file that you downloaded earlier and drop it into a subfolder called "data" in your "trial" project folder. 
-![](images/screen_trial.png)
+![](../images/screen_trial.png)
 
-* Now click on the "refresh" button ![](images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window 
+* Now click on the "refresh" button ![](../images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window 
 
 You should now see that there is a "data" folder in your project directory, and that "SampleData.csv" is in that folder. 
 
 Now, you can use `read.csv()` again to read your file. But this time, you only need a *relative pathname*--that is, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
 
 Let's call this version of the data `dat2`
-```{r}
+```{r, echo=T, eval=F}
+dat2=read.csv("data/SampleData.csv")
+```
+
+```{r, echo=F}
 dat2=read.csv("../data/SampleData.csv")
 ```
 
