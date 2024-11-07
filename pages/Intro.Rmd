@@ -290,7 +290,7 @@ Here is what I recommend for every project you start:
 
 ***
 
-> <span style="color:purple">**Quick Review of Module 1:**</span>  
+> <span style="color:purple">**Quick Review of this module:**</span>  
 >
 >* You can assign values to ***objects***, which you can manipulate using ***operators*** and ***functions***.
 >
