@@ -57,7 +57,7 @@ dat=read.csv("/Users/daishizuka/Downloads/SampleData.csv")
 ```
 
 ```{r, echo=F}
-dat=read.csv("../data/SampleData.csv")
+dat=read.csv("data/SampleData.csv")
 ```
 
 Now let's look at the data, simply by running `dat`
@@ -69,7 +69,9 @@ Now, this might seem like a fine way to read your data file if you plan to do al
 
 That's where RStudio Projects come in...
 
-## 2. Using Rstudio Projects and organizing your files. ![](../images/Rstudiologo.png){width=10%}
+## 2. Using Rstudio Projects and organizing your files. 
+
+![](images/Rstudiologo.png)
 
 Rstudio projects facilitate a important "best practice" for developing code to facilitate your research, which is to make sure that ***for each project, create one folder that contains all of your data, scripts, outputs (e.g., plots) and other assets.*** 
 
@@ -100,7 +102,7 @@ Now, whenever you create any file within this R Project, the files will automati
 Let's try this out:
 
 * Go find the "SampleData.csv" file that you downloaded earlier and drop it into a subfolder called "data" in your "trial" project folder. 
-![](../images/screen_trial.png)
+![](images/screen_trial.png)
 
 * Now click on the "refresh" button ![](../images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window 
 
@@ -109,13 +111,11 @@ You should now see that there is a "data" folder in your project directory, and 
 Now, you can use `read.csv()` again to read your file. But this time, you only need a *relative pathname*--that is, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
 
 Let's call this version of the data `dat2`
-```{r, echo=T, eval=F}
+```{r, echo=T, eval=T}
 dat2=read.csv("data/SampleData.csv")
 ```
 
-```{r, echo=F}
-dat2=read.csv("../data/SampleData.csv")
-```
+
 
 ```{r}
 dat2
@@ -135,7 +135,7 @@ and you should be able to run the code as-is.
 
 <br>
 
-## 3. Version control and collaboration using Git and GitHub ![](../images/github-mark.png){width=10%}
+## 3. Version control and collaboration using Git and GitHub ![](images/github-mark.png){width=10%}
 
 ***Version control*** is a system by which you can keep track of changes to collaborative projects. One common example is Google Doc, which is an online document that multiple people can collaborate on. Importantly, Google Doc automatically saves versions of the document when changes are made, and users can revert back to earlier versions if they want. 
 
@@ -175,54 +175,12 @@ To take from their directions:
 
 #### 3.2.2. Create a GitHub account
 
-Go to [github.com](https://github.com/) and sign up for an account.
+If you haven't already, go to [github.com](https://github.com/) and sign up for an account.
+
+**Follow the directions to set up a passkey or other authentication methods. Make sure you can log in and out of github!!**
 
 <br>
 
-#### 3.2.3. Create a Personal Access Token on GitHub
-
-When linking a GitHub repository with Rstudio, you will need to be able to authenticate your connection. To increase security, GitHub no longer supports access using a simple password. Instead, it requires you to authenticate using a personal access token. You need to generate a token, and then you will use this later to connect Rstudio with your repository. 
-
-* Go to [https://github.com/settings/tokens](https://github.com/settings/tokens) and click “Generate token”. Your settings should include "repo", "user", "workflow", and I would set the expiration date to be at least the end of the semester (e.g., December 15th, 2023). **SAVE THIS TOKEN**. 
-
-*(The longer way to go is to sign in to github, Click on your avatar on the top-right corner, then go to Settings > Developer settings (at the very bottom) > Personal access tokens > Tokens (classic))*
-
-<br>
-
-#### 3.2.4. Clone a repository
-
-Go to the BIOS967 organization on GitHub: https://github.com/BIOS967
-
-At the top of the page, click on "Repositories"
-
-Click on "BIOS967_Fall2023" (for the Fall 2023 semester)
-
-Now, click on the green button that says "<>Code"
-
-Copy the clone URL to your clipboard. Use the HTTPS URL. 
-
-![](../images/Github_clone.png)
-
-In RStudio, start a new project:
-File > New Project > Version Control > Git. In “Repository URL”, paste the URL of your new GitHub repository. 
-
-Determine where your project will be saved locally. Be intentional. I have all of my GitHub repositories saved in my Documents folder in a subfolder called "GitHub". 
-
-Check "Open in new session"
-
-Click "Create Project".
-
-**At some point in this process, you will be asked to authenticate. At that point, you will enter your GitHub account name, and then enter the Personal Access Token that you created in step 3.2.4.**
-
-Congratulations! Now you have successfully cloned a GitHub repository on your computer.
-
-This means that, whenever I make an update or create new files on this repository, you can download those changes by "pulling" this repository. 
-
-Let's try that out. I'm going to make some change on the repository and upload ("commit" and "push") those changes up to GitHub. Then, I want you to "pull" those changes.
-
-To pull changes from a GitHub repository, click on the "Git" tab on the top right window in Rstudio, and click the "Pull" button.
-
-<br>
 
 ### 3.3. Working with GitHub: Pull, Stage, Commit, Push 
 
@@ -230,7 +188,7 @@ Once you have finished the set up process, you are ready to start your workflow!
 
 First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right). If you click on that tab, it'll look like this:
 
-![](../images/gitwindow.png){width=100%}
+![](images/gitwindow.png){width=100%}
 
 The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
 
@@ -248,7 +206,7 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 
 First, click "Pull" in the Git window. This will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
 
-![](../images/gitwindow_pull.png){width=50%}
+![](images/gitwindow_pull.png){width=50%}
 
 It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
 
@@ -284,7 +242,7 @@ Click "Push" to upload the changes to the remote repository on GitHub.
 
 ### 3.5. Using a Git Client (as another option)
 
-There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](../images/Github-desktop-logo.png){width=10%}
+There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
 
 Git Clients provide a graphical user interface (GUI) that facilitates the processes of committing, pushing, pulling and other tasks. It also allows you to see the history of changes to your repository.
 
@@ -333,18 +291,18 @@ If you try it, you might find that you like this interface better than pull-comm
 
   * First, go to your repository and click on "Settings"
 
-![](../images/GitHub_1.png)
+![](images/GitHub_1.png)
 
 <br>
 
   * Then, click on "Collaborators" on the navigation panel on the left side
 
-![](../images/GitHub_2.png)
+![](images/GitHub_2.png)
 <br>
 
   * Click on "Add People" and add "dshizuka". 
   
-![](../images/GitHub_3.png)
+![](images/GitHub_3.png)
 
 <br>
 
