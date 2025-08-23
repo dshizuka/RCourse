@@ -1,6 +1,6 @@
 ---
 title: 'BIOS 967: Intro to R for Biologists'
-subtitle: Syllabus, Fall 2023
+subtitle: Syllabus, Fall 2025
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: html_document
 ---
@@ -14,14 +14,18 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ### <u>Instructor</u>  
 * **Dai Shizuka**
-* **Office: 410B Manter Hall**
-* **Email: dshizuka2'at'unl.edu** 
+* **Office: 408 Manter Hall**
+* **Email: dshizuka2'at'nebraska.edu** 
 
 ### <u>Course Website</u>  
-#### Course materials will be posted at the course blog: [https://dshizuka.github.io/RCourse/](https://dshizuka.github.io/RCourse/)####  
+
+#### Course materials are posted at the course blog: 
+* **[https://dshizuka.github.io/RCourse/](https://dshizuka.github.io/RCourse/)**
+
+* **Course assignments will be posted on the course Canvas site.**
   
 ### <u>Course Goals</u>  
-* Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes, including wrangling data, generating plots, conducting analyses, and generating reports.
+* Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes. This goes beyond data analysis: we cover topics such as data structure, version control, wrangling data, dealing with text, generating plots, conducting analyses, and generating reports.
 
 * Learn to conduct **reproducible research** and to reproduce research of others.
 
@@ -31,16 +35,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ### <u>Required Materials</u>
+
 * **Laptop computer**: You will need access to a laptop computer that you can reliably use during class each week.
+
 * **Installed programs**: see the ** Before the Course ** section below  
 
 ### <u>How the Course Works</u>
 
-* Class sessions will consist of live-coding sessions led by the instructor, as well as individual and group exercises.
+* Each class session will have an acommpanying web module that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook. 
 
-* Each class session will have an acommpanying web module that provides details and codes. These are designed to be guides that will help you retain the information in the future. Compiled together, this will essentially be your textbook.
+* There will be weekly assignments where students will do a 'run-through' of one or two modules ahead of class time and answer some simple questions.
 
-* Most weeks, we will start a task during the Thursday session, which will then turn into a homework assignment. Sometimes this will entail generating and submitting code scripts. Other times, it will require you to prepare data, look up literature, or other tasks.
+* During class, we will engage in live-coding sessions led by the instructor, as well as individual and group exercises to address and challenging topics and tasks.
 
 * Three times during the semester, we will have project presentation sessions. See below for details.
 
@@ -51,29 +57,37 @@ Students will be evaluated based on 4 criteria. (1) Participation [15 points], (
 
 Here are the basic expectations for each of the above categories:
 
-(1) **Participation:** Students are expected to attend in-person sessions, but accommodations will be made for illness (including illness of dependents), conflicts with research or teaching needs (e.g., field research trip), etc. Students are asked to notify the instructor of upcoming conflicts ahead of time. Conflicts that would require the student to miss more than 4 sessions over the course of the semester should be discussed with the instructor at the beginning of the semester.
+(1) **Participation:** Students are expected to attend in-person sessions, but accommodations will be made for illness (including illness of dependents), conflicts with research or teaching needs (e.g., field research trip), etc. Students are asked to notify the instructor of upcoming conflicts ahead of time. Conflicts that would require the student to miss more than 4 sessions over the course of the semester should be discussed with the instructor at the beginning of the semester. A Zoom link will be provided for students who have prior approval (e.g., travel for field research, illness).
 
 (2) **Presentations:** Three times during the semester, we will have project presentation sessions. In the **first session** near the beginning of the semester, each student will present a *brief* overview of their research theme. This can be very broad description of the theme or a detailed account of a specific project. In the **second session** in the middle of the semester, students will present a 'progress report'--a description of the project that they settled on, and where they are on the project. In the **third session**, the students will present their final products.
 
-(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture, and to prepare you towards the beginning of your independent project. These sill be posted via Canvas. You will have 5 or 7 days to complete the assignment. 
+(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture. These sill be posted via Canvas. 
 
 (4) **Project Proposal & Progress Reports:** The student will develop a project proposal in two steps: submission of an initial project idea, and submission of a 2-page project proposal that includes objectives and description of the dataset (i.e., how it was collected). During the last third of the semester, students will submit progress reports every 2 weeks. 
 
 (5) **Independent Project Final Products**: At the end of the semester, students will submit a final report (4-5 pages), the data file, and the R script(s). 
 
 ### <u>Independent Project</u>
-You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. I will leave the format fairly open, but here are some suggestions:
+You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. 
 
-(1)	Conduct new analyses of your own data
-
-(2)	Re-create models and/or figures from a publication in your field (I recommend this approach—it really helps you understand concepts at a new level).
-
-(3)	Conduct meta-analyses or re-analysis of publically available data. 
+**The independent project requires you to have some type of dataset. Ideally, this will be related to your thesis/dissertation project. If you do not yet have your own data, it is preferred that you get data from your research lab. I will guide you in this process.**
 
 You will submit a brief plan (< 2 pages) of your project during the 8th week of the course. However, you can start your project earlier than that. You will submit a final report, along with the dataset and R scripts needed to reproduce the results.
 
 ### <u>Students with disabilities</u> 
+
 Students with disabilities are encouraged to contact the instructor for a confidential discussion of their individual needs for academic accommodation. It is the policy of the University of Nebraska-Lincoln to provide flexible and individualized accommodation to students with documented disabilities that may affect their ability to fully participate in course activities or to meet course requirements. To receive accommodation services, students must be registered with the Services for Students with Disabilities (SSD) office, 132 Canfield Administration, 472-3787 voice or TTY.
+
+
+### <u> AI policy </u>
+
+I acknowledge that AI has become a useful tool for generating code in many programming languages, including R. However, generating code with AI without the ability to understand what it does (sometimes called 'vibe coding') is ultimately limiting, as it does not allow you to develop a broader vision for how to create a workflow. The goal of this class is not to give you lines of code--it is to enable you to think through the whole process of using programming to tackle research tasks.  
+
+Since AI-assisted coding is still new (at least to me), we will often be learning how to integrate it into development of R scripts together. There may be some experimentation throughout the course. 
+
+For course modules, I ask you to follow the code that I have provided, rather than finding other solutions (though there almost certainly will be alternative ways to do the same thing). In many cases, there are reasons I teach the specific codes I teach (e.g., using 'base R' functions rather than functions from packages that can be ephemeral and become unsupported in the future). We can discuss alternative solutions during live-coding sessions in class. 
+
+The use of AI for generating code for your project will not be prohibited. However, you will be required to annotate your code with explanation of the whole workflow. The expectation is that you will UNDERSTAND the whole code script that you are creating. The more you do this during THIS CLASS, the better off you will be as you grow as a researcher: relying too much on AI in this class will ultimately hamper your abilities later on. 
 
 ***
 
@@ -81,37 +95,37 @@ Students with disabilities are encouraged to contact the instructor for a confid
 
 ### <u>Tentative course schedule (subject to change!)</u>
 
-* Week 1 (Aug 22, 24): Intros & Getting started with R; File Organization & Importing Data;
+* Week 1: Intros & Getting started with R; Objects;  
 
-* Week 2 (Aug 31): **No class on Tuesday (29th)**; Data Formats
+* Week 2: GitHub workflow; working with data; **Presentations 1: Research Themes**
 
-* Week 3 (Sep 5, 7): Some simple statistics & Plots
+* Week 3: Some simple statistics & Plots 
 
-* Week 4 (Sep 14): **No class on Tuesday (12th)**; **Presentations 1: Project Ideas (Thursday)**
+* Week 4: (**no class Thursday, September 14**)
 
-* Week 5 (Sep 19, 21): Data Wrangling & Plotting in Tidyverse Part ; Creating reports 
+* Week 5: Data Wrangling & Plotting in Tidyverse Part ; Creating reports 
 
-* Week 6 (Sep 26, 28): apply functions, loops, statements, custom functions
+* Week 6: apply functions, loops, statements, custom functions
 
-* Week 7 (Oct 3, 5):  Resampling & bootstrapping
+* Week 7:  Resampling & bootstrapping
 
-* Week 8 (Oct 10, 12): Simulations, stochasticity, **Submit proposal for independent project**
+* Week 8: Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9 (Oct 19): **Fall Break (Tuesday 17th)**; **Presentations 2: Project Plans (Thursday)**
+* Week 9 (Oct 19): **Fall Break (Tuesday 21st)**; **Presentations 2: Project Plans (Thursday)**
 
-* Week 10 (Oct 24, 26): Batch processing
+* Week 10: Batch processing; independent projects
 
-* Week 11 (Oct 31, Nov 2): Worked examples, independent projects
+* Week 11: independent projects
 
-* Week 12 (Nov 7, 9): Worked examples, independent projects
+* Week 12: independent projects
 
-* Week 13 (Nov 14, 16): Independent projects
+* Week 13: Independent projects
 
-* Week 14 (Nov 21, 23): **No class for Thanksgiving**
+* Week 14: **No class for Thanksgiving**
 
-* Week 15 (Nov 28, Nov 30): Independent projects
+* Week 15: Independent projects
 
-* Week 16 (Dec 5, 7): **Presentations 3: Independent projects presentation**
+* Week 16: **Presentations 3: Independent projects presentation**
 
 ***
 ### <u>Before the Course</u>  
