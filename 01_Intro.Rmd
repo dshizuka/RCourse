@@ -11,8 +11,6 @@ output:
     toc_float: true
 font size: 11pt
 geometry: margin=1in
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "pages") })
 ---
 ```{r setup, include=FALSE}
 library(knitr)
