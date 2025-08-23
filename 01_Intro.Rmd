@@ -18,6 +18,18 @@ library(knitr)
 ```
 
 ***
+
+## 1. Welcome to this course website.
+
+So, you want to learn R. If you are in this class, you probably want to learn R to do some SCIENCE. Typically, students that take this class have spent a long time learning biology, and how to do biological research, and it is now time to learn how to use R because you have to make plots, or because you have to do some statistical analyses. 
+
+But R is even MORE than a software for graphics or stats (or seemingly endless set of software packages)--it is A LANGUAGE. And like learning any language, learning R (or any other programming language) will open you up for more opportunities than you might realize. It will increase your research capacity. It will also help you think more clearly about data. Also, like learning any language, you can't just learn it by reading or hearing a lecture--you have to USE IT. During this semester, you should try to use it everyday. 
+
+This will be a journey, but it will be a journey that is well worth it!
+
+On a more practical note, becoming good at programming as part of science is a marketable skill. You can become a data scientist that actually understands data, their pitfalls and their potential. ***We can do this!*** 
+
+
 ## 1.1 What is R?
 R is a language that allows you to do data manipulation, conduct any data analysis you can think of, produce beautiful graphs, put together and run simple models, simulations, randomizations... you name it.  
 
@@ -32,7 +44,8 @@ R is a language that allows you to do data manipulation, conduct any data analys
 * **Community**: Lots of online forums and help  
 
 #### Drawbacks:  
-* You have to learn a language.  
+* You have to learn a language, and learning a new language is HARD. 
+
 
 ***
 

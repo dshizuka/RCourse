@@ -1,5 +1,5 @@
 ---
-title: "File Organization with RStudio Projects"
+title: "File Organization with RStudio Projects, Version Control, and GitHub Workflow"
 subtitle: "BIOS 967: Intro to R for Biologists"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
