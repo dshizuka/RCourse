@@ -1,0 +1,72 @@
+---
+title: "Learning Modules"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+* ### 1. Getting Started
+
+  + ### [Let's get started with R!](pages/01_Intro.html)
+
+  + ### [Types of Objects (vectors, strings, matrices, dataframes, lists)](pages/ObjectTypes.html)
+
+  + ### [Workflow with RStudio Projects and GitHub](pages/Workflow.html)
+
+  + ### [Importing and Navigating Data](pages/Data.html)
+
+* ### Plotting in R:
+
+    + ### [Basics of Plots](pages/Plots_basics.html)
+    
+    + ### [Intro to ggplot2](pages/ggplot_intro.html)
+
+* ### Stats in R:
+
+    + ### [Linear Models in R (including ANOVA, GLM)](pages/Stats_LinearModels.html)
+
+* ### Wrangling data in R:
+
+    + ### [Data Wrangling with Tidyverse Packages](pages/tidyverse.html)
+    
+    + ### [Parsing Dates and Text](pages/text_parsing.html)
+
+* ### Functions, Sampling, and Batch Processing
+
+  + ### [Custom Functions (and if-else statements)](pages/Functions.html)
+
+  + ### [Apply Fuctions and Loops](pages/Apply.html)
+    
+  + ### [Randomizations and Sampling From Distributions](pages/RandomNumbers.html)
+
+  + ### [Batch Processing (Example using Flack et al. 2014)](pages/batch.html) 
+
+* ### Reports
+
+  + ### [Generating reports with RMarkdown](pages/Rmarkdown.html)
+
+* ### Extras
+  + ### [What now? More resources for continuing to learn R](pages/resources.html)
+
+***
+
+## Worked Examples: 
+
+#### *These are lessons that use real or simulated data to demonstrate skills that are covered in the learning modules above.*
+
+
+* #### [Worked Example: Simulating Population Growth](pages/example_PopGrowth.html)
+
+* #### [Worked Example: Wrangling World Bank Data](pages/example_WorldBank.html)
+
+* #### [Worked Example: Data wrangling with coot chick color data](pages/example_CootDataWrangling.html)
+
+* #### [Worked Example: Plotting the change of butterfly size under climate change](pages/Ex1.Plot_Bowden.html)
+
+* #### [Worked Example: Plots and stats on effect of anthropogenic noise on crab physiology](pages/example_Wale.html)
+
+    

@@ -25,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
 * **Course assignments will be posted on the course Canvas site.**
   
 ### <u>Course Goals</u>  
-* Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes. This goes beyond data analysis: we cover topics such as data structure, version control, wrangling data, dealing with text, generating plots, conducting analyses, and generating reports.
+* Get over the hump in learning the R programming language and become proficient in using R for a variety of purposes. The goal isn't to learn everything you need to know about R--that is impossible to accomplish in a semester. Rather, we will focus on building the foundations that will allow you to continue learning beyond this class as needs arise. 
+
+* Learn that there is more to data analysis than lines of code: we cover topics such as data structure, version control, wrangling data, dealing with text, generating plots, conducting analyses, and generating reports.
 
 * Learn to conduct **reproducible research** and to reproduce research of others.
 
@@ -95,7 +97,7 @@ The use of AI for generating code for your project will not be prohibited. Howev
 
 ### <u>Tentative course schedule (subject to change!)</u>
 
-* Week 1: Intros & Getting started with R; Objects;  
+* Week 1: Intros & Getting started with R; Objects  
 
 * Week 2: GitHub workflow; working with data; **Presentations 1: Research Themes**
 
@@ -111,7 +113,7 @@ The use of AI for generating code for your project will not be prohibited. Howev
 
 * Week 8: Simulations, stochasticity, **Submit proposal for independent project**
 
-* Week 9 (Oct 19): **Fall Break (Tuesday 21st)**; **Presentations 2: Project Plans (Thursday)**
+* Week 9: **Fall Break (Tuesday 21st)**; **Presentations 2: Project Plans (Thursday)**
 
 * Week 10: Batch processing; independent projects
 

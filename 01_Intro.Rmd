@@ -11,6 +11,8 @@ output:
     toc_float: true
 font size: 11pt
 geometry: margin=1in
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "pages") })
 ---
 ```{r setup, include=FALSE}
 library(knitr)
@@ -45,7 +47,7 @@ First, open up the R Studio program. You will get a window with 3 panels. Click 
 Now you will have 4 panels.  
 
 ```{r, echo=FALSE, fig.align="center"}
-knitr::include_graphics("../images/panels.png")
+knitr::include_graphics("images/Panels.png")
 ```
 
 These are the 4 panels you will have:  
@@ -180,7 +182,7 @@ Here, the syntax is important. Generically, `seq(x, y, z)` says “create a sequ
 ```
 This should give you a help file in the bottom right 'outputs' panel. It'll look something like this:
 ```{r, echo=FALSE, fig.align="center"}
-knitr::include_graphics("../images/seq_help.png")
+knitr::include_graphics("images/seq_help.png")
 ```
 
 ***Some important elements of the help file: ***  
