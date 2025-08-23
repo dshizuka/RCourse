@@ -8,7 +8,7 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Syllabus"
-      href: syllabus.html
+      href: pages/syllabus.html
     - text: "Modules"
-      href: modules.html
+      href: pages/modules.html
 output_dir: "."
