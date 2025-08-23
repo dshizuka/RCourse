@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   + ### [Types of Objects (vectors, strings, matrices, dataframes, lists)](02_ObjectTypes.html)
 
-  + ### [Workflow with RStudio Projects and GitHub](pages/Workflow.html)
+  + ### [Workflow with RStudio Projects and GitHub](03_Workflow.html)
 
   + ### [Importing and Navigating Data](pages/Data.html)
 
