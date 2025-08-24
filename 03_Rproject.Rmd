@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br>
 
-***Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html), and the [https://happygitwithr.com/](https://happygitwithr.com/) tutorials.***
+***Note: You can get a lot of this information from Hadley Wickham's "R for Data Science" book, Chapter 8: [here](https://r4ds.had.co.nz/workflow-projects.html).***
 
 <br>
 
