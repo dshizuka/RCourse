@@ -52,7 +52,7 @@ You can figure out what your current working directory is using `getwd()`:
 getwd()
 ```
 
-You can get the whole list of folders and files that is in your working directory using `list.files()`:
+You can get the whole list of folders and files that are in your working directory using `list.files()`:
 
 ```{r}
 list.files()
@@ -61,12 +61,25 @@ list.files()
 You can look inside a specific folder within your directory by specifying the file within the `list.files()` function. For example, to look in the "data" folder within my current working directory:
 
 ```{r}
-list.files("data")
+list.files("data/")
 ```
+
+You can **go one level up** in your folder structure (aka the "parent directory") by using `..`
+
+```{r}
+list.files("../")
+```
+
+***
+
+#### Now, take a minute to try this out on your own computer. Start by running `list.files()`, and then see if you can navigate into and outside your folders.
+
+*** 
+
 
 ## 2. Navigating folders and files using absolute pathnames to read a file (but never do this again!)
 
-As explained in the previous module, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses pathnames to arrange these files (as do all programming languages). These are sometimes called "absolute paths". Once you understand how path names work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
+As explained above, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses pathnames to arrange these files (as do all programming languages). These are sometimes called "absolute paths". Once you understand how path names work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
 
 For example, if I were to create a new data file and save it as a .csv file on the desktop on my own computer (Mac), the path name might look like this:
 `/Users/daishizuka/Desktop/data.csv`

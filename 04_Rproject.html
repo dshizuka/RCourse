@@ -344,7 +344,7 @@ div.tocify {
 Projects</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/23/25</h4>
+<h4 class="date">updated 08/24/25</h4>
 
 </div>
 
@@ -401,7 +401,7 @@ where a particular file is <em>relative to your working directory</em>
 <code>getwd()</code>:</p>
 <pre class="r"><code>getwd()</code></pre>
 <pre><code>## [1] &quot;/Users/dshizuka2/Documents/GitHub/RCourse&quot;</code></pre>
-<p>You can get the whole list of folders and files that is in your
+<p>You can get the whole list of folders and files that are in your
 working directory using <code>list.files()</code>:</p>
 <pre class="r"><code>list.files()</code></pre>
 <pre><code>##  [1] &quot;_config.yml&quot;         &quot;_put_away&quot;           &quot;_site.yml&quot;          
@@ -409,16 +409,16 @@ working directory using <code>list.files()</code>:</p>
 ##  [7] &quot;02_ObjectTypes.Rmd&quot;  &quot;03_Data.html&quot;        &quot;03_Data.Rmd&quot;        
 ## [10] &quot;03_Workflow.html&quot;    &quot;03_Workflow.Rmd&quot;     &quot;04_Rproject.html&quot;   
 ## [13] &quot;04_Rproject.Rmd&quot;     &quot;05_GitHub.Rmd&quot;       &quot;assignments&quot;        
-## [16] &quot;data&quot;                &quot;images&quot;              &quot;index.html&quot;         
-## [19] &quot;index.Rmd&quot;           &quot;modules.html&quot;        &quot;modules.Rmd&quot;        
-## [22] &quot;pages&quot;               &quot;pdfs&quot;                &quot;RCourse.Rproj&quot;      
-## [25] &quot;site_libs&quot;           &quot;style.css&quot;           &quot;syllabus.html&quot;      
-## [28] &quot;syllabus.Rmd&quot;</code></pre>
+## [16] &quot;data&quot;                &quot;data.zip&quot;            &quot;images&quot;             
+## [19] &quot;index.html&quot;          &quot;index.Rmd&quot;           &quot;modules.html&quot;       
+## [22] &quot;modules.Rmd&quot;         &quot;pages&quot;               &quot;pdfs&quot;               
+## [25] &quot;RCourse.Rproj&quot;       &quot;site_libs&quot;           &quot;style.css&quot;          
+## [28] &quot;syllabus.html&quot;       &quot;syllabus.Rmd&quot;</code></pre>
 <p>You can look inside a specific folder within your directory by
 specifying the file within the <code>list.files()</code> function. For
 example, to look in the “data” folder within my current working
 directory:</p>
-<pre class="r"><code>list.files(&quot;data&quot;)</code></pre>
+<pre class="r"><code>list.files(&quot;data/&quot;)</code></pre>
 <pre><code>##  [1] &quot;all.R1.Rdat&quot;                   &quot;Assignment1_example.zip&quot;      
 ##  [3] &quot;Assignment2_example.zip&quot;       &quot;boloria.csv&quot;                  
 ##  [5] &quot;colias.csv&quot;                    &quot;coot_example&quot;                 
@@ -428,6 +428,25 @@ directory:</p>
 ## [13] &quot;presidential.csv&quot;              &quot;readme.txt&quot;                   
 ## [15] &quot;SampleData_w_errors.csv&quot;       &quot;SampleData.csv&quot;               
 ## [17] &quot;sex_chromo.csv&quot;                &quot;single_exposure.csv&quot;</code></pre>
+<p>You can <strong>go one level up</strong> in your folder structure
+(aka the “parent directory”) by using <code>..</code></p>
+<pre class="r"><code>list.files(&quot;../&quot;)</code></pre>
+<pre><code>##  [1] &quot;BARS_phenotypic_integration&quot; &quot;BIO-LEAPS&quot;                  
+##  [3] &quot;CCLO_Social_network&quot;         &quot;Fairywren_Projects&quot;         
+##  [5] &quot;Feeder-Project&quot;              &quot;foodwebs&quot;                   
+##  [7] &quot;GCSP_projects&quot;               &quot;MicrophoneArray&quot;            
+##  [9] &quot;networkanalysis&quot;             &quot;Plover-Project&quot;             
+## [11] &quot;RCourse&quot;                     &quot;RFID_Feeders&quot;               
+## [13] &quot;WBNU-playback&quot;</code></pre>
+<hr />
+<div
+id="now-take-a-minute-to-try-this-out-on-your-own-computer.-start-by-running-list.files-and-then-see-if-you-can-navigate-into-and-outside-your-folders."
+class="section level4">
+<h4>Now, take a minute to try this out on your own computer. Start by
+running <code>list.files()</code>, and then see if you can navigate into
+and outside your folders.</h4>
+<hr />
+</div>
 </div>
 </div>
 <div
@@ -435,15 +454,15 @@ id="navigating-folders-and-files-using-absolute-pathnames-to-read-a-file-but-nev
 class="section level2">
 <h2>2. Navigating folders and files using absolute pathnames to read a
 file (but never do this again!)</h2>
-<p>As explained in the previous module, the Working Directory defines
-where R will look for files, or where it will save files that you
-generate. R uses pathnames to arrange these files (as do all programming
-languages). These are sometimes called “absolute paths”. Once you
-understand how path names work, it can be really handy to be able to
-pull data in and out from wherever on your computer. However, this can
-quickly get cumbersome. Moreover, it makes it hard to port your scripts
-from one computer to another, since pathnames on different computers
-will end up being different.</p>
+<p>As explained above, the Working Directory defines where R will look
+for files, or where it will save files that you generate. R uses
+pathnames to arrange these files (as do all programming languages).
+These are sometimes called “absolute paths”. Once you understand how
+path names work, it can be really handy to be able to pull data in and
+out from wherever on your computer. However, this can quickly get
+cumbersome. Moreover, it makes it hard to port your scripts from one
+computer to another, since pathnames on different computers will end up
+being different.</p>
 <p>For example, if I were to create a new data file and save it as a
 .csv file on the desktop on my own computer (Mac), the path name might
 look like this: <code>/Users/daishizuka/Desktop/data.csv</code></p>
