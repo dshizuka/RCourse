@@ -16,7 +16,7 @@ library(knitr)
 ## Overview
 Most of you are looking to use R for data analysis, which of course requires learning how to import your data into R. This is maybe the big leap for people who are not used to programming.  
 
-To import data into R, you will create an object that points to a dataset somewhere on your computer. R will then import that data as a **dataframe** object ([see Module 2](ObjectTypes.html)). 
+To import data into R, you will create an object that points to a dataset somewhere on your computer. R will then import that data as a **dataframe** object ([see Module 2](02_ObjectTypes.html)). 
 
 ***
 
@@ -27,18 +27,17 @@ To import data into R, you will create an object that points to a dataset somewh
 ><span style="color:purple">**Do this before you start this section!**</span>
 >
 * Click on the following links to download three files: 
->(1) [SampleData.csv](../data/SampleData.csv)
->(2) [SampleData_w_errors.csv](../data/SampleData_w_errors.csv)
->(3) [sex_chromo.csv](../data/sex_chromo.csv)
+>(1) [SampleData.csv](data/SampleData.csv)
+>(2) [SampleData_w_errors.csv](data/SampleData_w_errors.csv)
+>(3) [sex_chromo.csv](data/sex_chromo.csv)
 >* Save these files into a subfolder called "data" inside your working directory (i.e., the folder where you are keeping all of your course materials)
 >
 
-### 1.1 File Formats: Use .csv (or .txt)
+### 1.1 File Formats: Using .csv (or .txt)
 
 Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While we have all likely had headaches associated with Excel, it's undeniable that it is still the predominant way to compile our data.  
 
-R can read several file formats, but the popular excel format (.xlsor .xlsx) is NOT one of them (unless you use a specialized package, e.g., `xlsx`). Instead, you will most often convert your excel sheet into one of two formats: ***tab-delimited files (saved as .txt)*** or ***comma-separated-values files (.csv)***. These are simple text files in which each entry is separated by a tab or comma (respectively). The huge advantage of these formats is that they are non-proprietary file formats that can be read by any text editor. One potential drawback is that you cannot keep any type of formatting (like highlighting of cells on a spread sheet) or special characters. 
-
+R can read several file formats, but the popular excel format (.xls or .xlsx) is NOT one of them (unless you use a specialized package, e.g., `xlsx`). Instead, you will most often convert your excel sheet into one of two formats: ***tab-delimited files (saved as .txt)*** or ***comma-separated-values files (.csv)***. These are simple text files in which each entry is separated by a tab or comma (respectively). The huge advantage of these formats is that they are **non-proprietary file formats** that can be read by any text editor. This is super important:  `.xls` or `.xlsx` file is only useful on computers with Microsoft Office software, `.csv` or `.txt` file is universal, and anyone with a computer can open it. So the best practice for **reproducible research** or **open research** is to use one these formats. 
 
 If you use Excel or any other spreadsheet for data storage, you can easily convert those into one of these formats using `[Save as...]`  
 
@@ -46,7 +45,7 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 ***
 
-## 2. Five ways to import data from .csv (or .txt) files
+## 2. Five ways to import data from .csv (or .txt) files--but avoid most of them.
 
 No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
 
@@ -58,24 +57,18 @@ No matter how you import the data, the final goal is the same: assign the import
 
 Here is an image of how I might organize my course folder:
 ```{r, echo=FALSE, fig.align="center", out.width="75%"}
-knitr::include_graphics("../images/folderorganization1.png")
+knitr::include_graphics("images/folderorganization1.png")
 ```
 
 In this case, my data files are inside a subfolder called "data", so the pathname is `data/SampleData.csv`
 Using this, I can read in the .csv file using a function called `read.csv()`, with the path name. ***Note that the path name needs to be inside quotes***.
 
-```{r, eval=F}
+```{r, eval=T}
 dat=read.csv("data/SampleData.csv")
-```
-
-```{r, eval=T, echo=F}
-dat=read.csv("../data/SampleData.csv")
 ```
 
 
 One of the biggest benefits of this method is that the pathname is relative to the folder that the .Rproj file is in, which means that as long as the folder is organized in the same way, you can just transfer all the codes to someone else's computer and it will still work. In contrast, if you are using the full path name, you will always have to edit this for the computer that you are running the code on. This means that, if you simply share the entire folder including the .Rproj file, your collaborator can run your code seamlessly without having to alter the pathname or resetting the working directory.
-
-
 
 ***
 
@@ -190,7 +183,7 @@ Similarly, you might use spreadsheets with formatting for purposes other than ke
 
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set.", out.width="50%"}
-knitr::include_graphics("../images/excel_form.png")
+knitr::include_graphics("images/excel_form.png")
 ```
 
 ***
@@ -206,7 +199,7 @@ knitr::include_graphics("../images/excel_form.png")
 4. Don't add totals on the last line of the data. Also, avoid calculating group averages, etc. to your data. 
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="Example spreadsheet of data on egg size of American Coots", out.width="100%"}
-knitr::include_graphics("../images/eggdata_image.png")
+knitr::include_graphics("images/eggdata_image.png")
 ```
 
 <br>
@@ -221,7 +214,7 @@ knitr::include_graphics("../images/eggdata_image.png")
 This is one common way people have used excel sheets when your data comes from multiple sources (e.g., multiple plots). It also makes you feel like you have maximum information in the sheet. But in reality, this makes it impossible to do any global analysis. And R cannot read in this type of spreadsheet.
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"}
-knitr::include_graphics("../images/multitable.png")
+knitr::include_graphics("images/multitable.png")
 ```
 
 
@@ -254,7 +247,7 @@ This is a common mistake that comes from using Excel as forms.
 If you are using highlighting to indicate some information, it you can almost always just add another column to include that information as another variable (see example figure). Merged cells will make R unable to import the file.
 
 ```{r, echo=FALSE, fig.align="center", fig.cap="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes", out.width="100%"}
-knitr::include_graphics("../images/highlighting.png")
+knitr::include_graphics("images/highlighting.png")
 ```
 
 <br>
@@ -333,13 +326,10 @@ Even when you have taken care to follow the above dos and don'ts, you will often
 
 Step 1: Import the `SampleData_w_errors.csv` file and look at its data structure:
 
-```{r, eval=F}
-errdat=read.csv("data/SampleData_w_errors.csv") #assuming your working directory is set to the sample data folder
-errdat
-```
+
 
 ```{r, eval=T, echo=F}
-errdat=read.csv("../data/SampleData_w_errors.csv") #assuming your working directory is set to the sample data folder
+errdat=read.csv("data/SampleData_w_errors.csv") #assuming your working directory is set to the sample data folder
 errdat
 ```
 Step 2: Fix the spreadsheet so that you get the following:

@@ -14,7 +14,7 @@
 
 <title>Module 3: Working With Data</title>
 
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Module 3: Working With Data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 11/05/24</h4>
+<h4 class="date">updated 08/23/25</h4>
 
 </div>
 
@@ -354,8 +354,8 @@ requires learning how to import your data into R. This is maybe the big
 leap for people who are not used to programming.</p>
 <p>To import data into R, you will create an object that points to a
 dataset somewhere on your computer. R will then import that data as a
-<strong>dataframe</strong> object (<a href="ObjectTypes.html">see Module
-2</a>).</p>
+<strong>dataframe</strong> object (<a href="02_ObjectTypes.html">see
+Module 2</a>).</p>
 <hr />
 </div>
 <div id="importing-data-overview" class="section level2">
@@ -368,10 +368,10 @@ section!</strong></span></p>
 <li>Click on the following links to download three files:</li>
 </ul>
 <ol style="list-style-type: decimal">
-<li><a href="../data/SampleData.csv">SampleData.csv</a></li>
+<li><a href="data/SampleData.csv">SampleData.csv</a></li>
 <li><a
-href="../data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
-<li><a href="../data/sex_chromo.csv">sex_chromo.csv</a></li>
+href="data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
+<li><a href="data/sex_chromo.csv">sex_chromo.csv</a></li>
 </ol>
 <ul>
 <li>Save these files into a subfolder called “data” inside your working
@@ -379,23 +379,23 @@ directory (i.e., the folder where you are keeping all of your course
 materials)</li>
 </ul>
 </blockquote>
-<div id="file-formats-use-.csv-or-.txt" class="section level3">
-<h3>1.1 File Formats: Use .csv (or .txt)</h3>
+<div id="file-formats-using-.csv-or-.txt" class="section level3">
+<h3>1.1 File Formats: Using .csv (or .txt)</h3>
 <p>Many of us manage data by entering them into a spreadsheet using
 common software like Microsoft Excel. While we have all likely had
 headaches associated with Excel, it’s undeniable that it is still the
 predominant way to compile our data.</p>
-<p>R can read several file formats, but the popular excel format (.xlsor
-.xlsx) is NOT one of them (unless you use a specialized package, e.g.,
-<code>xlsx</code>). Instead, you will most often convert your excel
-sheet into one of two formats: <strong><em>tab-delimited files (saved as
-.txt)</em></strong> or <strong><em>comma-separated-values files
-(.csv)</em></strong>. These are simple text files in which each entry is
-separated by a tab or comma (respectively). The huge advantage of these
-formats is that they are non-proprietary file formats that can be read
-by any text editor. One potential drawback is that you cannot keep any
-type of formatting (like highlighting of cells on a spread sheet) or
-special characters.</p>
+<p>R can read several file formats, but the popular excel format (.xls
+or .xlsx) is NOT one of them (unless you use a specialized package,
+e.g., <code>xlsx</code>). Instead, you will most often convert your
+excel sheet into one of two formats: <strong><em>tab-delimited files
+(saved as .txt)</em></strong> or <strong><em>comma-separated-values
+files (.csv)</em></strong>. These are simple text files in which each
+entry is separated by a tab or comma (respectively). The huge advantage
+of these formats is that they are non-proprietary file formats that can
+be read by any text editor. One potential drawback is that you cannot
+keep any type of formatting (like highlighting of cells on a spread
+sheet) or special characters.</p>
 <p>If you use Excel or any other spreadsheet for data storage, you can
 easily convert those into one of these formats using
 <code>[Save as...]</code></p>
@@ -424,7 +424,7 @@ it automatically sets that folder as the working directory. This makes
 the job of finding and importing data much easier than it would be
 otherwise (i.e., step 2).</p>
 <p>Here is an image of how I might organize my course folder:
-<img src="../images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
+<img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
 <p>In this case, my data files are inside a subfolder called “data”, so
 the pathname is <code>data/SampleData.csv</code> Using this, I can read
 in the .csv file using a function called <code>read.csv()</code>, with
@@ -606,7 +606,7 @@ other than keeping data for analysis (e.g., using it as a way to track
 progress on a project). The formatting for that kind of use is different
 than for storing data.</p>
 <div class="figure" style="text-align: center">
-<img src="../images/excel_form.png" alt="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set." width="50%" />
+<img src="images/excel_form.png" alt="Spreadsheets are used for many different purposes, which explains many common formatting mistakes in data. This is a *form* made in Excel. NOT a good example of a data set." width="50%" />
 <p class="caption">
 Spreadsheets are used for many different purposes, which explains many
 common formatting mistakes in data. This is a <em>form</em> made in
@@ -631,7 +631,7 @@ separate column.</p></li>
 calculating group averages, etc. to your data.</p></li>
 </ol>
 <div class="figure" style="text-align: center">
-<img src="../images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
+<img src="images/eggdata_image.png" alt="Example spreadsheet of data on egg size of American Coots" width="100%" />
 <p class="caption">
 Example spreadsheet of data on egg size of American Coots
 </p>
@@ -650,7 +650,7 @@ feel like you have maximum information in the sheet. But in reality,
 this makes it impossible to do any global analysis. And R cannot read in
 this type of spreadsheet.</p>
 <div class="figure" style="text-align: center">
-<img src="../images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="482" />
+<img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"  />
 <p class="caption">
 example from <a
 href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"
@@ -703,7 +703,7 @@ can almost always just add another column to include that information as
 another variable (see example figure). Merged cells will make R unable
 to import the file.</p>
 <div class="figure" style="text-align: center">
-<img src="../images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
+<img src="images/highlighting.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="100%" />
 <p class="caption">
 example from <a
 href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"
@@ -833,8 +833,6 @@ class="section level2">
 <h2>Group Exercise 1: Troubleshoot data import</h2>
 <p>Step 1: Import the <code>SampleData_w_errors.csv</code> file and look
 at its data structure:</p>
-<pre class="r"><code>errdat=read.csv(&quot;data/SampleData_w_errors.csv&quot;) #assuming your working directory is set to the sample data folder
-errdat</code></pre>
 <pre><code>##    Indiv_ID    sex      age size weight  X
 ## 1     20-01   male    adult 29.5   66.5  1
 ## 2     20-02   male juvenile   28   58.5 NA
