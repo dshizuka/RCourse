@@ -2,7 +2,7 @@
 title: 'BIOS 967: Intro to R for Biologists'
 subtitle: Syllabus, Fall 2025
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
-output: html_document
+output: pdf_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -55,19 +55,20 @@ knitr::opts_chunk$set(echo = TRUE)
 * The last part of the semester will mostly be dedicated to conducting independent research projects.
 
 ### <u>Evaluation</u>  
-Students will be evaluated based on 4 criteria. (1) Participation [15 points], (2) Presentations [15 points], (3) Take-home assignments [20 points], (4) Project Proposal & Progress Reports [20 points], (5) Independent Project Final Products [30 points].
+
+Students will be evaluated based on 4 criteria. (1) Participation & take-home assignments [25 points], (2) Presentations [30 points], (3) Project Proposal & Progress Reports [15 points], (5) Independent Project Final Products [30 points].
 
 Here are the basic expectations for each of the above categories:
 
 (1) **Participation:** Students are expected to attend in-person sessions, but accommodations will be made for illness (including illness of dependents), conflicts with research or teaching needs (e.g., field research trip), etc. Students are asked to notify the instructor of upcoming conflicts ahead of time. Conflicts that would require the student to miss more than 4 sessions over the course of the semester should be discussed with the instructor at the beginning of the semester. A Zoom link will be provided for students who have prior approval (e.g., travel for field research, illness).
 
+**Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture. These sill be posted via Canvas. 
+
 (2) **Presentations:** Three times during the semester, we will have project presentation sessions. In the **first session** near the beginning of the semester, each student will present a *brief* overview of their research theme. This can be very broad description of the theme or a detailed account of a specific project. In the **second session** in the middle of the semester, students will present a 'progress report'--a description of the project that they settled on, and where they are on the project. In the **third session**, the students will present their final products.
 
-(3) **Take-home assignments:** There will be take-home assignments over the course of the semester, which are designed to guide you through some independent exploration of material covered in lecture. These sill be posted via Canvas. 
+(3) **Project Proposal & Progress Reports:** The student will develop a project proposal in two steps: submission of an initial project idea, and submission of a 2-page project proposal that includes objectives and description of the dataset (i.e., how it was collected). During the last third of the semester, students will submit progress reports every 2 weeks. 
 
-(4) **Project Proposal & Progress Reports:** The student will develop a project proposal in two steps: submission of an initial project idea, and submission of a 2-page project proposal that includes objectives and description of the dataset (i.e., how it was collected). During the last third of the semester, students will submit progress reports every 2 weeks. 
-
-(5) **Independent Project Final Products**: At the end of the semester, students will submit a final report (4-5 pages), the data file, and the R script(s). 
+(4) **Independent Project Final Products**: At the end of the semester, students will submit a final report (4-5 pages), the data file, and the R script(s). 
 
 ### <u>Independent Project</u>
 You will spend several weeks during the course conducting independent projects. We will have regular class during this time, but I will be available to help you with your R codes. This is an opportunity for you to work on something new that will further your research goals. 
@@ -99,23 +100,23 @@ The use of AI for generating code for your project will not be prohibited. Howev
 
 * Week 1: Intros & Getting started with R; Objects  
 
-* Week 2: GitHub workflow; working with data; **Presentations 1: Research Themes**
+* Week 2: RStudio Projects; working with data 
 
-* Week 3: Some simple statistics & Plots 
+* Week 3: **Presentations 1: Research Themes**; Plotting basics 
 
-* Week 4: (**no class Thursday, September 14**)
+* Week 4: (**no class Thursday, September 14**); Intro to ggplot
 
-* Week 5: Data Wrangling & Plotting in Tidyverse Part ; Creating reports 
+* Week 5: Data Wrangling 
 
 * Week 6: apply functions, loops, statements, custom functions
 
-* Week 7:  Resampling & bootstrapping
+* Week 7: Resampling & bootstrapping
 
 * Week 8: Simulations, stochasticity, **Submit proposal for independent project**
 
 * Week 9: **Fall Break (Tuesday 21st)**; **Presentations 2: Project Plans (Thursday)**
 
-* Week 10: Batch processing; independent projects
+* Week 10: Batch processing; setting up GitHub
 
 * Week 11: independent projects
 
