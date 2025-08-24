@@ -28,9 +28,13 @@ knitr::opts_chunk$set(echo = TRUE)
 * Save this file somewhere on your computer where you can find it. 
 >
 
-## 1. What we are talking about here. 
+## 1. What we are talking about here and why. 
 
-This module is focused on organizing a workflow, which often involves importing data, generating (and saving) graphics, writing new data outputs, etc. To do all of this, we need to be able to talk to the computer about **where to find files and where to put files**. This seems like a basic thing, but it is often the biggest first hurdle in learning computer programming. The computer can't think like you and intuit where the proper file might be, or where it should put it--it needs to be told explicitly.
+This module introduces the idea of organizing a workflow, which can involve importing data, generating (and saving) graphics, writing new data outputs, etc. Importantly, we want to do all of this **without relying on pull-down menus or clicking buttons**. Rather, we will do all of this by code. Why? Because code can be made to be reproducible--i.e., we can set up the code so that it works on any computer the same way. Thiw way, we can produce results that can be reproduced by anyone, every time, simply by running that code. On the other hand, button-clicks are not reproducible in the same way. Maybe you can re-create an entire routine of button-clicks by leaving yourself very detailed instructions... but leaving yourself reproducible code is much easier.
+
+I admit that all of this will feel like it's overly cumbersome at the beginning. But trust me, this is going to pay off very quickly. After learning how to setup your workflow, you will be able to share code, results, and troubleshoot with collaborators (including your 'future self') much faster and reliably. Importantly for this class, it will also **help me help you better** in your independent project, because I will be able to run your code, reproduce your errors, and help you find fixes.
+
+To do all of this, we need to be able to talk to the computer about **where to find files and where to put files**. This seems like a basic thing, but it is often the biggest first hurdle in learning computer programming. The computer can't think like you and intuit where the proper file might be, or where it should put it--it needs to be told explicitly.
 
 #### Some terminology
 
@@ -84,21 +88,20 @@ setwd("/Users/dshizuka2/Documents")
 list.files("GitHub/")
 ```
 
-```{r, eval=F}
-list.files(full.names=T)
-```
-
+Notice that you are 
 
 
 You can **go one level up** in your folder structure (aka the "parent directory") by using `..`
 
-```{r}
+*I'm not going to share the results here because I don't really want to reveal the file structure of my personal computer on a public webpage...*
+
+```{r, eval=F}
 list.files("../")
 ```
 
 ***
 
-#### Now, take a minute to try this out on your own computer. Start by running `list.files()`, and then see if you can navigate into and outside your folders.
+#### Now, take a minute to try this out on your own computer. Start by running `list.files()`, and then see if you can navigate into and outside your folders. Develop a sense for how the computer navigates files and folders.
 
 *** 
 

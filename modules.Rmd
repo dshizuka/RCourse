@@ -15,9 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
   + ### [Types of Objects (vectors, strings, matrices, dataframes, lists)](02_ObjectTypes.html)
 
+  + ### [Directories, Pathnames, and RStudio Projects](03_Rproject.html)
+    
+    
   + ### [Importing and Navigating Data](03_Data.html)
 
-  + ### [Workflow with RStudio Projects and GitHub](03_Workflow.html)
+
 
 * ### Plotting in R:
 
