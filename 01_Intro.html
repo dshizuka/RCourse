@@ -370,9 +370,8 @@ it!</p>
 science is a marketable skill. You can become a data scientist that
 actually understands data, their pitfalls and their potential.
 <strong><em>We can do this!</em></strong></p>
-</div>
-<div id="what-is-r" class="section level2">
-<h2>1.1 What is R?</h2>
+<div id="what-is-r" class="section level3">
+<h3>What is R?</h3>
 <p>R is a language that allows you to do data manipulation, conduct any
 data analysis you can think of, produce beautiful graphs, put together
 and run simple models, simulations, randomizations… you name it.</p>
@@ -416,8 +415,9 @@ HARD.</li>
 <hr />
 </div>
 </div>
+</div>
 <div id="working-with-rstudio" class="section level2">
-<h2>1.2 Working with RStudio</h2>
+<h2>2. Working with RStudio</h2>
 <p>In this class, we will be using an open-source software called
 <em>RStudio</em>. <em>RStudio</em> is an IDE (Integrated Development
 Environment)–a fancy word for software that organizes windows and
@@ -459,7 +459,7 @@ confused.</p>
 <hr />
 </div>
 <div id="running-commands-in-the-console" class="section level2">
-<h2>1.3 Running commands in the Console</h2>
+<h2>3. Running commands in the Console</h2>
 <p>Let’s start with something simple. Try typing the code that is shown
 in the shaded area into the Console (bottom left panel) and press
 <code>[return]</code></p>
@@ -514,7 +514,7 @@ command.</li>
 <hr />
 </div>
 <div id="operators" class="section level2">
-<h2>1.4 Operators</h2>
+<h2>4. Operators</h2>
 <p><strong>Operators</strong> are symbols that have special meaning in
 R. These are critical to know.</p>
 <table>
@@ -622,7 +622,7 @@ c = 5</code></pre>
 <hr />
 </div>
 <div id="functions-and-help-files" class="section level2">
-<h2>1.5 Functions and help files</h2>
+<h2>5. Functions and help files</h2>
 <p><em>Functions</em> are commands that you use to manipulate objects in
 R. Functions followed by <code>()</code>, and each function comes with
 specific arguments or syntax that goes inside the parentheses. Function
@@ -694,7 +694,7 @@ as you learn how to work with a programming language.</p>
 <hr />
 </div>
 <div id="using-the-script-editor" class="section level2">
-<h2>1.6 Using the Script Editor</h2>
+<h2>6. Using the Script Editor</h2>
 <p>You can type commands directly into the R Console and hit
 <code>[return]</code> to run the command (as we have done above).
 However, it is best practice to type your code into the Editor, and then
@@ -735,7 +735,7 @@ again.</p>
 </div>
 <div id="working-directory-and-saving-your-script"
 class="section level2">
-<h2>1.7 Working Directory and Saving Your Script</h2>
+<h2>7. Working Directory and Saving Your Script</h2>
 <p>Now that we have built a simple script, we should save it. But to
 save a script, you need to be familiar with the <strong>working
 directory</strong>. The working directory is the location in your
@@ -777,48 +777,27 @@ typing:</p>
 <code>File</code>–<code>Save</code> and giving it a name like
 “session_1”. The script file should show up in the folder that is
 designated as the working directory with the file extension “.R”</p>
+<p>In a couple of modules, we will tackle a more elegant way to set up
+your working directory, using what is called <strong>Rstudio
+Projects.</strong></p>
 <hr />
 </div>
-<div id="organizing-your-folders-and-setting-up-an-r-studio-project"
+<div id="quitting-rstudiodont-save-your-workspace-image"
 class="section level2">
-<h2>1.8 Organizing your folders and setting up an R Studio Project</h2>
-<p>As explained above, the Working Directory defines where R will look
-for files, or where it will save files that you generate. R uses path
-names to arrange these files (as do all programming languages). But this
-can get cumbersome because your path names are defined relative to the
-entire organization of your computer. <strong><em>Wouldn’t it be more
-convenient if you didn’t have to type out path names for files all the
-time?</em></strong></p>
-<p>That’s where file organization comes in. And RStudio Project makes it
-easier for you to do that.</p>
-<p>Here is what I recommend for every project you start:</p>
-<ol style="list-style-type: decimal">
-<li>Create a folder that will be your main “project folder”.</li>
-</ol>
-<ul>
-<li>Try this out be creating a “BIOS 967” Folder somewhere in your
-computer.</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li><p>Next, in R Studio, click on “File” &gt; “New Project”</p></li>
-<li><p>Click on “Existing Directory”, click “Browse” and select the
-“BIOS 967” Folder you created, then click “Create Project”</p></li>
-<li><p>Now, you will see that there is a new “BIOS967.rproj” file in
-your folder.</p></li>
-<li><p>Open that .rproj file. This will open up a new RStudio
-window.</p></li>
-<li><p>Run the command <code>getwd()</code> in your console. This should
-now give you the path to the folder.</p></li>
-<li><p>Now, whenever you create any file within this R Project, the
-files will automatically go into this folder. Also, if you want to
-import any files, you can just put in the file name instead of the whole
-path.</p></li>
-</ol>
-<ul>
-<li>Try this out by creating a new R Script file, name it something with
-the date on it, and save. It should automatically go into this
-folder.</li>
-</ul>
+<h2>8. Quitting Rstudio–don’t save your ‘workspace image’</h2>
+<p>After you’ve saved your R script, let’s try quitting R.</p>
+<p>You will be asked if you want to save the ‘workspace image’.</p>
+<p><img src="images/QuitR.png" width="20%" /></p>
+<div id="click-dont-save." class="section level4">
+<h4>Click “Don’t Save”.</h4>
+<p>Saving the workspace image isn’t terrible–but I find it very
+annoying. What this will do is automatically reload the working
+environment–i.e., everything that you’ve done in the current session–the
+next time you start up Rstudio. But this turns out to be an annoyance a
+lot of the time. For example, it will be super annoying if you are
+switching between projects, then having previously loaded objects that
+you don’t remember. Trust me, you are better off NOT saving the working
+environment.</p>
 <hr />
 <blockquote>
 <p><span style="color:purple"><strong>Quick Review of this
@@ -839,6 +818,7 @@ use the <strong><em>script editor</em></strong> to write and save the
 code script.</p></li>
 </ul>
 </blockquote>
+</div>
 </div>
 
 

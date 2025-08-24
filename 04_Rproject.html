@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Directories, Pathnames, and RStudio Projects</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Directories, Pathnames, and RStudio
+Projects</h1>
+<h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 08/23/25</h4>
+
+</div>
+
+
+<p><br></p>
+<p><strong><em>Note: You can get a lot of this information from Hadley
+Wickham’s “R for Data Science” book, Chapter 8: <a
+href="https://r4ds.had.co.nz/workflow-projects.html">here</a>, and the
+<a href="https://happygitwithr.com/">https://happygitwithr.com/</a>
+tutorials.</em></strong></p>
+<p><br></p>
+<blockquote>
+<p><span style="color:purple"><strong>Do this before you start this
+section!</strong></span></p>
+<ul>
+<li>Click on the following link to download this file: <a
+href="data/SampleData.csv">SampleData.csv</a></li>
+<li>Save this file somewhere on your computer where you can find
+it.</li>
+</ul>
+</blockquote>
+<div id="what-we-are-talking-about-here." class="section level2">
+<h2>1. What we are talking about here.</h2>
+<p>This module is focused on organizing a workflow, which often involves
+importing data, generating (and saving) graphics, writing new data
+outputs, etc. To do all of this, we need to be able to talk to the
+computer about <strong>where to find files and where to put
+files</strong>. This seems like a basic thing, but it is often the
+biggest first hurdle in learning computer programming. The computer
+can’t think like you and intuit where the proper file might be, or where
+it should put it–it needs to be told explicitly.</p>
+<div id="some-terminology" class="section level4">
+<h4>Some terminology</h4>
+<ul>
+<li><p><strong>directory:</strong> Essentially, this is a folder on your
+computer.</p></li>
+<li><p><strong>working directory:</strong> This is the directory
+(folder) that computer treats as the default place to look for files, or
+to write (save) output files.</p></li>
+<li><p><strong>pathname:</strong> A string of directory and file names
+that specifies exactly where on your computer the particular file is
+located.</p></li>
+<li><p><strong>absolute path:</strong> This is a string that specifies
+where a particular file is on your computer, starting from the root
+directory of your computer.</p></li>
+<li><p><strong>relative path:</strong> This is a string that specifies
+where a particular file is <em>relative to your working directory</em>
+(i.e., instead of the root of your computer).</p></li>
+</ul>
+</div>
+<div id="intro-to-navigating-your-directories" class="section level3">
+<h3>1.1 Intro to navigating your directories</h3>
+<p>You can figure out what your current working directory is using
+<code>getwd()</code>:</p>
+<pre class="r"><code>getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/dshizuka2/Documents/GitHub/RCourse&quot;</code></pre>
+<p>You can get the whole list of folders and files that is in your
+working directory using <code>list.files()</code>:</p>
+<pre class="r"><code>list.files()</code></pre>
+<pre><code>##  [1] &quot;_config.yml&quot;         &quot;_put_away&quot;           &quot;_site.yml&quot;          
+##  [4] &quot;01_Intro.html&quot;       &quot;01_Intro.Rmd&quot;        &quot;02_ObjectTypes.html&quot;
+##  [7] &quot;02_ObjectTypes.Rmd&quot;  &quot;03_Data.html&quot;        &quot;03_Data.Rmd&quot;        
+## [10] &quot;03_Workflow.html&quot;    &quot;03_Workflow.Rmd&quot;     &quot;04_Rproject.html&quot;   
+## [13] &quot;04_Rproject.Rmd&quot;     &quot;05_GitHub.Rmd&quot;       &quot;assignments&quot;        
+## [16] &quot;data&quot;                &quot;images&quot;              &quot;index.html&quot;         
+## [19] &quot;index.Rmd&quot;           &quot;modules.html&quot;        &quot;modules.Rmd&quot;        
+## [22] &quot;pages&quot;               &quot;pdfs&quot;                &quot;RCourse.Rproj&quot;      
+## [25] &quot;site_libs&quot;           &quot;style.css&quot;           &quot;syllabus.html&quot;      
+## [28] &quot;syllabus.Rmd&quot;</code></pre>
+<p>You can look inside a specific folder within your directory by
+specifying the file within the <code>list.files()</code> function. For
+example, to look in the “data” folder within my current working
+directory:</p>
+<pre class="r"><code>list.files(&quot;data&quot;)</code></pre>
+<pre><code>##  [1] &quot;all.R1.Rdat&quot;                   &quot;Assignment1_example.zip&quot;      
+##  [3] &quot;Assignment2_example.zip&quot;       &quot;boloria.csv&quot;                  
+##  [5] &quot;colias.csv&quot;                    &quot;coot_example&quot;                 
+##  [7] &quot;coot_example.zip&quot;              &quot;EggMeasurements_example.csv&quot;  
+##  [9] &quot;EggMeasurements2006_clean.csv&quot; &quot;Flack et al_Biology Letters&quot;  
+## [11] &quot;iris.csv&quot;                      &quot;multiple_exposure.csv&quot;        
+## [13] &quot;presidential.csv&quot;              &quot;readme.txt&quot;                   
+## [15] &quot;SampleData_w_errors.csv&quot;       &quot;SampleData.csv&quot;               
+## [17] &quot;sex_chromo.csv&quot;                &quot;single_exposure.csv&quot;</code></pre>
+</div>
+</div>
+<div
+id="navigating-folders-and-files-using-absolute-pathnames-to-read-a-file-but-never-do-this-again"
+class="section level2">
+<h2>2. Navigating folders and files using absolute pathnames to read a
+file (but never do this again!)</h2>
+<p>As explained in the previous module, the Working Directory defines
+where R will look for files, or where it will save files that you
+generate. R uses pathnames to arrange these files (as do all programming
+languages). These are sometimes called “absolute paths”. Once you
+understand how path names work, it can be really handy to be able to
+pull data in and out from wherever on your computer. However, this can
+quickly get cumbersome. Moreover, it makes it hard to port your scripts
+from one computer to another, since pathnames on different computers
+will end up being different.</p>
+<p>For example, if I were to create a new data file and save it as a
+.csv file on the desktop on my own computer (Mac), the path name might
+look like this: <code>/Users/daishizuka/Desktop/data.csv</code></p>
+<p>But if I copy and paste the exact same file and save it on the
+desktop of one of my lab computers (Windows), the path name might look
+like this: <code>C:\Users\ShizukaLab\Desktop\data.csv</code></p>
+<p>This means that if your code script references this dataset, you
+can’t just run the same code to import data on different computers.</p>
+<p>To demonstrate this, let’s try importing the sample data file that
+you downloaded at the top of this page.</p>
+<ul>
+<li><p>Find the file on your computer.</p></li>
+<li><p>If you are on a Mac, Right-click (or Control-click) on the file
+to bring up a menu, then click “Option”. This should give you a menu
+item that says “Copy ‘sample.csv’ as Pathname”. Click on that.</p></li>
+<li><p>If you are on Windows, Right-Click on the file and choose
+“Properties”. In the Properties window, you will see the pathname under
+“Location”. Copy the pathname.</p></li>
+<li><p>Now, run this code to read in the data file and look at it in R.
+Here, you are going to assign the data to an object called “dat”. Note
+that inside the <code>read.csv()</code> function, the pathname has to be
+in quotes. You have to use the pathname for the file ON YOUR
+COMPUTER.</p></li>
+</ul>
+<pre class="r"><code>#For my computer, it would be this. Remember to replace the pathname with how it appears on your computer.
+dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre>
+<p>Now let’s look at the data, simply by running <code>dat</code></p>
+<pre class="r"><code>dat</code></pre>
+<pre><code>##    Indiv.ID    sex      age size weight
+## 1     20-01   male    adult 29.5   66.5
+## 2     20-02   male juvenile 28.0   58.5
+## 3     20-03 female    adult 26.0   57.0
+## 4     20-04 female    adult 25.0   55.5
+## 5     20-05 female juvenile 25.0   62.0
+## 6     20-06   male juvenile 28.0   61.0
+## 7     20-07 female    adult 26.0   58.0
+## 8     20-08   male    adult 28.5   65.0
+## 9     20-09   male juvenile 27.5   60.0
+## 10    20-10 female juvenile 26.0   59.0
+## 11    20-11   male    adult 25.5   62.0
+## 12    20-12 female    adult 27.0   59.0
+## 13    20-13 female    adult 26.5   60.0</code></pre>
+<p>Now, this might seem like a fine way to read your data file if you
+plan to do all of your analyses on your own computer, and you know where
+the file will always be on your computer. HOWEVER, this is a major
+hindrance to collaboration. Also, it is a major hindrance to me teaching
+this class, as I can’t easily try out your code to help you
+troubleshoot.</p>
+<p>That’s where RStudio Projects come in…</p>
+</div>
+<div id="using-rstudio-projects-and-organizing-your-files."
+class="section level2">
+<h2>3. Using Rstudio Projects and organizing your files.</h2>
+<p><img src="images/Rstudiologo.png" /></p>
+<p>Rstudio projects facilitate a important “best practice” for
+developing code to facilitate your research, which is to make sure that
+<strong><em>for each project, create one folder that contains all of
+your data, scripts, outputs (e.g., plots) and other
+assets.</em></strong></p>
+<p>Additionally, I highly recommend that this “project directory” folder
+includes a subfolder called “data” that contain all of the data files,
+and “figures” (or some other name) folder that will contain all of the
+output plots, etc.</p>
+<p>Setting up a project directory in this way allows you to keep
+everything organized and up to date, and it also helps with
+collaborations or sharing code, because it is easy to follow where
+things are. It is also nice for your “future self”–if you come back to a
+project after some time, it is easy to pick up where you left off
+without wondering where you left all of the relevant files.</p>
+<p>Finally, the more important reason to set up an Rstudio project
+folder is that it will allow anyone to run the code you are developing
+in this folder because you all of your pathnames will be “relative” to
+the parent directory. By using <em>relative path</em> names in your
+code, it becomes much more reproducible and enables collaboration.</p>
+<div id="setting-up-a-new-rstudio-project-folder"
+class="section level3">
+<h3>2.1. Setting up a new Rstudio project folder</h3>
+<p>Here is what I recommend for every project you start:</p>
+<ol style="list-style-type: decimal">
+<li>Create a folder that will be your main “project folder”.</li>
+</ol>
+<p><em>Try this out be creating a “trial” Folder somewhere in your
+computer.</em></p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Next, in R Studio, click on “File” &gt; “New Project”</p></li>
+<li><p>Click on “Existing Directory”, click “Browse” and select the
+“trial” Folder you created, then click “Create Project”</p></li>
+<li><p>Now, you will see that there is a new “trial.rproj” file in your
+folder.</p></li>
+<li><p>Open that .rproj file. This will open up a new RStudio
+window.</p></li>
+</ol>
+<p>Now, whenever you create any file within this R Project, the files
+will automatically go into this folder. Also, if you want to import any
+files, you can just put in the file name instead of the whole path.</p>
+<p>Let’s try this out:</p>
+<ul>
+<li><p>Go find the “SampleData.csv” file that you downloaded earlier and
+drop it into a subfolder called “data” in your “trial” project folder.
+<img src="images/screen_trial.png" /></p></li>
+<li><p>Now click on the “refresh” button <img
+src="../images/Rstudio_refresh.png" /> on the far right side of your
+“Files” window on the bottom-right part of your Rstudio window</p></li>
+</ul>
+<p>You should now see that there is a “data” folder in your project
+directory, and that “SampleData.csv” is in that folder.</p>
+<p>Now, you can use <code>read.csv()</code> again to read your file. But
+this time, you only need a <em>relative pathname</em>–that is, you only
+need to put in <code>"data/SampleData.csv"</code> to tell R to look for
+“SampleData.csv” inside the “data” folder, instead of the whole pathname
+on your computer.</p>
+<p>Let’s call this version of the data <code>dat2</code></p>
+<pre class="r"><code>dat2=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
+<pre class="r"><code>dat2</code></pre>
+<pre><code>##    Indiv.ID    sex      age size weight
+## 1     20-01   male    adult 29.5   66.5
+## 2     20-02   male juvenile 28.0   58.5
+## 3     20-03 female    adult 26.0   57.0
+## 4     20-04 female    adult 25.0   55.5
+## 5     20-05 female juvenile 25.0   62.0
+## 6     20-06   male juvenile 28.0   61.0
+## 7     20-07 female    adult 26.0   58.0
+## 8     20-08   male    adult 28.5   65.0
+## 9     20-09   male juvenile 27.5   60.0
+## 10    20-10 female juvenile 26.0   59.0
+## 11    20-11   male    adult 25.5   62.0
+## 12    20-12 female    adult 27.0   59.0
+## 13    20-13 female    adult 26.5   60.0</code></pre>
+<p>The beauty of this system is that, as long as the project directory
+structure is the same the computer, you can run this exact same code to
+import the data on any computer. In turn, that means that this entire
+project and code are portable in multiple ways. You could:</p>
+<ul>
+<li><p>send a collaborator your whole project directory, or</p></li>
+<li><p>copy the project directory on a thumbdrive, or</p></li>
+<li><p>sync the project directory on DropBox, OneDrive, or other cloud
+storage that syncs with multiple computers…</p></li>
+</ul>
+<p>and you should be able to run the code as-is.</p>
+<p><em>However, the most elegant way to have your project run on
+multiple computers across multiple collaborators is to use a version
+control system, such as GitHub…</em></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

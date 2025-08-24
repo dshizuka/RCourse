@@ -30,7 +30,7 @@ This will be a journey, but it will be a journey that is well worth it!
 On a more practical note, becoming good at programming as part of science is a marketable skill. You can become a data scientist that actually understands data, their pitfalls and their potential. ***We can do this!*** 
 
 
-## 1.1 What is R?
+### What is R?
 R is a language that allows you to do data manipulation, conduct any data analysis you can think of, produce beautiful graphs, put together and run simple models, simulations, randomizations... you name it.  
 
 #### Pros:  
@@ -49,7 +49,7 @@ R is a language that allows you to do data manipulation, conduct any data analys
 
 ***
 
-## 1.2 Working with RStudio 
+## 2. Working with RStudio 
 
 In this class, we will be using an open-source software called *RStudio*. *RStudio* is an IDE (Integrated Development Environment)--a fancy word for software that organizes windows and provides a layout that helps make programming easier. Strictly speaking, you don't really need *RStudio* or any other IDE. If you prefer, you can simply open the R program and use the R console and editor as separate windows. However, there are some benefits to using *RStudio*.  
 
@@ -72,7 +72,7 @@ You can set the panels up however you like by going to `[Preferences]`--`[Pane L
 
 
 ***
-## 1.3 Running commands in the Console  
+## 3. Running commands in the Console  
 
 
 
@@ -117,7 +117,7 @@ Objects are the building blocks of tasks you will perform in R, and thus assigni
 
 
 ***
-## 1.4 Operators  
+## 4. Operators  
 **Operators** are symbols that have special meaning in R. These are critical to know.  
 
 
@@ -173,7 +173,7 @@ a != c # a is not the same as c?
 
 ***
 
-## 1.5 Functions and help files
+## 5. Functions and help files
 *Functions* are commands that you use to manipulate objects in R. Functions followed by `()`, and each function comes with specific arguments or syntax that goes inside the parentheses. Function names are like the verbs that you have to learn to master this language.
 
 For example, the function `rep(x,n)`  is a function that says, “repeat the value x n times”. Try it:
@@ -223,7 +223,7 @@ seq(1,10,length.out=19)
 The ability to see the inner workings of each function and specify some aspects of how functions work is one of the strengths of R. Hopefully you will come to appreciate that this flexibility and detail as you learn how to work with a programming language. 
 
   ***
-## 1.6 Using the Script Editor
+## 6. Using the Script Editor
 You can type commands directly into the R Console and hit `[return]` to run the command (as we have done above). However, it is best practice to type your code into the Editor, and then hit `[command]+[return]` while the cursors is on the line of the command you want to run. There are several advantages to running your commands from the Editor rather than typing directly into the Console:  
 
 1. **You can run multiple lines of command at once** by highlighting the entire set of codes you want to run and hitting `[command]+[return]`.
@@ -246,7 +246,7 @@ a/b #The answer should be 2.5
 See what happens if you remove the hashtags and run the script again. 
 
 ***
-## 1.7 Working Directory and Saving Your Script
+## 7. Working Directory and Saving Your Script
 Now that we have built a simple script, we should save it. But to save a script, you need to be familiar with the **working directory**. The working directory is the location in your computer where R will know to go save things, or to look for things if you ask it.  
 
 The *default working directory* can be set by going to `[Preferences]`. It will be the first item at the top of the preferences window. You can set the default working directory by clicking `Browse`. Go ahead and set the working directory to a folder for this course.   
@@ -273,33 +273,23 @@ getwd()
 
 Now, save the script you have written so far by going to `File`--`Save` and giving it a name like "session_1". The script file should show up in the folder that is designated as the working directory with the file extension ".R"  
 
+In a couple of modules, we will tackle a more elegant way to set up your working directory, using what is called **Rstudio Projects.**
+
 ***
 
-## 1.8 Organizing your folders and setting up an R Studio Project
+## 8. Quitting Rstudio--don't save your 'workspace image'
 
-As explained above, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses path names to arrange these files (as do all programming languages). But this can get cumbersome because your path names are defined relative to the entire organization of your computer. ***Wouldn't it be more convenient if you didn't have to type out path names for files all the time?***
+After you've saved your R script, let's try quitting R. 
 
-That's where file organization comes in. And RStudio Project makes it easier for you to do that. 
+You will be asked if you want to save the 'workspace image'. 
 
-Here is what I recommend for every project you start: 
+```{r, echo=F, out.width="20%"}
+knitr::include_graphics("images/QuitR.png")
+```
 
-1. Create a folder that will be your main "project folder".
-  
-* Try this out be creating a "BIOS 967" Folder somewhere in your computer.
+#### Click "Don't Save". 
 
-2. Next, in R Studio, click on "File" > "New Project" 
-
-3. Click on "Existing Directory", click "Browse" and select the "BIOS 967" Folder you created, then click "Create Project"
-
-4. Now, you will see that there is a new "BIOS967.rproj" file in your folder.
-
-5. Open that .rproj file. This will open up a new RStudio window. 
-
-6. Run the command `getwd()` in your console. This should now give you the path to the folder. 
-
-7. Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
-
-* Try this out by creating a new R Script file, name it something with the date on it, and save. It should automatically go into this folder. 
+Saving the workspace image isn't terrible--but I find it very annoying. What this will do is automatically reload the working environment--i.e., everything that you've done in the current session--the next time you start up Rstudio. But this turns out to be an annoyance a lot of the time. For example, it will be super annoying if you are switching between projects, then having previously loaded objects that you don't remember. Trust me, you are better off NOT saving the working environment. 
 
 ***
 

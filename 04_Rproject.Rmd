@@ -57,6 +57,7 @@ You can get the whole list of folders and files that is in your working director
 ```{r}
 list.files()
 ```
+
 You can look inside a specific folder within your directory by specifying the file within the `list.files()` function. For example, to look in the "data" folder within my current working directory:
 
 ```{r}
@@ -104,6 +105,7 @@ Now, this might seem like a fine way to read your data file if you plan to do al
 That's where RStudio Projects come in...
 
 ## 3. Using Rstudio Projects and organizing your files. 
+
 
 ![](images/Rstudiologo.png)
 
