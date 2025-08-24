@@ -500,6 +500,16 @@ cloned the repository. If you can’t find it, you can search for
 “RCourse_2025” on your computer. You should see all a bunch of files and
 folders.</p>
 </div>
+<div id="what-just-happened" class="section level3">
+<h3>What just happened?</h3>
+<p>A repository is a collection of folders and files–i.e., a remote
+directory–that is stored remotely by GitHub. When you clone the
+repository, what you have done is create a local directory–a version of
+this repository on your computer. This allows you to make changes–e.g.,
+create, edit, delete codes and files on your computer. The rest of the
+work then is to deliberately decide to keep or discard these changes and
+keep it all in sync with the remote directory.</p>
+</div>
 </div>
 <div
 id="make-a-repository-for-your-independent-project-on-on-github-and-clone-it-to-your-computer."
@@ -514,9 +524,7 @@ clone it to your computer.</h2>
 <li><p>Repository name: <code>BIOS967_2025_YourLastName</code>
 <strong><em>please follow this template for naming your repository–this
 allows me to easily find your repo on my end</em></strong></p></li>
-<li><p>Preferably, select “Public”. <em>But if you select “Private”, you
-will then have to add me to the repository once you’ve created
-it!</em></p></li>
+<li><p>Select “Public” or “Private”–your choice.</p></li>
 <li><p>Initialize this repository with: Check Add a README
 file.</p></li>
 </ul></li>
@@ -569,11 +577,6 @@ on your repository. <strong>Get used to pulling from your repository
 when you first open your project, even if you haven’t made any changes
 since last time because I may have suggested changes for
 you!</strong></p></li>
-<li><p><strong>Stage:</strong> Whenever you make any changes on any
-files in your project directory, Git will “stage” those changes. This
-just means that the system recognizes that you’ve made those changes
-(e.g., add file, delete file, edit file) and it is ready for you to
-commit to those changes.</p></li>
 <li><p><strong>Commit:</strong> When you are done making a set of
 changes and you are ready to upload those changes to GitHub, you first
 need to <strong>commit</strong> those changes. When you do this, you
@@ -584,13 +587,19 @@ your change history, and it can be a nice way for you (and your
 collaborators) to understand what changes you have made.</p></li>
 <li><p><strong>Push:</strong> Once you have committed your changes, you
 are ready to <strong>push</strong> those changes onto your remote
-repository–i.e., the copy that is stored in GitHub.</p></li>
+repository–i.e., the copy that is stored in GitHub. <strong>Remember to
+always push your changes after you’re done with a session of
+work</strong></p></li>
 </ul>
 <div id="pull-from-the-repository" class="section level4">
 <h4>3.3.1. Pull from the repository</h4>
-<p>First, click “Pull” in the Git window. This will pull any changes
-that are stored in the remote directory (i.e., on GitHub) that you don’t
-already have on your local version.</p>
+<p>First, click “Fetch Origin” in the top navigation panel on the GitHub
+Desktop window. This will check to see if there are any changes on the
+remote directory. If there are any changes, it will then show a “Pull”
+option.</p>
+<p>Clicking this will pull any changes that are stored in the remote
+directory (i.e., on GitHub) that you don’t already have on your local
+version.</p>
 <p>It will most likely say “You are already up to date”. But again, get
 in the habit of doing this when you open your project.</p>
 </div>
@@ -602,11 +611,11 @@ editing the readme file.</p>
 readme.txt file.</p>
 <p>Add some text–e.g., “Here is the first change in my repository”.</p>
 <p>Save the readme.txt file.</p>
-<p>Now go to the Git window (top right window). You should see the
-change reflected in the window.</p>
-</div>
-<div id="commit-changes" class="section level4">
-<h4>3.3.3. Commit changes</h4>
+<p>Now go to GitHub Deskop window. You should see the change reflected
+in the left panel.</p>
+<pre class="r"><code>knitr::include_graphics(&quot;images/githubdesktop_example.png&quot;)</code></pre>
+<p><img src="images/githubdesktop_example.png" /><!-- --> #### 3.3.3.
+Commit changes</p>
 <p>Click on “Commit” in the Git window</p>
 <p>A new window will pop out. Check all the boxes that represent each
 change you’ve made.</p>

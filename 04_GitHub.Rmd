@@ -132,6 +132,10 @@ Check "For my own purposes" and click "Continue".
 
 Now, navigate to the "Local Path" folder that was indicated when you cloned the repository. If you can't find it, you can search for "RCourse_2025" on your computer. You should see all a bunch of files and folders.
 
+### What just happened?
+
+A repository is a collection of folders and files--i.e., a remote directory--that is stored remotely by GitHub. When you clone the repository, what you have done is create a local directory--a version of this repository on your computer. This allows you to make changes--e.g., create, edit, delete codes and files on your computer. The rest of the work then is to deliberately decide to keep or discard these changes and keep it all in sync with the remote directory.
+
 
 ## 3. Make a repository for your independent project on on GitHub and clone it to your computer.
 
@@ -143,7 +147,7 @@ Now, navigate to the "Local Path" folder that was indicated when you cloned the 
 
   * Repository name: `BIOS967_2025_YourLastName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
   
-  * Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
+  * Select "Public" or "Private"--your choice.
   
   * Initialize this repository with: Check Add a README file.
 
@@ -192,15 +196,15 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 
 * **Pull:** When you open your project on your computer, I highly recommend that you always first click "Pull". This takes the version of your repository that is stored on GitHub remotely and pulls it to your local folder. Thus, you have synced your computer with whatever changes that other people (e.g., your instructor) has made on your repository. **Get used to pulling from your repository when you first open your project, even if you haven't made any changes since last time because I may have suggested changes for you!** 
 
-* **Stage:** Whenever you make any changes on any files in your project directory, Git will "stage" those changes. This just means that the system recognizes that you've made those changes (e.g., add file, delete file, edit file) and it is ready for you to commit to those changes. 
-
 * **Commit:** When you are done making a set of changes and you are ready to upload those changes to GitHub, you first need to **commit** those changes. When you do this, you will write a "commit message"--i.e., a brief description of the changes that you have made. Git will make you do this--it won't let you push those changes to GitHub unless you've written something. This will go in your change history, and it can be a nice way for you (and your collaborators) to understand what changes you have made. 
 
-* **Push:** Once you have committed your changes, you are ready to **push** those changes onto your remote repository--i.e., the copy that is stored in GitHub. 
+* **Push:** Once you have committed your changes, you are ready to **push** those changes onto your remote repository--i.e., the copy that is stored in GitHub. **Remember to always push your changes after you're done with a session of work**
 
 #### 3.3.1. Pull from the repository
 
-First, click "Pull" in the Git window. This will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
+First, click "Fetch Origin" in the top navigation panel on the GitHub Desktop window. This will check to see if there are any changes on the remote directory. If there are any changes, it will then show a "Pull" option. 
+
+Clicking this will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
 
 It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
 
@@ -214,17 +218,20 @@ Add some text--e.g., "Here is the first change in my repository".
 
 Save the readme.txt file. 
 
-Now go to the Git window (top right window). You should see the change reflected in the window. 
+Now go to GitHub Deskop window. You should see the list of files that have changed in the left panel. The panel on the right shows you the specific changes that have been made in the file that is selected.
+
+
+```{r, echo=F, out.width="75%"}
+knitr::include_graphics("images/githubdesktop_example.png")
+```
 
 #### 3.3.3. Commit changes
 
-Click on "Commit" in the Git window
+You can see that, below the list of files that have changed, there is a place to write the summary of changes and a textbox for detailed description. This is where you document the changes that have been made. Only the summary is required, and the summary can be something pretty simple when the changes are routine or self explanatory (e.g., "added new modules"). But in some cases, you may want to note some details about what has been changed. This may become more important when you are collaborating with others on developing code or making fine changes in analyses, and this is the main channel of communication. For now, it's ok to keep it simple. 
 
-A new window will pop out. Check all the boxes that represent each change you've made. 
+Once you write something in the summary section, the blue button that says "Commit XX files to XX" will be available to click. 
 
-Check the "Staged" box. Then, write a commit message. Something like, "add a line to readme file". 
-
-Press "Commit". 
+Press "Commit" when you are done documenting the changes. 
 
 #### 3.3.4. Push changes to GitHub. 
 
