@@ -134,9 +134,7 @@ The use of AI for generating code for your project will not be prohibited. Howev
 ### <u>Before the Course</u>  
 Please do the following things before we meet for the first class.   
 
-1. **Download and Install *R* and *RStudio Desktop* **  
+**Download and Install *R* and *RStudio Desktop* **  
 Go to [https://posit.co/download/rstudio-desktop/](https://posit.co/download/rstudio-desktop/) and follow directions for downloading and installing R and RStudio If you already have R, upgrade to the latest version. It will make things easier to have everyone on the same version.
 
-2. **Get a GitHub account**:
-Go to [https://github.com/](https://github.com/) and create an account. Send me an email with your account name and email so I can add you to the class "GitHub Organization".
 
