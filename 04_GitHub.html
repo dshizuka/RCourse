@@ -358,10 +358,12 @@ tutorials.</em></strong></p>
 assume that you have already learned how to setup an RStudio
 Project.</strong></span></p>
 </blockquote>
-<div id="version-control-and-collaboration-using-git-and-github"
+<p><img src="images/github-mark.png" style="width:10.0%" /></p>
+<div
+id="intro-to-version-control-and-collaboration-using-git-and-github"
 class="section level2">
-<h2>Version control and collaboration using Git and GitHub <img
-src="images/github-mark.png" style="width:10.0%" /></h2>
+<h2>1. Intro to Version control and collaboration using Git and
+GitHub</h2>
 <p><strong><em>Version control</em></strong> is a system by which you
 can keep track of changes to collaborative projects. One common example
 is Google Doc, which is an online document that multiple people can
@@ -398,10 +400,9 @@ techniques.</p></li>
 </ul>
 <p><br></p>
 </div>
-</div>
 <div id="a-note-on-how-we-are-doing-this-in-this-class"
-class="section level2">
-<h2>A note on how we are doing this in this class:</h2>
+class="section level3">
+<h3>A note on how we are doing this in this class:</h3>
 <p>There are multiple ways to integrate Rstudio and GitHub. In fact, it
 is possible to have Rstudio talk to GitHub directly. <strong>However, I
 much prefer using a Git Client.</strong> This is a personal preference–I
@@ -413,8 +414,12 @@ Rstudio so you can make a choice.</p>
 <p><em>Here, we are following the directions on <a
 href="https://happygitwithr.com/">Chapter 6-13 of the Happy git with R
 website, here</a></em></p>
-<div id="install-git" class="section level4">
-<h4>3.2.1. Install Git</h4>
+</div>
+</div>
+<div id="lets-start-using-github" class="section level2">
+<h2>2. Let’s start using GitHub!</h2>
+<div id="install-git" class="section level3">
+<h3>2.1 Install Git</h3>
 <p>Here, I highly recommend following the directions on Chapter 6 of
 Happy Git with R: <a href="https://happygitwithr.com/install-git"
 class="uri">https://happygitwithr.com/install-git</a></p>
@@ -429,8 +434,8 @@ href="https://gitforwindows.org/">Git for Windows</a></p></li>
 </ul>
 <p><br></p>
 </div>
-<div id="create-a-github-account" class="section level4">
-<h4>3.2.2. Create a GitHub account</h4>
+<div id="create-a-github-account" class="section level3">
+<h3>2.2. Create a GitHub account</h3>
 <p>If you haven’t already, go to <a
 href="https://github.com/">github.com</a> and sign up for an
 account.</p>
@@ -439,8 +444,8 @@ authentication methods. Make sure you can log in and out of
 github!!</strong></p>
 <p><br></p>
 </div>
-<div id="install-a-git-client" class="section level4">
-<h4>3.2.3 Install a Git Client</h4>
+<div id="install-a-git-client" class="section level3">
+<h3>2.3 Install a Git Client</h3>
 <p>There are many Git clients out there. Personally, I just use <a
 href="https://desktop.github.com/">GitHub Desktop</a> <img
 src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
@@ -448,21 +453,104 @@ src="images/Github-desktop-logo.png" style="width:10.0%" /></p>
 the processes of committing, pushing, pulling and other tasks. It also
 allows you to see the history of changes to your repository. For more
 info on Git clients, I recommend <a
-href="https://happygitwithr.com/git-client">this page</a></p>
+href="https://happygitwithr.com/git-client">this page</a>.</p>
 <p>To install GitHub Desktop, go to <a
 href="https://desktop.github.com/"
 class="uri">https://desktop.github.com/</a> and follow their
 directions.</p>
 </div>
-<div id="working-with-github-pull-stage-commit-push"
+<div id="clone-a-repository-using-the-github-desktop"
 class="section level3">
-<h3>3.3. Working with GitHub: Pull, Stage, Commit, Push</h3>
+<h3>2.4. Clone a repository using the GitHub Desktop</h3>
+<p>Now, I am going to have you <strong><em>clone</em></strong> a
+repository. This means that you will download all contents of a project
+on GitHub to your computer.</p>
+<p>*Note that I am going to have you clone a “forked” version of this
+course website. That is, this is a copy of the project, rather than the
+“master” version of this project. This prevents you from accidentally
+screwing up the course website–so you can rest easy and play around. If
+something does go wrong, I can easily revert the repository from the
+master version. Also, I can update the repository as needed when I make
+changes.</p>
+<p>Go to <a
+href="https://github.com/BIOS967/RCourse_2025.git">https://github.com/BIOS967/RCourse_2025.git</a>.</p>
+<p>It will look like this.</p>
+<p><img src="images/BIOS967_RCourse_2025.png" width="75%" style="display: block; margin: auto;" /></p>
+<p>Now click on the green “clone” button circled in red:</p>
+<p><img src="images/Clone.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Now, click on “Open with GitHub Desktop”, circled in red above.</p>
+<p>It will then ask you if you want to open the GitHub Desktop app.
+Click “Open GitHub Desktop App”.</p>
+<p>Then, the application will open, and you will get this window:</p>
+<p><img src="images/Clone_part2.png" width="50%" style="display: block; margin: auto;" />
+The “Repository URL” will show you which GitHub repository you are
+cloning.</p>
+<p>The “Local Path” shows you where the <strong>local version</strong>
+of the repository will be stored on your computer. On Mac, this will
+typically create a “GitHub” folder within the “Documents” folder.</p>
+<p>I recommend that you use the default location. Also, I recommend that
+you keep all cloned GitHub repository that you might clone in this new
+“GitHub” folder.</p>
+<p>Next, since this is a “forked” repository, you will see this
+window:</p>
+<p><img src="images/forked_repo.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Check “For my own purposes” and click “Continue”.</p>
+<p>Now, navigate to the “Local Path” folder that was indicated when you
+cloned the repository. If you can’t find it, you can search for
+“RCourse_2025” on your computer. You should see all a bunch of files and
+folders.</p>
+</div>
+</div>
+<div
+id="make-a-repository-for-your-independent-project-on-on-github-and-clone-it-to-your-computer."
+class="section level2">
+<h2>3. Make a repository for your independent project on on GitHub and
+clone it to your computer.</h2>
+<ul>
+<li><p>Log in to your GitHub account</p></li>
+<li><p>click on “Repositories” on the top ribbon</p></li>
+<li><p>Then click the big green “New repository” button</p>
+<ul>
+<li><p>Repository name: <code>BIOS967_2025_YourLastName</code>
+<strong><em>please follow this template for naming your repository–this
+allows me to easily find your repo on my end</em></strong></p></li>
+<li><p>Preferably, select “Public”. <em>But if you select “Private”, you
+will then have to add me to the repository once you’ve created
+it!</em></p></li>
+<li><p>Initialize this repository with: Check Add a README
+file.</p></li>
+</ul></li>
+<li><p>Click on “Create Repository”</p></li>
+<li><p>Now, clone the repository on your computer following the
+directions in section 3.2.5 above.</p></li>
+<li><p>Finally, add me as a collaborator on your project.</p>
+<ul>
+<li>First, go to your repository and click on “Settings”</li>
+</ul></li>
+</ul>
+<p><img src="images/GitHub_1.png" width="75%" /></p>
+<p><br></p>
+<ul>
+<li>Then, click on “Collaborators” on the navigation panel on the left
+side</li>
+</ul>
+<p><img src="images/GitHub_2.png" width="75%" /></p>
+<p><br></p>
+<ul>
+<li>Click on “Add People” and add “dshizuka”.</li>
+</ul>
+<p><img src="images/GitHub_3.png" width="100%" /></p>
+<p><br></p>
+<p>Once you’ve created and cloned your repository, I suggest you make a
+“data” subfolder and “scripts” subfolder so that you can get organized
+with your files from the beginning!</p>
+<hr />
+</div>
+<div id="working-with-github-pull-stage-commit-push"
+class="section level2">
+<h2>4. Working with GitHub: Pull, Stage, Commit, Push</h2>
 <p>Once you have finished the set up process, you are ready to start
 your workflow!</p>
-<p>First, notice that you should now have a tab called “Git” in the
-“Environment” window in RStudio (typically upper-right). If you click on
-that tab, it’ll look like this:</p>
-<p><img src="images/gitwindow.png" style="width:100.0%" /></p>
 <p>The Git workflow may feel a bit painful for you in the beginning
 because it seems a lot more manual and tedious than automated syncing
 that you may have gotten used to with Dropbox, Google Drive, etc. But
@@ -503,7 +591,6 @@ repository–i.e., the copy that is stored in GitHub.</p></li>
 <p>First, click “Pull” in the Git window. This will pull any changes
 that are stored in the remote directory (i.e., on GitHub) that you don’t
 already have on your local version.</p>
-<p><img src="images/gitwindow_pull.png" style="width:50.0%" /></p>
 <p>It will most likely say “You are already up to date”. But again, get
 in the habit of doing this when you open your project.</p>
 </div>
@@ -529,24 +616,6 @@ change you’ve made.</p>
 </div>
 <div id="push-changes-to-github." class="section level4">
 <h4>3.3.4. Push changes to GitHub.</h4>
-<p>Click “Push” to upload the changes to the remote repository on
-GitHub.</p>
-<p><br></p>
-<p><br></p>
-</div>
-<div id="opening-your-repository-in-github-desktop"
-class="section level4">
-<h4>3.5.1. Opening your repository in GitHub Desktop</h4>
-<p>Let’s open a repository on GitHub Desktop. Here, we’ll start by using
-a repository that you’ve already cloned onto your computer. Then, on the
-right-hand side, you will be able to push the commit(s) to GitHub.</p>
-<ul>
-<li><p>Open GitHub Desktop and go to File &gt; Add Local
-Repository.</p></li>
-<li><p>When it asks for the local path, click Choose and find the folder
-for BIOS967_Fall2023 repository that you downloaded earlier (or
-equivalent for the semester you’re in).</p></li>
-</ul>
 </div>
 <div id="using-a-github-desktop-to-pull-commit-and-push."
 class="section level4">
@@ -566,50 +635,6 @@ Desktop apps open to update your codes. Ultimately, you should choose
 the way that makes the most sense to you.</p>
 <p><br></p>
 </div>
-</div>
-</div>
-<div
-id="make-a-repository-for-your-independent-project-on-on-github-and-clone-it-to-your-computer."
-class="section level2">
-<h2>4. Make a repository for your independent project on on GitHub and
-clone it to your computer.</h2>
-<ul>
-<li><p>Log in to your GitHub account</p></li>
-<li><p>click on “Repositories” on the top ribbon</p></li>
-<li><p>Then click the big green “New repository” button</p>
-<ul>
-<li><p>Repository name: <code>BIOS967_YourLastName</code>
-<strong><em>please follow this template for naming your repository–this
-allows me to easily find your repo on my end</em></strong></p></li>
-<li><p>Preferably, select “Public”. <em>But if you select “Private”, you
-will then have to add me to the repository once you’ve created
-it!</em></p></li>
-<li><p>Initialize this repository with: Check Add a README
-file.</p></li>
-</ul></li>
-<li><p>Click on “Create Repository”</p></li>
-<li><p>Now, clone the repository on your computer following the
-directions in section 3.2.5 above.</p></li>
-<li><p>Finally, add me as a collaborator on your project.</p>
-<ul>
-<li>First, go to your repository and click on “Settings”</li>
-</ul></li>
-</ul>
-<p><img src="images/GitHub_1.png" /></p>
-<p><br></p>
-<ul>
-<li>Then, click on “Collaborators” on the navigation panel on the left
-side</li>
-</ul>
-<p><img src="images/GitHub_2.png" /> <br></p>
-<ul>
-<li>Click on “Add People” and add “dshizuka”.</li>
-</ul>
-<p><img src="images/GitHub_3.png" /></p>
-<p><br></p>
-<p>Once you’ve created and cloned your repository, I suggest you make a
-“data” subfolder and “scripts” subfolder so that you can get organized
-with your files from the beginning!</p>
 </div>
 
 

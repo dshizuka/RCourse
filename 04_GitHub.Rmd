@@ -24,8 +24,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ><span style="color:purple">**Note that, for this module, I assume that you have already learned how to setup an RStudio Project.**</span>
 
+![](images/github-mark.png){width=10%}
 
-## Version control and collaboration using Git and GitHub ![](images/github-mark.png){width=10%}
+## 1. Intro to Version control and collaboration using Git and GitHub 
 
 ***Version control*** is a system by which you can keep track of changes to collaborative projects. One common example is Google Doc, which is an online document that multiple people can collaborate on. Importantly, Google Doc automatically saves versions of the document when changes are made, and users can revert back to earlier versions if they want. 
 
@@ -47,14 +48,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br>
 
-## A note on how we are doing this in this class:
+### A note on how we are doing this in this class:
 
 There are multiple ways to integrate Rstudio and GitHub. In fact, it is possible to have Rstudio talk to GitHub directly. **However, I much prefer using a Git Client.** This is a personal preference--I find it much easier to troubleshoot with a Git client like GitHub Desktop rather than Rstudio. So I am going to prefer that you do it this way in this class--mostly so that I can help you troubleshoot if something goes wrong. Below, I will show you both ways to setup your Rstudio so you can make a choice. 
 
 
 *Here, we are following the directions on [Chapter 6-13 of the Happy git with R website, here](https://happygitwithr.com/)*
 
-#### 3.2.1. Install Git
+## 2. Let's start using GitHub!
+
+### 2.1 Install Git
 
 Here, I highly recommend following the directions on Chapter 6 of Happy Git with R: https://happygitwithr.com/install-git
 
@@ -66,7 +69,7 @@ To take from their directions:
 
 <br>
 
-#### 3.2.2. Create a GitHub account
+### 2.2. Create a GitHub account
 
 If you haven't already, go to [github.com](https://github.com/) and sign up for an account.
 
@@ -75,7 +78,7 @@ If you haven't already, go to [github.com](https://github.com/) and sign up for 
 <br>
 
 
-#### 3.2.3 Install a Git Client
+### 2.3 Install a Git Client
 
 There are many Git clients out there. Personally, I just use [GitHub Desktop](https://desktop.github.com/) ![](images/Github-desktop-logo.png){width=10%}
 
@@ -84,18 +87,104 @@ Git Clients provide a graphical user interface (GUI) that facilitates the proces
 
 To install GitHub Desktop, go to https://desktop.github.com/ and follow their directions.
 
-#### 3.2.4. Clone a repository
+### 2.4. Clone a repository using the GitHub Desktop
+
+Now, I am going to have you ***clone*** a repository. This means that you will download all contents of a project on GitHub to your computer. 
+
+*Note that I am going to have you clone a "forked" version of this course website. That is, this is a copy of the project, rather than the "master" version of this project. This prevents you from accidentally screwing up the course website--so you can rest easy and play around. If something does go wrong, I can easily revert the repository from the master version. Also, I can update the repository as needed when I make changes. 
+
+Go to [https://github.com/BIOS967/RCourse_2025.git](https://github.com/BIOS967/RCourse_2025.git).
+
+It will look like this. 
+
+```{r, echo=F, out.width="75%", fig.align="center"}
+knitr::include_graphics("images/BIOS967_RCourse_2025.png")
+```
+
+Now click on the green "clone" button circled in red:
+
+```{r, echo=F, out.width="50%", fig.align="center"}
+knitr::include_graphics("images/Clone.png")
+```
+
+Now, click on "Open with GitHub Desktop", circled in red above. 
+
+It will then ask you if you want to open the GitHub Desktop app. Click "Open GitHub Desktop App".
+
+Then, the application will open, and you will get this window:
+
+```{r, echo=F, out.width="50%", fig.align="center"}
+knitr::include_graphics("images/Clone_part2.png")
+```
+The "Repository URL" will show you which GitHub repository you are cloning. 
+
+The "Local Path" shows you where the **local version** of the repository will be stored on your computer. On Mac, this will typically create a "GitHub" folder within the "Documents" folder. 
+
+I recommend that you use the default location. Also, I recommend that you keep all cloned GitHub repository that you might clone in this new "GitHub" folder. 
+
+Next, since this is a "forked" repository, you will see this window:
+
+```{r, echo=F, out.width="50%", fig.align="center"}
+knitr::include_graphics("images/forked_repo.png")
+```
+
+Check "For my own purposes" and click "Continue".
+
+Now, navigate to the "Local Path" folder that was indicated when you cloned the repository. If you can't find it, you can search for "RCourse_2025" on your computer. You should see all a bunch of files and folders.
 
 
+## 3. Make a repository for your independent project on on GitHub and clone it to your computer.
+
+* Log in to your GitHub account
+
+* click on “Repositories” on the top ribbon
+
+* Then click the big green “New repository” button
+
+  * Repository name: `BIOS967_2025_YourLastName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
+  
+  * Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
+  
+  * Initialize this repository with: Check Add a README file.
+
+* Click on "Create Repository"
+
+* Now, clone the repository on your computer following the directions in section 3.2.5 above. 
+
+* Finally, add me as a collaborator on your project.
+
+  * First, go to your repository and click on "Settings"
+
+```{r, echo=F, out.width="75%"}
+knitr::include_graphics("images/GitHub_1.png")
+```
 
 
-### 3.3. Working with GitHub: Pull, Stage, Commit, Push 
+<br>
+
+  * Then, click on "Collaborators" on the navigation panel on the left side
+
+```{r, echo=F, out.width="75%"}
+knitr::include_graphics("images/GitHub_2.png")
+```
+
+<br>
+
+  * Click on "Add People" and add "dshizuka". 
+  
+```{r, echo=F, out.width="100%"}
+knitr::include_graphics("images/GitHub_3.png")
+```
+
+<br>
+
+Once you've created and cloned your repository, I suggest you make a "data" subfolder and "scripts" subfolder so that you can get organized with your files from the beginning!
+
+***
+
+## 4. Working with GitHub: Pull, Stage, Commit, Push 
 
 Once you have finished the set up process, you are ready to start your workflow!
-
-First, notice that you should now have a tab called "Git" in the "Environment" window in RStudio (typically upper-right). If you click on that tab, it'll look like this:
-
-![](images/gitwindow.png){width=100%}
 
 The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
 
@@ -112,8 +201,6 @@ Here are the 4 main actions that you will take whenever you work with your GitHu
 #### 3.3.1. Pull from the repository
 
 First, click "Pull" in the Git window. This will pull any changes that are stored in the remote directory (i.e., on GitHub) that you don't already have on your local version.
-
-![](images/gitwindow_pull.png){width=50%}
 
 It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
 
@@ -141,23 +228,6 @@ Press "Commit".
 
 #### 3.3.4. Push changes to GitHub. 
 
-Click "Push" to upload the changes to the remote repository on GitHub. 
-
-<br>
-
-
-
-
-
-<br>
-
-#### 3.5.1. Opening your repository in GitHub Desktop 
-
-Let's open a repository on GitHub Desktop. Here, we'll start by using a repository that you've already cloned onto your computer. Then, on the right-hand side, you will be able to push the commit(s) to GitHub. 
-
-* Open GitHub Desktop and go to File > Add Local Repository. 
-
-* When it asks for the local path, click Choose and find the folder for BIOS967_Fall2023 repository that you downloaded earlier (or equivalent for the semester you're in).
 
 
 #### 3.5.2. Using a GitHub Desktop to Pull, Commit and Push.
@@ -170,43 +240,5 @@ If you try it, you might find that you like this interface better than pull-comm
 
 <br>
 
-## 4. Make a repository for your independent project on on GitHub and clone it to your computer.
-
-* Log in to your GitHub account
-
-* click on “Repositories” on the top ribbon
-
-* Then click the big green “New repository” button
-
-  * Repository name: `BIOS967_YourLastName` ***please follow this template for naming your repository--this allows me to easily find your repo on my end***
-  
-  * Preferably, select "Public". *But if you select "Private", you will then have to add me to the repository once you've created it!*
-  
-  * Initialize this repository with: Check Add a README file.
-
-* Click on "Create Repository"
-
-* Now, clone the repository on your computer following the directions in section 3.2.5 above. 
-
-* Finally, add me as a collaborator on your project.
-
-  * First, go to your repository and click on "Settings"
-
-![](images/GitHub_1.png)
-
-<br>
-
-  * Then, click on "Collaborators" on the navigation panel on the left side
-
-![](images/GitHub_2.png)
-<br>
-
-  * Click on "Add People" and add "dshizuka". 
-  
-![](images/GitHub_3.png)
-
-<br>
-
-Once you've created and cloned your repository, I suggest you make a "data" subfolder and "scripts" subfolder so that you can get organized with your files from the beginning!
 
 
