@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+* August 25, 2025: Welcome to BIOS 967 for Fall 2025! The syllabus has just recently been updated. If you looked at the syllabus earlier, take a look again now. 
+
 ---
 
 ## Quick Links:
