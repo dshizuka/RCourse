@@ -1,0 +1,326 @@
+---
+title: "Data Wrangling  with *dplyr* and *tidyr*"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+## Intro to the ['tidyverse'](https://www.tidyverse.org/)
+
+```{r, out.width="10%", echo=F}
+knitr::include_graphics("images/icons/tidyr.png")
+knitr::include_graphics("images/icons/dplyr.png")
+knitr::include_graphics("images/icons/stringr.png")
+knitr::include_graphics("images/icons/ggplot2.png")
+```
+
+Now that we have dipped our feet into plots and stats in R, I think you are getting a better sense of the fact that 'wrangling' or 'manipulating' data is one of the biggest steps to becoming proficient in R and all that it has to offer. 
+
+For example, for any given analysis, you may have to subset data, filter out certain data that don't meet some criteria, focus in on a select set of variables of interest, calculate means, and variance for different groups, etc. etc. 
+
+These tasks are where the packages [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/) and other packages in the [tidyverse](https://www.tidyverse.org/)--a series of packages designed for all kinds of data tasks. This also includes the popular [ggplot2](https://ggplot2.tidyverse.org/) package for graphics. 
+
+The tidyverse packages are constructed by [Hadley Wickam](http://hadley.nz/). There are several books that cover how to use these packages, including *R for Data Science* [which is available for free as an online book](https://r4ds.had.co.nz/)
+
+```{r, out.width="20%", echo=F}
+knitr::include_graphics("images/icons/R_for_Data_Science_cover.png")
+```
+
+In this module, we'll be learning some functions from the packages **dplyr** and **tidyr**. 
+
+We will do this by playing with data from the World Bank.
+
+***
+
+## Installing and loading packages we need for this module
+
+One can install each package separately, but you can also just install all "tidyverse" packages simply by running this command:
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+install.packages("wbstats")
+```
+
+Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function
+
+You now have the package downloaded on your computer, but to actually use it, you have to load the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
+
+```{r}
+library(wbstats)
+library(tidyverse)
+```
+
+**Two important thing to notice here.** First, the message tells you what packages were actually loaded as part of the tidyverse "metapackage". You see that this includes 8 packages: ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats. Second, the message tells you that there are two functions in the `dplyr` package that conflict with existing functions: `filter()` and `lag()`. This is sometimes very important to know! This means that the `filter()` function works differently before and after loading this package.
+
+***
+
+><span style="color:purple">***Some things to know about getting started with 'tidyverse'***</span>
+>
+>**Pipe Operator (`%>%`):**
+>tidyverse makes use of the pipe operator `%>%`, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient. 
+>
+>**Tibbles:**
+>"tibble" is a special class of dataframe that is used in tidyverse. It is largely the same as a dataframe but it has some features (or rather, lack of features) that make for 'defensive coding'. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow "partial matching".
+>
+>To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
+
+
+***
+
+## 2. Working with *tidyr* and *dplyr*
+
+### 2.1. *tidyr*
+
+I use *tidyr* mostly for reshaping data to move between "long-format" and "wide-format" data. 
+
+Here is link to the *tidyr* cheat sheet: https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf
+
+#### Main *tidyr* functions
+
+* `pivot_longer()`: "lengthen" data by collapsing several columns into two.
+* `pivot_wider()`: "widen" data by expanding two columns into multiple columns
+* `drop_na()`: remove rows that contain NA
+* `separate()`: separate values in a column into multiple columns
+* `unite()`: paste together values in two columns
+
+### 2.2. *dplyr*
+
+*dplyr* is a package that helps you wrangle your data into shape to aid you in the process of visualization and analysis. 
+
+Here is a link to the `dplyr` cheat sheet: https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+
+#### Main *dplyr* functions
+
+* `pull()`: select one column and save as a vector.
+* `select()`: select columns by criteria
+* `filter()`: filter rows by criteria
+* `mutate()`: add new variable using functions
+* `group_by()`: group the data together based on a given variable (or variables). Often used when calculating summary stats.
+* `summarise()`: calculate summary statistic for a given variable
+* `arrange()`: change order of rows
+* `left_join()`, `right_join()`, `inner_join()`, `full_join()`: set of functions to help merge data tables.
+* `nest_join()`: create nested datasets (advanced... I don't know how to use this yet)
+
+<br>
+
+
+***
+
+## 3. Demonstrating the basic functions
+
+<br>
+
+### 3.1 Using pipes (`%>%`) to chain together sequence of actions!
+
+First, I'm going to introduce the "pipe"--perhaps the most useful part of the tidyverse grammar (which actually comes from another amazing package called `magrittr`, if you care...).
+
+Basically, piping is when the `%>%` operator is used to forward a value, or the result of an expression, into the next function call/expression.
+
+Take for example the `billboard` dataset, which is part of the *tidyr* package. It contains data on rankings of songs on the Billboard Top 100 in the year 2000.
+
+```{r}
+billboard
+```
+
+You can use the `filter()` function (see more below) to show just the data for songs by The Backstreet Boys.
+```{r}
+filter(billboard, artist=="Backstreet Boys, The")
+```
+
+But you can run the same code by using `%>%`, like this:
+```{r}
+billboard %>% filter(artist=="Backstreet Boys, The")
+```
+
+What this does is tell R: "Take `billboard`. Then, filter the data to show just the songs by The Backstreet Boys. And in this case, the `filter(., )` says that the forwarded value should be used in place of ".".
+
+... but you actually don't even need to include the "." here--tidyverse automatically applies the forwarded value as the first entry in the function, so you can just do: 
+
+```{r}
+billboard %>% filter(artist=="Backstreet Boys, The")
+```
+
+Right now, this seems a bit puzzling and not that useful... but, you will quickly see how the `%>%` operator can help you build nice pipelines (pun intended) for data wrangling!
+
+**From here on out, I will build the codes using pipes as a default.**
+
+<br>
+
+***
+
+### 3.2. Filter by row values
+
+As I've shown already, you can use the `filter()` function in *dplyr* to select rows based on some criteria. 
+
+I can actually use multiple criteria to filter data. Let's say I now want to see the data for songs by either The Backstreet Boys or N'Sync: 
+```{r}
+billboard %>% filter(artist=="Backstreet Boys, The" | artist=="N'Sync")
+```
+
+Recall that there is a conflict over the function name `filter()`--there is another `filter()` function in base R that is separate from the tidyverse version. To make sure you are using the version from the *dplyr* package, I often use `dplyr::filter()` when I run this function.
+
+```{r}
+billboard %>% dplyr::filter(artist=="Backstreet Boys, The" | artist=="N'Sync")
+```
+
+<br>
+
+***
+
+### 3.3. Select columns
+
+Sometimes, you don't need all of the data. Let's say we just want to see what position each song started at--so we just want the artist, track, date entered and the week 1 rank. You can do this with `select()`
+
+```{r}
+billboard %>% select(artist, track, date.entered, wk1)
+```
+The nice thing about the select function is that you don't need to put the column names in quotes or anything--just type in the columns you want. 
+
+or, type in the columns you DON'T want:
+```{r}
+billboard %>% select(-track, -date.entered)
+```
+
+Combining the `filter()` and `select()` functions allow you to manage the data in flexible ways. And piping makes it easy to do this:
+
+```{r}
+billboard %>% dplyr::filter(artist=="Backstreet Boys, The") %>% select(artist, track, date.entered, wk1)
+```
+
+<br>
+
+***
+
+### 3.4. Converting wide-format data to long-format data with `pivot_longer()`
+
+"Wide-format" data is one in which each row is a subject/entity that is measured repeatedly, and each measurement appears on different columns. The `billboard` data is a prime example of wide-format data because it lists the rankings of a song for each week in separate columns.
+
+Let's now convert this into a long-format, in which we have a column for "week" and then the rank of that song for that week in a column called "rank":
+
+```{r}
+billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+What happened here? 
+
+The minimal arguments that are required in here are: 
+
+* `data`: (self explanatory)
+* `cols`: The columns that we want to collapse into a single column. Here, we want all the columns that start with "wk", which contain the ranking of that song in that week. tidyverse has a friendly function called `starts_with()` that we use here. An alternative way to do this would be to *exclude* all the other columns, which we could do with `-c(artist, track, date.entered)`
+* `names_to`: The name of a new column that will contain names of the columns that you collapsed. Here, naming this "week" makes sense.
+* `values_to`: The name of a new column that will have the values for each ID x names_from combination. In this case, this is "rank"
+
+<br>
+
+***
+
+### 3.5.  Converting long-format data to wide-format data with `pivot_wider()`
+
+Let's save the long-format version of the billboard data:
+```{r}
+bb_long=billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+
+We can then revert back to the wide-format version this way:
+
+```{r}
+bb_long %>% pivot_wider(names_from = "week", values_from = "rank")
+```
+So, what happened here? 
+The minimal arguments that are required in here are: 
+
+* `data`: is `bb_long`, forwarded by the %>%
+* `names_from`: The column that you want to expand into different columns. In this case, it is "age" because you want to see the heights of each tree at different ages as different columns.
+* `values_from`: The column that will have the values for each ID x names_from combination. In this case, this is "height"
+
+***
+
+
+### 3.6. Group and Summarize data
+
+*dplyr* makes the craft of summarizing data much easier... if you get comfortable with the grammar. Here, I will show you how to use `group_by()` and `summarise()` functions to get summary data by artist, like their best ranking and how many weeks they spent on the Top 100 chart.
+
+Let's go back to the code that created the long-format version of the billboard data, but let's drop the rows that contain NAs using `drop_na()`
+
+```{r}
+billboard %>% 
+  pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank") %>%
+  drop_na() 
+```
+
+Now, we can calculate the "best rank" of each artist by grouping the data by "artist", and finding the minimum ranking that the artist had:
+```{r}
+billboard %>% 
+  pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank") %>%
+  drop_na() %>%
+  group_by(artist) %>%
+  summarise(artist.best=min(rank, na.rm=T))
+```
+Let's try another one: we can calculate the number of weeks that an artist spent on Top 100 by simply counting the number of rows that the artist shows up in (after having dropped all of the rows containing NAs, that should be what is left).
+
+```{r}
+billboard %>% 
+  pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank") %>%
+  drop_na() %>%
+  group_by(artist) %>%
+  summarise(artist.weeks=n())
+```
+We can also do both summary functions in one go. Let's do that and save the table as artist_dat:
+
+```{r}
+artist_dat=billboard %>% 
+  pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank") %>%
+  drop_na() %>%
+  group_by(artist) %>%
+  summarise(artist.weeks=n(), artist.best=min(rank))
+
+artist_dat
+```
+
+<br>
+
+***
+
+### 3.7. Add new variables using `mutate()`
+
+You can make new variables (columns). You'll often do this if want to calculate some new variable based on existing variables.
+```{r}
+artist_dat %>%
+  mutate(top5= artist.best <=5) %>% #TRUE if artist's song was ever in Top 5
+  mutate(weeks.prop = artist.weeks/max(artist.weeks)) #weeks on list as proportion of maximum value
+```
+
+<br>
+
+***
+
+### 3.8. Join two different data
+
+The four main join functions all seek to merge data using matching columns (either matching column names, or manually designated using the `by=` argument). But they differ in which rows they will keep:
+
+* `left_join(x, y)`: match up the values in designated columns of x and y, and keep all rows in x. NAs show up when a value is present in x but not y.
+
+* `right_join(x, y)`: match up the values in designated columns of x and y, and keep all rows in y. NAs show up when a value is present in y but not x.
+
+* `inner_join(x, y)`: match up the values in designated columns of x and y, and keep only rows in which x and y values matched. No NAs show up.
+
+* `full_join(x, y): match up the values in designated columns of x and y, and keep all rows in x and y, even if they don't match. NAs whenever value in one table doesn't have a match in the other.
+
+Let's demonstrate this by comparing the `billboard` data with the `artist_dat` table that we created above. The `billboard` data has more rows than `artist_dat` because some artists show up in multiple rows (if they have multiple songs in the charts). We will remove the columns with "wk" so we can see the results more easily.
+
+```{r, message=F}
+left_join(billboard, artist_dat) %>%
+  select(-starts_with("wk"), -date.entered)
+```
+
+You can see that whenever the artist has multiple songs on the list, the "artist.weeks" and "artist.best" variables are repeated (because these are the stats for the artist).
+
+<br>
+
+
+## Get more practice with Worked Examples
+
+Go to the Worked Example on ["Wrangling World Bank Data"](Ex_WorldBank.html)

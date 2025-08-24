@@ -545,34 +545,44 @@ folder is that it will allow anyone to run the code you are developing
 in this folder because you all of your pathnames will be “relative” to
 the parent directory. By using <em>relative path</em> names in your
 code, it becomes much more reproducible and enables collaboration.</p>
-<div id="setting-up-a-new-rstudio-project-folder"
+<p>Reading about all of this is one thing, but you’ll actually learn how
+this works by using it! So, let’s set up an RStudio Project directory
+that you will use for the rest of the lectures for this course.
+<strong>Please follow these directions and set up your folder exactly
+the same way, with exactly the same folder names (including
+capitalization).</strong> If you don’t use the same structure and names
+for your folders, it will cause problems later!</p>
+<div id="setting-up-a-new-rstudio-project-folder-the-course-lectures."
 class="section level3">
-<h3>2.1. Setting up a new Rstudio project folder</h3>
-<p>Here is what I recommend for every project you start:</p>
+<h3>3.1. Setting up a new Rstudio project folder the course
+lectures.</h3>
 <ol style="list-style-type: decimal">
-<li>Create a folder that will be your main “project folder”.</li>
-</ol>
-<p><em>Try this out be creating a “trial” Folder somewhere in your
-computer.</em></p>
-<ol start="2" style="list-style-type: decimal">
+<li><p>Create a folder called “BIOS967_lectures” on your
+computer.</p></li>
 <li><p>Next, in R Studio, click on “File” &gt; “New Project”</p></li>
 <li><p>Click on “Existing Directory”, click “Browse” and select the
-“trial” Folder you created, then click “Create Project”</p></li>
-<li><p>Now, you will see that there is a new “trial.rproj” file in your
-folder.</p></li>
+“BIOS967_lectures” Folder you created, then click “Create
+Project”</p></li>
+<li><p>Now, you will see that there is a new “BIOS967_lectures.rproj”
+file in your folder.</p></li>
 <li><p>Open that .rproj file. This will open up a new RStudio
 window.</p></li>
 </ol>
 <p>Now, whenever you create any file within this R Project, the files
 will automatically go into this folder. Also, if you want to import any
 files, you can just put in the file name instead of the whole path.</p>
-<p>Let’s try this out:</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Create a “data” folder with all data needed for all learning
+modules.</li>
+</ol>
 <ul>
-<li><p>Go find the “SampleData.csv” file that you downloaded earlier and
-drop it into a subfolder called “data” in your “trial” project folder.
-<img src="images/screen_trial.png" /></p></li>
-<li><p>Now click on the “refresh” button <img
-src="../images/Rstudio_refresh.png" /> on the far right side of your
+<li><p>Click on <a href="data.zip">this link</a> to download a
+compressed file with all data from the learning modules.</p></li>
+<li><p>“Decompress” or “unzip” the file. This will create a folder
+called “data”. Move this folder into your “BIOS967_lectures”
+folder.</p></li>
+<li><p>Now, in RStudio, click on the “refresh” button <img
+src="images/Rstudio_refresh.png" /> on the far right side of your
 “Files” window on the bottom-right part of your Rstudio window</p></li>
 </ul>
 <p>You should now see that there is a “data” folder in your project
@@ -610,9 +620,6 @@ project and code are portable in multiple ways. You could:</p>
 storage that syncs with multiple computers…</p></li>
 </ul>
 <p>and you should be able to run the code as-is.</p>
-<p><em>However, the most elegant way to have your project run on
-multiple computers across multiple collaborators is to use a version
-control system, such as GitHub…</em></p>
 </div>
 </div>
 

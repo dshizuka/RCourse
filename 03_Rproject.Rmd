@@ -164,32 +164,29 @@ Setting up a project directory in this way allows you to keep everything organiz
 
 Finally, the more important reason to set up an Rstudio project folder is that it will allow anyone to run the code you are developing in this folder because you all of your pathnames will be "relative" to the parent directory. By using *relative path* names in your code, it becomes much more reproducible and enables collaboration. 
 
-### 2.1. Setting up a new Rstudio project folder
+Reading about all of this is one thing, but you'll actually learn how this works by using it! So, let's set up an RStudio Project directory that you will use for the rest of the lectures for this course. **Please follow these directions and set up your folder exactly the same way, with exactly the same folder names (including capitalization).** If you don't use the same structure and names for your folders, it will cause problems later!
 
-Here is what I recommend for every project you start: 
+### 3.1. Setting up a new Rstudio project folder the course lectures.
 
-1. Create a folder that will be your main "project folder".
-  
-*Try this out be creating a "trial" Folder somewhere in your computer.*
+1. Create a folder called "BIOS967_lectures" on your computer.
 
 2. Next, in R Studio, click on "File" > "New Project" 
 
-3. Click on "Existing Directory", click "Browse" and select the "trial" Folder you created, then click "Create Project"
+3. Click on "Existing Directory", click "Browse" and select the "BIOS967_lectures" Folder you created, then click "Create Project"
 
-4. Now, you will see that there is a new "trial.rproj" file in your folder.
+4. Now, you will see that there is a new "BIOS967_lectures.rproj" file in your folder.
 
 5. Open that .rproj file. This will open up a new RStudio window. 
 
 Now, whenever you create any file within this R Project, the files will automatically go into this folder. Also, if you want to import any files, you can just put in the file name instead of the whole path. 
 
-Let's try this out:
+6. Create a "data" folder with all data needed for all learning modules.
 
-* Go find the "SampleData.csv" file that you downloaded earlier and drop it into a subfolder called "data" in your "trial" project folder. 
-![](images/screen_trial.png)
+  * Click on [this link](data.zip) to download a compressed file with all data from the learning modules. 
 
-* Now click on the "refresh" button ![](../images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window 
+  * "Decompress" or "unzip" the file. This will create a folder called "data". Move this folder into your "BIOS967_lectures" folder. 
 
-You should now see that there is a "data" folder in your project directory, and that "SampleData.csv" is in that folder. 
+  * Now, in RStudio, click on the "refresh" button ![](images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window. You should now see that there is a "data" folder in your project directory, and that there are a bunch of different files in that folder. 
 
 Now, you can use `read.csv()` again to read your file. But this time, you only need a *relative pathname*--that is, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
 
@@ -197,8 +194,6 @@ Let's call this version of the data `dat2`
 ```{r, echo=T, eval=T}
 dat2=read.csv("data/SampleData.csv")
 ```
-
-
 
 ```{r}
 dat2
@@ -214,6 +209,6 @@ The beauty of this system is that, as long as the project directory structure is
 
 and you should be able to run the code as-is.
 
-*However, the most elegant way to have your project run on multiple computers across multiple collaborators is to use a version control system, such as GitHub...*
+
 
 

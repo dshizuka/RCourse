@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Worked Example: Modeling Population Growth</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Worked Example: Modeling Population
+Growth</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 08/24/25</h4>
+
+</div>
+
+
+<hr />
+<div
+id="in-this-module-we-will-be-demonstrating-some-basic-concepts-in-population-ecology-using-r.-this-will-help-us-get-practice-with-using-a-variety-of-r-tricks-such-as-apply-functions-sampling-random-numbers-and-using-for-loops."
+class="section level4">
+<h4>In this module, we will be demonstrating some basic concepts in
+population ecology using R. This will help us get practice with using a
+variety of R tricks such as apply functions, sampling random numbers,
+and using for-loops.</h4>
+<hr />
+</div>
+<div id="set-up" class="section level4">
+<h4>Set up:</h4>
+<p>To begin this module, I will show you how to set up the .Rmd file so
+that code does not go off the page when rendering in pdf. To do this,
+you will use the <code>opts_chunk$set()</code> function in the
+<code>knitr</code> package:</p>
+<pre class="r"><code>library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE, fig.pos=&quot;h&quot;)</code></pre>
+<p>Let’s also install and load packages that we’ll use.
+<code>primer</code> is a package associated with the book, “A Primer of
+Ecology with R” <a
+href="http://www.cas.miamioh.edu/~stevenmh/stevens-2009-part.pdf">(get
+full pdf version here)</a>. <code>RColorBrewer</code> is a package that
+gives you access to friendly color palettes.</p>
+<pre class="r"><code>#if you don&#39;t have these packages on your computer:
+install.packages(&#39;primer&#39;) 
+install.packages(&#39;RColorBrewer&#39;)</code></pre>
+<pre class="r"><code>library(primer)
+library(RColorBrewer)</code></pre>
+<hr />
+</div>
+<div
+id="modeling-the-basic-exponentialgeometric-population-growth-model"
+class="section level2">
+<h2>1. Modeling the basic exponential/geometric population growth
+model</h2>
+<p>Let’s think of a hypothetical population that you have observed over
+two years. Say there were 100 individuals in the first year, and 150
+individuals in the second year. Then, we can say that the growth rate of
+the population over those two years is <span
+class="math inline">\(\frac{N_2}{N_1}=1.5\)</span>.<br />
+More generally, we can think of the annual growth rate, <span
+class="math inline">\(\lambda\)</span> as the number of individuals in
+one year compared to the year before:<br />
+<br />
+</p>
+<p><span class="math display">\[\lambda=\frac{N_{t+1}}{N_t}\]</span></p>
+<p>If this rate of growth is constant over <span
+class="math inline">\(t\)</span> number of years and the initial
+population size is <span class="math inline">\(N_0\)</span>, then the
+population size at year <span class="math inline">\(t\)</span> is:</p>
+<p><span class="math display">\[N_t=N_0\lambda^t\]</span> This is the
+model of <strong><em>geometric population growth</em></strong>, i.e., a
+population growing in discrete time steps with constant growth rate.</p>
+<p><strong><em>Exponential population growth</em></strong> occurs when a
+population is growing in continuous time with a constant growth rate,
+<span class="math inline">\(r\)</span>:</p>
+<p><span class="math display">\[N_t=N_0e^{rt}\]</span></p>
+<p>Here, <span class="math inline">\(r\)</span> is the <em>instantaneous
+rate of growth</em> which is the birth rate (births per individual)
+minus the death rate (deaths per individual) at any given time
+scale.</p>
+<p>Geometric and exponential growth models are very similar, except that
+they differ in several mathematical properties. But given a certain time
+unit, we can go between the two models pretty easily. You just have to
+remember that <span class="math inline">\(\lambda=e^r\)</span> and <span
+class="math inline">\(\ln \lambda=r\)</span></p>
+<p>Let’s now project population growth over 10 years with starting
+population of 100 and <span class="math inline">\(\lambda=1.5\)</span>.
+What we need to do is assign the constants (<span
+class="math inline">\(N_0\)</span> and <span
+class="math inline">\(\lambda\)</span>) and then project the population
+sizes at <span class="math inline">\(N_t\)</span> when <span
+class="math inline">\(t\)</span> ranges from 0 (intial population) to
+10</p>
+<pre class="r"><code>N0 = 100
+lambda = 1.5
+t = 0:10
+N=N0*lambda^t
+round(N,0) </code></pre>
+<pre><code>##  [1]  100  150  225  338  506  759 1139 1709 2563 3844 5767</code></pre>
+<pre class="r"><code>#I&#39;m rounding this here because it doesn&#39;t 
+#make sense to have a fraction of an individual.</code></pre>
+<p>Let’s plot this on a linear scale and log scale.</p>
+<pre class="r"><code>plot(t, N, type=&quot;o&quot;, pch=19, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
+<pre class="r"><code>plot(t, N, type=&quot;o&quot;, log=&quot;y&quot;, pch=19, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
+<p>These two plots describe exponential (or geometric) population
+growth: i.e., population under a constant growth rate.</p>
+<hr />
+<p><strong>A digression</strong>: Let’s use this opportunity to
+demonstrate a solution to a question I’ve had a number of times in
+assignments: how can you plot a two-panel plot and customize the margins
+on each panel separately? You can do this by setting up the plotting
+using a <code>layout()</code> function (instead of
+<code>par(mfrow=)</code>), which will allow us to set the margins
+separately for each panel. Here’s a demo:</p>
+<pre class="r"><code>layout(matrix(c(1,2), nrow=2))
+par(mar=c(0.5,4,4,4))
+plot(t, N, type=&quot;o&quot;, pch=19, las=1, xaxt=&quot;n&quot;, main=&quot;Population Growth on Two Scales&quot;)
+axis(side=1, labels=F)
+par(mar=c(4,4,0.5,4))
+plot(t, N, type=&quot;o&quot;, log=&quot;y&quot;,pch=19, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<p>Compare this with:</p>
+<pre class="r"><code>layout(matrix(c(1,2), nrow=1))
+par(mar=c(4,4,2,0.5))
+plot(t, N, type=&quot;o&quot;, pch=19, las=1)
+
+par(mar=c(4,4,2,0.5))
+plot(t, N, type=&quot;o&quot;, log=&quot;y&quot;,pch=19, las=1)
+axis(side=2, labels=F)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="varying-the-growth-rate" class="section level2">
+<h2>2. Varying the growth rate</h2>
+<p>Now, let’s try projecting the population with different growth rates,
+<span class="math inline">\(\lambda\)</span>. Let’s think about how to
+do this. We will now have two parameters that vary (<span
+class="math inline">\(t\)</span> and <span
+class="math inline">\(\lambda\)</span>). This means that we want an
+output that is a <em>matrix</em>, with one parameter (say <span
+class="math inline">\(t\)</span>) on the rows and the other parameter
+(<span class="math inline">\(\lambda\)</span>) on the columns. We will
+do this by employing the <code>sapply()</code> function.<br />
+Now, we will define a sequence numbers for <span
+class="math inline">\(\lambda\)</span> (here, it will be 0.6, 0.8, 1,
+1.2 and 1.4) and then use <code>sapply()</code> to run multiple versions
+of the population growth rate equation. This function will return a
+vector or matrix, depending on what is the simplest form.</p>
+<pre class="r"><code>N0 = 100
+lambda = seq(0.6,1.4,0.2)
+t = 0:10
+N=sapply(lambda, function(lambda) N0*lambda^t)
+N</code></pre>
+<pre><code>##              [,1]      [,2] [,3]     [,4]      [,5]
+##  [1,] 100.0000000 100.00000  100 100.0000  100.0000
+##  [2,]  60.0000000  80.00000  100 120.0000  140.0000
+##  [3,]  36.0000000  64.00000  100 144.0000  196.0000
+##  [4,]  21.6000000  51.20000  100 172.8000  274.4000
+##  [5,]  12.9600000  40.96000  100 207.3600  384.1600
+##  [6,]   7.7760000  32.76800  100 248.8320  537.8240
+##  [7,]   4.6656000  26.21440  100 298.5984  752.9536
+##  [8,]   2.7993600  20.97152  100 358.3181 1054.1350
+##  [9,]   1.6796160  16.77722  100 429.9817 1475.7891
+## [10,]   1.0077696  13.42177  100 515.9780 2066.1047
+## [11,]   0.6046618  10.73742  100 619.1736 2892.5465</code></pre>
+<p>What we end up with is a matrix with 11 rows corresponding to <span
+class="math inline">\(t=\)</span> 0 through 10 and 5 columns
+corresponding to the five values of <span
+class="math inline">\(\lambda\)</span> (0.6, 0.8, 1, 1.2, 1.4). We can
+plot this output nicely using the <code>matplot()</code> function:</p>
+<pre class="r"><code>matplot(t, N, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-9-1.png" width="384" height="2in" /></p>
+<p>Let’s make it prettier by creating a color palette in RColorBrewer
+and using different point types and lines to show the different
+trajectories.</p>
+<pre class="r"><code>colors=brewer.pal(5, &quot;Set1&quot;)
+matplot(t, N, type=&quot;o&quot;, las=1, pch=1:5, col=colors, lty=1:5)
+legend(&quot;topleft&quot;, legend=c(&quot;0.6&quot;, &quot;0.8&quot;, &quot;1&quot;, &quot;1.2&quot;, &quot;1.4&quot;), title=&quot;lambda&quot;, pch=1:5, lty=1:5, col=colors, cex=0.8)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-11-1.png" width="384" height="2in" /></p>
+<p>Ok, we can see that there are multiple trajectories here, but it’s
+kind of hard to see what is goin on at the bottom of the figure. Let’s
+try plotting the population sizes on a log scale:</p>
+<pre class="r"><code>colors=brewer.pal(5, &quot;Set1&quot;)
+matplot(t, N, type=&quot;o&quot;, las=1, pch=1:5, col=colors, lty=1:5, log=&quot;y&quot;, yaxt=&quot;n&quot;)
+marks=c(1, 5, 10, 50, 100, 500, 1000)
+axis(side=2, at=marks, labels=format(marks, drop0trailing=TRUE), las=1)
+legend(&quot;bottomleft&quot;, legend=c(&quot;0.6&quot;, &quot;0.8&quot;, &quot;1&quot;, &quot;1.2&quot;, &quot;1.4&quot;), title=&quot;lambda&quot;, pch=1:5, lty=1:5, col=colors, cex=0.8)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-13-1.png" width="384" height="2in" /></p>
+<p>You can see that two lines go up (<span class="math inline">\(\lambda
+&gt; 1\)</span>), two lines go down (<span class="math inline">\(\lambda
+&lt; 1\)</span>) and one line stays flat (<span
+class="math inline">\(\lambda = 1\)</span>). That is, populations
+increase when <span class="math inline">\(\lambda &gt; 1\)</span> and
+vice versa.</p>
+<p>Since the instantaneous rate of growth, <span class="math inline">\(r
+= \ln\lambda\)</span>:</p>
+<ul>
+<li><h5 id="population-does-not-change-when-lambda1-or-r0">Population
+does not change when <span class="math inline">\(\lambda=1\)</span> or
+<span class="math inline">\(r=0\)</span></h5></li>
+<li><h5 id="population-increases-when-lambda1-or-r0">Population
+increases when <span class="math inline">\(\lambda&gt;1\)</span> or
+<span class="math inline">\(r&gt;0\)</span></h5></li>
+<li><h5 id="population-decreases-when-lambda1-or-r0">Population
+decreases when <span class="math inline">\(\lambda&lt;1\)</span> or
+<span class="math inline">\(r&lt;0\)</span></h5></li>
+</ul>
+</div>
+<div id="simulating-stochasticity" class="section level2">
+<h2>3. Simulating stochasticity</h2>
+<p>Thus far, we have assumed that population growth rate is constant
+through time. This is clearly not the case in most natural populations.
+Even disregarding density-dependent mechanisms, populationg growth rates
+fluctuate due to different sources of stochasticity (i.e., randomness).
+One major source of randomness in population growth rate is
+<strong><em>environmental stochasticity:</em></strong> i.e., random
+fluctuations in population growth rate due to good and bad years.</p>
+<p>Let’s say that a population has a stable population growth rate–i.e.,
+average instantaneous growth rate, <span
+class="math inline">\(\bar{r}=0\)</span>. But the actual growth rate
+fluctuates around this average with some variance, <span
+class="math inline">\(\sigma_r^2=0.01\)</span>. Hence, for each time
+step (say, 1,000), we could randomly draw a number from a normal
+distribution with mean of 0 and variance of 0.01 (or <span
+class="math inline">\(sd=\sqrt{var}=0.1\)</span>), like so:</p>
+<pre class="r"><code>set.seed(2)
+rs=rnorm(1000, mean=0, sd=0.1)
+hist(rs, xlab=&quot;r&quot;)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-14-1.png" width="384" /></p>
+<p>For consistency of modeling purposes, we want to convert this
+distribution of growth rates to the discrete population growth rate,
+<span class="math inline">\(\lambda\)</span>, which can also be
+expressed as <span class="math inline">\(e^r\)</span>. So, the
+distribution of <span class="math inline">\(\lambda\)</span> in this
+case is:</p>
+<pre class="r"><code>hist(exp(rs), xlab=&quot;lambda&quot;, main=&quot;Histogram of lambdas&quot;)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-15-1.png" width="384" /></p>
+<p>The two distributions look similar, but the top (distribution of
+<span class="math inline">\(r\)</span>) is a <strong>normal
+distribution</strong> centered around 0, and bottom (distribution of
+<span class="math inline">\(\lambda\)</span>) is <strong>log-normal
+distribution</strong>–i.e., the log of the value is a normal
+distribution–centered around 1.</p>
+<p>For simplicity, we can also just take the distribution of lambdas
+from a log-normal distribution directly (output not shown):</p>
+<pre class="r"><code>set.seed(2)
+lambdas=rlnorm(100, meanlog = 0, sdlog = 0.1)
+round(lambdas,2)</code></pre>
+<p>Ok, now let’s use this method of generating stochasticity in
+population growth rates to simulate population growth. Let’s remind
+ourselves what the population projection over 20 years looks like under
+geometric population growth with <span
+class="math inline">\(\lambda=1.2\)</span> and <span
+class="math inline">\(N_0=100\)</span>.</p>
+<p>Here, let’s try generating this plot slightly differently–we will use
+a for-loop to calculate <span class="math inline">\(N_t\)</span> for
+each time step <span class="math inline">\(t\)</span> and store it as a
+vector.</p>
+<pre class="r"><code>N0 = 100 #initial population size
+times=20 #number of years into the future
+N=vector(length=times) #empty vector to store pop. sizes
+N[1]=N0 #initial population size should be the first N
+lambda = 1.2 #growth rate
+#start loop: Take previous year&#39;s N and multiply by lambda
+for(t in 2:times){
+N[t]=N[t-1]*lambda
+}
+plot(1:times, N, type=&quot;o&quot;, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-17-1.png" width="384" /></p>
+<p>This is a bit more round-about than before, but this lays the
+groundwork for our stochasticity simulation. Now, let’s simulate a
+population with the same mean growth rate<a href="#fn1"
+class="footnote-ref" id="fnref1"><sup>1</sup></a> but with standard
+deviation of 0.1.</p>
+<pre class="r"><code>set.seed(2)
+N0 = 100 #initial population size
+times=20 #number of years into the future
+N=vector(length=times) #empty vector to store pop. sizes
+N[1]=N0 #initial population size should be the first N
+
+#lambdas--we only need 19 numbers because growth only happens between 2 years.
+lambda = rlnorm(times-1, meanlog = 0, sdlog = 0.1) 
+
+#start loop: Take previous year&#39;s N and multiply by lambda
+for(t in 2:times){
+N[t]=N[t-1]*lambda[t-1]
+}
+plot(1:times, N, type=&quot;o&quot;, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-18-1.png" width="384" /></p>
+<p>The main take away is that the population grows much more slowly when
+there is stochasticity in the growth rate. Whereas the exponential
+growth model predicted the population to be &gt;3,000 in 20 years, this
+simulation shows the population to be about 140 individuals in 20
+years.</p>
+<div
+id="exercise-remove-the-set.seed-part-of-the-routine-above-and-try-running-the-script-several-times-to-see-how-the-dynamics-can-change."
+class="section level4">
+<h4>Exercise: Remove the <code>set.seed()</code> part of the routine
+above and try running the script several times to see how the dynamics
+can change.</h4>
+<p>Now, let’s try running this simulation multiple times (10x) and
+plotting the results in one figure. To do this, we will employ the
+<code>sapply()</code> function and run the for-loop sequence inside it.
+The nice thing about this is that the <code>sapply()</code> function
+will automatically organize the output as a matrix for us, so that we
+can directly use the <code>matplot()</code> function to plot the
+results.</p>
+<pre class="r"><code>#multiple simulations
+set.seed(2)
+sims=10
+outmat=sapply(1:sims, function(x){
+  times=20
+  N0=100
+  N=vector(length=times)
+  N[1]=N0
+  lambda=rlnorm(times-1, meanlog=0, sdlog=0.1)
+  for (t in 2:times){
+    N[t]=N[t-1]*lambda[t-1]
+  }
+  N
+})
+matplot(1:times,outmat, type=&quot;l&quot;, las=1, ylab=&quot;Population Size&quot;, xlab=&quot;Years&quot;)
+abline(h=100, lty=2)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>This figure shows the population trajectories of this population
+under 10 runs of the simulation. Remember that in all of these cases,
+the mean population growth rate<a href="#fn2" class="footnote-ref"
+id="fnref2"><sup>2</sup></a> is 1.2–i.e., the population is supposed to
+be growing at a pretty quick pace. Yet, none of the simulations show the
+population growing much over 20 years. In fact, the population size
+decreased in 4 out of the 10 simulations. This demonstrates a central
+concept in population ecology (and conservation biology)–<em>variation
+in population growth rates tend to slow down population growth</em>.</p>
+<p>**</p>
+</div>
+</div>
+<div id="population-viability-analysis-an-over-simplified-example"
+class="section level2">
+<h2>4. Population Viability Analysis: An over-simplified example</h2>
+<p>Population Viability Analysis (PVA) is a population modeling method
+to assess extinction risk of a population or species. It is the
+mathematical foundation of conservation biology, and it is used
+worldwide to guide management decisions for threatened species. Here, I
+will walk through a simplified example of PVA using an example
+dataset.</p>
+<div id="the-song-sparrow-dataset" class="section level3">
+<h3>4.1 The Song Sparrow Dataset</h3>
+<p>Here, we will be using the <code>sparrows</code> dataset from the R
+package <code>primer</code>. You should have already installed and
+loaded the package at the beginning of the module. If you haven’t yet,
+run <code>library(primer)</code> to load it.<br />
+The <code>primer</code> package is a package that is associated with a
+textbook called “A Primer of Ecology with R”, written by Henry Stevens<a
+href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. The
+<code>sparrow</code> dataset is based on counts of Song Sparrows
+(<em>Melospiza melodia</em>) in Darrtown, OH from 1966 to 2003.</p>
+<div style="page-break-after: always;"></div>
+<div class="float">
+<img
+src="images/266px-Melospiza_melodia_-Battery_Park,_New_Castle,_Delaware,_USA_-singing-8.jpg"
+alt="Song Sparrow" />
+<div class="figcaption">Song Sparrow</div>
+</div>
+<p>Let’s load the dataset and look at it:</p>
+<pre class="r"><code>data(sparrows)
+head(sparrows)</code></pre>
+<pre><code>##   Year Count ObserverNumber
+## 1 1966    34              1
+## 2 1967    40              1
+## 3 1968    42              1
+## 4 1969    54              1
+## 5 1970    49              1
+## 6 1971    71              1</code></pre>
+<p>We can plot the data:</p>
+<pre class="r"><code>plot(Count~Year, data=sparrows, type=&quot;o&quot;, las=1)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-21-1.png" width="384" /></p>
+</div>
+<div id="calculating-lambda-from-counts" class="section level3">
+<h3>4.2 Calculating lambda from counts</h3>
+<p>The first thing we can do with this data is to extract the annual
+population growth rates <span class="math inline">\(\lambda\)</span> for
+each pair of years. That is, we need to calculate <span
+class="math inline">\(\frac{N_2}{N_1}\)</span>, <span
+class="math inline">\(\frac{N_3}{N_2}\)</span>, <span
+class="math inline">\(\frac{N_4}{N_3}\)</span>, etc.</p>
+<pre class="r"><code>counts=sparrows$Count
+l=counts[-1]/counts[-length(counts)]
+round(l, 2)</code></pre>
+<pre><code>##  [1] 1.18 1.05 1.29 0.91 1.45 0.93 0.85 1.29 1.07 0.48 0.86 0.81 0.85 1.41 0.90
+## [16] 1.46 0.88 1.03 1.19 0.77 1.38 0.96 0.91 0.78 1.25 3.00 0.80 0.97 0.72 1.25
+## [31] 1.07 0.41 0.92 1.00 1.26</code></pre>
+<pre class="r"><code>hist(l, breaks=20, main=&quot;Histogram of lambdas&quot;, col=&quot;gray&quot;)</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-22-1.png" width="384" /></p>
+<p>Let’s extract the mean and standard deviation of <span
+class="math inline">\(\ln\lambda\)</span>:</p>
+<pre class="r"><code>mean(log(l))</code></pre>
+<pre><code>## [1] 0.006709703</code></pre>
+<pre class="r"><code>sd(log(l))</code></pre>
+<pre><code>## [1] 0.3366946</code></pre>
+<p>You’ll notice that the average <span
+class="math inline">\(\ln\lambda=r\)</span> is really close to 0, but
+slightly above it. This means that, the population is pretty stable at
+the moment. However, the variance is fairly big.</p>
+<p>Let’s just assume that we can estimate the distribution of annual
+population growth rates <span class="math inline">\(\lambda\)</span> as
+a log-normal distribution with those mean-logs and sd-logs. With this,
+we can generate 50 projected <span
+class="math inline">\(\lambda\)</span> values:</p>
+<pre class="r"><code>set.seed(2)
+sim.l=rlnorm(50, meanlog=mean(log(l)), sdlog=sd(log(l)))
+round(sim.l,2)</code></pre>
+<pre><code>##  [1] 0.74 1.07 1.72 0.69 0.98 1.05 1.28 0.93 1.96 0.96 1.16 1.40 0.88 0.71 1.83
+## [16] 0.46 1.35 1.02 1.42 1.16 2.04 0.67 1.72 1.94 1.01 0.44 1.18 0.82 1.31 1.11
+## [31] 1.29 1.12 1.45 0.91 0.78 0.82 0.56 0.74 0.83 0.93 0.88 0.52 0.76 1.91 1.24
+## [46] 1.97 0.91 0.98 0.95 0.67</code></pre>
+</div>
+<div id="projecting-the-population-over-20-years"
+class="section level3">
+<h3>4.3 Projecting the population over 20 years</h3>
+<p>Let’ use this to simulate this Song Sparrow population over the next
+20 years (or rather, from 2003 to 2023).</p>
+<p>First, let’s look at the population size in 2003, the last year in
+this dataset:</p>
+<pre class="r"><code>tail(sparrows)</code></pre>
+<pre><code>##    Year Count ObserverNumber
+## 31 1997    84              2
+## 32 1998    90              2
+## 33 1999    37              3
+## 34 2000    34              3
+## 35 2001    34              3
+## 36 2003    43              3</code></pre>
+<p>So we will use N0 = 43 as our starting point, and simulate the
+population over the next 20 years.</p>
+<pre class="r"><code>#Single simulation
+set.seed(2)
+time=21
+N0=43
+N=vector(length=time)
+N[1]=N0
+sim.l=rlnorm(time, meanlog=mean(log(l)), sdlog=sd(log(l)))
+for(t in 2:time){
+  N[t]=N[t-1]*sim.l[t-1]
+}
+par(mar=c(4,4,1,4))
+plot(1:(time), N, type=&quot;o&quot;, las=1, xaxt=&quot;n&quot;)
+axis(side=1, at=c(1,6,11,16,20), labels=c(2003, 2008, 2013, 2018, 2023))</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-26-1.png" width="432" /></p>
+<p>Using the same principles as the stochastic simulations in Section 3,
+we can also conduct multiple simulations and plot the results</p>
+<pre class="r"><code>set.seed(2)
+sims=5
+outmat=sapply(1:sims, function(x){
+  time=21
+  N0=43
+  N=vector(length=time)
+  N[1]=N0
+  sim.l=rlnorm(time, meanlog=mean(log(l)), sdlog=sd(log(l)))
+  for(t in 2:time){
+    N[t]=N[t-1]*sim.l[t-1]
+  }
+  N
+})
+par(mar=c(4,4,1,4))
+matplot(1:time,outmat, type=&quot;l&quot;, las=1, lty=5, ylim=c(0,200), ylab=&quot;N&quot;, xaxt=&quot;n&quot;, xlab=&quot;Year&quot;)
+axis(side=1, at=c(1,6,11,16,20), labels=c(2003, 2008, 2013, 2018, 2023))</code></pre>
+<p><img src="x_PopGrowth_files/figure-html/unnamed-chunk-27-1.png" width="432" /></p>
+<p>You can see that there are scenarios in which the population
+increases to very large numbers, and other scenarios in which the
+opulation declines.</p>
+</div>
+<div id="the-pva-what-is-the-extinction-risk" class="section level3">
+<h3>4.4 The PVA: What is the extinction risk?</h3>
+<p>Now, let’s say we want to ask a question about extinction risk of
+this population. For example, we might ask what are the chances that
+this population goes extinct within 100 years, given the observed
+pattern in population sizes? To figure this out, we need to conduct a
+large number of simulations (in this case, let’s do 1,000x) projecting
+the population for 100 years (or 101, if starting from year 0). Then, we
+want to ask: in how many iterations of this model does the population
+size dip below 2 (the minimum number of individuals needed to
+reproduce)?</p>
+<p>Let’s start by doing the simulations in the same way as above, but
+changing <code>sims=1000</code> and <code>time=101</code>.</p>
+<pre class="r"><code>set.seed(2)
+sims=1000
+outmat=sapply(1:sims, function(x){
+  time=101
+  N0=43
+  N=vector(length=time)
+  N[1]=N0
+  sim.l=rlnorm(time, meanlog=mean(log(l)), sdlog=sd(log(l)))
+  for(t in 2:time){
+    N[t]=N[t-1]*sim.l[t-1]
+  }
+  N
+})
+
+dim(outmat)</code></pre>
+<pre><code>## [1]  101 1000</code></pre>
+<p>So, what we have now is a matrix with 101 rows (year 0 to year 100),
+and 1,000 columns, each representing a single iteration of the
+simulation. Thus, we could figure out how many columns has at least one
+time point in which N &lt; 2 by using the <code>apply()</code> function
+to ask whether the minimum of each column is less than 2.</p>
+<pre class="r"><code>#which columns have at least one value less than 2?
+minpop=apply(outmat, 2, function(x) min(x)&lt;2)
+sum(minpop+0)/sims #proportion of columns with TRUE</code></pre>
+<pre><code>## [1] 0.279</code></pre>
+<p>Thus, there is approximately a 28% chance that the population will go
+extinct within 100 years due purely to stochasticity.</p>
+<p>Now, this is a really simplified version of PVA–it does not account
+for uncertainty in the estimates of mean and sd of <span
+class="math inline">\(\ln\lambda\)</span>, nor does it take into account
+any other realistic factors such as temporal autocorrelation of growth
+rates, density-dependent factors, habitat change/loss, etc. etc. But I
+hope that you got a sense for how to use R for simulating complex
+dynamics.</p>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Technically, the <em>geometric mean</em> of <span
+class="math inline">\(\lambda\)</span> would be 1.2 here, because lambda
+is going to have a log-normal distribution.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Again, technically speaking, I mean the <em>geometric
+mean</em>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Stevens, M.H.H. (2009) <em>A Primer of Ecology with
+R</em>, Springer, 2nd Printing.<a href="#fnref3"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Randomizations: Sampling from sets and probability distributions</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Randomizations: Sampling from sets and
+probability distributions</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 08/24/25</h4>
+
+</div>
+
+
+<hr />
+<p>In this module, we will introduce several functions that are useful
+for randomization and sampling from distributions. These techniques are
+broadly used for both statistics as well as simulations, and they are
+super useful toolkits for you to have in your arsenal for research.</p>
+<div id="random-number-generators" class="section level2">
+<h2>1. Random number generators</h2>
+<p><code>sample()</code> and <code>rnorm()</code>. These are two
+examples of functions that help you generate random numbers from some
+probability distributoin. But if you think about it, there is an
+infinate number of ways to sample a random set of numbers<a href="#fn1"
+class="footnote-ref" id="fnref1"><sup>1</sup></a>. Understanding these
+functions can be really useful in crafting randomization tests,
+bootstrapping, and simulations.</p>
+<p>Let’s consider some options:</p>
+<div
+id="sampling-from-a-given-set-of-numbers-with-or-without-replacement."
+class="section level3">
+<h3>1.1 Sampling from a given set of numbers with or without
+replacement.</h3>
+<p>We often want to generate a set of random number given some
+distribution. Say, for example, we want to sample randomly from a set of
+numbers. For example, let’s sample 5 integer between 1 and 10.</p>
+<pre class="r"><code>sample(1:10, 5, replace=F) #5 random numbers between 1 and 10</code></pre>
+<pre><code>## [1] 2 4 8 9 3</code></pre>
+<p>You will probably notice that you have generated a <em>different</em>
+set of random numbers than what is shown here. This makes sense, but it
+makes it difficult to make this code <em>reproducible</em>. What we can
+do is to use <code>set.seed()</code> to make this process
+repeatable:</p>
+<pre class="r"><code>set.seed(2) #you can put whatever number inside set.seed()
+sample(1:10, 5, replace=F) #5 random numbers between 1 and 10s</code></pre>
+<pre><code>## [1]  5  6  9  1 10</code></pre>
+<p>When you run the code like this, you should always get “2, 7, 5, 10,
+6”<br />
+Try changing the number inside the <code>set.seed()</code> and see what
+you get.</p>
+<p>Note that we have used <strong><code>replace=F</code></strong> to
+indicate that, once we choose a number, we want to avoid choosing it
+again. This is akin to physically picking 5 cards out of a set of 10 at
+the same time. We can do that up to the sample size, but no more. So,
+this will work:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace=F) #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1]  5  6  9  1 10  7  4  8  3  2</code></pre>
+<p>But this will NOT work:</p>
+<pre class="r"><code>sample(1:10, 11, replace=F) #11 random numbers between 1 and 10</code></pre>
+<pre><code>## Error in sample.int(length(x), size, replace, prob): cannot take a sample larger than the population when &#39;replace = FALSE&#39;</code></pre>
+<p>In the first iteration, you have simply shuffled the order of the
+numbers. But you cannot shuffle 11 cards out of a deck of 10.</p>
+<p>Compare this to the case when we set <code>replace=TRUE</code>:</p>
+<pre class="r"><code>set.seed(2)
+sample(1:10, 10, replace=T) #10 random numbers between 1 and 10</code></pre>
+<pre><code>##  [1] 5 6 6 8 1 1 9 2 1 3</code></pre>
+<p>You will notice that we have chose some numbers multiple times (“2”
+appears three times, “10” and “6” appear twice). When you set
+<code>replace=TRUE</code>, we are basically simulating a situation where
+we choose a card, write down the number, <strong><em>and then put it
+back before picking up another card</em></strong>. This process is the
+essence of a simulation procedure called
+<strong>bootstrapping</strong>.</p>
+<p>A quick recap:</p>
+<ul>
+<li><code>sample(x, n)</code> allows you to randomly sample <em>n</em>
+numbers from the set <code>x</code>.</li>
+<li><code>replace=F</code> (default) means once you sample one number,
+you will not sample it again. You can use this to shuffle the order of
+numbers (generally called <em>randomization</em>)</li>
+<li><code>replace=T</code> allows for sampling a number more than once.
+You can use this to resample a set of numbers with equal probability
+(generally called <em>bootstrapping</em>)</li>
+</ul>
+<hr />
+</div>
+<div id="sampling-from-probability-distributions"
+class="section level3">
+<h3>1.2 Sampling from probability distributions</h3>
+<p>Rather than sampling from a discrete set of numbers, we might want to
+sample numbers from a given hypothetical distribution. As an
+illustration, let’s sample a set of 100 numbers from a normal
+distribution with mean of 0 and standard deviation of 1</p>
+<pre class="r"><code>set.seed(2)
+rn=rnorm(10, mean=0, sd=1)
+rn</code></pre>
+<pre><code>##  [1] -0.89691455  0.18484918  1.58784533 -1.13037567 -0.08025176  0.13242028
+##  [7]  0.70795473 -0.23969802  1.98447394 -0.13878701</code></pre>
+<p>You can see that it generates numbers with 8 digits. We can generate
+a <strong>histogram</strong> and check to see if the output of the
+<code>rnorm()</code> function really looks like a normal distribution.
+Let’s do it with 1,000 numbers so that we reduce sampling error.</p>
+<pre class="r"><code>set.seed(2)
+hist(rnorm(1000, mean=0, sd=1), freq=F)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p>Looks about right.</p>
+<p>Now let’s try the same thing but with a <strong>uniform
+distribution</strong> of numbers ranging from 0 to 1</p>
+<pre class="r"><code>set.seed(2)
+runif(10, min=0, max=1)</code></pre>
+<pre><code>##  [1] 0.1848823 0.7023740 0.5733263 0.1680519 0.9438393 0.9434750 0.1291590
+##  [8] 0.8334488 0.4680185 0.5499837</code></pre>
+<pre class="r"><code>hist(runif(1000, min=0, max=1), freq=F)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-8-1.png" width="50%" /></p>
+</div>
+<div id="coin-flips" class="section level3">
+<h3>1.3 Coin-flips</h3>
+<p>We can use the <code>rbinom()</code> function to simulate coin-flips,
+i.e., generating 0s and 1s randomly.</p>
+<ol style="list-style-type: decimal">
+<li>Flipping the coin 100 times, keeping track of result each time.</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+coin=rbinom(100, 1, prob=0.5) #100 trials of a single flip of the coin
+coin</code></pre>
+<pre><code>##   [1] 0 1 1 0 1 1 0 1 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 1 1 1 1 1
+##  [38] 0 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 0 0 0
+##  [75] 0 1 0 1 0 1 0 1 0 0 0 1 1 0 1 0 1 0 0 1 0 0 0 0 0 0</code></pre>
+<pre class="r"><code>table(coin) #generate a table of results</code></pre>
+<pre><code>## coin
+##  0  1 
+## 55 45</code></pre>
+<pre class="r"><code>sum(coin)/length(coin) #calculate probability of 1</code></pre>
+<pre><code>## [1] 0.45</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Flipping the coin 100 times, but with skewed probability</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flip=100
+coin4=rbinom(100, 1, prob=0.25)
+table(coin4)</code></pre>
+<pre><code>## coin4
+##  0  1 
+## 72 28</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>10 trials of 100 fair coin flips</li>
+</ol>
+<pre class="r"><code>set.seed(2)
+flips=100
+coin2=rbinom(10, flips, prob=0.5)
+coin2</code></pre>
+<pre><code>##  [1] 48 47 59 45 46 54 50 58 58 52</code></pre>
+</div>
+<div id="table-of-probability-distributions" class="section level3">
+<h3>1.4 Table of probability distributions</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Function to generate numbers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Beta</td>
+<td><code>rbeta()</code></td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td><code>rbinom()</code></td>
+</tr>
+<tr class="odd">
+<td>Chi-square</td>
+<td><code>rchisq()</code></td>
+</tr>
+<tr class="even">
+<td>Exponential</td>
+<td><code>rexp()</code></td>
+</tr>
+<tr class="odd">
+<td>Gamma</td>
+<td><code>rgamma()</code></td>
+</tr>
+<tr class="even">
+<td>Geometric</td>
+<td><code>rgeom()</code></td>
+</tr>
+<tr class="odd">
+<td>Logistic</td>
+<td><code>rlogis()</code></td>
+</tr>
+<tr class="even">
+<td>Log Normal</td>
+<td><code>rlnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Negative Binomial</td>
+<td><code>rnbinom()</code></td>
+</tr>
+<tr class="even">
+<td>Normal</td>
+<td><code>rnorm()</code></td>
+</tr>
+<tr class="odd">
+<td>Poisson</td>
+<td><code>rpois()</code></td>
+</tr>
+<tr class="even">
+<td>Uniform</td>
+<td><code>runif()</code></td>
+</tr>
+<tr class="odd">
+<td>Weibull</td>
+<td><code>rweibull()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div
+id="resampling-techniques-randomization-bootstrapping-and-jackknifing"
+class="section level2">
+<h2>2. Resampling Techniques: Randomization, Bootstrapping, and
+Jackknifing</h2>
+<p>In statistics, “resampling” techniques are often used to overcome
+limitations in inference if you are not sure if your result is due to
+sampling error. In brief: when we collect data, we end up with the
+dataset that we have. But what if you conducted the same study again:
+how likely would you be to get the same answer? Broadly speaking, you
+can ask this question (to some degree) by “resampling” your data. There
+are three basic flavors of resampling:</p>
+<ul>
+<li><p><strong>Randomization, or Permutation</strong> is when you
+resample all of the data that you have, but in randomized
+order.</p></li>
+<li><p><strong>Bootstrapping</strong> is when you randomly resample all
+observed values, but <em>with replacement</em>. This procedure
+essentially simulates sampling error and is useful when you can make the
+assumption that your sample generally represents the true distribution,
+but you want to account for sampling error. It is often used when you
+just have one set of samples, but you want to simulate a situation where
+you had a large set of samples with the same underlying distribution of
+values (but with different sampling error).</p></li>
+<li><p><strong>Jackknifing</strong> is when you randomly subsample some
+of your observations. This procedure is useful when you have a
+sufficiently large dataset, but you want to test the stability of your
+metric (i.e., what is the range of values might your estimate take if
+you were missing some data). For example, you might use this procedure
+to generate a confidence interval around your metric of
+interest.</p></li>
+</ul>
+<div class="figure" style="text-align: center">
+<img src="images/Rodgers1999_Fig1.png" alt="2x2 classification of resampling strategies, from Rodgers 1999 [^2]"  />
+<p class="caption">
+2x2 classification of resampling strategies, from Rodgers 1999 <a
+href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+</p>
+</div>
+<div id="correlation-test-with-randomizationpermutation"
+class="section level3">
+<h3>2.1. Correlation test with randomization/permutation</h3>
+<p>To demonstrate how one might use a permutation test, let’s try to
+compare P-values generated from a Pearson product-moment correlation
+test vs. a permutation test.</p>
+<div id="pearson-correlation-example-using-trees-data"
+class="section level4">
+<h4>2.1.1. Pearson correlation example using trees data</h4>
+<p>As an example, let’s use the <code>trees</code> dataset from base R.
+This dataset contains girth (diameter), height and volume estimates for
+31 black cherry trees.</p>
+<pre class="r"><code>head(trees)</code></pre>
+<pre><code>##   Girth Height Volume
+## 1   8.3     70   10.3
+## 2   8.6     65   10.3
+## 3   8.8     63   10.2
+## 4  10.5     72   16.4
+## 5  10.7     81   18.8
+## 6  10.8     83   19.7</code></pre>
+<p>We can plot the relationship between tree girth and height:</p>
+<pre class="r"><code>plot(Height~Girth, data=trees, pch=19)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+It seems like there is some correlation there… Let’s do a Pearson’s
+correlation test to look at the correlation coefficient and the P-value
+from this test:</p>
+<pre class="r"><code>cor.test(trees$Girth,trees$Height)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  trees$Girth and trees$Height
+## t = 3.2722, df = 29, p-value = 0.002758
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2021327 0.7378538
+## sample estimates:
+##       cor 
+## 0.5192801</code></pre>
+<p>The correlation coefficient = 0.52. Based on the product-moment
+correlation test, the <strong>P-value = 0.0028</strong></p>
+<hr />
+</div>
+<div id="now-calculate-p-value-with-randomizationpermutation-test"
+class="section level4">
+<h4>2.1.2. Now calculate P-value with randomization/permutation
+test</h4>
+<p>To do this, we are going to first save the observed correlation
+coefficient.</p>
+<pre class="r"><code>obs.cor=cor(trees$Girth,trees$Height)
+obs.cor</code></pre>
+<pre><code>## [1] 0.5192801</code></pre>
+<p>Now, we want to figure out how to get a correlation coefficient after
+permuting the data. To do this, let’s run on iteration of the resampling
+of tree height data. We can do this using the <code>sample()</code>
+function.</p>
+<p>Here’s the raw tree height data:</p>
+<pre class="r"><code>trees$Height</code></pre>
+<pre><code>##  [1] 70 65 63 72 81 83 66 75 80 75 79 76 76 69 75 74 85 86 71 64 78 80 74 72 77
+## [26] 81 82 80 80 80 87</code></pre>
+<p>Here is one iteration of permutation of the tree height data</p>
+<pre class="r"><code>sample(trees$Height, length(trees$Height), replace=F)</code></pre>
+<pre><code>##  [1] 80 80 74 72 79 83 80 69 75 80 76 72 87 81 77 66 74 78 64 86 65 71 82 63 80
+## [26] 75 70 76 81 75 85</code></pre>
+<p>To get a correlation coefficient with permuted data, we just put that
+resampled data inside the <code>cor()</code> function:</p>
+<pre class="r"><code>cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))</code></pre>
+<pre><code>## [1] -0.03450754</code></pre>
+<p>Now, we run this whole routine a large number of times (10,000
+times)</p>
+<pre class="r"><code>rep=10000
+rand.cor=vector(length=rep)
+for(i in 1:rep){
+  rand.cor[i]=cor(trees$Girth, sample(trees$Height, length(trees$Height), replace=F))
+}</code></pre>
+<p>Here, we plot a histogram of the correlation coefficient from the
+permutations, and a red line to indicate the observed correlation
+coefficient.</p>
+<pre class="r"><code>hist(rand.cor, xlim=c(-1,1))
+abline(v=obs.cor, lty=2, col=&quot;red&quot;)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Now, we can calculate a P-value from a randomization test in two
+ways: A one-tailed test, or two-tailed test. A <strong>one-tailed
+test</strong> tests the hypothesis with a specific directionality of an
+effect. For example, that the observed correlation coefficient is
+specifically MORE POSITIVE than random expectation. In contrast, a
+<strong>two-tailed test</strong> would test the hypothesis that the
+absolute value of the observed correlation coefficient is larger than
+the distribution of absolute values generated by random chance. The
+standard Pearson’s correlation test above generates the P-value for the
+two-tailed test. Here, we can do either:</p>
+<pre class="r"><code>p.onetail=length(which(rand.cor&gt;=obs.cor))/rep
+round(p.onetail, digits=3)</code></pre>
+<pre><code>## [1] 0.001</code></pre>
+<pre class="r"><code>p.twotail=length(which(abs(rand.cor)&gt;=abs(obs.cor)))/rep
+p.twotail</code></pre>
+<pre><code>## [1] 0.0022</code></pre>
+<p>We should get a very similar P-value to the original correlation test
+(P = 0.0028)</p>
+<hr />
+</div>
+</div>
+<div id="resampling-with-bootstrapping-vs.-jackknifing"
+class="section level3">
+<h3>2.2. Resampling with bootstrapping vs. jackknifing</h3>
+<p>Now, let’s do a quick example of a bootstrapping and jackknifing
+test. Start with loading tidyverse.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<div id="the-co2-dataset" class="section level4">
+<h4>2.2.1. The <code>co2</code> dataset</h4>
+<p>We’ll use the <code>co2</code> dataset in base R. This is a
+timeseries of atmospheric <span class="math inline">\(CO_2\)</span>
+levels measured at Manua Loa since January 1959 to December 1997.</p>
+<pre class="r"><code>co2</code></pre>
+<p>Since this is a “timeseries” object, the first thing I want to do is
+convert it into a data frame (manually).</p>
+<p>To do this, I will first create objects for months (1 through 12) and
+years (1959 through 1997). Then, I can use a nifty function called
+<code>expand.grid()</code> that will create a two-column matrix of all
+possible combinations of month x year.</p>
+<pre class="r"><code>years=1959:1997
+months=1:12
+expand.grid(months, years)[1:20,] #just showing the first 20 rows of this.</code></pre>
+<pre><code>##    Var1 Var2
+## 1     1 1959
+## 2     2 1959
+## 3     3 1959
+## 4     4 1959
+## 5     5 1959
+## 6     6 1959
+## 7     7 1959
+## 8     8 1959
+## 9     9 1959
+## 10   10 1959
+## 11   11 1959
+## 12   12 1959
+## 13    1 1960
+## 14    2 1960
+## 15    3 1960
+## 16    4 1960
+## 17    5 1960
+## 18    6 1960
+## 19    7 1960
+## 20    8 1960</code></pre>
+<p>So we can use this to create a data frame with columns for month,
+year, and <span class="math inline">\(CO_2\)</span> levels. Then I’ll
+name the columns.</p>
+<pre class="r"><code>co2.dat=data.frame(expand.grid(months, years), as.numeric(co2))
+names(co2.dat)=c(&quot;month&quot;, &quot;year&quot;, &quot;value&quot;)
+head(co2.dat)</code></pre>
+<pre><code>##   month year  value
+## 1     1 1959 315.42
+## 2     2 1959 316.31
+## 3     3 1959 316.50
+## 4     4 1959 317.56
+## 5     5 1959 318.13
+## 6     6 1959 318.00</code></pre>
+</div>
+<div id="get-annual-averages" class="section level4">
+<h4>2.2.2. Get annual averages</h4>
+<p>Now, I will use <code>group_by()</code> and <code>summarise()</code>
+to create an annual avearage dataset.</p>
+<pre class="r"><code>co2.annual=co2.dat %&gt;% group_by(year) %&gt;% summarise(year.mean=mean(value))
+co2.annual</code></pre>
+<pre><code>## # A tibble: 39 × 2
+##     year year.mean
+##    &lt;int&gt;     &lt;dbl&gt;
+##  1  1959      316.
+##  2  1960      317.
+##  3  1961      317.
+##  4  1962      318.
+##  5  1963      319.
+##  6  1964      319.
+##  7  1965      320.
+##  8  1966      321.
+##  9  1967      322.
+## 10  1968      323.
+## # ℹ 29 more rows</code></pre>
+<p>I can plot the change in annual average <span
+class="math inline">\(CO_2\)</span> over time.</p>
+<pre class="r"><code>ggplot(co2.annual, aes(x=year, y=year.mean))+ geom_line() + geom_point()</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>Calculate slope of this relationship from observed data:</p>
+<pre class="r"><code>lm.fit=(lm(year.mean~year, data=co2.annual))
+summary(lm.fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = year.mean ~ year, data = co2.annual)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.4467 -1.1919 -0.5012  1.2712  3.6718 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -2.255e+03  4.586e+01  -49.17   &lt;2e-16 ***
+## year         1.310e+00  2.319e-02   56.52   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.63 on 37 degrees of freedom
+## Multiple R-squared:  0.9885, Adjusted R-squared:  0.9882 
+## F-statistic:  3194 on 1 and 37 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>obs.slope=summary(lm.fit)$coefficients[2,1]
+obs.slope</code></pre>
+<pre><code>## [1] 1.310499</code></pre>
+</div>
+<div id="bootstrap-monthly-temperature-data" class="section level4">
+<h4>2.2.3. Bootstrap monthly temperature data</h4>
+<p>We can test how robust the estimate of the slope is to sampling error
+of the monthly measurements. One way to do this is to use a
+bootstrapping procedure.</p>
+<p>One iteration of a bootstrap procedure:</p>
+<pre class="r"><code>co2.boot=co2.dat %&gt;% group_by(year) %&gt;%
+  summarise(mean.boot=mean(sample(value, 12, replace=T)))
+
+ggplot(co2.boot, aes(x=year, y=mean.boot))+ geom_line() + geom_point()</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>Do this 1,000 times to generate confidence interval for the
+slope:</p>
+<pre class="r"><code>times=1000
+boot.fits=list()
+for(i in 1:times){
+  co2.boot=co2.dat %&gt;% group_by(year) %&gt;%
+    summarise(mean.boot=mean(sample(value, 12, replace=T)))
+  boot.fits[[i]]=lm(mean.boot~year, data=co2.boot)
+}
+
+boot.slopes=sapply(boot.fits, function(x) summary(x)$coefficients[2,1])
+
+hist(boot.slopes)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<pre class="r"><code>ci.slopes.boot=quantile(boot.slopes, probs=c(0.025, 0.975))
+ci.slopes.boot</code></pre>
+<pre><code>##     2.5%    97.5% 
+## 1.295146 1.324964</code></pre>
+</div>
+<div id="jackknife-monthly-measurements" class="section level4">
+<h4>2.2.4. Jackknife monthly measurements</h4>
+<p>Now do the same with a jackknife procedure:</p>
+<pre class="r"><code>times=1000
+jk.fits=list()
+for(i in 1:times){
+  co2.jk=co2.dat %&gt;% group_by(year) %&gt;%
+    summarise(mean.jk=mean(sample(value, 6, replace=F)))
+  jk.fits[[i]]=lm(mean.jk~year, data=co2.jk)
+}
+
+jk.slopes=sapply(jk.fits, function(x) summary(x)$coefficients[2,1])
+
+hist(jk.slopes)</code></pre>
+<p><img src="13_RandomNumbers_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<pre class="r"><code>ci.slopes.jk=quantile(jk.slopes, probs=c(0.025, 0.975))
+ci.slopes.jk</code></pre>
+<pre><code>##     2.5%    97.5% 
+## 1.294935 1.326785</code></pre>
+<p>In both cases, the confidence interval of the slope estimate is quite
+robust to sampling error (as would expected for such a strong
+relationship).</p>
+<hr />
+</div>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Strictly speaking, we can only generate pseudo-random
+numbers–the computer can use an algorithm that generates numbers that
+are indistinguishable from random, but it is not truly random as long as
+we are using some algorithm to generate it.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Rodgers, J. L. (1999). The bootstrap, the jackknife, and
+the randomization test: A sampling taxonomy. Multivariate behavioral
+research, 34(4), 441-456.<a href="#fnref2"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
