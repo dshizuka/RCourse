@@ -399,35 +399,27 @@ where a particular file is <em>relative to your working directory</em>
 <h3>1.1 Intro to navigating your directories</h3>
 <p>You can figure out what your current working directory is using
 <code>getwd()</code>:</p>
+<p>Say I was running this from my “Documents” folder, it would look like
+this:</p>
 <pre class="r"><code>getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/dshizuka2/Documents/GitHub/RCourse&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/dshizuka2/Documents&quot;</code></pre>
 <p>You can get the whole list of folders and files that are in your
 working directory using <code>list.files()</code>:</p>
 <pre class="r"><code>list.files()</code></pre>
-<pre><code>##  [1] &quot;_config.yml&quot;         &quot;_put_away&quot;           &quot;_site.yml&quot;          
-##  [4] &quot;01_Intro.html&quot;       &quot;01_Intro.Rmd&quot;        &quot;02_ObjectTypes.html&quot;
-##  [7] &quot;02_ObjectTypes.Rmd&quot;  &quot;03_Data.html&quot;        &quot;03_Data.Rmd&quot;        
-## [10] &quot;03_Workflow.html&quot;    &quot;03_Workflow.Rmd&quot;     &quot;04_Rproject.html&quot;   
-## [13] &quot;04_Rproject.Rmd&quot;     &quot;05_GitHub.Rmd&quot;       &quot;assignments&quot;        
-## [16] &quot;data&quot;                &quot;data.zip&quot;            &quot;images&quot;             
-## [19] &quot;index.html&quot;          &quot;index.Rmd&quot;           &quot;modules.html&quot;       
-## [22] &quot;modules.Rmd&quot;         &quot;pages&quot;               &quot;pdfs&quot;               
-## [25] &quot;RCourse.Rproj&quot;       &quot;site_libs&quot;           &quot;style.css&quot;          
-## [28] &quot;syllabus.html&quot;       &quot;syllabus.Rmd&quot;</code></pre>
+<pre><code>## [1] &quot;Adobe&quot;    &quot;Arduino&quot;  &quot;GitHub&quot;   &quot;HOBOware&quot; &quot;Zoom&quot;</code></pre>
 <p>You can look inside a specific folder within your directory by
 specifying the file within the <code>list.files()</code> function. For
 example, to look in the “data” folder within my current working
 directory:</p>
-<pre class="r"><code>list.files(&quot;data/&quot;)</code></pre>
-<pre><code>##  [1] &quot;all.R1.Rdat&quot;                   &quot;Assignment1_example.zip&quot;      
-##  [3] &quot;Assignment2_example.zip&quot;       &quot;boloria.csv&quot;                  
-##  [5] &quot;colias.csv&quot;                    &quot;coot_example&quot;                 
-##  [7] &quot;coot_example.zip&quot;              &quot;EggMeasurements_example.csv&quot;  
-##  [9] &quot;EggMeasurements2006_clean.csv&quot; &quot;Flack et al_Biology Letters&quot;  
-## [11] &quot;iris.csv&quot;                      &quot;multiple_exposure.csv&quot;        
-## [13] &quot;presidential.csv&quot;              &quot;readme.txt&quot;                   
-## [15] &quot;SampleData_w_errors.csv&quot;       &quot;SampleData.csv&quot;               
-## [17] &quot;sex_chromo.csv&quot;                &quot;single_exposure.csv&quot;</code></pre>
+<pre class="r"><code>list.files(&quot;GitHub/&quot;)</code></pre>
+<pre><code>##  [1] &quot;BARS_phenotypic_integration&quot; &quot;BIO-LEAPS&quot;                  
+##  [3] &quot;CCLO_Social_network&quot;         &quot;Fairywren_Projects&quot;         
+##  [5] &quot;Feeder-Project&quot;              &quot;foodwebs&quot;                   
+##  [7] &quot;GCSP_projects&quot;               &quot;MicrophoneArray&quot;            
+##  [9] &quot;networkanalysis&quot;             &quot;Plover-Project&quot;             
+## [11] &quot;RCourse&quot;                     &quot;RFID_Feeders&quot;               
+## [13] &quot;WBNU-playback&quot;</code></pre>
+<pre class="r"><code>list.files(full.names=T)</code></pre>
 <p>You can <strong>go one level up</strong> in your folder structure
 (aka the “parent directory”) by using <code>..</code></p>
 <pre class="r"><code>list.files(&quot;../&quot;)</code></pre>
@@ -452,8 +444,8 @@ and outside your folders.</h4>
 <div
 id="navigating-folders-and-files-using-absolute-pathnames-to-read-a-file-but-never-do-this-again"
 class="section level2">
-<h2>2. Navigating folders and files using absolute pathnames to read a
-file (but never do this again!)</h2>
+<h2>2. Navigating folders and files using <strong>absolute
+pathnames</strong> to read a file (but never do this again!)</h2>
 <p>As explained above, the Working Directory defines where R will look
 for files, or where it will save files that you generate. R uses
 pathnames to arrange these files (as do all programming languages).
@@ -466,6 +458,8 @@ being different.</p>
 <p>For example, if I were to create a new data file and save it as a
 .csv file on the desktop on my own computer (Mac), the path name might
 look like this: <code>/Users/daishizuka/Desktop/data.csv</code></p>
+<p>or</p>
+<p><code>./Desktop/data.csv</code></p>
 <p>But if I copy and paste the exact same file and save it on the
 desktop of one of my lab computers (Windows), the path name might look
 like this: <code>C:\Users\ShizukaLab\Desktop\data.csv</code></p>

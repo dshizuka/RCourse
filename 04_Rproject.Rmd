@@ -48,21 +48,47 @@ This module is focused on organizing a workflow, which often involves importing 
 
 You can figure out what your current working directory is using `getwd()`:
 
-```{r}
+Say I was running this from my "Documents" folder, it would look like this:
+
+```{r, eval=F}
 getwd()
 ```
 
+
+```{r, echo=F}
+setwd("/Users/dshizuka2/Documents")
+getwd()
+```
 You can get the whole list of folders and files that are in your working directory using `list.files()`:
 
-```{r}
+```{r, eval=F}
 list.files()
 ```
 
+```{r, echo=F}
+saved.wd=getwd()
+setwd("/Users/dshizuka2/Documents")
+list.files()
+```
+
+
+
 You can look inside a specific folder within your directory by specifying the file within the `list.files()` function. For example, to look in the "data" folder within my current working directory:
 
-```{r}
-list.files("data/")
+```{r, eval=F}
+list.files("GitHub/")
 ```
+
+```{r, echo=F}
+setwd("/Users/dshizuka2/Documents")
+list.files("GitHub/")
+```
+
+```{r, eval=F}
+list.files(full.names=T)
+```
+
+
 
 You can **go one level up** in your folder structure (aka the "parent directory") by using `..`
 
@@ -77,13 +103,18 @@ list.files("../")
 *** 
 
 
-## 2. Navigating folders and files using absolute pathnames to read a file (but never do this again!)
+## 2. Navigating folders and files using **absolute pathnames** to read a file (but never do this again!)
 
 As explained above, the Working Directory defines where R will look for files, or where it will save files that you generate. R uses pathnames to arrange these files (as do all programming languages). These are sometimes called "absolute paths". Once you understand how path names work, it can be really handy to be able to pull data in and out from wherever on your computer. However, this can quickly get cumbersome. Moreover, it makes it hard to port your scripts from one computer to another, since pathnames on different computers will end up being different. 
 
 For example, if I were to create a new data file and save it as a .csv file on the desktop on my own computer (Mac), the path name might look like this:
 `/Users/daishizuka/Desktop/data.csv`
 
+or 
+
+ `./Desktop/data.csv`
+ 
+ 
 But if I copy and paste the exact same file and save it on the desktop of one of my lab computers (Windows), the path name might look like this:
 `C:\Users\ShizukaLab\Desktop\data.csv`
 
