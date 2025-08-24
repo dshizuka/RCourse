@@ -1,5 +1,5 @@
 ---
-title: "Module 3: Working With Data"
+title: "Working With Data"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 

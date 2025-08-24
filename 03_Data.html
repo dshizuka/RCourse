@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Module 3: Working With Data</title>
+<title>Working With Data</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -340,7 +340,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Module 3: Working With Data</h1>
+<h1 class="title toc-ignore">Working With Data</h1>
 <h4 class="author">Dai Shizuka</h4>
 <h4 class="date">updated 08/23/25</h4>
 
@@ -392,10 +392,13 @@ excel sheet into one of two formats: <strong><em>tab-delimited files
 (saved as .txt)</em></strong> or <strong><em>comma-separated-values
 files (.csv)</em></strong>. These are simple text files in which each
 entry is separated by a tab or comma (respectively). The huge advantage
-of these formats is that they are non-proprietary file formats that can
-be read by any text editor. One potential drawback is that you cannot
-keep any type of formatting (like highlighting of cells on a spread
-sheet) or special characters.</p>
+of these formats is that they are <strong>non-proprietary file
+formats</strong> that can be read by any text editor. This is super
+important: <code>.xls</code> or <code>.xlsx</code> file is only useful
+on computers with Microsoft Office software, <code>.csv</code> or
+<code>.txt</code> file is universal, and anyone with a computer can open
+it. So the best practice for <strong>reproducible research</strong> or
+<strong>open research</strong> is to use one these formats.</p>
 <p>If you use Excel or any other spreadsheet for data storage, you can
 easily convert those into one of these formats using
 <code>[Save as...]</code></p>
@@ -404,9 +407,11 @@ data importing tasks.</em></strong></p>
 <hr />
 </div>
 </div>
-<div id="five-ways-to-import-data-from-.csv-or-.txt-files"
+<div
+id="five-ways-to-import-data-from-.csv-or-.txt-filesbut-avoid-most-of-them."
 class="section level2">
-<h2>2. Five ways to import data from .csv (or .txt) files</h2>
+<h2>2. Five ways to import data from .csv (or .txt) files–but avoid most
+of them.</h2>
 <p>No matter how you import the data, the final goal is the same: assign
 the imported data as an object. Here, we will assign the data into an
 object called <code>dat</code>. (tip: I would not use “data” as an
