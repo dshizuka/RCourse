@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   + ### [Directories, Pathnames, and RStudio Projects](03_Rproject.html)
   
-  + ### [Working with Data](03_Data.html)
+  + ### [Working with Data](04_Data.html)
   
   + ### [Setting up GitHub for your independent projects (under construction)](05_GitHub.html)  
 
