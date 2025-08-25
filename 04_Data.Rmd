@@ -64,7 +64,7 @@ dat=read.csv("data/SampleData.csv")
 
 ### 2.2. Loading a .rdata file.
 
-In R, you also have the option of "loading" an .rdata file format, which is a binary file format used by the R programming language. .Rdata files can store multiple objects. together. 
+In R, you also have the option of "loading" an .rdata file format, which is a binary file format used by the R programming language. .Rdata files can store multiple objects together. This is a super useful way to share data. 
 
 ```{r}
 load("data/coot_data.rdata")
