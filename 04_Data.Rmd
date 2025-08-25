@@ -24,16 +24,13 @@ To import data into R, you will create an object that points to a dataset somewh
 
 <br>
 
-><span style="color:purple">**Do this before you start this section!**</span>
+><span style="color:purple">**Do this before you start this section (if you didn't do it in the previous module)!**</span>
 >
-* Click on the following links to download three files: 
->(1) [SampleData.csv](data/SampleData.csv)
->(2) [SampleData_w_errors.csv](data/SampleData_w_errors.csv)
->(3) [sex_chromo.csv](data/sex_chromo.csv)
->* Save these files into a subfolder called "data" inside your working directory (i.e., the folder where you are keeping all of your course materials)
+>* Click on [this link](data.zip) to download a zip file: 
+>* Unzip the file. YOu will find a folder called "data". Put this inside your working directory (i.e., the folder where you are keeping all of your course materials)
 >
 
-### 1.1 File Formats: Using .csv (or .txt)
+### 1.1 File Formats for spreadsheets: Using .csv (or .txt)
 
 Many of us manage data by entering them into a spreadsheet using common software like Microsoft Excel. While we have all likely had headaches associated with Excel, it's undeniable that it is still the predominant way to compile our data.  
 
@@ -45,32 +42,42 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 ***
 
-## 2. Five ways to import data from .csv (or .txt) files--but avoid most of them.
+## 2. Importing data in an RStudio Project (recommended)
 
-No matter how you import the data, the final goal is the same: assign the imported data as an object. Here, we will assign the data into an object called `dat`. (tip: I would not use "data" as an object name because `data()` is a function name). Try out each of the following methods for importing a sample data set called "SampleData_1.csv".
-
-***
-
-### 2.1. RStudio Project (recommended)
-
-***RStudio Project*** is a convenient way to organize your projects. When you have your folder organized as a **project directory**, this creates a file called "<yourprojectname>.Rproj" in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise (i.e., step 2).
+***RStudio Project*** is a convenient way to organize your projects (see the ["Directories, Pathnames, and RStudio Projects" module](03_Rproject.html). When you have your folder organized as a **project directory**, this creates a file called "<yourprojectname>.Rproj" in that folder. Then, if you open that file, it automatically sets that folder as the working directory. This makes the job of finding and importing data much easier than it would be otherwise.
 
 Here is an image of how I might organize my course folder:
 ```{r, echo=FALSE, fig.align="center", out.width="75%"}
 knitr::include_graphics("images/folderorganization1.png")
 ```
 
-In this case, my data files are inside a subfolder called "data", so the pathname is `data/SampleData.csv`
+### 2.1. Importing a .csv file 
+
+In this case, my data files are inside a subfolder called "data". So the pathname is `data/SampleData.csv`
 Using this, I can read in the .csv file using a function called `read.csv()`, with the path name. ***Note that the path name needs to be inside quotes***.
 
 ```{r, eval=T}
 dat=read.csv("data/SampleData.csv")
 ```
 
+*** 
 
-One of the biggest benefits of this method is that the pathname is relative to the folder that the .Rproj file is in, which means that as long as the folder is organized in the same way, you can just transfer all the codes to someone else's computer and it will still work. In contrast, if you are using the full path name, you will always have to edit this for the computer that you are running the code on. This means that, if you simply share the entire folder including the .Rproj file, your collaborator can run your code seamlessly without having to alter the pathname or resetting the working directory.
+### 2.2. Loading a .rdata file.
+
+In R, you also have the option of "loading" an .rdata file format, which is a binary file format used by the R programming language. .Rdata files can store multiple objects. together. 
+
+```{r}
+load("data/coot_data.rdata")
+```
+
+You should see that three datasets appeared in your "global environment": "chick_color", "chicks", and "eggs". These are three datasets associated with a [worked example module on coot chick colors](x_CootDataWrangling.html)
+
+
 
 ***
+
+## 
+
 
 ### 2.2. Entering the full path name
 You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data. 

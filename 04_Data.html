@@ -14,7 +14,7 @@
 
 <title>Working With Data</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Working With Data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/24/25</h4>
+<h4 class="date">updated 08/25/25</h4>
 
 </div>
 
@@ -363,24 +363,19 @@ Module 2</a>).</p>
 <p><br></p>
 <blockquote>
 <p><span style="color:purple"><strong>Do this before you start this
-section!</strong></span></p>
+section (if you didn’t do it in the previous
+module)!</strong></span></p>
 <ul>
-<li>Click on the following links to download three files:</li>
-</ul>
-<ol style="list-style-type: decimal">
-<li><a href="data/SampleData.csv">SampleData.csv</a></li>
-<li><a
-href="data/SampleData_w_errors.csv">SampleData_w_errors.csv</a></li>
-<li><a href="data/sex_chromo.csv">sex_chromo.csv</a></li>
-</ol>
-<ul>
-<li>Save these files into a subfolder called “data” inside your working
-directory (i.e., the folder where you are keeping all of your course
-materials)</li>
+<li>Click on <a href="data.zip">this link</a> to download a zip
+file:</li>
+<li>Unzip the file. YOu will find a folder called “data”. Put this
+inside your working directory (i.e., the folder where you are keeping
+all of your course materials)</li>
 </ul>
 </blockquote>
-<div id="file-formats-using-.csv-or-.txt" class="section level3">
-<h3>1.1 File Formats: Using .csv (or .txt)</h3>
+<div id="file-formats-for-spreadsheets-using-.csv-or-.txt"
+class="section level3">
+<h3>1.1 File Formats for spreadsheets: Using .csv (or .txt)</h3>
 <p>Many of us manage data by entering them into a spreadsheet using
 common software like Microsoft Excel. While we have all likely had
 headaches associated with Excel, it’s undeniable that it is still the
@@ -407,46 +402,43 @@ data importing tasks.</em></strong></p>
 <hr />
 </div>
 </div>
-<div
-id="five-ways-to-import-data-from-.csv-or-.txt-filesbut-avoid-most-of-them."
+<div id="importing-data-in-an-rstudio-project-recommended"
 class="section level2">
-<h2>2. Five ways to import data from .csv (or .txt) files–but avoid most
-of them.</h2>
-<p>No matter how you import the data, the final goal is the same: assign
-the imported data as an object. Here, we will assign the data into an
-object called <code>dat</code>. (tip: I would not use “data” as an
-object name because <code>data()</code> is a function name). Try out
-each of the following methods for importing a sample data set called
-“SampleData_1.csv”.</p>
-<hr />
-<div id="rstudio-project-recommended" class="section level3">
-<h3>2.1. RStudio Project (recommended)</h3>
+<h2>2. Importing data in an RStudio Project (recommended)</h2>
 <p><strong><em>RStudio Project</em></strong> is a convenient way to
-organize your projects. When you have your folder organized as a
-<strong>project directory</strong>, this creates a file called
-“<yourprojectname>.Rproj” in that folder. Then, if you open that file,
-it automatically sets that folder as the working directory. This makes
-the job of finding and importing data much easier than it would be
-otherwise (i.e., step 2).</p>
+organize your projects (see the <a href="03_Rproject.html">“Directories,
+Pathnames, and RStudio Projects” module</a>. When you have your folder
+organized as a <strong>project directory</strong>, this creates a file
+called “<yourprojectname>.Rproj” in that folder. Then, if you open that
+file, it automatically sets that folder as the working directory. This
+makes the job of finding and importing data much easier than it would be
+otherwise.</p>
 <p>Here is an image of how I might organize my course folder:
 <img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
-<p>In this case, my data files are inside a subfolder called “data”, so
+<div id="importing-a-.csv-file" class="section level3">
+<h3>2.1. Importing a .csv file</h3>
+<p>In this case, my data files are inside a subfolder called “data”. So
 the pathname is <code>data/SampleData.csv</code> Using this, I can read
 in the .csv file using a function called <code>read.csv()</code>, with
 the path name. <strong><em>Note that the path name needs to be inside
 quotes</em></strong>.</p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
-<p>One of the biggest benefits of this method is that the pathname is
-relative to the folder that the .Rproj file is in, which means that as
-long as the folder is organized in the same way, you can just transfer
-all the codes to someone else’s computer and it will still work. In
-contrast, if you are using the full path name, you will always have to
-edit this for the computer that you are running the code on. This means
-that, if you simply share the entire folder including the .Rproj file,
-your collaborator can run your code seamlessly without having to alter
-the pathname or resetting the working directory.</p>
+</div>
+<div id="loading-a-.rdata-file." class="section level3">
+<h3>2.2. Loading a .rdata file.</h3>
+<p>In R, you also have the option of “loading” an .rdata file format,
+which is a binary file format used by the R programming language. .Rdata
+files can store multiple objects. together.</p>
+<pre class="r"><code>load(&quot;data/coot_data.rdata&quot;)</code></pre>
+<p>You should see that three datasets appeared in your “global
+environment”: “chick_color”, “chicks”, and “eggs”. These are three
+datasets associated with a <a href="x_CootDataWrangling.html">worked
+example module on coot chick colors</a></p>
 <hr />
 </div>
+</div>
+<div id="section" class="section level2">
+<h2></h2>
 <div id="entering-the-full-path-name" class="section level3">
 <h3>2.2. Entering the full path name</h3>
 <p>You can also use the full path name to import the data. This might be
@@ -655,7 +647,7 @@ feel like you have maximum information in the sheet. But in reality,
 this makes it impossible to do any global analysis. And R cannot read in
 this type of spreadsheet.</p>
 <div class="figure" style="text-align: center">
-<img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"  />
+<img src="images/multitable.png" alt="example from https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes" width="482" />
 <p class="caption">
 example from <a
 href="https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes"
