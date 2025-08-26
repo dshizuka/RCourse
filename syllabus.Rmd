@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ***
 ### <u>Time/Location</u>  
-* **T/Th 12:30-1:50pm @ 401 Manter Hall **  
+* **T/Th 12:30-1:45pm @ 401 Manter Hall **  
   
 ### <u>Instructor</u>  
 * **Dai Shizuka**
@@ -98,37 +98,38 @@ The use of AI for generating code for your project will not be prohibited. Howev
 
 ### <u>Tentative course schedule (subject to change!)</u>
 
-* Week 1: Intros & Getting started with R; Objects  
+* Week 1 (Aug 26,28): Intros & Getting started with R; Objects
 
-* Week 2: RStudio Projects; working with data 
+*	Week 2 (Sep 2,4): RStudio Projects; working with data
 
-* Week 3: **Presentations 1: Research Themes**; Plotting basics 
+*	Week 3 (Sep 9,11): Plotting basics; 2-minute Presentations 1: Research Themes 
 
-* Week 4: (**no class Thursday, September 14**); Intro to ggplot
+*	Week 4 (Sep 16,18): Intro to ggplot; **(no class Thursday, Sept 14)**
 
-* Week 5: Data Wrangling 
+*	Week 5 (Sep 23,25): Data Wrangling
 
-* Week 6: apply functions, loops, statements, custom functions
+*	Week 6 (Sep 30, Oct 2): apply functions, loops, statements, custom functions
 
-* Week 7: Resampling & bootstrapping
+*	Week 7 (Oct 7,9): Resampling & bootstrapping, simulations
 
-* Week 8: Simulations, stochasticity, **Submit proposal for independent project**
+*	Week 8 (Oct 14,16): Batch processing, **Submit proposal for independent project**
 
-* Week 9: **Fall Break (Tuesday 21st)**; **Presentations 2: Project Plans (Thursday)**
+*	Week 9 (Oct 21,23): **no class Oct 21st: Fall Break**; **2-minute Presentations 2: Project Plans**
 
-* Week 10: Batch processing; setting up GitHub
+*	Week 10 (Oct 28,30): Setting up GitHub; Independent project work (in person)
 
-* Week 11: independent projects
+*	Week 11 (Nov 4,6): Independent project work (in person Nov 4; no class Nov 6)
 
-* Week 12: independent projects
+*	Week 12 (Nov 11,13): Independent projects (in person)
 
-* Week 13: Independent projects
+*	Week 13 (Nov 18,20): Independent projects (in person)
 
-* Week 14: **No class for Thanksgiving**
+*	Week 14 (Nov 25, 27): **No class for Thanksgiving**
 
-* Week 15: Independent projects
+*	Week 15 (Dec 2,4): Independent projects (in person)
 
-* Week 16: **Presentations 3: Independent projects presentation**
+*	Week 16 (Dec 9,11): **Presentation 3: Independent projects presentations; submit independent projects**
+
 
 ***
 ### <u>Before the Course</u>  
