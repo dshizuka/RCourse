@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ---
 
 ## Updates
+* August 26: Here is the [google doc for live coding sessions](https://docs.google.com/document/d/1AzvXYMHvwYf7ILJXUKGGuc96T_Oh4GYsS8CWcFgbEQ8/edit?tab=t.0)
 
 * August 25, 2025: Welcome to BIOS 967 for Fall 2025! The syllabus has just recently been updated. If you looked at the syllabus earlier, take a look again now. 
 
