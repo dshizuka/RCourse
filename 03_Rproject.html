@@ -14,7 +14,7 @@
 
 <title>Directories, Pathnames, and RStudio Projects</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -423,19 +423,26 @@ this:</p>
 <p>You can get the whole list of folders and files that are in your
 working directory using <code>list.files()</code>:</p>
 <pre class="r"><code>list.files()</code></pre>
-<pre><code>## [1] &quot;Adobe&quot;    &quot;Arduino&quot;  &quot;GitHub&quot;   &quot;HOBOware&quot; &quot;Zoom&quot;</code></pre>
+<pre><code>## [1] &quot;03252024.pdf&quot;                           
+## [2] &quot;Arduino&quot;                                
+## [3] &quot;cpos-06152024_JAS_edit.docx&quot;            
+## [4] &quot;GitHub&quot;                                 
+## [5] &quot;Reller_Landmanagement_20240319_DS.kmz&quot;  
+## [6] &quot;RellerLandManagementMap_20240319_DS.kmz&quot;
+## [7] &quot;RellerLandManagementMap_20240328.kmz&quot;   
+## [8] &quot;ScanSnap Home folder&quot;                   
+## [9] &quot;Zoom&quot;</code></pre>
 <p>You can look inside a specific folder within your directory by
 specifying the file within the <code>list.files()</code> function. For
 example, to look in the “data” folder within my current working
 directory:</p>
 <pre class="r"><code>list.files(&quot;GitHub/&quot;)</code></pre>
-<pre><code>##  [1] &quot;2025_Shizuka&quot;                &quot;BARS_phenotypic_integration&quot;
-##  [3] &quot;BIO-LEAPS&quot;                   &quot;CCLO_Social_network&quot;        
-##  [5] &quot;Fairywren_Projects&quot;          &quot;Feeder-Project&quot;             
-##  [7] &quot;foodwebs&quot;                    &quot;GCSP_projects&quot;              
-##  [9] &quot;MicrophoneArray&quot;             &quot;networkanalysis&quot;            
-## [11] &quot;Plover-Project&quot;              &quot;RCourse&quot;                    
-## [13] &quot;RFID_Feeders&quot;                &quot;WBNU-playback&quot;</code></pre>
+<pre><code>##  [1] &quot;BARS_phenotypic_integration&quot; &quot;BIO-LEAPS&quot;                  
+##  [3] &quot;CCLO_Social_network&quot;         &quot;Fairywren_Projects&quot;         
+##  [5] &quot;Feeder-Project&quot;              &quot;foodwebs&quot;                   
+##  [7] &quot;GCSP_projects&quot;               &quot;MicrophoneArray&quot;            
+##  [9] &quot;networkanalysis&quot;             &quot;Plover-Project&quot;             
+## [11] &quot;RCourse&quot;                     &quot;RFID_Feeders&quot;</code></pre>
 <p>Notice that you are</p>
 <p>You can <strong>go one level up</strong> in your folder structure
 (aka the “parent directory”) by using <code>..</code></p>
@@ -499,20 +506,20 @@ COMPUTER.</p></li>
 dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre>
 <p>Now let’s look at the data, simply by running <code>dat</code></p>
 <pre class="r"><code>dat</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight
-## 1     20-01   male    adult 29.5   66.5
-## 2     20-02   male juvenile 28.0   58.5
-## 3     20-03 female    adult 26.0   57.0
-## 4     20-04 female    adult 25.0   55.5
-## 5     20-05 female juvenile 25.0   62.0
-## 6     20-06   male juvenile 28.0   61.0
-## 7     20-07 female    adult 26.0   58.0
-## 8     20-08   male    adult 28.5   65.0
-## 9     20-09   male juvenile 27.5   60.0
-## 10    20-10 female juvenile 26.0   59.0
-## 11    20-11   male    adult 25.5   62.0
-## 12    20-12 female    adult 27.0   59.0
-## 13    20-13 female    adult 26.5   60.0</code></pre>
+<pre><code>##    Individual.ID    sex      age size weight date.captured
+## 1          20-01   male    adult 29.5   66.5        5/4/01
+## 2          20-02   male juvenile 28.0   58.5        5/5/01
+## 3          20-03 female    adult 26.0   57.0       5/10/01
+## 4          20-04 female    adult 25.0   55.5       5/10/01
+## 5          20-05 female juvenile 25.0   62.0       5/10/01
+## 6          20-06   male juvenile 28.0   61.0       5/12/01
+## 7          20-07 female    adult 26.0   58.0       5/13/01
+## 8          20-08   male    adult 28.5   65.0       5/13/01
+## 9          20-09   male juvenile 27.5   60.0       5/13/01
+## 10         20-10 female juvenile 26.0   59.0       5/13/01
+## 11         20-11   male    adult 25.5   62.0       5/15/01
+## 12         20-12 female    adult 27.0   59.0       5/16/01
+## 13         20-13 female    adult 26.5   60.0       5/16/01</code></pre>
 <p>Now, this might seem like a fine way to read your data file if you
 plan to do all of your analyses on your own computer, and you know where
 the file will always be on your computer. HOWEVER, this is a major
@@ -610,20 +617,20 @@ on your computer.</p>
 <p>Let’s call this version of the data <code>dat2</code></p>
 <pre class="r"><code>dat2=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 <pre class="r"><code>dat2</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight
-## 1     20-01   male    adult 29.5   66.5
-## 2     20-02   male juvenile 28.0   58.5
-## 3     20-03 female    adult 26.0   57.0
-## 4     20-04 female    adult 25.0   55.5
-## 5     20-05 female juvenile 25.0   62.0
-## 6     20-06   male juvenile 28.0   61.0
-## 7     20-07 female    adult 26.0   58.0
-## 8     20-08   male    adult 28.5   65.0
-## 9     20-09   male juvenile 27.5   60.0
-## 10    20-10 female juvenile 26.0   59.0
-## 11    20-11   male    adult 25.5   62.0
-## 12    20-12 female    adult 27.0   59.0
-## 13    20-13 female    adult 26.5   60.0</code></pre>
+<pre><code>##    Individual.ID    sex      age size weight date.captured
+## 1          20-01   male    adult 29.5   66.5        5/4/01
+## 2          20-02   male juvenile 28.0   58.5        5/5/01
+## 3          20-03 female    adult 26.0   57.0       5/10/01
+## 4          20-04 female    adult 25.0   55.5       5/10/01
+## 5          20-05 female juvenile 25.0   62.0       5/10/01
+## 6          20-06   male juvenile 28.0   61.0       5/12/01
+## 7          20-07 female    adult 26.0   58.0       5/13/01
+## 8          20-08   male    adult 28.5   65.0       5/13/01
+## 9          20-09   male juvenile 27.5   60.0       5/13/01
+## 10         20-10 female juvenile 26.0   59.0       5/13/01
+## 11         20-11   male    adult 25.5   62.0       5/15/01
+## 12         20-12 female    adult 27.0   59.0       5/16/01
+## 13         20-13 female    adult 26.5   60.0       5/16/01</code></pre>
 <p>This will also simplify the process of saving files and plots–which
 we will do later.</p>
 <p>The beauty of this system is that, <strong>as long as the project

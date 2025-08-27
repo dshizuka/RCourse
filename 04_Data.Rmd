@@ -48,10 +48,10 @@ If you use Excel or any other spreadsheet for data storage, you can easily conve
 
 Here is an image of how I might organize my course folder:
 ```{r, echo=FALSE, fig.align="center", out.width="75%"}
-knitr::include_graphics("images/folderorganization1.png")
+knitr::include_graphics("images/file_structure.png")
 ```
 
-### 2.1. Importing a .csv file 
+### 2.1 Importing a .csv file 
 
 In this case, my data files are inside a subfolder called "data". So the pathname is `data/SampleData.csv`
 Using this, I can read in the .csv file using a function called `read.csv()`, with the path name. ***Note that the path name needs to be inside quotes***.
@@ -62,7 +62,15 @@ dat=read.csv("data/SampleData.csv")
 
 *** 
 
-### 2.2. Loading a .rdata file.
+### 2.2 importing from .txt file or other text-based file formats.
+
+R is very good at importing from .txt files or anyt other text-based file formats. You just need to make sure you know the format--i.e., whether there are headers or other lines of text at the top, what kind of delimitation is used (e.g., comma-delimited vs. tab-delimited vs. space-delimited, etc.). In fact, if you know how to work with these options, it allows you to work with an even wider array of data. 
+
+A more generic function is `read.table()`. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files `dat=read.table(file.choose(), sep=",")`, or tab-delimited files `dat=read.table(file.choose(), sep="\t")`. So the `read.table()` function is more flexible in many ways.
+
+***
+
+### 2.3 Loading a .rdata file.
 
 In R, you also have the option of "loading" an .rdata file format, which is a binary file format used by the R programming language. .Rdata files can store multiple objects together. This is a super useful way to share data. 
 
@@ -73,10 +81,11 @@ load("data/coot_data.rdata")
 You should see that three datasets appeared in your "global environment": "chick_color", "chicks", and "eggs". These are three datasets associated with a [worked example module on coot chick colors](x_CootDataWrangling.html)
 
 
-
 ***
 
 ## 3. The **Not** recommended ways to import data, and why I don't recommend them.
+
+***
 
 ### 3.1 Entering the full path name
 You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data. 
@@ -109,13 +118,13 @@ dat=read.csv("data/SampleData.csv")
 ***Remember: You will have to change the path inside the lines of code here to be where the file resides in your computer.***
 
 
-><span style="color:purple">**Difference between options 1 and 2:**</span>
+><span style="color:purple">**Why using the absolute pathname is not recommended:**</span>
 >
->Options 1 and 2 (using RStudio Project and Entering Full Path Name) are essentially the same thing in that you are telling R how to find the file on your computer that you want to import. It's just that RStudio Projects makes this much more straightforward and transferable because the pathname becomes relative to your working directory automatically.
+>This option works fine **as long as you are only ever working on code on one computer (and you never move your data file).** But as soon as you try to run this same code on a different computer, it will fail. You will have to find the absolute pathname for the data file *on that particular computer* and then edit the code. This might not be something you encounter very often when you are working on one thesis/dissertation project on your own--but it will matter a lot as soon as you are trying to seek help from others on code development, or if you are collaborating on a project with someone because your code is only reproducible *on your computer*. So be nice to your future self--make it a routine to establish an RStudio project.
 
 ***
 
-### 3.2 Use a url (recommended for data downloadable from the web)
+### 3.2 Use a url (good for data downloadable from the web)
 
 Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name. 
 
@@ -128,7 +137,9 @@ So, you can simply download that file using this url instead of the path name:
 dat=read.csv("https://dshizuka.github.io/RCourse/data/SampleData.csv")
 ```
 
-Super useful! But **note:** only use this if you know that the url is going to be stable for a long time! If you need to be able to reproduce your analysis in the long term, it may pay off to download the data and save it on your computer and use Option 1. 
+><span style="color:purple">**Why using url is not recommended:**</span>
+>
+>Honestly, this method is super useful *when it works*! But **note:** only use this if you know that the url is going to be stable for a long time! If you need to be able to reproduce your analysis in the long term, it will probably pay off to download the data and save it on your computer and set up an RStudio project folder. 
 
 ***
 
@@ -138,20 +149,64 @@ You can also call a prompt that will let you choose the file. You can then find 
 dat=read.csv(file.choose())
 ```
 
-***
-
 ### 3.4 Using RStudio GUI
+
 In RStudio, select `[File]`--`[Import Dataset]`--`[From CSV...]`
 The first time you do this, you may be asked to install the `readr` package. 
 
-**Note:** I actually do NOT recommend using this method for a variety of reasons (irreproducibility, takes time, saves the object as a special format).
-
-
-***
-
-><span style="color:purple">**Importing from .txt files:**</span>
+><span style="color:purple">**Why using the 'choose.file()' prompt or the GUI are not recommended:**</span>
 >
->A more generic function is `read.table()`. This function allows you to read any kind of text file (including .csv files) while specifying the data is delimited. So, for example, you can use this function to import comma-separated files `dat=read.table(file.choose(), sep=",")`, or tab-delimited files `dat=read.table(file.choose(), sep="\t")`. So the `read.table()` function is more flexible in many ways.
+>These methods defeat some of the main purpose of using code! First, when you have to click around to find your file, it takes time each time you are running the code. Importantly, this procedure is not as reproducible as code--when you embed the code to import the data properly, you ensure that anyone trying to run the code will get it right. Also, it is too easy to forget *which version* of the dataset you are supposed to be using, and you can make mistakes. You can prevent all that by just writing the code to import the data.   
+
+### 3.5 Reading straight from .xls or .xlsx
+
+Ok, I will admit to you that there are times when it is just easier to write code to import directly from the default Excel format (.xls or .xlsx). For example, if you have to constantly update your data, it feels inconvenient to have to constantly remember to convert it into .csv format. You may also have to import a whole batch of data that are already saved as Excel sheets, and you don't want to go through the trouble of converting each of them to .csv...
+
+Whatever the reason, it IS possible to import data straight from Excel formats by using other ***R packages***. 
+
+To use a function in a package, you have to first make sure that the package is downloaded to your computer. The `install.packages()` function downloads the package from an online repository to your computer.
+
+
+```{r, eval=F, message=F}
+install.packages("readxl")
+```
+But to USE the package in your current R environment, you have to load the package. You can do that using either `library()` or `require()`. They both work--if you want to know the difference, just do a web search for "what's the difference between library and require in R?"
+
+```{r}
+library(readxl)
+```
+
+Now, you can use the `read_excel()` function to download an .xlsx version of the SampleData file:
+
+```{r}
+dat_xlsx=read_excel("data/SampleData.xlsx")
+
+dat_xlsx
+```
+
+You might notice that this output is formatted slightly differently than data frames you've seen before. It is called a 'tibble' format, which is used by the 'tidyverse' family of packages. You'll learn more about that in the ggplot and data wrangling modules later on.
+
+><span style="color:purple">**Why importing directly from .xlsx is less preferred:**</span>
+>
+>Honestly, this method is not that bad, especially if you get used to it, so I do use this option sometimes. However, my main gripe with reading straight from .xlsx is that, in trying to be friendly, it makes formatting decisions that are not best practice for coding. For example, check the column names of this dataset:
+
+```{r}
+names(dat_xlsx)
+```
+
+It includes column names that have spaces in them, like "Individual ID". Now, try calling that column:
+
+```{r, eval=F}
+dat_xlsx$Individual ID
+```
+
+You will find that this code will not run--because you can't have an object name that has a space. Instead, you have to use the "`" symbol around the column name to call it:
+
+```{r}
+dat_xlsx$`Individual ID`
+```
+
+This might seem like small details, but it CAN cause a lot of headaches downstream. Also, there is the basic problem of proprietary file formats. If you truly want to use open science practices, you should avoid sharing data and code using .xlsx format because computers that don't have Microsoft Office cannot open them. 
 
 ***
 

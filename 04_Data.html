@@ -14,7 +14,7 @@
 
 <title>Working With Data</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -414,9 +414,9 @@ file, it automatically sets that folder as the working directory. This
 makes the job of finding and importing data much easier than it would be
 otherwise.</p>
 <p>Here is an image of how I might organize my course folder:
-<img src="images/folderorganization1.png" width="75%" style="display: block; margin: auto;" /></p>
+<img src="images/file_structure.png" width="75%" style="display: block; margin: auto;" /></p>
 <div id="importing-a-.csv-file" class="section level3">
-<h3>2.1. Importing a .csv file</h3>
+<h3>2.1 Importing a .csv file</h3>
 <p>In this case, my data files are inside a subfolder called “data”. So
 the pathname is <code>data/SampleData.csv</code> Using this, I can read
 in the .csv file using a function called <code>read.csv()</code>, with
@@ -425,8 +425,26 @@ quotes</em></strong>.</p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 <hr />
 </div>
+<div id="importing-from-.txt-file-or-other-text-based-file-formats."
+class="section level3">
+<h3>2.2 importing from .txt file or other text-based file formats.</h3>
+<p>R is very good at importing from .txt files or anyt other text-based
+file formats. You just need to make sure you know the format–i.e.,
+whether there are headers or other lines of text at the top, what kind
+of delimitation is used (e.g., comma-delimited vs. tab-delimited
+vs. space-delimited, etc.). In fact, if you know how to work with these
+options, it allows you to work with an even wider array of data.</p>
+<p>A more generic function is <code>read.table()</code>. This function
+allows you to read any kind of text file (including .csv files) while
+specifying the data is delimited. So, for example, you can use this
+function to import comma-separated files
+<code>dat=read.table(file.choose(), sep=",")</code>, or tab-delimited
+files <code>dat=read.table(file.choose(), sep="\t")</code>. So the
+<code>read.table()</code> function is more flexible in many ways.</p>
+<hr />
+</div>
 <div id="loading-a-.rdata-file." class="section level3">
-<h3>2.2. Loading a .rdata file.</h3>
+<h3>2.3 Loading a .rdata file.</h3>
 <p>In R, you also have the option of “loading” an .rdata file format,
 which is a binary file format used by the R programming language. .Rdata
 files can store multiple objects together. This is a super useful way to
@@ -444,6 +462,7 @@ id="the-not-recommended-ways-to-import-data-and-why-i-dont-recommend-them."
 class="section level2">
 <h2>3. The <strong>Not</strong> recommended ways to import data, and why
 I don’t recommend them.</h2>
+<hr />
 <div id="entering-the-full-path-name" class="section level3">
 <h3>3.1 Entering the full path name</h3>
 <p>You can also use the full path name to import the data. This might be
@@ -477,20 +496,25 @@ dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
 lines of code here to be where the file resides in your
 computer.</em></strong></p>
 <blockquote>
-<p><span style="color:purple"><strong>Difference between options 1 and
-2:</strong></span></p>
-<p>Options 1 and 2 (using RStudio Project and Entering Full Path Name)
-are essentially the same thing in that you are telling R how to find the
-file on your computer that you want to import. It’s just that RStudio
-Projects makes this much more straightforward and transferable because
-the pathname becomes relative to your working directory
-automatically.</p>
+<p><span style="color:purple"><strong>Why using the absolute pathname is
+not recommended:</strong></span></p>
+<p>This option works fine <strong>as long as you are only ever working
+on code on one computer (and you never move your data file).</strong>
+But as soon as you try to run this same code on a different computer, it
+will fail. You will have to find the absolute pathname for the data file
+<em>on that particular computer</em> and then edit the code. This might
+not be something you encounter very often when you are working on one
+thesis/dissertation project on your own–but it will matter a lot as soon
+as you are trying to seek help from others on code development, or if
+you are collaborating on a project with someone because your code is
+only reproducible <em>on your computer</em>. So be nice to your future
+self–make it a routine to establish an RStudio project.</p>
 </blockquote>
 <hr />
 </div>
-<div id="use-a-url-recommended-for-data-downloadable-from-the-web"
+<div id="use-a-url-good-for-data-downloadable-from-the-web"
 class="section level3">
-<h3>3.2 Use a url (recommended for data downloadable from the web)</h3>
+<h3>3.2 Use a url (good for data downloadable from the web)</h3>
 <p>Sometimes, you will be downloading a dataset that is accessible
 online, from a static website, a github page, a data repository (like
 Dryad or Figshare), or even a dropbox folder. In fact, if you can get a
@@ -504,10 +528,15 @@ address” and get this url:
 <p>So, you can simply download that file using this url instead of the
 path name:</p>
 <pre class="r"><code>dat=read.csv(&quot;https://dshizuka.github.io/RCourse/data/SampleData.csv&quot;)</code></pre>
-<p>Super useful! But <strong>note:</strong> only use this if you know
-that the url is going to be stable for a long time! If you need to be
-able to reproduce your analysis in the long term, it may pay off to
-download the data and save it on your computer and use Option 1.</p>
+<blockquote>
+<p><span style="color:purple"><strong>Why using url is not
+recommended:</strong></span></p>
+<p>Honestly, this method is super useful <em>when it works</em>! But
+<strong>note:</strong> only use this if you know that the url is going
+to be stable for a long time! If you need to be able to reproduce your
+analysis in the long term, it will probably pay off to download the data
+and save it on your computer and set up an RStudio project folder.</p>
+</blockquote>
 <hr />
 </div>
 <div id="call-choose-file-prompt." class="section level3">
@@ -518,7 +547,6 @@ and quick way to import data. However, it is limiting because it takes
 time to click around to find the file, and more importantly, this step
 is not <em>reproducible</em>.</p>
 <pre class="r"><code>dat=read.csv(file.choose())</code></pre>
-<hr />
 </div>
 <div id="using-rstudio-gui" class="section level3">
 <h3>3.4 Using RStudio GUI</h3>
@@ -526,21 +554,92 @@ is not <em>reproducible</em>.</p>
 <code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code>
 The first time you do this, you may be asked to install the
 <code>readr</code> package.</p>
-<p><strong>Note:</strong> I actually do NOT recommend using this method
-for a variety of reasons (irreproducibility, takes time, saves the
-object as a special format).</p>
-<hr />
 <blockquote>
-<p><span style="color:purple"><strong>Importing from .txt
-files:</strong></span></p>
-<p>A more generic function is <code>read.table()</code>. This function
-allows you to read any kind of text file (including .csv files) while
-specifying the data is delimited. So, for example, you can use this
-function to import comma-separated files
-<code>dat=read.table(file.choose(), sep=",")</code>, or tab-delimited
-files <code>dat=read.table(file.choose(), sep="\t")</code>. So the
-<code>read.table()</code> function is more flexible in many ways.</p>
+<p><span style="color:purple"><strong>Why using the ‘choose.file()’
+prompt or the GUI are not recommended:</strong></span></p>
+<p>These methods defeat some of the main purpose of using code! First,
+when you have to click around to find your file, it takes time each time
+you are running the code. Importantly, this procedure is not as
+reproducible as code–when you embed the code to import the data
+properly, you ensure that anyone trying to run the code will get it
+right. Also, it is too easy to forget <em>which version</em> of the
+dataset you are supposed to be using, and you can make mistakes. You can
+prevent all that by just writing the code to import the data.</p>
 </blockquote>
+</div>
+<div id="reading-straight-from-.xls-or-.xlsx" class="section level3">
+<h3>3.5 Reading straight from .xls or .xlsx</h3>
+<p>Ok, I will admit to you that there are times when it is just easier
+to write code to import directly from the default Excel format (.xls or
+.xlsx). For example, if you have to constantly update your data, it
+feels inconvenient to have to constantly remember to convert it into
+.csv format. You may also have to import a whole batch of data that are
+already saved as Excel sheets, and you don’t want to go through the
+trouble of converting each of them to .csv…</p>
+<p>Whatever the reason, it IS possible to import data straight from
+Excel formats by using other <strong><em>R packages</em></strong>.</p>
+<p>To use a function in a package, you have to first make sure that the
+package is downloaded to your computer. The
+<code>install.packages()</code> function downloads the package from an
+online repository to your computer.</p>
+<pre class="r"><code>install.packages(&quot;readxl&quot;)</code></pre>
+<p>But to USE the package in your current R environment, you have to
+load the package. You can do that using either <code>library()</code> or
+<code>require()</code>. They both work–if you want to know the
+difference, just do a web search for “what’s the difference between
+library and require in R?”</p>
+<pre class="r"><code>library(readxl)</code></pre>
+<p>Now, you can use the <code>read_excel()</code> function to download
+an .xlsx version of the SampleData file:</p>
+<pre class="r"><code>dat_xlsx=read_excel(&quot;data/SampleData.xlsx&quot;)
+
+dat_xlsx</code></pre>
+<pre><code>## # A tibble: 13 × 6
+##    `Individual ID` sex    age       size weight `date captured`    
+##    &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dttm&gt;             
+##  1 20-01           male   adult     29.5   66.5 2001-05-04 00:00:00
+##  2 20-02           male   juvenile  28     58.5 2001-05-05 00:00:00
+##  3 20-03           female adult     26     57   2001-05-10 00:00:00
+##  4 20-04           female adult     25     55.5 2001-05-10 00:00:00
+##  5 20-05           female juvenile  25     62   2001-05-10 00:00:00
+##  6 20-06           male   juvenile  28     61   2001-05-12 00:00:00
+##  7 20-07           female adult     26     58   2001-05-13 00:00:00
+##  8 20-08           male   adult     28.5   65   2001-05-13 00:00:00
+##  9 20-09           male   juvenile  27.5   60   2001-05-13 00:00:00
+## 10 20-10           female juvenile  26     59   2001-05-13 00:00:00
+## 11 20-11           male   adult     25.5   62   2001-05-15 00:00:00
+## 12 20-12           female adult     27     59   2001-05-16 00:00:00
+## 13 20-13           female adult     26.5   60   2001-05-16 00:00:00</code></pre>
+<p>You might notice that this output is formatted slightly differently
+than data frames you’ve seen before. It is called a ‘tibble’ format,
+which is used by the ‘tidyverse’ family of packages. You’ll learn more
+about that in the ggplot and data wrangling modules later on.</p>
+<blockquote>
+<p><span style="color:purple"><strong>Why importing directly from .xlsx
+is less preferred:</strong></span></p>
+<p>Honestly, this method is not that bad, especially if you get used to
+it, so I do use this option sometimes. However, my main gripe with
+reading straight from .xlsx is that, in trying to be friendly, it makes
+formatting decisions that are not best practice for coding. For example,
+check the column names of this dataset:</p>
+</blockquote>
+<pre class="r"><code>names(dat_xlsx)</code></pre>
+<pre><code>## [1] &quot;Individual ID&quot; &quot;sex&quot;           &quot;age&quot;           &quot;size&quot;         
+## [5] &quot;weight&quot;        &quot;date captured&quot;</code></pre>
+<p>It includes column names that have spaces in them, like “Individual
+ID”. Now, try calling that column:</p>
+<pre class="r"><code>dat_xlsx$Individual ID</code></pre>
+<p>You will find that this code will not run–because you can’t have an
+object name that has a space. Instead, you have to use the “`” symbol
+around the column name to call it:</p>
+<pre class="r"><code>dat_xlsx$`Individual ID`</code></pre>
+<pre><code>##  [1] &quot;20-01&quot; &quot;20-02&quot; &quot;20-03&quot; &quot;20-04&quot; &quot;20-05&quot; &quot;20-06&quot; &quot;20-07&quot; &quot;20-08&quot; &quot;20-09&quot;
+## [10] &quot;20-10&quot; &quot;20-11&quot; &quot;20-12&quot; &quot;20-13&quot;</code></pre>
+<p>This might seem like small details, but it CAN cause a lot of
+headaches downstream. Also, there is the basic problem of proprietary
+file formats. If you truly want to use open science practices, you
+should avoid sharing data and code using .xlsx format because computers
+that don’t have Microsoft Office cannot open them.</p>
 <hr />
 </div>
 </div>
