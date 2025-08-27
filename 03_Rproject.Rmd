@@ -168,13 +168,13 @@ Reading about all of this is one thing, but you'll actually learn how this works
 
 ### 3.1. Setting up a new Rstudio project folder the course lectures.
 
-1. Create a folder called "BIOS967_lectures" on your computer.
+1. Create a folder called "BIOS967_RCourse" on your computer.
 
 2. Next, in R Studio, click on "File" > "New Project" 
 
-3. Click on "Existing Directory", click "Browse" and select the "BIOS967_lectures" Folder you created, then click "Create Project"
+3. Click on "Existing Directory", click "Browse" and select the "BIOS967_RCourse" Folder you created, then click "Create Project"
 
-4. Now, you will see that there is a new "BIOS967_lectures.rproj" file in your folder.
+4. Now, you will see that there is a new "BIOS967_RCourse.rproj" file in your folder.
 
 5. Open that .rproj file. This will open up a new RStudio window. 
 
@@ -184,11 +184,25 @@ Now, whenever you create any file within this R Project, the files will automati
 
   * Click on [this link](data.zip) to download a compressed file with all data from the learning modules. 
 
-  * "Decompress" or "unzip" the file. This will create a folder called "data". Move this folder into your "BIOS967_lectures" folder. 
+  * "Decompress" or "unzip" the file. This will create a folder called "data". Move this folder into your "BIOS967_RCourse" folder. 
 
-  * Now, in RStudio, click on the "refresh" button ![](images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window. You should now see that there is a "data" folder in your project directory, and that there are a bunch of different files in that folder. 
+  * Finally, create a second folder, called "scripts". This is where you will store code scripts. 
+  
+  * Now, in RStudio, click on the "refresh" button ![](images/Rstudio_refresh.png) on the far right side of your "Files" window on the bottom-right part of your Rstudio window. You should now see the "data" and "script" folders in your project directory, and there should be bunch of files in the "data" folder. 
+  
+```{r, echo=F}
+knitr::include_graphics("images/file_structure.png")
+```
 
-Now, you can use `read.csv()` again to read your file. But this time, you only need a *relative pathname*--that is, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
+## 4. What you will do from now on:
+
+Now that we have created the proper file structure for this project folder for the lectures in this course, here is the workflow from now on: **Always start by opening the ".rproj" file.** 
+
+This starts an R session with the working directory *set to the folder where the .rproj file resides.* 
+
+What does this mean? 
+
+First, it means that you don't need to use absolute pathnames any more--you just need the relative pathname. For example, to import the "SampleData.csv" data, you only need to put in `"data/SampleData.csv"` to tell R to look for "SampleData.csv" inside the "data" folder, instead of the whole pathname on your computer.
 
 Let's call this version of the data `dat2`
 ```{r, echo=T, eval=T}
@@ -199,7 +213,9 @@ dat2=read.csv("data/SampleData.csv")
 dat2
 ```
 
-The beauty of this system is that, as long as the project directory structure is the same the computer, you can run this exact same code to import the data on any computer. In turn, that means that this entire project and code are portable in multiple ways. You could:
+This will also simplify the process of saving files and plots--which we will do later. 
+
+The beauty of this system is that, **as long as the project directory structure is the same the computer, you can run this exact same code to import the data on any computer.** In turn, that means that this entire project and code are portable in multiple ways. You could:
 
 * send a collaborator your whole project directory, or
 
@@ -207,7 +223,7 @@ The beauty of this system is that, as long as the project directory structure is
 
 * sync the project directory on DropBox, OneDrive, or other cloud storage that syncs with multiple computers...
 
-and you should be able to run the code as-is.
+* **or, the best way--make this project folder into a GitHub repository (or other Git system), where you and collaborators can keep the project folder synchronized as you work.** In class, we will do this together later to setup repositories for your independent projects. To learn how to do this, go to [the "GitHub Workflow" module](05_GitHub.html). 
 
 
 

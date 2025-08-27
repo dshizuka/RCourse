@@ -344,7 +344,7 @@ div.tocify {
 Projects</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/24/25</h4>
+<h4 class="date">updated 08/27/25</h4>
 
 </div>
 
@@ -429,13 +429,13 @@ specifying the file within the <code>list.files()</code> function. For
 example, to look in the “data” folder within my current working
 directory:</p>
 <pre class="r"><code>list.files(&quot;GitHub/&quot;)</code></pre>
-<pre><code>##  [1] &quot;BARS_phenotypic_integration&quot; &quot;BIO-LEAPS&quot;                  
-##  [3] &quot;CCLO_Social_network&quot;         &quot;Fairywren_Projects&quot;         
-##  [5] &quot;Feeder-Project&quot;              &quot;foodwebs&quot;                   
-##  [7] &quot;GCSP_projects&quot;               &quot;MicrophoneArray&quot;            
-##  [9] &quot;networkanalysis&quot;             &quot;Plover-Project&quot;             
-## [11] &quot;RCourse&quot;                     &quot;RFID_Feeders&quot;               
-## [13] &quot;WBNU-playback&quot;</code></pre>
+<pre><code>##  [1] &quot;2025_Shizuka&quot;                &quot;BARS_phenotypic_integration&quot;
+##  [3] &quot;BIO-LEAPS&quot;                   &quot;CCLO_Social_network&quot;        
+##  [5] &quot;Fairywren_Projects&quot;          &quot;Feeder-Project&quot;             
+##  [7] &quot;foodwebs&quot;                    &quot;GCSP_projects&quot;              
+##  [9] &quot;MicrophoneArray&quot;             &quot;networkanalysis&quot;            
+## [11] &quot;Plover-Project&quot;              &quot;RCourse&quot;                    
+## [13] &quot;RFID_Feeders&quot;                &quot;WBNU-playback&quot;</code></pre>
 <p>Notice that you are</p>
 <p>You can <strong>go one level up</strong> in your folder structure
 (aka the “parent directory”) by using <code>..</code></p>
@@ -557,13 +557,13 @@ class="section level3">
 <h3>3.1. Setting up a new Rstudio project folder the course
 lectures.</h3>
 <ol style="list-style-type: decimal">
-<li><p>Create a folder called “BIOS967_lectures” on your
+<li><p>Create a folder called “BIOS967_RCourse” on your
 computer.</p></li>
 <li><p>Next, in R Studio, click on “File” &gt; “New Project”</p></li>
 <li><p>Click on “Existing Directory”, click “Browse” and select the
-“BIOS967_lectures” Folder you created, then click “Create
+“BIOS967_RCourse” Folder you created, then click “Create
 Project”</p></li>
-<li><p>Now, you will see that there is a new “BIOS967_lectures.rproj”
+<li><p>Now, you will see that there is a new “BIOS967_RCourse.rproj”
 file in your folder.</p></li>
 <li><p>Open that .rproj file. This will open up a new RStudio
 window.</p></li>
@@ -579,17 +579,32 @@ modules.</li>
 <li><p>Click on <a href="data.zip">this link</a> to download a
 compressed file with all data from the learning modules.</p></li>
 <li><p>“Decompress” or “unzip” the file. This will create a folder
-called “data”. Move this folder into your “BIOS967_lectures”
+called “data”. Move this folder into your “BIOS967_RCourse”
 folder.</p></li>
+<li><p>Finally, create a second folder, called “scripts”. This is where
+you will store code scripts.</p></li>
 <li><p>Now, in RStudio, click on the “refresh” button <img
 src="images/Rstudio_refresh.png" /> on the far right side of your
-“Files” window on the bottom-right part of your Rstudio window</p></li>
+“Files” window on the bottom-right part of your Rstudio window. You
+should now see the “data” and “script” folders in your project
+directory, and there should be bunch of files in the “data”
+folder.</p></li>
 </ul>
-<p>You should now see that there is a “data” folder in your project
-directory, and that “SampleData.csv” is in that folder.</p>
-<p>Now, you can use <code>read.csv()</code> again to read your file. But
-this time, you only need a <em>relative pathname</em>–that is, you only
-need to put in <code>"data/SampleData.csv"</code> to tell R to look for
+<p><img src="images/file_structure.png" width="937" /></p>
+</div>
+</div>
+<div id="what-you-will-do-from-now-on" class="section level2">
+<h2>4. What you will do from now on:</h2>
+<p>Now that we have created the proper file structure for this project
+folder for the lectures in this course, here is the workflow from now
+on: <strong>Always start by opening the “.rproj” file.</strong></p>
+<p>This starts an R session with the working directory <em>set to the
+folder where the .rproj file resides.</em></p>
+<p>What does this mean?</p>
+<p>First, it means that you don’t need to use absolute pathnames any
+more–you just need the relative pathname. For example, to import the
+“SampleData.csv” data, you only need to put in
+<code>"data/SampleData.csv"</code> to tell R to look for
 “SampleData.csv” inside the “data” folder, instead of the whole pathname
 on your computer.</p>
 <p>Let’s call this version of the data <code>dat2</code></p>
@@ -609,18 +624,25 @@ on your computer.</p>
 ## 11    20-11   male    adult 25.5   62.0
 ## 12    20-12 female    adult 27.0   59.0
 ## 13    20-13 female    adult 26.5   60.0</code></pre>
-<p>The beauty of this system is that, as long as the project directory
-structure is the same the computer, you can run this exact same code to
-import the data on any computer. In turn, that means that this entire
-project and code are portable in multiple ways. You could:</p>
+<p>This will also simplify the process of saving files and plots–which
+we will do later.</p>
+<p>The beauty of this system is that, <strong>as long as the project
+directory structure is the same the computer, you can run this exact
+same code to import the data on any computer.</strong> In turn, that
+means that this entire project and code are portable in multiple ways.
+You could:</p>
 <ul>
 <li><p>send a collaborator your whole project directory, or</p></li>
 <li><p>copy the project directory on a thumbdrive, or</p></li>
 <li><p>sync the project directory on DropBox, OneDrive, or other cloud
 storage that syncs with multiple computers…</p></li>
+<li><p><strong>or, the best way–make this project folder into a GitHub
+repository (or other Git system), where you and collaborators can keep
+the project folder synchronized as you work.</strong> In class, we will
+do this together later to setup repositories for your independent
+projects. To learn how to do this, go to <a href="05_GitHub.html">the
+“GitHub Workflow” module</a>.</p></li>
 </ul>
-<p>and you should be able to run the code as-is.</p>
-</div>
 </div>
 
 
