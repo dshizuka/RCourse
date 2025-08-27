@@ -14,7 +14,7 @@
 
 <title>Working With Data</title>
 
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Working With Data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/25/25</h4>
+<h4 class="date">updated 08/27/25</h4>
 
 </div>
 
@@ -423,12 +423,14 @@ in the .csv file using a function called <code>read.csv()</code>, with
 the path name. <strong><em>Note that the path name needs to be inside
 quotes</em></strong>.</p>
 <pre class="r"><code>dat=read.csv(&quot;data/SampleData.csv&quot;)</code></pre>
+<hr />
 </div>
 <div id="loading-a-.rdata-file." class="section level3">
 <h3>2.2. Loading a .rdata file.</h3>
 <p>In R, you also have the option of “loading” an .rdata file format,
 which is a binary file format used by the R programming language. .Rdata
-files can store multiple objects. together.</p>
+files can store multiple objects together. This is a super useful way to
+share data.</p>
 <pre class="r"><code>load(&quot;data/coot_data.rdata&quot;)</code></pre>
 <p>You should see that three datasets appeared in your “global
 environment”: “chick_color”, “chicks”, and “eggs”. These are three
@@ -437,10 +439,13 @@ example module on coot chick colors</a></p>
 <hr />
 </div>
 </div>
-<div id="section" class="section level2">
-<h2></h2>
+<div
+id="the-not-recommended-ways-to-import-data-and-why-i-dont-recommend-them."
+class="section level2">
+<h2>3. The <strong>Not</strong> recommended ways to import data, and why
+I don’t recommend them.</h2>
 <div id="entering-the-full-path-name" class="section level3">
-<h3>2.2. Entering the full path name</h3>
+<h3>3.1 Entering the full path name</h3>
 <p>You can also use the full path name to import the data. This might be
 helpful if you are not using Rstudio Projects and/or saving your script
 in a folder separate from your data.</p>
@@ -485,7 +490,7 @@ automatically.</p>
 </div>
 <div id="use-a-url-recommended-for-data-downloadable-from-the-web"
 class="section level3">
-<h3>2.3. Use a url (recommended for data downloadable from the web)</h3>
+<h3>3.2 Use a url (recommended for data downloadable from the web)</h3>
 <p>Sometimes, you will be downloading a dataset that is accessible
 online, from a static website, a github page, a data repository (like
 Dryad or Figshare), or even a dropbox folder. In fact, if you can get a
@@ -506,7 +511,7 @@ download the data and save it on your computer and use Option 1.</p>
 <hr />
 </div>
 <div id="call-choose-file-prompt." class="section level3">
-<h3>2.4. Call ‘choose file’ prompt.</h3>
+<h3>3.3 Call ‘choose file’ prompt.</h3>
 <p>You can also call a prompt that will let you choose the file. You can
 then find and choose the file you want to import. This is a convenient
 and quick way to import data. However, it is limiting because it takes
@@ -516,7 +521,7 @@ is not <em>reproducible</em>.</p>
 <hr />
 </div>
 <div id="using-rstudio-gui" class="section level3">
-<h3>2.5. Using RStudio GUI</h3>
+<h3>3.4 Using RStudio GUI</h3>
 <p>In RStudio, select
 <code>[File]</code>–<code>[Import Dataset]</code>–<code>[From CSV...]</code>
 The first time you do this, you may be asked to install the
@@ -540,7 +545,7 @@ files <code>dat=read.table(file.choose(), sep="\t")</code>. So the
 </div>
 </div>
 <div id="looking-at-the-data" class="section level2">
-<h2>3. Looking at the data</h2>
+<h2>4. Looking at the data</h2>
 <p>Now that you have the data imported as an object called
 <code>dat</code>, let’s look at it! You can do this simply by calling
 the object:</p>
@@ -585,7 +590,7 @@ of the data frame, including summary stats for numeric variables:</p>
 </div>
 <div id="formatting-spreadsheets-to-keep-data-for-analysis"
 class="section level2">
-<h2>4. Formatting spreadsheets to keep data for analysis</h2>
+<h2>5. Formatting spreadsheets to keep data for analysis</h2>
 <p>This part is not necessarily about R. It is about managing your Excel
 sheet in a way that facilitates data analysis outside of Excel.</p>
 <p>Before I start, I highly recommend this free online resource from
@@ -612,7 +617,7 @@ Excel. NOT a good example of a data set.
 </div>
 <hr />
 <div id="basic-structure-of-a-spreadsheet" class="section level3">
-<h3>4.1 Basic structure of a spreadsheet</h3>
+<h3>5.1 Basic structure of a spreadsheet</h3>
 <ol style="list-style-type: decimal">
 <li><p>First line (Header) are names of variables. Each variable is one
 column. Do not use values as column names.</p></li>
@@ -637,7 +642,7 @@ Example spreadsheet of data on egg size of American Coots
 <hr />
 </div>
 <div id="spreadsheet-dos-and-donts" class="section level3">
-<h3>4.2 Spreadsheet dos and don’ts!</h3>
+<h3>5.2 Spreadsheet dos and don’ts!</h3>
 <p><br></p>
 <div id="dont-keep-multiple-tables-in-one-sheet" class="section level4">
 <h4>1. <strong>Don’t</strong> keep multiple tables in one sheet</h4>
@@ -784,7 +789,7 @@ if you have done everything in script, everything is reversible.</p>
 </div>
 </div>
 <div id="troubleshooting-data-import" class="section level2">
-<h2>5. Troubleshooting Data Import</h2>
+<h2>6. Troubleshooting Data Import</h2>
 <p>Even when you have taken care to follow the above dos and don’ts, you
 will often have some kind of problem reading in files. One of the big
 roadblocks to using R is dealing with these bugs.</p>

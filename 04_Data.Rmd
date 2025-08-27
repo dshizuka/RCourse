@@ -76,10 +76,9 @@ You should see that three datasets appeared in your "global environment": "chick
 
 ***
 
-## 
+## 3. The **Not** recommended ways to import data, and why I don't recommend them.
 
-
-### 2.2. Entering the full path name
+### 3.1 Entering the full path name
 You can also use the full path name to import the data. This might be helpful if you are not using Rstudio Projects and/or saving your script in a folder separate from your data. 
 
 
@@ -116,7 +115,7 @@ dat=read.csv("data/SampleData.csv")
 
 ***
 
-### 2.3. Use a url (recommended for data downloadable from the web)
+### 3.2 Use a url (recommended for data downloadable from the web)
 
 Sometimes, you will be downloading a dataset that is accessible online, from a static website, a github page, a data repository (like Dryad or Figshare), or even a dropbox folder. In fact, if you can get a url of a data file, you can import it directly into R without having to first downloading it to your computer, saving it and then getting a path name. 
 
@@ -133,7 +132,7 @@ Super useful! But **note:** only use this if you know that the url is going to b
 
 ***
 
-### 2.4. Call 'choose file' prompt. 
+### 3.3 Call 'choose file' prompt. 
 You can also call a prompt that will let you choose the file. You can then find and choose the file you want to import. This is a convenient and quick way to import data. However, it is limiting because it takes time to click around to find the file, and more importantly, this step is not *reproducible*.
 ```{r, eval=FALSE}
 dat=read.csv(file.choose())
@@ -141,7 +140,7 @@ dat=read.csv(file.choose())
 
 ***
 
-### 2.5. Using RStudio GUI
+### 3.4 Using RStudio GUI
 In RStudio, select `[File]`--`[Import Dataset]`--`[From CSV...]`
 The first time you do this, you may be asked to install the `readr` package. 
 
@@ -156,7 +155,7 @@ The first time you do this, you may be asked to install the `readr` package.
 
 ***
 
-## 3. Looking at the data
+## 4. Looking at the data
 
 
 Now that you have the data imported as an object called `dat`, let's look at it! You can do this simply by calling the object:
@@ -178,7 +177,7 @@ str(dat)
 
 ***
 
-## 4. Formatting spreadsheets to keep data for analysis
+## 5. Formatting spreadsheets to keep data for analysis
 
 This  part is not necessarily about R. It is about managing your Excel sheet in a way that facilitates data analysis outside of Excel.
 
@@ -195,7 +194,7 @@ knitr::include_graphics("images/excel_form.png")
 
 ***
 
-### 4.1 Basic structure of a spreadsheet
+### 5.1 Basic structure of a spreadsheet
 
 1. First line (Header) are names of variables. Each variable is one column. Do not use values as column names.
 
@@ -213,7 +212,7 @@ knitr::include_graphics("images/eggdata_image.png")
 
 ***
 
-### 4.2 Spreadsheet dos and don'ts!
+### 5.2 Spreadsheet dos and don'ts!
 
 <br>
 
@@ -302,7 +301,7 @@ This is more of a suggestion than a rule. When you use formulas within Excel to 
 
 ***
 
-## 5. Troubleshooting Data Import
+## 6. Troubleshooting Data Import
 
 Even when you have taken care to follow the above dos and don'ts, you will often have some kind of problem reading in files. One of the big roadblocks to using R is dealing with these bugs. 
 
