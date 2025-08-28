@@ -222,8 +222,48 @@ seq(1,10,length.out=19)
 
 The ability to see the inner workings of each function and specify some aspects of how functions work is one of the strengths of R. Hopefully you will come to appreciate that this flexibility and detail as you learn how to work with a programming language. 
 
-  ***
-## 6. Using the Script Editor
+***
+  
+## 6. Packages
+
+One of the huge benefits of learning R is the enormous and ever-growing corpus of **packages** that members of the user community build to aid in different tasks (over 22,500 packages as of August 28, 2025). 
+
+#### What are R packages?
+
+Packages are collections of functions and data in a well-defined format (e.g., each function has a help file) designed around a specific functionality (e.g., a particular analysis approach). 
+
+R automatically comes with *base* packages that forms the 'source code'. 
+
+#### How do I get & use packages?
+
+To use a new package, you have to go through two steps:
+
+(1) First, you need to **install** the package on your computer. This downloads the package to your R directory on your computer. Most commonly, you will install the package from a repository, like CRAN (Comprensive R Archive Network) or Bioconductor (a repository primarily for packages related to genomic analyses). In some cases, the package may not be archived in a repository, but may be available from the author's GitHub page (in which case, the explanation for how to install the package should be explained there). 
+
+```{r, eval=F}
+install.packages("vioplot")
+```
+To install a package form CRAN, use `install.packages()` with the name of the package in quotes inside the parentheses. 
+
+(2) Second, you need to **load** the package in order to use it. Think of this as 'turning on' a package. If you have a script that relies on a package, you need to load it each session. But that's easy to do--just include the code to load the package at the top of your script.
+
+One way to load a package is to use the function `library()`
+
+```{r}
+library(vioplot)
+```
+
+Once you've loaded the package, you now have access to all the functions included in it. You can see what is in the package like this:
+
+```{r, message=F}
+library(help="vioplot")
+```
+
+This should pop up a window in one of your panels with all the information about the package, including the functions in it. 
+
+
+
+## 7. Using the Script Editor
 You can type commands directly into the R Console and hit `[return]` to run the command (as we have done above). However, it is best practice to type your code into the Editor, and then hit `[command]+[return]` while the cursors is on the line of the command you want to run. There are several advantages to running your commands from the Editor rather than typing directly into the Console:  
 
 1. **You can run multiple lines of command at once** by highlighting the entire set of codes you want to run and hitting `[command]+[return]`.
@@ -246,7 +286,7 @@ a/b #The answer should be 2.5
 See what happens if you remove the hashtags and run the script again. 
 
 ***
-## 7. Working Directory and Saving Your Script
+## 8. Working Directory and Saving Your Script
 Now that we have built a simple script, we should save it. But to save a script, you need to be familiar with the **working directory**. The working directory is the location in your computer where R will know to go save things, or to look for things if you ask it.  
 
 The *default working directory* can be set by going to `[Preferences]`. It will be the first item at the top of the preferences window. You can set the default working directory by clicking `Browse`. Go ahead and set the working directory to a folder for this course.   
@@ -277,7 +317,7 @@ In a couple of modules, we will tackle a more elegant way to set up your working
 
 ***
 
-## 8. Quitting Rstudio--don't save your 'workspace image'
+## 9. Quitting Rstudio--don't save your 'workspace image'
 
 After you've saved your R script, let's try quitting R. 
 
