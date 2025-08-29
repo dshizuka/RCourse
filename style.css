@@ -1,9 +1,3 @@
 blockquote {
   font-style: italic
 }
-
-/* Whole document: */
-body{
-  font-family: Helvetica;
-  font-size: 16pt;
-}
