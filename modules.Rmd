@@ -27,15 +27,18 @@ knitr::opts_chunk$set(echo = TRUE)
     
     + ### [Intro to ggplot2](07_ggplot_intro.html)
 
-* ### Stats in R:
-
-    + ### [Linear Models in R (including ANOVA, GLM)](08_Stats_LinearModels.html)
 
 * ### Wrangling data in R:
 
     + ### [Data Wrangling with Tidyverse Packages](09_tidyverse.html)
     
     + ### [Parsing Dates and Text](10_text_parsing.html)
+    
+    
+* ### Stats in R:
+
+    + ### [Linear Models in R (including ANOVA, GLM)](08_Stats_LinearModels.html)
+    
 
 * ### Functions, Sampling, and Batch Processing
 
