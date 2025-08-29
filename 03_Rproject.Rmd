@@ -58,42 +58,26 @@ Say I was running this from my "Documents" folder, it would look like this:
 getwd()
 ```
 
-
 ```{r, echo=F}
 setwd("/Users/dshizuka2/Documents")
 getwd()
 ```
+
 You can get the whole list of folders and files that are in your working directory using `list.files()`:
 
-```{r, eval=F}
-list.files()
-```
-
-```{r, echo=F}
-saved.wd=getwd()
-setwd("/Users/dshizuka2/Documents")
-list.files()
-```
-
-
-
-You can look inside a specific folder within your directory by specifying the file within the `list.files()` function. For example, to look in the "data" folder within my current working directory:
-
-```{r, eval=F}
-list.files("GitHub/")
-```
-
-```{r, echo=F}
-setwd("/Users/dshizuka2/Documents")
-list.files("GitHub/")
-```
-
-Notice that you are 
-
-
-You can **go one level up** in your folder structure (aka the "parent directory") by using `..`
-
 *I'm not going to share the results here because I don't really want to reveal the file structure of my personal computer on a public webpage...*
+
+```{r, eval=F}
+list.files()
+```
+
+You can look inside a specific folder within your directory by specifying the file within the `list.files()` function. For example, to look in one of the folders folder within my current working directory, include the folder name in quotes inside the function:
+
+```{r, eval=F}
+list.files("foldername")
+```
+
+You can **go one level up** in your folder structure (aka the "parent directory") by using ".."
 
 ```{r, eval=F}
 list.files("../")
@@ -147,9 +131,11 @@ Now let's look at the data, simply by running `dat`
 dat
 ```
 
-Now, this might seem like a fine way to read your data file if you plan to do all of your analyses on your own computer, and you know where the file will always be on your computer. HOWEVER, this is a major hindrance to collaboration. Also, it is a major hindrance to me teaching this class, as I can't easily try out your code to help you troubleshoot. 
+Now, this might seem like a fine way to read your data file if you plan to do all of your analyses on your own computer, and you know where the file will always be on your computer. HOWEVER, this is a major hindrance to collaboration. Also, it is a major hindrance to me helping you with your independent project this class, as I can't easily try out your code to help you troubleshoot. 
 
 That's where RStudio Projects come in...
+
+***
 
 ## 3. Using Rstudio Projects and organizing your files. 
 
@@ -164,7 +150,7 @@ Setting up a project directory in this way allows you to keep everything organiz
 
 Finally, the more important reason to set up an Rstudio project folder is that it will allow anyone to run the code you are developing in this folder because you all of your pathnames will be "relative" to the parent directory. By using *relative path* names in your code, it becomes much more reproducible and enables collaboration. 
 
-Reading about all of this is one thing, but you'll actually learn how this works by using it! So, let's set up an RStudio Project directory that you will use for the rest of the lectures for this course. **Please follow these directions and set up your folder exactly the same way, with exactly the same folder names (including capitalization).** If you don't use the same structure and names for your folders, it will cause problems later!
+Reading about all of this is one thing, but you'll actually learn how this works by using it! So, let's set up an RStudio Project directory that you will use for the rest of the lectures for this course. **Please follow these directions and set up your folder exactly the same way, with exactly the same folder names (including capitalization).** 
 
 ### 3.1. Setting up a new Rstudio project folder the course lectures.
 

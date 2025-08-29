@@ -14,7 +14,7 @@
 
 <title>Directories, Pathnames, and RStudio Projects</title>
 
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -344,7 +344,7 @@ div.tocify {
 Projects</h1>
 <h3 class="subtitle">BIOS 967: Intro to R for Biologists</h3>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/27/25</h4>
+<h4 class="date">updated 08/29/25</h4>
 
 </div>
 
@@ -422,33 +422,17 @@ this:</p>
 <pre><code>## [1] &quot;/Users/dshizuka2/Documents&quot;</code></pre>
 <p>You can get the whole list of folders and files that are in your
 working directory using <code>list.files()</code>:</p>
-<pre class="r"><code>list.files()</code></pre>
-<pre><code>## [1] &quot;03252024.pdf&quot;                           
-## [2] &quot;Arduino&quot;                                
-## [3] &quot;cpos-06152024_JAS_edit.docx&quot;            
-## [4] &quot;GitHub&quot;                                 
-## [5] &quot;Reller_Landmanagement_20240319_DS.kmz&quot;  
-## [6] &quot;RellerLandManagementMap_20240319_DS.kmz&quot;
-## [7] &quot;RellerLandManagementMap_20240328.kmz&quot;   
-## [8] &quot;ScanSnap Home folder&quot;                   
-## [9] &quot;Zoom&quot;</code></pre>
-<p>You can look inside a specific folder within your directory by
-specifying the file within the <code>list.files()</code> function. For
-example, to look in the “data” folder within my current working
-directory:</p>
-<pre class="r"><code>list.files(&quot;GitHub/&quot;)</code></pre>
-<pre><code>##  [1] &quot;BARS_phenotypic_integration&quot; &quot;BIO-LEAPS&quot;                  
-##  [3] &quot;CCLO_Social_network&quot;         &quot;Fairywren_Projects&quot;         
-##  [5] &quot;Feeder-Project&quot;              &quot;foodwebs&quot;                   
-##  [7] &quot;GCSP_projects&quot;               &quot;MicrophoneArray&quot;            
-##  [9] &quot;networkanalysis&quot;             &quot;Plover-Project&quot;             
-## [11] &quot;RCourse&quot;                     &quot;RFID_Feeders&quot;</code></pre>
-<p>Notice that you are</p>
-<p>You can <strong>go one level up</strong> in your folder structure
-(aka the “parent directory”) by using <code>..</code></p>
 <p><em>I’m not going to share the results here because I don’t really
 want to reveal the file structure of my personal computer on a public
 webpage…</em></p>
+<pre class="r"><code>list.files()</code></pre>
+<p>You can look inside a specific folder within your directory by
+specifying the file within the <code>list.files()</code> function. For
+example, to look in one of the folders folder within my current working
+directory, include the folder name in quotes inside the function:</p>
+<pre class="r"><code>list.files(&quot;foldername&quot;)</code></pre>
+<p>You can <strong>go one level up</strong> in your folder structure
+(aka the “parent directory”) by using “..”</p>
 <pre class="r"><code>list.files(&quot;../&quot;)</code></pre>
 <hr />
 <div
@@ -523,10 +507,11 @@ dat=read.csv(&quot;/Users/daishizuka/Downloads/SampleData.csv&quot;)</code></pre
 <p>Now, this might seem like a fine way to read your data file if you
 plan to do all of your analyses on your own computer, and you know where
 the file will always be on your computer. HOWEVER, this is a major
-hindrance to collaboration. Also, it is a major hindrance to me teaching
-this class, as I can’t easily try out your code to help you
-troubleshoot.</p>
+hindrance to collaboration. Also, it is a major hindrance to me helping
+you with your independent project this class, as I can’t easily try out
+your code to help you troubleshoot.</p>
 <p>That’s where RStudio Projects come in…</p>
+<hr />
 </div>
 <div id="using-rstudio-projects-and-organizing-your-files."
 class="section level2">
@@ -557,8 +542,7 @@ this works by using it! So, let’s set up an RStudio Project directory
 that you will use for the rest of the lectures for this course.
 <strong>Please follow these directions and set up your folder exactly
 the same way, with exactly the same folder names (including
-capitalization).</strong> If you don’t use the same structure and names
-for your folders, it will cause problems later!</p>
+capitalization).</strong></p>
 <div id="setting-up-a-new-rstudio-project-folder-the-course-lectures."
 class="section level3">
 <h3>3.1. Setting up a new Rstudio project folder the course
