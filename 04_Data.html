@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Working With Data</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/27/25</h4>
+<h4 class="date">updated 09/02/25</h4>
 
 </div>
 
@@ -649,42 +649,43 @@ that don’t have Microsoft Office cannot open them.</p>
 <code>dat</code>, let’s look at it! You can do this simply by calling
 the object:</p>
 <pre class="r"><code>dat</code></pre>
-<pre><code>##    Indiv.ID    sex      age size weight
-## 1     20-01   male    adult 29.5   66.5
-## 2     20-02   male juvenile 28.0   58.5
-## 3     20-03 female    adult 26.0   57.0
-## 4     20-04 female    adult 25.0   55.5
-## 5     20-05 female juvenile 25.0   62.0
-## 6     20-06   male juvenile 28.0   61.0
-## 7     20-07 female    adult 26.0   58.0
-## 8     20-08   male    adult 28.5   65.0
-## 9     20-09   male juvenile 27.5   60.0
-## 10    20-10 female juvenile 26.0   59.0
-## 11    20-11   male    adult 25.5   62.0
-## 12    20-12 female    adult 27.0   59.0
-## 13    20-13 female    adult 26.5   60.0</code></pre>
+<pre><code>##    Individual.ID    sex      age size weight date.captured
+## 1          20-01   male    adult 29.5   66.5        5/4/01
+## 2          20-02   male juvenile 28.0   58.5        5/5/01
+## 3          20-03 female    adult 26.0   57.0       5/10/01
+## 4          20-04 female    adult 25.0   55.5       5/10/01
+## 5          20-05 female juvenile 25.0   62.0       5/10/01
+## 6          20-06   male juvenile 28.0   61.0       5/12/01
+## 7          20-07 female    adult 26.0   58.0       5/13/01
+## 8          20-08   male    adult 28.5   65.0       5/13/01
+## 9          20-09   male juvenile 27.5   60.0       5/13/01
+## 10         20-10 female juvenile 26.0   59.0       5/13/01
+## 11         20-11   male    adult 25.5   62.0       5/15/01
+## 12         20-12 female    adult 27.0   59.0       5/16/01
+## 13         20-13 female    adult 26.5   60.0       5/16/01</code></pre>
 <p>This data only has 13 rows, so it’s manageable. But sometimes you
 have a much larger dataset, and you don’t really want to see all of it,
 but you want to check that the correct data was imported. In that case,
 you can use a function called <code>head()</code> which will show you
 just the first 6 lines of an object.</p>
 <pre class="r"><code>head(dat)</code></pre>
-<pre><code>##   Indiv.ID    sex      age size weight
-## 1    20-01   male    adult 29.5   66.5
-## 2    20-02   male juvenile 28.0   58.5
-## 3    20-03 female    adult 26.0   57.0
-## 4    20-04 female    adult 25.0   55.5
-## 5    20-05 female juvenile 25.0   62.0
-## 6    20-06   male juvenile 28.0   61.0</code></pre>
+<pre><code>##   Individual.ID    sex      age size weight date.captured
+## 1         20-01   male    adult 29.5   66.5        5/4/01
+## 2         20-02   male juvenile 28.0   58.5        5/5/01
+## 3         20-03 female    adult 26.0   57.0       5/10/01
+## 4         20-04 female    adult 25.0   55.5       5/10/01
+## 5         20-05 female juvenile 25.0   62.0       5/10/01
+## 6         20-06   male juvenile 28.0   61.0       5/12/01</code></pre>
 <p>You can also use the <code>str()</code> function to get the structure
 of the data frame, including summary stats for numeric variables:</p>
 <pre class="r"><code>str(dat)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    13 obs. of  5 variables:
-##  $ Indiv.ID: chr  &quot;20-01&quot; &quot;20-02&quot; &quot;20-03&quot; &quot;20-04&quot; ...
-##  $ sex     : chr  &quot;male&quot; &quot;male&quot; &quot;female&quot; &quot;female&quot; ...
-##  $ age     : chr  &quot;adult&quot; &quot;juvenile&quot; &quot;adult&quot; &quot;adult&quot; ...
-##  $ size    : num  29.5 28 26 25 25 28 26 28.5 27.5 26 ...
-##  $ weight  : num  66.5 58.5 57 55.5 62 61 58 65 60 59 ...</code></pre>
+<pre><code>## &#39;data.frame&#39;:    13 obs. of  6 variables:
+##  $ Individual.ID: chr  &quot;20-01&quot; &quot;20-02&quot; &quot;20-03&quot; &quot;20-04&quot; ...
+##  $ sex          : chr  &quot;male&quot; &quot;male&quot; &quot;female&quot; &quot;female&quot; ...
+##  $ age          : chr  &quot;adult&quot; &quot;juvenile&quot; &quot;adult&quot; &quot;adult&quot; ...
+##  $ size         : num  29.5 28 26 25 25 28 26 28.5 27.5 26 ...
+##  $ weight       : num  66.5 58.5 57 55.5 62 61 58 65 60 59 ...
+##  $ date.captured: chr  &quot;5/4/01&quot; &quot;5/5/01&quot; &quot;5/10/01&quot; &quot;5/10/01&quot; ...</code></pre>
 <hr />
 </div>
 <div id="formatting-spreadsheets-to-keep-data-for-analysis"
@@ -956,7 +957,8 @@ at its data structure:</p>
 <li>The column called “weight” is numeric</li>
 <li>The column called “X” is removed.</li>
 </ul>
-<p>See how to fix these errors in R <a href="Fix_Data.html">here</a></p>
+<p>See how to fix these errors in R <a
+href="04.1_Fix_Data.html">here</a></p>
 <hr />
 </div>
 <div id="group-exercise-2-improve-my-egg-measurement-data"
@@ -972,7 +974,7 @@ Excel.</p></li>
 <li><p><strong>Come up with as many recommendations as possible on how
 to improve this excel sheet.</strong></p></li>
 </ul>
-<p>See the answers <a href="Fix_Data.html">here</a></p>
+<p>See the answers <a href="04.1_Fix_Data.html">here</a></p>
 </div>
 
 

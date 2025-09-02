@@ -400,7 +400,7 @@ Step 2: Fix the spreadsheet so that you get the following:
 * The column called "weight" is numeric
 * The column called "X" is removed.
 
-See how to fix these errors in R [here](Fix_Data.html)
+See how to fix these errors in R [here](04.1_Fix_Data.html)
 
 ***
 
@@ -412,5 +412,5 @@ See how to fix these errors in R [here](Fix_Data.html)
 
 * **Come up with as many recommendations as possible on how to improve this excel sheet.**
 
-See the answers [here](Fix_Data.html)
+See the answers [here](04.1_Fix_Data.html)
 

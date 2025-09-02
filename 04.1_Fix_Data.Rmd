@@ -13,7 +13,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Group Exercise 1: Fixing the `SampleData_w_errors.csv` in R
+## Group Exercise 1: Fixing the `SampleData_w_errors.csv` in R
 
 In Group Exercise 1 for Module 4, I asked you to fix the following in the spreadsheet:
 
@@ -26,27 +26,19 @@ In reality, it is better if you can **keep the raw data raw** and fix these erro
 
 Here are how I would fix the problems in the example data:
 
-```{r, eval=F}
+```{r, eval=T}
 dat=read.csv("data/SampleData_w_errors.csv")
 dat
 ```
 
-```{r, echo=F}
-dat=read.csv("../data/SampleData_w_errors.csv")
-dat
-```
 
 Setting "#N/A!" as N/A value
 
-```{r, eval=F}
+```{r, eval=T}
 dat=read.csv("data/SampleData_w_errors.csv", na.strings=c("#N/A!", "**"))
 dat
 ```
 
-```{r, echo=F}
-dat=read.csv("../data/SampleData_w_errors.csv", na.strings=c("#N/A!", "**"))
-dat
-```
 
 Remove the mystery column "X"
 ```{r}
@@ -61,23 +53,18 @@ dat
 ```
 
 
-### Group Exercise 2: Fixing errors in the egg measurement data:
+## Group Exercise 2: Fixing errors in the egg measurement data:
 
 In Group Exercise 2, I provided you with data I collected on American coot eggs before I became practiced in using R... And there are a lot of thigns that need to be fixed here.
 
 #### 1. Periods used as N/A data. 
 
-```{r, eval=F}
+```{r, eval=T}
 eggs=read.csv("data/EggMeasurements_example.csv")
 head(eggs)
 str(eggs)
 ```
 
-```{r, eval=T, echo=F}
-eggs=read.csv("../data/EggMeasurements_example.csv")
-head(eggs)
-str(eggs)
-```
 
 First, you can tell that variables like "mass", "length" and "width" should be numbers, but they are read as characters.
 
@@ -95,15 +82,11 @@ unique(eggs$width)
 
 Fix this by telling R that "." is an na.string
 
-```{r, eval=F}
+```{r, eval=T}
 eggs=read.csv("data/EggMeasurements_example.csv", na.strings=".")
 unique(eggs$mass)
 ```
 
-```{r, eval=T, echo=F}
-eggs=read.csv("../data/EggMeasurements_example.csv", na.strings=".")
-unique(eggs$mass)
-```
 Now, you can tell that R is interpreting mass as a number (it's not in quotes), and conveniently, it correctly interprets missing values as "NA".
 
 You can see that mass, length and width all show up as numerics now:
@@ -111,7 +94,7 @@ You can see that mass, length and width all show up as numerics now:
 str(eggs)
 ```
 
-#### 2. Wrong dates
+### 2. Wrong dates
 
 LayDate is the date that the egg was laid, if known. We only have this data for nests that were checked in subsequent dates (because if there are two new eggs two days later, we don't know which one was laid on which date).
 
@@ -120,5 +103,11 @@ Let's look at what values this takes:
 sort(unique(eggs$LayDate))
 ```
 
-There are a bunch of eggs that were apparently laid on May 18th and 19th, 1999! That can't be right... 
+There are a bunch of eggs that were apparently laid on May 18th and 19th, 2025! That can't be right... 
+
+This can happen because of an "auto-fill" error in Excel. If the column is formatted to take mm/dd/yy and you only fill the month and date, it can auto-fill the year with the CURRENT YEAR, causing problems like this.
+
+The best way to fix this problem is probably to go back to Excel and use the entry number--for example, if the data sequences goes "5/17/06", "5/18/25", "5/19/06", then you probably entered "5/18/06" incorrectly. 
+
+
 
