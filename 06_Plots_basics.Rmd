@@ -14,7 +14,7 @@ library(knitr)
 #knitr::opts_chunk$set(out.width="3.5in")
 ```
 
-R is amazing for graphics--i.e., visualizing data. Once you learn how to play around with the codes, it is almost infinitely customizable. In fact, R has become a major tool for graphics departments at major journalism outlets such as the [BBC](https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535). There are also many wonderful resources for how to make compelling and clear visualizations of data [(e.g., this book by Claus Wilke)](https://serialmentor.com/dataviz/index.html)
+R is amazing for graphics--i.e., visualizing data. Once you learn how to play around with the codes, it is almost infinitely customizable. In fact, R has become a major tool for graphics departments at major journalism outlets such as the [BBC](https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535). There are also many wonderful resources for how to make compelling and clear visualizations of data [(e.g., this book by Claus Wilke)](https://clauswilke.com/dataviz/directory-of-visualizations.html)
 
 But let's not get ahead of ourselves. In this module, we will cover the basics of the plotting functions in the base package of R. There are many additional packages that help you produce fancier plots (e.g., 'ggplot2' and 'lattice'). We may cover ggplot2 later in the course.
 
@@ -109,6 +109,7 @@ t=seq(1,10,1) # time sequence, from 1 to 10
 response=c(1,5,4,2,3,9,6,7,8,10) # 10 random numbers
 plot(t, response, type="b") #plot a line plot
 ```
+
 ```{r, eval=T, echo=F,fig.height=3, fig.width=4}
 par(mar=c(4,4,1,2))
 t=seq(1,10,1) # time sequence, from 1 to 10
