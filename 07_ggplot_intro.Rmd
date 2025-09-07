@@ -74,9 +74,13 @@ We can break down the layers of any graphic to different components (see [this p
 
 3. The **geom, or geometric object**: the type of visual object you want to make
 
-4. **Scaling:** i.e., how different values of variables are represented
+4. **Statistical transformations**: e.g., fit lines
 
-5. **Faceting:** i.e., representing subsets of data as subplots
+5. **Scaling:** i.e., how different values of variables are represented
+
+6. **Non-data elements:** e.g., grid lines, axis labels, title, etc.
+
+7. **Faceting:** i.e., representing subsets of data as subplots
 
 ### 3.2. The basic workflow of ggplot2
 
@@ -151,16 +155,54 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3))
 ```
+You can also assign your own color palette using `scale_color_manual()`.
 
-#### step 6: set up a simple "theme"
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  scale_color_manual(values=c("tomato", "slateblue", "gold"))
+```
+
+You can learn all about the color scales in ggplot2 here: https://ggplot2-book.org/scales-colour.html
+
+#### step 6: Edit the x- and y-axis labels.
+
+Right now, the labels say "Sepal.Length" and "Sepal.Width". Let's change the periods into spaces:
+
 ```{r, out.width="50%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3)) +
+  xlab("Sepal Length") +
+  ylab("Sepal Width")
+```
+
+#### step 7: Changing the plot "theme"
+
+The gray back ground with the white grid lines is a signature background for ggplot. But for publications, you might want the more traditional background. You can play around with the background using "themes". There are some built-in alternative themes in ggplot that you can call, such as `theme_bw()`. 
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  scale_color_discrete(type=rainbow(3)) +
+  xlab("Sepal Length") +
+  ylab("Sepal Width") +
   theme_bw() 
 ```
 
-#### step 7: additional adjustments in `theme` to remove grid lines
+#### step 8: additional adjustments in `theme`:
+
+You can also customize themes further using the `theme()` function. 
+
+However, to do this, you need to learn another class of ggplot functions called **"elements"**. Elements are non-data elements of the plot that you can change. 
+
+* `element_text()` is used to change text
+
+* `element_line()` is used to lines
+
+* `element_blank()` is used to remove an element.
+
+For example, I can use it to remove the grid lines. 
 
 ```{r, out.width="50%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
@@ -169,22 +211,20 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
-
-#### step 8: Edit the x- and y-axis labels.
-
-Right now, the labels say "Sepal.Length" and "Sepal.Width". Let's change the periods into spaces:
-
+I can use `element_text()` to change the size of the text at the tick marks. 
 ```{r, out.width="50%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3)) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   xlab("Sepal Length") +
-  ylab("Sepal Width")
+  ylab("Sepal Width") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text=element_text(size=16, color="purple"))
 ```
 
-#### step 9: Remove legend
+For a complete guide on ggplot themes, go here: https://ggplot2-book.org/themes.html
+
+#### step 9: Work with the legend
 
 ... ok, most of the time, you probably should have a legend. But, it will be helpful for you to learn how to play around with it. There are several ways to do this, but one way is to edit the `legend.position` argument in the `theme()` function.
 
@@ -212,11 +252,83 @@ ggplot(iris) +
   ylab("Sepal Width")
 ```
 
+## 5. Adding a regression line
+
+Let's go back to the basics and add a linear regression line through the iris sepal data. To start with, we will just add one line for all points. We can do this with `geom_smooth()`
+
+Let's first try it without specifying any methods
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point() +
+  geom_smooth() + 
+  xlab("Sepal Length") +
+  ylab("Sepal Width")
+```
+
+You can see that it adds a "smooth" line (using a "loess" regression--which stands for *locally estimated scatterplot smoothing*).
+
+But what we usually want to do is fit a linear regression line:
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point() +
+  geom_smooth(method="lm") +
+  xlab("Sepal Length") +
+  ylab("Sepal Width")
+```
+
+You can see that, when we add a regression line to the whole data, we don't get any relationship. This is because we are mixing up the data from all three species. 
+
+We can separate the species but just using it as a grouping variable:
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, group=Species)) +
+  geom_point() +
+  geom_smooth(method="lm") +
+  xlab("Sepal Length") +
+  ylab("Sepal Width")
+```
+
+... but it's probably more useful to have them be in different colors:
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point() +
+  geom_smooth(method="lm") +
+  xlab("Sepal Length") +
+  ylab("Sepal Width")
+```
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  geom_smooth(method="lm") +
+  scale_color_manual(values=c("tomato", "slateblue", "gold")) +
+  xlab("Sepal Length") +
+  ylab("Sepal Width") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+```
+
+## 6. Faceting
+
+```{r, out.width="50%"}
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(size=2) +
+  geom_smooth(method="lm") +
+  xlab("Sepal Length") +
+  ylab("Sepal Width") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  facet_wrap(~Species)
+```
+
 ***
 
-## 5. Saving ggplot outputs
+## 7. Saving ggplot outputs
 
-### 5.1. The `ggsave()` function
+### 7.1. The `ggsave()` function
 
 You can export the last plot you made using the function `ggsave()`. Enter the file name you want to save it as, including the file extension.
 ```{r, eval=F}
@@ -224,7 +336,7 @@ ggsave("scatterplot.png")
 ```
 You will find the file in your Rproject folder.
 
-### 5.2. Adjusting the file dimensions
+### 7.2. Adjusting the file dimensions
 
 You might find that you want to adjust the width and height of the plot. You can set this in inches or whatever other unit (see ?ggsave() for details).
 
@@ -233,7 +345,7 @@ ggsave("scatterplot.png", width=8, height=4, units="in")
 ```
 
 
-### 5.3. Best practice: save the plot as an object, and then save it. 
+### 7.3. Best practice: save the plot as an object, and then save it. 
 
 A **better way** is to save the plot as an object, and then save it. Here, we will assign the plot with the legend as `p` and then save it.
 
@@ -255,7 +367,7 @@ ggsave("scatterplot_w_legend.pdf", width=8, height=4, units="in")
 
 ***
 
-## 6. Some other aesthetic options
+## 8. Some other aesthetic options
 
 Here is a vignette for other aesthetic specifications: https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
 
@@ -264,7 +376,7 @@ https://ggplot2-book.org/polishing.html
 
 ***
 
-## 7. A gallery of some other plot types:
+## 9. A gallery of some other plot types:
 
 <br>
 
@@ -331,16 +443,40 @@ ggplot(iris, aes(x=Sepal.Width, fill=Species)) +
 
 ### Line chart
 
-A line chart is typically used to display the change in a numberical value across time. 
+A line chart just connects points together. It is commonly used to display the change in a numberical value in a timeseries. It can also be used todisplay tracks across two dimensional space. 
 
-*Note: This is not the same as fitting a best-fit line to a set of data*
+Here's a very simple example. The `economics` dataset included in ggplot2 presents a few monthly metrics of the US populations from 1967 to 2015. 
 
-For this, let's use a different data set included in base R, called `Orange`. This dataset shows the change in circumference of 5 orange trees across different ages. 
+```{r}
+#take a look at the data
+economics
+
+#see the details of the data from the help file
+?economics
+```
+
+This data is already nicely organized, so we can simply plot a metric, say the population size, across time:
+```{r}
+ggplot(economics, aes(x=date, y=pop)) +
+  geom_line()
+```
+
+Let's do another example. For this, let's use a different data set included in base R, called `Orange`. This dataset shows the change in circumference of 5 orange trees across different ages. 
 
 ```{r}
 Orange
 ```
 
+Here, "age" is a time variable. We can plot the change in the circumference of trees across age. However, there are data from multiple trees here, so we need to tell the function to plot each tree as a separate line. We can do this two ways. 
+
+First, we can use the argument `group=` within the aesthetics to indicate the `Tree` is the grouping variable. 
+
+```{r, out.width="50%"}
+ggplot(Orange, aes(x=age, y=circumference, group=Tree)) +
+  geom_line()
+```
+
+Or, we can use the argument `color=` to indicate that we want the data for each tree shown in different colors. This will also automatically generate a legend
 ```{r, out.width="50%"}
 ggplot(Orange, aes(x=age, y=circumference, color=Tree)) +
   geom_line()

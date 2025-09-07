@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Intro to ggplot2</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/24/25</h4>
+<h4 class="date">updated 09/07/25</h4>
 
 </div>
 
@@ -421,8 +421,12 @@ pdf</a> for full explanation):</p>
 converted to “aesthetics” of the figure</p></li>
 <li><p>The <strong>geom, or geometric object</strong>: the type of
 visual object you want to make</p></li>
+<li><p><strong>Statistical transformations</strong>: e.g., fit
+lines</p></li>
 <li><p><strong>Scaling:</strong> i.e., how different values of variables
 are represented</p></li>
+<li><p><strong>Non-data elements:</strong> e.g., grid lines, axis
+labels, title, etc.</p></li>
 <li><p><strong>Faceting:</strong> i.e., representing subsets of data as
 subplots</p></li>
 </ol>
@@ -510,42 +514,79 @@ while to get familiar with them.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3))</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
-</div>
-<div id="step-6-set-up-a-simple-theme" class="section level4">
-<h4>step 6: set up a simple “theme”</h4>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" />
+You can also assign your own color palette using
+<code>scale_color_manual()</code>.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
-  scale_color_discrete(type=rainbow(3)) +
-  theme_bw() </code></pre>
+  scale_color_manual(values=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;gold&quot;))</code></pre>
 <p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-10-1.png" width="50%" /></p>
+<p>You can learn all about the color scales in ggplot2 here: <a
+href="https://ggplot2-book.org/scales-colour.html"
+class="uri">https://ggplot2-book.org/scales-colour.html</a></p>
 </div>
-<div id="step-7-additional-adjustments-in-theme-to-remove-grid-lines"
-class="section level4">
-<h4>step 7: additional adjustments in <code>theme</code> to remove grid
-lines</h4>
-<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
-  geom_point(size=2) +
-  scale_color_discrete(type=rainbow(3)) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
-</div>
-<div id="step-8-edit-the-x--and-y-axis-labels." class="section level4">
-<h4>step 8: Edit the x- and y-axis labels.</h4>
+<div id="step-6-edit-the-x--and-y-axis-labels." class="section level4">
+<h4>step 6: Edit the x- and y-axis labels.</h4>
 <p>Right now, the labels say “Sepal.Length” and “Sepal.Width”. Let’s
 change the periods into spaces:</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3)) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
+</div>
+<div id="step-7-changing-the-plot-theme" class="section level4">
+<h4>step 7: Changing the plot “theme”</h4>
+<p>The gray back ground with the white grid lines is a signature
+background for ggplot. But for publications, you might want the more
+traditional background. You can play around with the background using
+“themes”. There are some built-in alternative themes in ggplot that you
+can call, such as <code>theme_bw()</code>.</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  scale_color_discrete(type=rainbow(3)) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;) +
+  theme_bw() </code></pre>
 <p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-12-1.png" width="50%" /></p>
 </div>
-<div id="step-9-remove-legend" class="section level4">
-<h4>step 9: Remove legend</h4>
+<div id="step-8-additional-adjustments-in-theme" class="section level4">
+<h4>step 8: additional adjustments in <code>theme</code>:</h4>
+<p>You can also customize themes further using the <code>theme()</code>
+function.</p>
+<p>However, to do this, you need to learn another class of ggplot
+functions called <strong>“elements”</strong>. Elements are non-data
+elements of the plot that you can change.</p>
+<ul>
+<li><p><code>element_text()</code> is used to change text</p></li>
+<li><p><code>element_line()</code> is used to lines</p></li>
+<li><p><code>element_blank()</code> is used to remove an
+element.</p></li>
+</ul>
+<p>For example, I can use it to remove the grid lines.</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  scale_color_discrete(type=rainbow(3)) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" />
+I can use <code>element_text()</code> to change the size of the text at
+the tick marks.</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  scale_color_discrete(type=rainbow(3)) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text=element_text(size=16, color=&quot;purple&quot;))</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-14-1.png" width="50%" /></p>
+<p>For a complete guide on ggplot themes, go here: <a
+href="https://ggplot2-book.org/themes.html"
+class="uri">https://ggplot2-book.org/themes.html</a></p>
+</div>
+<div id="step-9-work-with-the-legend" class="section level4">
+<h4>step 9: Work with the legend</h4>
 <p>… ok, most of the time, you probably should have a legend. But, it
 will be helpful for you to learn how to play around with it. There are
 several ways to do this, but one way is to edit the
@@ -558,7 +599,7 @@ function.</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = &quot;none&quot;) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-15-1.png" width="50%" /></p>
 </div>
 <div id="alternative-syntax" class="section level4">
 <h4>Alternative syntax:</h4>
@@ -574,14 +615,83 @@ when you are doing more complex visualizations.</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.position = &quot;none&quot;) +
   xlab(&quot;Sepal Length&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-14-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-16-1.png" width="50%" /></p>
+</div>
+</div>
+<div id="adding-a-regression-line" class="section level2">
+<h2>5. Adding a regression line</h2>
+<p>Let’s go back to the basics and add a linear regression line through
+the iris sepal data. To start with, we will just add one line for all
+points. We can do this with <code>geom_smooth()</code></p>
+<p>Let’s first try it without specifying any methods</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point() +
+  geom_smooth() + 
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-17-1.png" width="50%" /></p>
+<p>You can see that it adds a “smooth” line (using a “loess”
+regression–which stands for <em>locally estimated scatterplot
+smoothing</em>).</p>
+<p>But what we usually want to do is fit a linear regression line:</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point() +
+  geom_smooth(method=&quot;lm&quot;) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-18-1.png" width="50%" /></p>
+<p>You can see that, when we add a regression line to the whole data, we
+don’t get any relationship. This is because we are mixing up the data
+from all three species.</p>
+<p>We can separate the species but just using it as a grouping
+variable:</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, group=Species)) +
+  geom_point() +
+  geom_smooth(method=&quot;lm&quot;) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
+<p>… but it’s probably more useful to have them be in different
+colors:</p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point() +
+  geom_smooth(method=&quot;lm&quot;) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-20-1.png" width="50%" /></p>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point(size=2) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;gold&quot;)) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-21-1.png" width="50%" /></p>
+</div>
+<div id="faceting" class="section level2">
+<h2>6. Faceting</h2>
+<pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(size=2) +
+  geom_smooth(method=&quot;lm&quot;) +
+  xlab(&quot;Sepal Length&quot;) +
+  ylab(&quot;Sepal Width&quot;) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  facet_wrap(~Species)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-22-1.png" width="50%" /></p>
 <hr />
 </div>
-</div>
 <div id="saving-ggplot-outputs" class="section level2">
-<h2>5. Saving ggplot outputs</h2>
+<h2>7. Saving ggplot outputs</h2>
 <div id="the-ggsave-function" class="section level3">
-<h3>5.1. The <code>ggsave()</code> function</h3>
+<h3>7.1. The <code>ggsave()</code> function</h3>
 <p>You can export the last plot you made using the function
 <code>ggsave()</code>. Enter the file name you want to save it as,
 including the file extension.</p>
@@ -589,7 +699,7 @@ including the file extension.</p>
 <p>You will find the file in your Rproject folder.</p>
 </div>
 <div id="adjusting-the-file-dimensions" class="section level3">
-<h3>5.2. Adjusting the file dimensions</h3>
+<h3>7.2. Adjusting the file dimensions</h3>
 <p>You might find that you want to adjust the width and height of the
 plot. You can set this in inches or whatever other unit (see ?ggsave()
 for details).</p>
@@ -597,7 +707,7 @@ for details).</p>
 </div>
 <div id="best-practice-save-the-plot-as-an-object-and-then-save-it."
 class="section level3">
-<h3>5.3. Best practice: save the plot as an object, and then save
+<h3>7.3. Best practice: save the plot as an object, and then save
 it.</h3>
 <p>A <strong>better way</strong> is to save the plot as an object, and
 then save it. Here, we will assign the plot with the legend as
@@ -612,14 +722,14 @@ then save it. Here, we will assign the plot with the legend as
 
 #display the plot
 p</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-17-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
 <pre class="r"><code>#save the plot
 ggsave(&quot;scatterplot_w_legend.pdf&quot;, width=8, height=4, units=&quot;in&quot;)</code></pre>
 <hr />
 </div>
 </div>
 <div id="some-other-aesthetic-options" class="section level2">
-<h2>6. Some other aesthetic options</h2>
+<h2>8. Some other aesthetic options</h2>
 <p>Here is a vignette for other aesthetic specifications: <a
 href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html"
 class="uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a></p>
@@ -629,7 +739,7 @@ class="uri">https://ggplot2-book.org/polishing.html</a></p>
 <hr />
 </div>
 <div id="a-gallery-of-some-other-plot-types" class="section level2">
-<h2>7. A gallery of some other plot types:</h2>
+<h2>9. A gallery of some other plot types:</h2>
 <p><br></p>
 <div id="boxplot-violin-plot" class="section level3">
 <h3>Boxplot &amp; Violin Plot:</h3>
@@ -649,17 +759,17 @@ The typical boxplot
   geom_boxplot() +
   scale_fill_brewer(palette=&quot;RdYlBu&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-27-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(y= Species, x=Sepal.Width, fill=Species)) +
   geom_boxplot(notch=T) +
   scale_fill_brewer(palette=&quot;RdYlBu&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-20-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-28-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x= Species, y=Sepal.Width, fill=Species)) +
   geom_violin() +
   scale_fill_brewer(palette=&quot;Blues&quot;) +
   ylab(&quot;Sepal Width&quot;)</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-21-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-29-1.png" width="50%" /></p>
 </div>
 <div id="histogram-density-plot" class="section level3">
 <h3>Histogram &amp; Density Plot:</h3>
@@ -669,34 +779,60 @@ of a continuous value.</p>
   geom_histogram(aes(x=Sepal.Width)) +
   theme_classic()</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-22-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-30-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width, fill=Species)) +
   geom_histogram(alpha=0.7, position=&#39;identity&#39;, color=&quot;black&quot;) +
   scale_fill_manual(values=c(&quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;)) +
   facet_grid(rows=vars(Species)) +
   theme_classic()</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-23-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-31-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width)) +
   geom_density() +
   theme_classic()</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-24-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-32-1.png" width="50%" /></p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Width, fill=Species)) +
   geom_density(alpha=0.5) +
   theme_classic()</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-25-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-33-1.png" width="50%" /></p>
 </div>
 <div id="line-chart" class="section level3">
 <h3>Line chart</h3>
-<p>A line chart is typically used to display the change in a numberical
-value across time.</p>
-<p><em>Note: This is not the same as fitting a best-fit line to a set of
-data</em></p>
-<p>For this, let’s use a different data set included in base R, called
-<code>Orange</code>. This dataset shows the change in circumference of 5
-orange trees across different ages.</p>
+<p>A line chart just connects points together. It is commonly used to
+display the change in a numberical value in a timeseries. It can also be
+used todisplay tracks across two dimensional space.</p>
+<p>Here’s a very simple example. The <code>economics</code> dataset
+included in ggplot2 presents a few monthly metrics of the US populations
+from 1967 to 2015.</p>
+<pre class="r"><code>#take a look at the data
+economics</code></pre>
+<pre><code>## # A tibble: 574 × 6
+##    date         pce    pop psavert uempmed unemploy
+##    &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 1967-07-01  507. 198712    12.6     4.5     2944
+##  2 1967-08-01  510. 198911    12.6     4.7     2945
+##  3 1967-09-01  516. 199113    11.9     4.6     2958
+##  4 1967-10-01  512. 199311    12.9     4.9     3143
+##  5 1967-11-01  517. 199498    12.8     4.7     3066
+##  6 1967-12-01  525. 199657    11.8     4.8     3018
+##  7 1968-01-01  531. 199808    11.7     5.1     2878
+##  8 1968-02-01  534. 199920    12.3     4.5     3001
+##  9 1968-03-01  544. 200056    11.7     4.1     2877
+## 10 1968-04-01  544  200208    12.3     4.6     2709
+## # ℹ 564 more rows</code></pre>
+<pre class="r"><code>#see the details of the data from the help file
+?economics</code></pre>
+<p>This data is already nicely organized, so we can simply plot a
+metric, say the population size, across time:</p>
+<pre class="r"><code>ggplot(economics, aes(x=date, y=pop)) +
+  geom_line()</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>Let’s do another example. For this, let’s use a different data set
+included in base R, called <code>Orange</code>. This dataset shows the
+change in circumference of 5 orange trees across different ages.</p>
 <pre class="r"><code>Orange</code></pre>
-<pre><code>##    Tree  age circumference
+<pre><code>## Grouped Data: circumference ~ age | Tree
+##    Tree  age circumference
 ## 1     1  118            30
 ## 2     1  484            58
 ## 3     1  664            87
@@ -732,9 +868,22 @@ orange trees across different ages.</p>
 ## 33    5 1231           142
 ## 34    5 1372           174
 ## 35    5 1582           177</code></pre>
+<p>Here, “age” is a time variable. We can plot the change in the
+circumference of trees across age. However, there are data from multiple
+trees here, so we need to tell the function to plot each tree as a
+separate line. We can do this two ways.</p>
+<p>First, we can use the argument <code>group=</code> within the
+aesthetics to indicate the <code>Tree</code> is the grouping
+variable.</p>
+<pre class="r"><code>ggplot(Orange, aes(x=age, y=circumference, group=Tree)) +
+  geom_line()</code></pre>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-37-1.png" width="50%" /></p>
+<p>Or, we can use the argument <code>color=</code> to indicate that we
+want the data for each tree shown in different colors. This will also
+automatically generate a legend</p>
 <pre class="r"><code>ggplot(Orange, aes(x=age, y=circumference, color=Tree)) +
   geom_line()</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-27-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-38-1.png" width="50%" /></p>
 </div>
 </div>
 
