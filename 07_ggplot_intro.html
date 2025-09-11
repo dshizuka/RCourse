@@ -342,7 +342,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Intro to ggplot2</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 09/07/25</h4>
+<h4 class="date">updated 09/11/25</h4>
 
 </div>
 
@@ -514,8 +514,8 @@ while to get familiar with them.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3))</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" />
-You can also assign your own color palette using
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-9-1.png" width="50%" /></p>
+<p>You can also assign your own color palette using
 <code>scale_color_manual()</code>.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
@@ -570,9 +570,9 @@ element.</p></li>
   scale_color_discrete(type=rainbow(3)) +
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" />
-I can use <code>element_text()</code> to change the size of the text at
-the tick marks.</p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-13-1.png" width="50%" /></p>
+<p>I can use <code>element_text()</code> to change the size of the text
+at the tick marks.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3)) +
@@ -663,6 +663,7 @@ colors:</p>
   ylab(&quot;Sepal Width&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-20-1.png" width="50%" /></p>
+<p>Make it prettier with custom colors and formatting adjustments.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   geom_smooth(method=&quot;lm&quot;) +
@@ -676,6 +677,11 @@ colors:</p>
 </div>
 <div id="faceting" class="section level2">
 <h2>6. Faceting</h2>
+<p>You can also easily create multi-panel plots using
+<code>facet_wrap()</code> or <code>facet_grid()</code> (you can look up
+the difference with a web search).</p>
+<p>For example, let’s plot the relationships between sepal length and
+width for each of the three species separately.</p>
 <pre class="r"><code>ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(size=2) +
   geom_smooth(method=&quot;lm&quot;) +
@@ -685,7 +691,7 @@ colors:</p>
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   facet_wrap(~Species)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-22-1.png" width="50%" /></p>
+<p><img src="07_ggplot_intro_files/figure-html/unnamed-chunk-22-1.png" width="100%" /></p>
 <hr />
 </div>
 <div id="saving-ggplot-outputs" class="section level2">

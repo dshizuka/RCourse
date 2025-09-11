@@ -155,6 +155,7 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
   scale_color_discrete(type=rainbow(3))
 ```
+
 You can also assign your own color palette using `scale_color_manual()`.
 
 ```{r, out.width="50%"}
@@ -211,7 +212,9 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
+
 I can use `element_text()` to change the size of the text at the tick marks. 
+
 ```{r, out.width="50%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
@@ -300,6 +303,8 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   ylab("Sepal Width")
 ```
 
+Make it prettier with custom colors and formatting adjustments.
+
 ```{r, out.width="50%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point(size=2) +
@@ -313,7 +318,11 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
 
 ## 6. Faceting
 
-```{r, out.width="50%"}
+You can also easily create multi-panel plots using `facet_wrap()` or `facet_grid()` (you can look up the difference with a web search).
+
+For example, let's plot the relationships between sepal length and width for each of the three species separately.
+
+```{r, out.width="100%"}
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(size=2) +
   geom_smooth(method="lm") +
