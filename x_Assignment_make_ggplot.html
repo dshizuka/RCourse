@@ -275,6 +275,8 @@ id="assignment-recreate-a-figure-form-a-published-paper-or-make-it-better"
 class="section level2">
 <h2>Assignment: Recreate a figure form a published paper (or make it
 better)</h2>
+<div id="intro" class="section level3">
+<h3>Intro:</h3>
 <p>For this assignment, I want you to do the best you can to recreate a
 figure from a published paper.</p>
 <p>I’ve chose a paper called <em>Temporal trends in allometry of shell
@@ -284,10 +286,27 @@ Kaustuv Roy, published in Biology Letters in August 2025.</p>
 <p><a
 href="https://royalsocietypublishing.org/doi/10.1098/rsbl.2025.0181"
 class="uri">https://royalsocietypublishing.org/doi/10.1098/rsbl.2025.0181</a></p>
+<p>In this paper, the authors calculate allometric relationships between
+size and shell thickness for 5 species of bivalves across two different
+geologic time periods (Pleistocene and Holocene). They find that there
+are differences in these relationships across geologic time, and that
+the changes are species specific.</p>
+<p>… which is interesting, but this exercise is not about the scientific
+finding itself. Instead, I want you to use their data and try
+reproducing their Figure 3, which looks like this:</p>
 <pre class="r"><code>knitr::include_graphics(&quot;images/Bullard_Roy_figure3.png&quot;)</code></pre>
-<p><img src="images/Bullard_Roy_figure3.png" width="649" /></p>
+<p><img src="images/Bullard_Roy_figure3.png" width="649" /> ### Download
+the data:</p>
+<p>The raw data for this paper is available for open access through the
+Dryad data repository <a
+href="https://datadryad.org/dataset/doi:10.5061/dryad.qrfj6q5st"
+class="uri">https://datadryad.org/dataset/doi:10.5061/dryad.qrfj6q5st</a></p>
+<p>However, there is a little bit of calculations that need to be
+done</p>
+<pre class="r"><code>dat=read.csv(&quot;https://dshizuka.github.io/RCourse/data/Bullard_Roy_Data_w_log.csv&quot;)</code></pre>
 <pre class="r"><code>dat=read.csv(&quot;data/Bullard_Roy_Data_w_log.csv&quot;)</code></pre>
-<p><img src="x_Assignment_make_ggplot_files/figure-html/unnamed-chunk-3-1.png" width="80%" height="150%" /></p>
+<p><img src="x_Assignment_make_ggplot_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="150%" /></p>
+</div>
 </div>
 
 
