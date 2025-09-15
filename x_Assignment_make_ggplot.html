@@ -295,14 +295,19 @@ the changes are species specific.</p>
 finding itself. Instead, I want you to use their data and try
 reproducing their Figure 3, which looks like this:</p>
 <pre class="r"><code>knitr::include_graphics(&quot;images/Bullard_Roy_figure3.png&quot;)</code></pre>
-<p><img src="images/Bullard_Roy_figure3.png" width="649" /> ### Download
-the data:</p>
+<p><img src="images/Bullard_Roy_figure3.png" width="649" /></p>
+</div>
+<div id="download-the-data" class="section level3">
+<h3>Download the data:</h3>
 <p>The raw data for this paper is available for open access through the
-Dryad data repository <a
+Dryad data repository: <a
 href="https://datadryad.org/dataset/doi:10.5061/dryad.qrfj6q5st"
 class="uri">https://datadryad.org/dataset/doi:10.5061/dryad.qrfj6q5st</a></p>
-<p>However, there is a little bit of calculations that need to be
-done</p>
+<p><strong>However,</strong> Figure 3 plots values that involve slightly
+complicated calculations for size (log of mean-centered values within
+each species/time). Since I want to focus here just on the graphics, I
+have created an appended dataset, which you can download <a
+href="%22data/Bullard_Roy_Data_w_log.csv%22">here</a></p>
 <pre class="r"><code>dat=read.csv(&quot;https://dshizuka.github.io/RCourse/data/Bullard_Roy_Data_w_log.csv&quot;)</code></pre>
 <pre class="r"><code>dat=read.csv(&quot;data/Bullard_Roy_Data_w_log.csv&quot;)</code></pre>
 <p><img src="x_Assignment_make_ggplot_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="150%" /></p>

@@ -26,11 +26,12 @@ In this paper, the authors calculate allometric relationships between size and s
 ```{r}
 knitr::include_graphics("images/Bullard_Roy_figure3.png")
 ```
+
 ### Download the data:
 
 The raw data for this paper is available for open access through the Dryad data repository: https://datadryad.org/dataset/doi:10.5061/dryad.qrfj6q5st
 
-**However,** Figure 3 plots values that involve slightly complicated calculations for size (log of mean-centered values within each species/time). 
+**However,** Figure 3 plots values that involve slightly complicated calculations for size (log of mean-centered values within each species/time). Since I want to focus here just on the graphics, I have created an appended dataset, which you can download [here]("data/Bullard_Roy_Data_w_log.csv")
 
 ```{r}
 dat=read.csv("https://dshizuka.github.io/RCourse/data/Bullard_Roy_Data_w_log.csv")
