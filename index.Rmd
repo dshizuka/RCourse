@@ -23,6 +23,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+* September 22: I made changes to the first data wrangling module so that it now focuses just on dplyr and uses the iris dataset instead of a more complex dataset.
+
 * August 29: I changed up the order of the modules to put 'data wrangling' ahead of stats. I think this makes sense for this course. Note that I will updating some modules as I go...
 
 * August 26: Here is the [google doc for live coding sessions](https://docs.google.com/document/d/1AzvXYMHvwYf7ILJXUKGGuc96T_Oh4GYsS8CWcFgbEQ8/edit?tab=t.0)
