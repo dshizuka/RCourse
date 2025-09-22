@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * ### Wrangling data in R:
 
-    + ### [Data Wrangling with Tidyverse Packages](09_tidyverse.html)
+    + ### [Data Wrangling with dplyr](09_dplyr.html)
     
     + ### [Parsing Dates and Text](10_text_parsing.html)
     
