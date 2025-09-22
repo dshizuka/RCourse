@@ -351,7 +351,13 @@ div.tocify {
 <div id="intro-to-the-tidyverse" class="section level2">
 <h2>Intro to the <a
 href="https://www.tidyverse.org/">‘tidyverse’</a></h2>
-<p><img src="images/icons/tidyr.png" width="10%" /><img src="images/icons/dplyr.png" width="10%" /><img src="images/icons/stringr.png" width="10%" /><img src="images/icons/ggplot2.png" width="10%" /></p>
+<p><img src="images/icons/tidyr.png" width="10%" /><img src="images/icons/dplyr.png" width="10%" /><img src="images/icons/stringr.png" width="10%" /><img src="images/icons/ggplot2.png" width="10%" />
+The tidyverse packages are constructed by <a
+href="http://hadley.nz/">Hadley Wickam</a>. There are several books that
+cover how to use these packages, including <em>R for Data Science</em>
+<a href="https://r4ds.had.co.nz/">which is available for free as an
+online book</a></p>
+<p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
 <p>Now that we have dipped our feet into plots and stats in R, I think
 you are getting a better sense of the fact that ‘wrangling’ or
 ‘manipulating’ data is one of the biggest steps to becoming proficient
@@ -372,12 +378,6 @@ treatments</p></li>
 </ul>
 <p>These tasks are where the package <a
 href="https://dplyr.tidyverse.org/">dplyr</a> shine.</p>
-<p>The tidyverse packages are constructed by <a
-href="http://hadley.nz/">Hadley Wickam</a>. There are several books that
-cover how to use these packages, including <em>R for Data Science</em>
-<a href="https://r4ds.had.co.nz/">which is available for free as an
-online book</a></p>
-<p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
 <p>In this module, we’ll be learning some functions from the package
 <strong>dplyr</strong>.</p>
 <hr />
@@ -385,8 +385,9 @@ online book</a></p>
 <div id="installing-and-loading-packages-we-need-for-this-module"
 class="section level2">
 <h2>1. Installing and loading packages we need for this module</h2>
-<p>One can install each package separately, but you can also just
-install all “tidyverse” packages simply by running this command:</p>
+<p>In this module, we will be using the <code>dplyr</code> and
+<code>ggplot2</code> packages.</p>
+<p>You can</p>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 <p>Note that this simply downloads the packages onto your computer. When
 you are ready to use them, you will have to load the package onto the
@@ -681,7 +682,7 @@ length greater or equal to 5cm:</p>
 </div>
 </div>
 <div id="select-columns" class="section level3">
-<h3>3.3. Select columns</h3>
+<h3>3.4 Select columns</h3>
 <p>Sometimes, you don’t need all of the data. Let’s say we just want the
 data for petals (not sepals). You can do this with
 <code>select()</code></p>
@@ -774,7 +775,7 @@ width):</p>
 ## # ℹ 1 more variable: Sepal.Area &lt;dbl&gt;</code></pre>
 </div>
 <div id="group-and-summarize-data" class="section level3">
-<h3>3.5. Group and Summarize data</h3>
+<h3>3.6 Group and Summarize data</h3>
 <p><em>dplyr</em> makes the craft of summarizing data much easier… if
 you get comfortable with the grammar. Here, I will show you how to use
 <code>group_by()</code> and <code>summarise()</code> functions to get
@@ -813,7 +814,7 @@ ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
 </div>
 <div id="merge-two-different-dataexample-calculating-z-scores"
 class="section level3">
-<h3>3.8. Merge two different data–example calculating z-scores</h3>
+<h3>3.7 Merge two different data–example calculating z-scores</h3>
 <p>The four main join functions all seek to merge data using matching
 columns (either matching column names, or manually designated using the
 <code>by=</code> argument). But they differ in which rows they will

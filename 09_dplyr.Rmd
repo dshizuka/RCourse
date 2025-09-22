@@ -213,7 +213,7 @@ iris %>%
 
 ***
 
-### 3.3. Select columns
+### 3.4 Select columns
 
 Sometimes, you don't need all of the data. Let's say we just want the data for petals (not sepals). You can do this with `select()`
 
@@ -255,7 +255,7 @@ iris %>%
   mutate(Petal.Area=Petal.Length*Petal.Width, Sepal.Area=Sepal.Length*Sepal.Width)
 ```
 
-### 3.5. Group and Summarize data
+### 3.6 Group and Summarize data
 
 *dplyr* makes the craft of summarizing data much easier... if you get comfortable with the grammar. Here, I will show you how to use `group_by()` and `summarise()` functions to get summary data by species.
 
@@ -291,7 +291,7 @@ ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
 
 ***
 
-### 3.8. Merge two different data--example calculating z-scores
+### 3.7 Merge two different data--example calculating z-scores
 
 The four main join functions all seek to merge data using matching columns (either matching column names, or manually designated using the `by=` argument). But they differ in which rows they will keep:
 
