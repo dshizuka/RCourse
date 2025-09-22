@@ -1,0 +1,328 @@
+---
+title: "Data Wrangling  with *dplyr*
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+****
+
+## Intro to the ['tidyverse'](https://www.tidyverse.org/)
+
+```{r, out.width="10%", echo=F}
+knitr::include_graphics("images/icons/tidyr.png")
+knitr::include_graphics("images/icons/dplyr.png")
+knitr::include_graphics("images/icons/stringr.png")
+knitr::include_graphics("images/icons/ggplot2.png")
+```
+
+Now that we have dipped our feet into plots and stats in R, I think you are getting a better sense of the fact that 'wrangling' or 'manipulating' data is one of the biggest steps to becoming proficient in R and all that it has to offer. 
+
+For example, for any given analysis, you will likely have to 'manipulate' the data in some ways, such as
+
+* subsetting the data to look at certain groups or treatments
+
+* filter out certain data that don't meet some criteria
+
+* focus in on a select set of variables of interest
+
+* generate new variables based on calculations 
+
+* rename variables
+
+* recategorize groups
+
+* calculate means, and variance for different groups 
+
+* merge multiple datasets together
+
+* etc., etc., etc.
+
+These tasks are where the package [dplyr](https://dplyr.tidyverse.org/) shine. 
+
+The tidyverse packages are constructed by [Hadley Wickam](http://hadley.nz/). There are several books that cover how to use these packages, including *R for Data Science* [which is available for free as an online book](https://r4ds.had.co.nz/)
+
+```{r, out.width="20%", echo=F}
+knitr::include_graphics("images/icons/R_for_Data_Science_cover.png")
+```
+
+In this module, we'll be learning some functions from the package **dplyr**. 
+
+***
+
+## 1. Installing and loading packages we need for this module
+
+One can install each package separately, but you can also just install all "tidyverse" packages simply by running this command:
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+
+Note that this simply downloads the packages onto your computer. When you are ready to use them, you will have to load the package onto the environment by running the function
+
+You now have the package downloaded on your computer, but to actually use it, you have to load the package. We can load the entire `tidyverse` package (or, if you prefer, you can just load the `tidyr` package).
+
+```{r}
+library(tidyverse)
+```
+
+**Two important thing to notice here.** First, the message tells you what packages were actually loaded as part of the tidyverse "metapackage". You see that this includes 8 packages: ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats. Second, the message tells you that there are two functions in the `dplyr` package that conflict with existing functions: `filter()` and `lag()`. This is sometimes very important to know! This means that the `filter()` function works differently before and after loading this package.
+
+***
+
+><span style="color:purple">***Some things to know about getting started with 'tidyverse'***</span>
+>
+>**Pipe Operator (`%>%`):**
+>tidyverse makes use of the pipe operator `%>%`, which allows you to carry over the output of one function to the next function. This can make series of data manipulation sequences much more efficient. 
+>
+>**Tibbles:**
+>"tibble" is a special class of dataframe that is used in tidyverse. It is largely the same as a dataframe but it has some features (or rather, lack of features) that make for 'defensive coding'. That is, it forces you to avoid dangerous operations, such as changing variable names or types (you have to explicitly do this) or allow "partial matching".
+>
+>To learn more about tibbles, start [here](https://tibble.tidyverse.org/)
+
+
+***
+
+## 2. Working with *dplyr*
+
+*dplyr* is a package that helps you wrangle your data into shape to aid you in the process of visualization and analysis. 
+
+Here is a link to the `dplyr` cheat sheet: https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+
+#### Main *dplyr* functions
+
+* `pull()`: select one column and save as a vector.
+* `select()`: select columns by criteria
+* `filter()`: filter rows by criteria
+* `mutate()`: add new variable using functions
+* `group_by()`: group the data together based on a given variable (or variables). Often used when calculating summary stats.
+* `summarise()`: calculate summary statistic for a given variable
+* `arrange()`: change order of rows
+* `left_join()`, `right_join()`, `inner_join()`, `full_join()`: set of functions to help merge data tables.
+* `nest_join()`: create nested datasets (advanced... I don't know how to use this yet)
+
+<br>
+
+
+***
+
+## 3. Demonstrating the basic functions with the iris database
+
+<br>
+
+### 3.1 Dataframe vs. tibble
+
+Let's take this iris dataset...
+
+
+If I just call the iris dataset, it will give me up to 100 rows (not shown because it'll take up too much space)
+```{r, eval=F}
+iris
+```
+
+So, we often look at just the 'top' of the dataframe using the `head()` function:
+
+```{r}
+head(iris)
+```
+
+One difference with tibble is that it will natively just show you the first 10 rows, with some extra information added in, such as the class of object each column contains.
+
+Let's make a version of the iris dataset that is in a tibble format:
+```{r}
+iris.tbl=tibble(iris)
+
+iris.tbl
+```
+
+You can read about the detailed differences between a dataframe and tibble [on this webpage](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html)
+
+
+
+### 3.2 Using pipes (`%>%`) to chain together sequence of actions!
+
+First, I'm going to introduce the "pipe"--perhaps the most useful part of the tidyverse grammar (which actually comes from another amazing package called `magrittr`, if you care...).
+
+Basically, piping is when the `%>%` operator is used to forward a value, or the result of an expression, into the next function call/expression.
+
+For example, let's say we want to convert the `iris` dataframe into a tibble. I could use `tibble(iris)` as I did above. But I can also do this:
+
+```{r}
+iris %>% tibble()
+```
+
+Right now, this seems a bit puzzling and not that useful... but, you will quickly see how the `%>%` operator can help you build nice pipelines (pun intended) for data wrangling!
+
+**From here on out, I will build the codes using pipes as a default.**
+
+<br>
+
+***
+
+### 3.3. Filter by row values
+
+
+For example, you can use the `filter()` function (see more below) to show just the data for the iris species *Iris setosa*.
+
+```{r}
+filter(iris, Species=="setosa")
+```
+
+But you can run the same code by using `%>%`, like this:
+```{r}
+iris %>% 
+  tibble() %>%
+  filter(Species=="setosa")
+```
+
+What this does is tell R: Take `iris` and turn it into a tibble. Then, filter the data to show just the data where "Species" takes the value "setosa". 
+
+#### Using `|` and `&` to filter by multiple criteria
+
+I can actually use multiple criteria to filter data. Here, the operators `&` and `|` become important. This was mentioned in the "getting started with R" module, but here we bring it to use.  
+
+We can use the `|` operator to indicate "or". So if you want to filter the data to include both *Iris setosa* and *Iris versicolor*, we can do this:
+
+```{r}
+iris %>% 
+  tibble() %>%
+  filter(Species=="setosa" | Species=="versicolor")
+```
+
+You can see that there are 100 rows that fulfill this criteria (which makes sense since there are 50 samples of each species).
+
+Alternatively, you can use `&` to indicate that you want show rows that fulfill BOTH criteria at the same time. 
+
+Let's say I wan to look at data for *Iris setosa* with sepal length greater or equal to 5cm:
+
+```{r}
+iris %>% 
+  tibble() %>%
+  filter(Species=="setosa" & Sepal.Length>=5)
+```
+
+<br>
+
+***
+
+### 3.3. Select columns
+
+Sometimes, you don't need all of the data. Let's say we just want the data for petals (not sepals). You can do this with `select()`
+
+```{r}
+iris %>% 
+  tibble() %>% 
+  select(Petal.Length, Petal.Width, Species)
+```
+
+The nice thing about the select function is that you don't need to put the column names in quotes or anything--just type in the columns you want. 
+
+or, type in the columns you DON'T want by adding a "-" in front of the column name:
+```{r}
+iris %>% 
+  tibble() %>% 
+  select(-Sepal.Length, -Sepal.Width)
+```
+
+Combining the `filter()` and `select()` functions allow you to manage the data in flexible ways. And piping makes it easy to do this:
+
+```{r}
+iris %>% 
+  tibble() %>% 
+  filter(Species=="setosa") %>%
+  select(-Sepal.Length, -Sepal.Width)
+```
+
+<br>
+
+### 3.5. Add new variables using `mutate()`
+
+You can make new variables (columns). You'll often do this if want to calculate some new variable based on existing variables.
+
+Let's calculate an estimated area of the petal and sepal (with the simplifying assumption that we can just multiple the length x width):
+
+```{r}
+iris %>% 
+  tibble() %>%
+  mutate(Petal.Area=Petal.Length*Petal.Width, Sepal.Area=Sepal.Length*Sepal.Width)
+```
+
+### 3.5. Group and Summarize data
+
+*dplyr* makes the craft of summarizing data much easier... if you get comfortable with the grammar. Here, I will show you how to use `group_by()` and `summarise()` functions to get summary data by species.
+
+For example, let's calculate the mean and standard deviation of sepal length by species:
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
+```
+
+This is sometimes useful for plotting the mean and standard deviation as error bars of each species (or if you do calculate the standard error, you could do that too). To do this, first, we will have to save what we did above as a new dataframe, and then use ggplot to make these plots:
+
+```{r, out.width="50%"}
+iris_spp_means=iris %>%
+  group_by(Species) %>%
+  summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
+
+ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
+  geom_point(size=5) +
+  geom_errorbar(aes(ymin=mean.sepal.length-sd.sepal.length, ymax=mean.sepal.length+sd.sepal.length), width=0.2)
+```
+
+Or you can make a bar chart using `geom_col()`
+
+```{r, out.width="50%"}
+ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
+  geom_col() +
+  geom_errorbar(aes(ymin=mean.sepal.length-sd.sepal.length, ymax=mean.sepal.length+sd.sepal.length), width=0.2)
+```
+
+<br>
+
+***
+
+### 3.8. Merge two different data--example calculating z-scores
+
+The four main join functions all seek to merge data using matching columns (either matching column names, or manually designated using the `by=` argument). But they differ in which rows they will keep:
+
+* `left_join(x, y)`: match up the values in designated columns of x and y, and keep all rows in x. NAs show up when a value is present in x but not y.
+
+* `right_join(x, y)`: match up the values in designated columns of x and y, and keep all rows in y. NAs show up when a value is present in y but not x.
+
+* `inner_join(x, y)`: match up the values in designated columns of x and y, and keep only rows in which x and y values matched. No NAs show up.
+
+* `full_join(x, y): match up the values in designated columns of x and y, and keep all rows in x and y, even if they don't match. NAs whenever value in one table doesn't have a match in the other.
+
+Let's demonstrate this by merging the iris dataset with the species mean values that we calculated above, and then use that to calculate the sepal lengths as z-scores. 
+
+To make this a bit fancier, we will also just select the sepal length column of the original dataset first.
+
+```{r, message=F}
+iris %>% select(Species, Sepal.Length) %>%
+  left_join(iris_spp_means) %>% 
+  tibble()
+```
+
+Now, we can use this to calculate the z-score of sepal length by using the `mutate()` function:
+
+```{r, message=F}
+iris %>% select(Species, Sepal.Length) %>%
+  left_join(iris_spp_means) %>% 
+  mutate(z.score=(Sepal.Length-mean.sepal.length)/sd.sepal.length) %>%
+  tibble()
+```
+
+<br>
+
+***
+
+
+## Get more practice with Worked Examples
+
+Go to the Worked Example on ["Wrangling World Bank Data"](Ex_WorldBank.html)

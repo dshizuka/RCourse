@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Data Wrangling with dplyr and tidyr</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="modules.html">Modules</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data Wrangling with <em>dplyr</em> and
+<em>tidyr</em></h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 09/22/25</h4>
+
+</div>
+
+
+<hr />
+<div id="intro-to-the-tidyverse" class="section level2">
+<h2>Intro to the <a
+href="https://www.tidyverse.org/">‘tidyverse’</a></h2>
+<p><img src="images/icons/tidyr.png" width="10%" /><img src="images/icons/dplyr.png" width="10%" /><img src="images/icons/stringr.png" width="10%" /><img src="images/icons/ggplot2.png" width="10%" /></p>
+<p>Now that we have dipped our feet into plots and stats in R, I think
+you are getting a better sense of the fact that ‘wrangling’ or
+‘manipulating’ data is one of the biggest steps to becoming proficient
+in R and all that it has to offer.</p>
+<p>For example, for any given analysis, you will likely have to
+‘manipulate’ the data in some ways, such as</p>
+<ul>
+<li><p>subsetting the data to look at certain groups or
+treatments</p></li>
+<li><p>filter out certain data that don’t meet some criteria</p></li>
+<li><p>focus in on a select set of variables of interest</p></li>
+<li><p>generate new variables based on calculations</p></li>
+<li><p>rename variables</p></li>
+<li><p>recategorize groups</p></li>
+<li><p>calculate means, and variance for different groups</p></li>
+<li><p>merge multiple datasets together</p></li>
+<li><p>etc., etc., etc.</p></li>
+</ul>
+<p>These tasks are where the packages <a
+href="https://dplyr.tidyverse.org/">dplyr</a>, <a
+href="https://tidyr.tidyverse.org/">tidyr</a> and other packages in the
+<a href="https://www.tidyverse.org/">tidyverse</a>–a series of packages
+designed for all kinds of data tasks. This also includes the popular <a
+href="https://ggplot2.tidyverse.org/">ggplot2</a> package for
+graphics.</p>
+<p>The tidyverse packages are constructed by <a
+href="http://hadley.nz/">Hadley Wickam</a>. There are several books that
+cover how to use these packages, including <em>R for Data Science</em>
+<a href="https://r4ds.had.co.nz/">which is available for free as an
+online book</a></p>
+<p><img src="images/icons/R_for_Data_Science_cover.png" width="20%" /></p>
+<p>In this module, we’ll be learning some functions from the packages
+<strong>dplyr</strong> and <strong>tidyr</strong>.</p>
+<p>We will do this by playing with data from the World Bank.</p>
+<hr />
+</div>
+<div id="installing-and-loading-packages-we-need-for-this-module"
+class="section level2">
+<h2>1. Installing and loading packages we need for this module</h2>
+<p>One can install each package separately, but you can also just
+install all “tidyverse” packages simply by running this command:</p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<p>Note that this simply downloads the packages onto your computer. When
+you are ready to use them, you will have to load the package onto the
+environment by running the function</p>
+<p>You now have the package downloaded on your computer, but to actually
+use it, you have to load the package. We can load the entire
+<code>tidyverse</code> package (or, if you prefer, you can just load the
+<code>tidyr</code> package).</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.4     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<p><strong>Two important thing to notice here.</strong> First, the
+message tells you what packages were actually loaded as part of the
+tidyverse “metapackage”. You see that this includes 8 packages:
+ggplot2,tibble, tidyr, readr, purrr, dplyr, stringr, and forcats.
+Second, the message tells you that there are two functions in the
+<code>dplyr</code> package that conflict with existing functions:
+<code>filter()</code> and <code>lag()</code>. This is sometimes very
+important to know! This means that the <code>filter()</code> function
+works differently before and after loading this package.</p>
+<hr />
+<blockquote>
+<p><span style="color:purple"><strong><em>Some things to know about
+getting started with ‘tidyverse’</em></strong></span></p>
+<p><strong>Pipe Operator (<code>%&gt;%</code>):</strong> tidyverse makes
+use of the pipe operator <code>%&gt;%</code>, which allows you to carry
+over the output of one function to the next function. This can make
+series of data manipulation sequences much more efficient.</p>
+<p><strong>Tibbles:</strong> “tibble” is a special class of dataframe
+that is used in tidyverse. It is largely the same as a dataframe but it
+has some features (or rather, lack of features) that make for ‘defensive
+coding’. That is, it forces you to avoid dangerous operations, such as
+changing variable names or types (you have to explicitly do this) or
+allow “partial matching”.</p>
+<p>To learn more about tibbles, start <a
+href="https://tibble.tidyverse.org/">here</a></p>
+</blockquote>
+<hr />
+</div>
+<div id="working-with-dplyr-and-tidyr" class="section level2">
+<h2>2. Working with <em>dplyr</em> and <em>tidyr</em></h2>
+<div id="dplyr" class="section level3">
+<h3>2.1. <em>dplyr</em></h3>
+<p><em>dplyr</em> is a package that helps you wrangle your data into
+shape to aid you in the process of visualization and analysis.</p>
+<p>Here is a link to the <code>dplyr</code> cheat sheet: <a
+href="https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf"
+class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf</a></p>
+<div id="main-dplyr-functions" class="section level4">
+<h4>Main <em>dplyr</em> functions</h4>
+<ul>
+<li><code>pull()</code>: select one column and save as a vector.</li>
+<li><code>select()</code>: select columns by criteria</li>
+<li><code>filter()</code>: filter rows by criteria</li>
+<li><code>mutate()</code>: add new variable using functions</li>
+<li><code>group_by()</code>: group the data together based on a given
+variable (or variables). Often used when calculating summary stats.</li>
+<li><code>summarise()</code>: calculate summary statistic for a given
+variable</li>
+<li><code>arrange()</code>: change order of rows</li>
+<li><code>left_join()</code>, <code>right_join()</code>,
+<code>inner_join()</code>, <code>full_join()</code>: set of functions to
+help merge data tables.</li>
+<li><code>nest_join()</code>: create nested datasets (advanced… I don’t
+know how to use this yet)</li>
+</ul>
+<p><br></p>
+</div>
+</div>
+<div id="tidyr" class="section level3">
+<h3>2.2. <em>tidyr</em></h3>
+<p>I use <em>tidyr</em> mostly for reshaping data to move between
+“long-format” and “wide-format” data.</p>
+<p>Here is link to the <em>tidyr</em> cheat sheet: <a
+href="https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf"
+class="uri">https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf</a></p>
+<div id="main-tidyr-functions" class="section level4">
+<h4>Main <em>tidyr</em> functions</h4>
+<ul>
+<li><code>pivot_longer()</code>: “lengthen” data by collapsing several
+columns into two.</li>
+<li><code>pivot_wider()</code>: “widen” data by expanding two columns
+into multiple columns</li>
+<li><code>drop_na()</code>: remove rows that contain NA</li>
+<li><code>separate()</code>: separate values in a column into multiple
+columns</li>
+<li><code>unite()</code>: paste together values in two columns</li>
+</ul>
+<p><br></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="demonstrating-the-basic-functions-with-the-iris-database"
+class="section level2">
+<h2>3. Demonstrating the basic functions with the iris database</h2>
+<p><br></p>
+<div id="dataframe-vs.-tibble" class="section level3">
+<h3>3.1 Dataframe vs. tibble</h3>
+<p>Let’s take this iris dataset…</p>
+<p>If I just call the iris dataset, it will give me up to 100 rows (not
+shown because it’ll take up too much space)</p>
+<pre class="r"><code>iris</code></pre>
+<p>So, we often look at just the ‘top’ of the dataframe using the
+<code>head()</code> function:</p>
+<pre class="r"><code>head(iris)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<p>One difference with tibble is that it will natively just show you the
+first 10 rows, with some extra information added in, such as the class
+of object each column contains.</p>
+<p>Let’s make a version of the iris dataset that is in a tibble
+format:</p>
+<pre class="r"><code>iris.tbl=tibble(iris)
+
+iris.tbl</code></pre>
+<pre><code>## # A tibble: 150 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ℹ 140 more rows</code></pre>
+<p>You can read about the detailed differences between a dataframe and
+tibble <a
+href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html">on
+this webpage</a></p>
+</div>
+<div id="using-pipes-to-chain-together-sequence-of-actions"
+class="section level3">
+<h3>3.2 Using pipes (<code>%&gt;%</code>) to chain together sequence of
+actions!</h3>
+<p>First, I’m going to introduce the “pipe”–perhaps the most useful part
+of the tidyverse grammar (which actually comes from another amazing
+package called <code>magrittr</code>, if you care…).</p>
+<p>Basically, piping is when the <code>%&gt;%</code> operator is used to
+forward a value, or the result of an expression, into the next function
+call/expression.</p>
+<p>For example, let’s say we want to convert the <code>iris</code>
+dataframe into a tibble. I could use <code>tibble(iris)</code> as I did
+above. But I can also do this:</p>
+<pre class="r"><code>iris %&gt;% tibble()</code></pre>
+<pre><code>## # A tibble: 150 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ℹ 140 more rows</code></pre>
+<p>Right now, this seems a bit puzzling and not that useful… but, you
+will quickly see how the <code>%&gt;%</code> operator can help you build
+nice pipelines (pun intended) for data wrangling!</p>
+<p><strong>From here on out, I will build the codes using pipes as a
+default.</strong></p>
+<p><br></p>
+<hr />
+</div>
+<div id="filter-by-row-values" class="section level3">
+<h3>3.3. Filter by row values</h3>
+<p>For example, you can use the <code>filter()</code> function (see more
+below) to show just the data for the iris species <em>Iris
+setosa</em>.</p>
+<pre class="r"><code>filter(iris, Species==&quot;setosa&quot;)</code></pre>
+<pre><code>##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 4           4.6         3.1          1.5         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 6           5.4         3.9          1.7         0.4  setosa
+## 7           4.6         3.4          1.4         0.3  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa
+## 11          5.4         3.7          1.5         0.2  setosa
+## 12          4.8         3.4          1.6         0.2  setosa
+## 13          4.8         3.0          1.4         0.1  setosa
+## 14          4.3         3.0          1.1         0.1  setosa
+## 15          5.8         4.0          1.2         0.2  setosa
+## 16          5.7         4.4          1.5         0.4  setosa
+## 17          5.4         3.9          1.3         0.4  setosa
+## 18          5.1         3.5          1.4         0.3  setosa
+## 19          5.7         3.8          1.7         0.3  setosa
+## 20          5.1         3.8          1.5         0.3  setosa
+## 21          5.4         3.4          1.7         0.2  setosa
+## 22          5.1         3.7          1.5         0.4  setosa
+## 23          4.6         3.6          1.0         0.2  setosa
+## 24          5.1         3.3          1.7         0.5  setosa
+## 25          4.8         3.4          1.9         0.2  setosa
+## 26          5.0         3.0          1.6         0.2  setosa
+## 27          5.0         3.4          1.6         0.4  setosa
+## 28          5.2         3.5          1.5         0.2  setosa
+## 29          5.2         3.4          1.4         0.2  setosa
+## 30          4.7         3.2          1.6         0.2  setosa
+## 31          4.8         3.1          1.6         0.2  setosa
+## 32          5.4         3.4          1.5         0.4  setosa
+## 33          5.2         4.1          1.5         0.1  setosa
+## 34          5.5         4.2          1.4         0.2  setosa
+## 35          4.9         3.1          1.5         0.2  setosa
+## 36          5.0         3.2          1.2         0.2  setosa
+## 37          5.5         3.5          1.3         0.2  setosa
+## 38          4.9         3.6          1.4         0.1  setosa
+## 39          4.4         3.0          1.3         0.2  setosa
+## 40          5.1         3.4          1.5         0.2  setosa
+## 41          5.0         3.5          1.3         0.3  setosa
+## 42          4.5         2.3          1.3         0.3  setosa
+## 43          4.4         3.2          1.3         0.2  setosa
+## 44          5.0         3.5          1.6         0.6  setosa
+## 45          5.1         3.8          1.9         0.4  setosa
+## 46          4.8         3.0          1.4         0.3  setosa
+## 47          5.1         3.8          1.6         0.2  setosa
+## 48          4.6         3.2          1.4         0.2  setosa
+## 49          5.3         3.7          1.5         0.2  setosa
+## 50          5.0         3.3          1.4         0.2  setosa</code></pre>
+<p>But you can run the same code by using <code>%&gt;%</code>, like
+this:</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;%
+  filter(Species==&quot;setosa&quot;)</code></pre>
+<pre><code>## # A tibble: 50 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ℹ 40 more rows</code></pre>
+<p>What this does is tell R: Take <code>iris</code> and turn it into a
+tibble. Then, filter the data to show just the data where “Species”
+takes the value “setosa”.</p>
+<div id="using-and-to-filter-by-multiple-criteria"
+class="section level4">
+<h4>Using <code>|</code> and <code>&amp;</code> to filter by multiple
+criteria</h4>
+<p>I can actually use multiple criteria to filter data. Here, the
+operators <code>&amp;</code> and <code>|</code> become important. This
+was mentioned in the “getting started with R” module, but here we bring
+it to use.</p>
+<p>We can use the <code>|</code> operator to indicate “or”. So if you
+want to filter the data to include both <em>Iris setosa</em> and
+<em>Iris versicolor</em>, we can do this:</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;%
+  filter(Species==&quot;setosa&quot; | Species==&quot;versicolor&quot;)</code></pre>
+<pre><code>## # A tibble: 100 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ℹ 90 more rows</code></pre>
+<p>You can see that there are 100 rows that fulfill this criteria (which
+makes sense since there are 50 samples of each species).</p>
+<p>Alternatively, you can use <code>&amp;</code> to indicate that you
+want show rows that fulfill BOTH criteria at the same time.</p>
+<p>Let’s say I wan to look at data for <em>Iris setosa</em> with sepal
+length greater or equal to 5cm:</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;%
+  filter(Species==&quot;setosa&quot; &amp; Sepal.Length&gt;=5)</code></pre>
+<pre><code>## # A tibble: 30 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          5           3.6          1.4         0.2 setosa 
+##  3          5.4         3.9          1.7         0.4 setosa 
+##  4          5           3.4          1.5         0.2 setosa 
+##  5          5.4         3.7          1.5         0.2 setosa 
+##  6          5.8         4            1.2         0.2 setosa 
+##  7          5.7         4.4          1.5         0.4 setosa 
+##  8          5.4         3.9          1.3         0.4 setosa 
+##  9          5.1         3.5          1.4         0.3 setosa 
+## 10          5.7         3.8          1.7         0.3 setosa 
+## # ℹ 20 more rows</code></pre>
+<p><br></p>
+<hr />
+</div>
+</div>
+<div id="select-columns" class="section level3">
+<h3>3.3. Select columns</h3>
+<p>Sometimes, you don’t need all of the data. Let’s say we just want the
+data for petals (not sepals). You can do this with
+<code>select()</code></p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;% 
+  select(Petal.Length, Petal.Width, Species)</code></pre>
+<pre><code>## # A tibble: 150 × 3
+##    Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          1.4         0.2 setosa 
+##  2          1.4         0.2 setosa 
+##  3          1.3         0.2 setosa 
+##  4          1.5         0.2 setosa 
+##  5          1.4         0.2 setosa 
+##  6          1.7         0.4 setosa 
+##  7          1.4         0.3 setosa 
+##  8          1.5         0.2 setosa 
+##  9          1.4         0.2 setosa 
+## 10          1.5         0.1 setosa 
+## # ℹ 140 more rows</code></pre>
+<p>The nice thing about the select function is that you don’t need to
+put the column names in quotes or anything–just type in the columns you
+want.</p>
+<p>or, type in the columns you DON’T want by adding a “-” in front of
+the column name:</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;% 
+  select(-Sepal.Length, -Sepal.Width)</code></pre>
+<pre><code>## # A tibble: 150 × 3
+##    Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          1.4         0.2 setosa 
+##  2          1.4         0.2 setosa 
+##  3          1.3         0.2 setosa 
+##  4          1.5         0.2 setosa 
+##  5          1.4         0.2 setosa 
+##  6          1.7         0.4 setosa 
+##  7          1.4         0.3 setosa 
+##  8          1.5         0.2 setosa 
+##  9          1.4         0.2 setosa 
+## 10          1.5         0.1 setosa 
+## # ℹ 140 more rows</code></pre>
+<p>Combining the <code>filter()</code> and <code>select()</code>
+functions allow you to manage the data in flexible ways. And piping
+makes it easy to do this:</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;% 
+  filter(Species==&quot;setosa&quot;) %&gt;%
+  select(-Sepal.Length, -Sepal.Width)</code></pre>
+<pre><code>## # A tibble: 50 × 3
+##    Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          1.4         0.2 setosa 
+##  2          1.4         0.2 setosa 
+##  3          1.3         0.2 setosa 
+##  4          1.5         0.2 setosa 
+##  5          1.4         0.2 setosa 
+##  6          1.7         0.4 setosa 
+##  7          1.4         0.3 setosa 
+##  8          1.5         0.2 setosa 
+##  9          1.4         0.2 setosa 
+## 10          1.5         0.1 setosa 
+## # ℹ 40 more rows</code></pre>
+<p><br></p>
+</div>
+<div id="add-new-variables-using-mutate" class="section level3">
+<h3>3.5. Add new variables using <code>mutate()</code></h3>
+<p>You can make new variables (columns). You’ll often do this if want to
+calculate some new variable based on existing variables.</p>
+<p>Let’s calculate an estimated area of the petal and sepal (with the
+simplifying assumption that we can just multiple the length x
+width):</p>
+<pre class="r"><code>iris %&gt;% 
+  tibble() %&gt;%
+  mutate(Petal.Area=Petal.Length*Petal.Width, Sepal.Area=Sepal.Length*Sepal.Width)</code></pre>
+<pre><code>## # A tibble: 150 × 7
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species Petal.Area
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;
+##  1          5.1         3.5          1.4         0.2 setosa        0.28
+##  2          4.9         3            1.4         0.2 setosa        0.28
+##  3          4.7         3.2          1.3         0.2 setosa        0.26
+##  4          4.6         3.1          1.5         0.2 setosa        0.3 
+##  5          5           3.6          1.4         0.2 setosa        0.28
+##  6          5.4         3.9          1.7         0.4 setosa        0.68
+##  7          4.6         3.4          1.4         0.3 setosa        0.42
+##  8          5           3.4          1.5         0.2 setosa        0.3 
+##  9          4.4         2.9          1.4         0.2 setosa        0.28
+## 10          4.9         3.1          1.5         0.1 setosa        0.15
+## # ℹ 140 more rows
+## # ℹ 1 more variable: Sepal.Area &lt;dbl&gt;</code></pre>
+</div>
+<div id="group-and-summarize-data" class="section level3">
+<h3>3.5. Group and Summarize data</h3>
+<p><em>dplyr</em> makes the craft of summarizing data much easier… if
+you get comfortable with the grammar. Here, I will show you how to use
+<code>group_by()</code> and <code>summarise()</code> functions to get
+summary data by species.</p>
+<p>For example, let’s calculate the mean and standard deviation of sepal
+length by species:</p>
+<pre class="r"><code>iris %&gt;%
+  group_by(Species) %&gt;%
+  summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   Species    mean.sepal.length sd.sepal.length
+##   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt;
+## 1 setosa                  5.01           0.352
+## 2 versicolor              5.94           0.516
+## 3 virginica               6.59           0.636</code></pre>
+<p>This is sometimes useful for plotting the mean and standard deviation
+as error bars of each species (or if you do calculate the standard
+error, you could do that too). To do this, first, we will have to save
+what we did above as a new dataframe, and then use ggplot to make these
+plots:</p>
+<pre class="r"><code>iris_spp_means=iris %&gt;%
+  group_by(Species) %&gt;%
+  summarise(mean.sepal.length=mean(Sepal.Length), sd.sepal.length=sd(Sepal.Length))
+
+ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
+  geom_point(size=5) +
+  geom_errorbar(aes(ymin=mean.sepal.length-sd.sepal.length, ymax=mean.sepal.length+sd.sepal.length), width=0.2)</code></pre>
+<p><img src="09_tidyverse_alt_files/figure-html/unnamed-chunk-18-1.png" width="50%" /></p>
+<p>Or you can make a bar chart using <code>geom_col()</code></p>
+<pre class="r"><code>ggplot(iris_spp_means, aes(x=Species, y=mean.sepal.length)) +
+  geom_col() +
+  geom_errorbar(aes(ymin=mean.sepal.length-sd.sepal.length, ymax=mean.sepal.length+sd.sepal.length), width=0.2)</code></pre>
+<p><img src="09_tidyverse_alt_files/figure-html/unnamed-chunk-19-1.png" width="50%" /></p>
+<p><br></p>
+<hr />
+</div>
+<div id="merge-two-different-dataexample-calculating-z-scores"
+class="section level3">
+<h3>3.8. Merge two different data–example calculating z-scores</h3>
+<p>The four main join functions all seek to merge data using matching
+columns (either matching column names, or manually designated using the
+<code>by=</code> argument). But they differ in which rows they will
+keep:</p>
+<ul>
+<li><p><code>left_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep all rows in x. NAs show up when a value is
+present in x but not y.</p></li>
+<li><p><code>right_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep all rows in y. NAs show up when a value is
+present in y but not x.</p></li>
+<li><p><code>inner_join(x, y)</code>: match up the values in designated
+columns of x and y, and keep only rows in which x and y values matched.
+No NAs show up.</p></li>
+<li><p>`full_join(x, y): match up the values in designated columns of x
+and y, and keep all rows in x and y, even if they don’t match. NAs
+whenever value in one table doesn’t have a match in the other.</p></li>
+</ul>
+<p>Let’s demonstrate this by merging the iris dataset with the species
+mean values that we calculated above, and then use that to calculate the
+sepal lengths as z-scores.</p>
+<p>To make this a bit fancier, we will also just select the sepal length
+column of the original dataset first.</p>
+<pre class="r"><code>iris %&gt;% select(Species, Sepal.Length) %&gt;%
+  left_join(iris_spp_means) %&gt;% 
+  tibble()</code></pre>
+<pre><code>## # A tibble: 150 × 4
+##    Species Sepal.Length mean.sepal.length sd.sepal.length
+##    &lt;fct&gt;          &lt;dbl&gt;             &lt;dbl&gt;           &lt;dbl&gt;
+##  1 setosa           5.1              5.01           0.352
+##  2 setosa           4.9              5.01           0.352
+##  3 setosa           4.7              5.01           0.352
+##  4 setosa           4.6              5.01           0.352
+##  5 setosa           5                5.01           0.352
+##  6 setosa           5.4              5.01           0.352
+##  7 setosa           4.6              5.01           0.352
+##  8 setosa           5                5.01           0.352
+##  9 setosa           4.4              5.01           0.352
+## 10 setosa           4.9              5.01           0.352
+## # ℹ 140 more rows</code></pre>
+<p>Now, we can use this to calculate the z-score of sepal length by
+using the <code>mutate()</code> function:</p>
+<pre class="r"><code>iris %&gt;% select(Species, Sepal.Length) %&gt;%
+  left_join(iris_spp_means) %&gt;% 
+  mutate(z.score=(Sepal.Length-mean.sepal.length)/sd.sepal.length) %&gt;%
+  tibble()</code></pre>
+<pre><code>## # A tibble: 150 × 5
+##    Species Sepal.Length mean.sepal.length sd.sepal.length z.score
+##    &lt;fct&gt;          &lt;dbl&gt;             &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+##  1 setosa           5.1              5.01           0.352  0.267 
+##  2 setosa           4.9              5.01           0.352 -0.301 
+##  3 setosa           4.7              5.01           0.352 -0.868 
+##  4 setosa           4.6              5.01           0.352 -1.15  
+##  5 setosa           5                5.01           0.352 -0.0170
+##  6 setosa           5.4              5.01           0.352  1.12  
+##  7 setosa           4.6              5.01           0.352 -1.15  
+##  8 setosa           5                5.01           0.352 -0.0170
+##  9 setosa           4.4              5.01           0.352 -1.72  
+## 10 setosa           4.9              5.01           0.352 -0.301 
+## # ℹ 140 more rows</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="reshaping-data-with-tidyr" class="section level2">
+<h2>Reshaping data with tidyr</h2>
+<div
+id="converting-wide-format-data-to-long-format-data-with-pivot_longer"
+class="section level3">
+<h3>4.1 Converting wide-format data to long-format data with
+<code>pivot_longer()</code></h3>
+<p>“Wide-format” data is one in which each row is a subject/entity that
+is measured repeatedly, and each measurement appears on different
+columns.</p>
+<p>The <code>billboard</code> data (included in the tidyr package) is a
+prime example of wide-format data because it lists the rankings of a
+song for each week in separate columns.</p>
+<pre class="r"><code>billboard</code></pre>
+<pre><code>## # A tibble: 317 × 79
+##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##    &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
+##  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
+##  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
+##  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
+##  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
+##  6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
+##  7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
+##  8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
+##  9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
+## 10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
+## # ℹ 307 more rows
+## # ℹ 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, …</code></pre>
+<p>Let’s now convert this into a long-format, in which we have a column
+for “week” and then the rank of that song for that week in a column
+called “rank”:</p>
+<pre class="r"><code>billboard %&gt;% pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
+<pre><code>## # A tibble: 24,092 × 5
+##    artist track                   date.entered week   rank
+##    &lt;chr&gt;  &lt;chr&gt;                   &lt;date&gt;       &lt;chr&gt; &lt;dbl&gt;
+##  1 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk1      87
+##  2 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk2      82
+##  3 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk3      72
+##  4 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk4      77
+##  5 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk5      87
+##  6 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk6      94
+##  7 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk7      99
+##  8 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk8      NA
+##  9 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk9      NA
+## 10 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk10     NA
+## # ℹ 24,082 more rows</code></pre>
+<p>What happened here?</p>
+<p>The minimal arguments that are required in here are:</p>
+<ul>
+<li><code>data</code>: (self explanatory)</li>
+<li><code>cols</code>: The columns that we want to collapse into a
+single column. Here, we want all the columns that start with “wk”, which
+contain the ranking of that song in that week. tidyverse has a friendly
+function called <code>starts_with()</code> that we use here. An
+alternative way to do this would be to <em>exclude</em> all the other
+columns, which we could do with
+<code>-c(artist, track, date.entered)</code></li>
+<li><code>names_to</code>: The name of a new column that will contain
+names of the columns that you collapsed. Here, naming this “week” makes
+sense.</li>
+<li><code>values_to</code>: The name of a new column that will have the
+values for each ID x names_from combination. In this case, this is
+“rank”</li>
+</ul>
+<p><br></p>
+<hr />
+</div>
+<div
+id="converting-long-format-data-to-wide-format-data-with-pivot_wider"
+class="section level3">
+<h3>4.2 Converting long-format data to wide-format data with
+<code>pivot_wider()</code></h3>
+<p>Let’s save the long-format version of the billboard data:</p>
+<pre class="r"><code>bb_long=billboard %&gt;% pivot_longer(cols=starts_with(&quot;wk&quot;), names_to=&quot;week&quot;, values_to=&quot;rank&quot;)</code></pre>
+<p>We can then revert back to the wide-format version this way:</p>
+<pre class="r"><code>bb_long %&gt;% pivot_wider(names_from = &quot;week&quot;, values_from = &quot;rank&quot;)</code></pre>
+<pre><code>## # A tibble: 317 × 79
+##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##    &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
+##  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
+##  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
+##  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
+##  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
+##  6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
+##  7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
+##  8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
+##  9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
+## 10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
+## # ℹ 307 more rows
+## # ℹ 68 more variables: wk9 &lt;dbl&gt;, wk10 &lt;dbl&gt;, wk11 &lt;dbl&gt;, wk12 &lt;dbl&gt;,
+## #   wk13 &lt;dbl&gt;, wk14 &lt;dbl&gt;, wk15 &lt;dbl&gt;, wk16 &lt;dbl&gt;, wk17 &lt;dbl&gt;, wk18 &lt;dbl&gt;,
+## #   wk19 &lt;dbl&gt;, wk20 &lt;dbl&gt;, wk21 &lt;dbl&gt;, wk22 &lt;dbl&gt;, wk23 &lt;dbl&gt;, wk24 &lt;dbl&gt;,
+## #   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,
+## #   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,
+## #   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;, …</code></pre>
+<p>So, what happened here? The minimal arguments that are required in
+here are:</p>
+<ul>
+<li><code>data</code>: is <code>bb_long</code>, forwarded by the
+%&gt;%</li>
+<li><code>names_from</code>: The column that you want to expand into
+different columns. In this case, it is “age” because you want to see the
+heights of each tree at different ages as different columns.</li>
+<li><code>values_from</code>: The column that will have the values for
+each ID x names_from combination. In this case, this is “height”</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="get-more-practice-with-worked-examples" class="section level2">
+<h2>Get more practice with Worked Examples</h2>
+<p>Go to the Worked Example on <a href="Ex_WorldBank.html">“Wrangling
+World Bank Data”</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
