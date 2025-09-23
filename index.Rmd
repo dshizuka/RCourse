@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Updates
 
+
 * September 23: Here is a link to the "solution" of the "make this plot" assignment: https://dshizuka.github.io/RCourse/x_Assignment_make_ggplot.html
 
 * September 22: I made changes to the first data wrangling module so that it now focuses just on dplyr and uses the iris dataset instead of a more complex dataset.
