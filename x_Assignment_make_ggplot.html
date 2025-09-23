@@ -295,7 +295,7 @@ the changes are species specific.</p>
 finding itself. Instead, I want you to use their data and try
 reproducing their Figure 3, which looks like this:</p>
 <pre class="r"><code>knitr::include_graphics(&quot;images/Bullard_Roy_figure3.png&quot;)</code></pre>
-<p><img src="images/Bullard_Roy_figure3.png" /><!-- --></p>
+<p><img src="images/Bullard_Roy_figure3.png" width="649" /></p>
 </div>
 <div id="download-the-data" class="section level3">
 <h3>Download the data:</h3>
@@ -346,12 +346,96 @@ First, I couldn’t put the figure legends in each panel–facet_wrap
 creates one legend for all panels. I also couldn’t figure out how to
 remove the boxes at the top of the panels (though I bet I could figure
 that out given enough time).</p>
+<pre class="r"><code>library(ggplot2)
+
+species.names=c(&quot;C. californiensis&quot;, &quot;C. fluctifraga&quot; , &quot;C. stultorum&quot;, &quot;C. undatella&quot;, &quot;C. staminea&quot;)
+
+names(species.names)=c(&quot;californiensis&quot;, &quot;fluctifraga&quot; , &quot;stultorum&quot;, &quot;undatella&quot;, &quot;staminea&quot;)
+
+dat$species=factor(dat$species, levels=c(&quot;californiensis&quot;, &quot;fluctifraga&quot; , &quot;stultorum&quot;, &quot;undatella&quot;, &quot;staminea&quot;))
+
+ggplot(dat, aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  facet_wrap(~species, nrow=3, scales=&quot;free&quot;, dir=&quot;v&quot;, labeller=labeller(species=species.names)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;)</code></pre>
 <p><img src="x_Assignment_make_ggplot_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>My version 2:</p>
 <p>Here is my second try, where I make 5 different plots and then put
 them together using the <code>plot_grid()</code> function from cowplot.
 This makes it so that we can have the legend in each panel. This also
 makes it easier to control the labels for each panel.</p>
+<pre class="r"><code>library(tidyverse)
+library(cowplot)
+
+
+dat= dat %&gt;% mutate(species=factor(species, levels=c(&quot;californiensis&quot;, &quot;fluctifraga&quot; , &quot;stultorum&quot;, &quot;undatella&quot;, &quot;staminea&quot;)))
+
+p1=ggplot(dat %&gt;% filter(species==&quot;californiensis&quot;), aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;) +
+  ggtitle(&quot;C. californiensis&quot;) +
+  guides(color=guide_legend(position=&quot;inside&quot;, title=&quot;&quot;)) +
+  theme(legend.justification.inside=c(1,0))
+
+p2=ggplot(dat %&gt;% filter(species==&quot;fluctifraga&quot;), aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;) +
+  ggtitle(&quot;C. fluctifraga&quot;) +
+  guides(color=guide_legend(position=&quot;inside&quot;, title=&quot;&quot;)) +
+  theme(legend.justification.inside=c(1,0))
+
+p3=ggplot(dat %&gt;% filter(species==&quot;stultorum&quot;), aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;) +
+  ggtitle(&quot;C. stultorum&quot;) +
+  guides(color=guide_legend(position=&quot;inside&quot;, title=&quot;&quot;)) +
+  theme(legend.justification.inside=c(1,0))
+
+p4=ggplot(dat %&gt;% filter(species==&quot;undatella&quot;), aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;) +
+  ggtitle(&quot;C. undatella&quot;) +
+  guides(color=guide_legend(position=&quot;inside&quot;, title=&quot;&quot;)) +
+  theme(legend.justification.inside=c(1,0))
+
+p5=ggplot(dat %&gt;% filter(species==&quot;staminea&quot;), aes(x=size_meancentered, y=logthickness, color=Time)) +
+  geom_point(pch=19, size=0.5) +
+  geom_smooth(method=&quot;lm&quot;) +
+  scale_color_manual(values = c(&quot;brown&quot;, &quot;darkgray&quot;))+
+  scale_shape_manual(values = c(19, 17)) +
+  theme_classic() +
+  ylab(&quot;log thickness&quot;) +
+  xlab(&quot;log size&quot;) +
+  ggtitle(&quot;C. staminea&quot;) +
+  guides(color=guide_legend(position=&quot;inside&quot;, title=&quot;&quot;)) +
+  theme(legend.justification.inside=c(1,0))
+
+plot_grid(p1, p2, p3, p4, p5, byrow=F, ncol=2)</code></pre>
 <p><img src="x_Assignment_make_ggplot_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 </div>
