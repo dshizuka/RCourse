@@ -78,6 +78,9 @@ If you haven't already, go to [github.com](https://github.com/) and sign up for 
 
 **Follow the directions to set up a passkey or other authentication methods. Make sure you can log in and out of github!!**
 
+
+***If you are in the BIO967 course, you will then send me the account name and email to me and then wait for instructions!!***
+
 <br>
 
 
