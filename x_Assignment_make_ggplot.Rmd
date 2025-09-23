@@ -49,7 +49,14 @@ You can use whatever tools you can think of at your disposal. You can use chatGP
 
 To reiterate: you are allowed to use AI tools. That's fine. I just want you to tell me exactly what you used. So if you used an AI tool, tell me what platform you used and what prompt you gave it. 
 
-My version 1:
+
+### Here are a couple of tries I did with this assignment!
+
+#### My version 1:
+
+Here was my first try. I used facet_wrap to do this. The challenging part was to customize the order of the plots to match the publication. To do that, I converted the "species" column into a factor and established "levels" according to the order in which I wanted the figures to be plotted. I created a separate "labeller" to correctly label the species names, which I learned how to do by googling. 
+
+But there were things I couldn't correctly do with this method. First, I couldn't put the figure legends in each panel--facet_wrap creates one legend for all panels. I also couldn't figure out how to remove the boxes at the top of the panels (though I bet I could figure that out given enough time).
 
 ```{r, echo=F, fig.height=8, message=F}
 library(ggplot2)
@@ -72,6 +79,8 @@ ggplot(dat, aes(x=size_meancentered, y=logthickness, color=Time)) +
 ```
 
 My version 2:
+
+Here is my second try, where I make 5 different plots and then put them together using the `plot_grid()` function from cowplot. This makes it so that we can have the legend in each panel. This also makes it easier to control the labels for each panel.  
 
 ```{r, echo=F, fig.height=8, message=F}
 library(tidyverse)
