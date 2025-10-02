@@ -26,7 +26,7 @@ So, inside the `function()` parentheses, you will simply list the objects that y
 For example, here’s is a custom function for calculating the mean of a vector:
 
 ```{r}
-mean.custom=function(x) sum(x)/length(x)
+mean.custom=function(x) {sum(x)/length(x)}
 ```
 
 Now that you have made this, you can use it by simply using `mean.custom()` as a function.
@@ -78,13 +78,13 @@ Let's assign `num` to be a number. Here, we will say it is 4.
 Then, we can use an if statement to tell us if the number is even. 
 ```{r}
 num=4
-if (num %% 2 == 0) print ("the number is even")
+if (num %% 2 == 0) {print ("the number is even")}
 ```
 
 But this if statement won't give you an output if the number is odd:
 ```{r}
 num=5
-if (num %% 2 == 0) print ("the number is even")
+if (num %% 2 == 0) {print ("the number is even")}
 ```
 
 The reason this won't give you an output is because the **if statement only executes the code when the condition is true**, and does not execute the code otherwise. 
@@ -100,13 +100,13 @@ Try this:
 If-Else statement that will work with even OR odd number:
 ```{r}
 num=4
-if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
+if (num %% 2 == 0) {print ("the number is even")} else {print("the number is odd")}
 ```
 
 Try the same statement with odd number
 ```{r}
 num=5
-if (num %% 2 == 0) print ("the number is even") else print("the number is odd")
+if (num %% 2 == 0) {print ("the number is even")} else {print("the number is odd")}
 ```
 
 ***

@@ -216,15 +216,17 @@ Press "Commit" when you are done documenting the changes.
 
 Once you've committed the changes, you will now see that the "Push Origin" button appears on the top right corner (and also as a blue button on the right). Clicking this will now sync the changes you've made on the local version of the repository (i.e., the version on your computer) with the remote directory. This will update the files that is on GitHub. All users of the repository can now "pull" these changes to their own local version.  
 
+***
+
 ## 4. Set up your repository with RStudio Project and file structure
 
-### 4.1. Make your directory an RStudio Project
+Follow the same process as section 3 in the ["Directories, Pathnames, and RStudio Projects"](https://dshizuka.github.io/RCourse/03_Rproject.html) module to set up your repository folder as an RStudio Project. 
 
-### 4.2. Set up file structure
+***
 
 ## 5. Working together: Branches and Pull Requests
 
-
+***
 
 ## 6. Alternative setup: working with GitHub directly with RStudio
 

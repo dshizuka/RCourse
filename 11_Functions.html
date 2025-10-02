@@ -343,7 +343,7 @@ div.tocify {
 <h1 class="title toc-ignore">Custom Functions (and If-Else
 statements)</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 08/24/25</h4>
+<h4 class="date">updated 10/02/25</h4>
 
 </div>
 
@@ -369,7 +369,7 @@ space and then the series of lines of code that the function will
 do.</p>
 <p>For example, here’s is a custom function for calculating the mean of
 a vector:</p>
-<pre class="r"><code>mean.custom=function(x) sum(x)/length(x)</code></pre>
+<pre class="r"><code>mean.custom=function(x) {sum(x)/length(x)}</code></pre>
 <p>Now that you have made this, you can use it by simply using
 <code>mean.custom()</code> as a function.</p>
 <p>Let’s use this to calculate the mean of numbers 1 through 10:</p>
@@ -409,12 +409,12 @@ number has a remainder of 1 when it is divided by 2.</p>
 4. Then, we can use an if statement to tell us if the number is
 even.</p>
 <pre class="r"><code>num=4
-if (num %% 2 == 0) print (&quot;the number is even&quot;)</code></pre>
+if (num %% 2 == 0) {print (&quot;the number is even&quot;)}</code></pre>
 <pre><code>## [1] &quot;the number is even&quot;</code></pre>
 <p>But this if statement won’t give you an output if the number is
 odd:</p>
 <pre class="r"><code>num=5
-if (num %% 2 == 0) print (&quot;the number is even&quot;)</code></pre>
+if (num %% 2 == 0) {print (&quot;the number is even&quot;)}</code></pre>
 <p>The reason this won’t give you an output is because the <strong>if
 statement only executes the code when the condition is true</strong>,
 and does not execute the code otherwise.</p>
@@ -429,11 +429,11 @@ The If-Else statement
 <p>Try this:</p>
 <p>If-Else statement that will work with even OR odd number:</p>
 <pre class="r"><code>num=4
-if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)</code></pre>
+if (num %% 2 == 0) {print (&quot;the number is even&quot;)} else {print(&quot;the number is odd&quot;)}</code></pre>
 <pre><code>## [1] &quot;the number is even&quot;</code></pre>
 <p>Try the same statement with odd number</p>
 <pre class="r"><code>num=5
-if (num %% 2 == 0) print (&quot;the number is even&quot;) else print(&quot;the number is odd&quot;)</code></pre>
+if (num %% 2 == 0) {print (&quot;the number is even&quot;)} else {print(&quot;the number is odd&quot;)}</code></pre>
 <pre><code>## [1] &quot;the number is odd&quot;</code></pre>
 <hr />
 </div>
