@@ -125,8 +125,6 @@ Now you have created your first GitHub repository. One special thing you did was
 
 Now, I am going to have you ***clone*** a repository. This means that you will download all contents of a project on GitHub to your computer. 
 
-*Note that I am going to have you clone a "forked" version of this course website. That is, this is a copy of the project, rather than the "master" version of this project. This prevents you from accidentally screwing up the course website--so you can rest easy and play around. If something does go wrong, I can easily revert the repository from the master version. Also, I can update the repository as needed when I make changes. 
-
 Go to the repository you created on GitHub.
 
 It will look something like this. 
