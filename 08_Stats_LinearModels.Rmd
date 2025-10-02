@@ -1,5 +1,5 @@
 ---
-title: "Module 6: Intro to Stats in R: Linear Models (GLM), including ANOVA"
+title: "Intro to Stats in R: Linear Models (GLM), including ANOVA"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
