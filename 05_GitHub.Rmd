@@ -163,11 +163,21 @@ Now, navigate to the "Local Path" folder that was indicated when you cloned the 
 A repository is a collection of folders and files--i.e., a remote directory--that is stored remotely by GitHub. When you clone the repository, what you have done is create a local directory--a version of this repository on your computer. This allows you to make changes--e.g., create, edit, delete codes and files on your computer. The rest of the work then is to deliberately decide to keep or discard these changes and keep it all in sync with the remote directory.
 
 
+***
 
+## 3. Set up your repository
+
+### Set up email notification
+
+I would like for you to enable email notification so that we can communicate on your repository. Go to "setting", then find "email notifications" at the bottom of the left navigation panel. Add your email. 
+
+### Create a RStudio Project directory.
+
+Follow the same process as section 3 in the ["Directories, Pathnames, and RStudio Projects"](https://dshizuka.github.io/RCourse/03_Rproject.html) module to set up your repository folder as an RStudio Project. 
 
 ***
 
-## 3. Working with GitHub: Pull, Stage, Commit, Push with GitHub Desktop
+## 4. Working with GitHub: Pull, Stage, Commit, Push with GitHub Desktop
 
 
 ***
@@ -189,7 +199,7 @@ Here are the 3 main actions that you will take whenever you work with your GitHu
 
 * **Push:** Once you have committed your changes, you are ready to **push** those changes onto your remote repository--i.e., the copy that is stored in GitHub. **Remember to always push your changes after you're done with a session of work**
 
-### 3.1. Pull from the repository
+### 4.1. Pull from the repository
 
 First, click "Fetch Origin" in the top navigation panel on the GitHub Desktop window. This will check to see if there are any changes on the remote directory. If there are any changes, it will then show a "Pull" option. 
 
@@ -197,7 +207,7 @@ Clicking this will pull any changes that are stored in the remote directory (i.e
 
 It will most likely say "You are already up to date". But again, get in the habit of doing this when you open your project. 
 
-### 3.2. Make some changes
+### 4.2. Make some changes
 
 Now you can make any change on your project. Let's just start by editing the readme file. 
 
@@ -214,7 +224,7 @@ Now go to GitHub Deskop window. You should see the list of files that have chang
 knitr::include_graphics("images/githubdesktop_example.png")
 ```
 
-### 3.3. Commit changes
+### 4.3. Commit changes
 
 You can see that, below the list of files that have changed, there is a place to write the summary of changes and a textbox for detailed description. This is where you document the changes that have been made. Only the summary is required, and the summary can be something pretty simple when the changes are routine or self explanatory (e.g., "added new modules"). But in some cases, you may want to note some details about what has been changed. This may become more important when you are collaborating with others on developing code or making fine changes in analyses, and this is the main channel of communication. For now, it's ok to keep it simple. 
 
@@ -222,20 +232,46 @@ Once you write something in the summary section, the blue button that says "Comm
 
 Press "Commit" when you are done documenting the changes. 
 
-### 3.4. Push changes to GitHub. 
+### 4.4. Push changes to GitHub. 
 
 Once you've committed the changes, you will now see that the "Push Origin" button appears on the top right corner (and also as a blue button on the right). Clicking this will now sync the changes you've made on the local version of the repository (i.e., the version on your computer) with the remote directory. This will update the files that is on GitHub. All users of the repository can now "pull" these changes to their own local version.  
 
-***
-
-## 4. Set up your repository with RStudio Project and file structure
-
-Follow the same process as section 3 in the ["Directories, Pathnames, and RStudio Projects"](https://dshizuka.github.io/RCourse/03_Rproject.html) module to set up your repository folder as an RStudio Project. 
 
 ***
 
-## 5. Working together: Branches and Pull Requests
+## 5. Working together remotely: Branches, issues and Pull Requests
 
+For a large chunk of this course, we will be holding "work sessions" in class where I can help you work through issues. However, in some cases we may need to work together remotely. Luckily, GitHub provides nice tools that allows us to do this. 
+
+```{r, echo=F, out.width="125%"}
+knitr::include_graphics("images/branch_merge.png")
+```
+
+
+Here is how I envision us working together on independent projects in this course (refer to image above). 
+
+### 1. (You) create an "issue":
+
+If you run into any challenges, or if you simply want to update me about something, you can create an 'issue' message on GitHub. There are a couple of ways you can do this:
+
+* In GitHub Desktop, go to "Repository" > "Create Issue on GitHub" (or simply click "command-I" on a Mac)
+
+* Go to your repository on GitHub, click on the "Issues" tab on the top, click it, then find the green "New issue" button.
+
+```{r, echo=F, out.width="100%"}
+knitr::include_graphics("images/GitHub_issue.png")
+```
+You can include images (e.g., screenshots) or other files in your message (if they don't appear in your repository, for example).
+
+### 2. (Instructor) responds and looks at your repo on the 'instructor branch'
+
+Once I get your message, I will either just respond back with a message, or I can examine the problem by looking into your data, code, etc. 
+
+To avoid inadvertently messing up your code, I will create a new "branch"--i.e., a version of your repository that I can mess around with, that won't automatically appear on your "master" branch. There, I may make some changes, like write suggested lines of code, etc. 
+
+### 3. (Instructor) creates a 'pull request' to you
+
+If I manage to figure out the problem, I can make suggestions in two ways. (1) I can simply message you back with suggestions for what you can do, or (2) if I have suggested edits to your code, I will make a 'pull request'. This send you a message that you've received a pull request. Then, you can review the edits I've made and, and you can accept those changes by clicking "merge pull request"
 
 
 ***

@@ -539,14 +539,32 @@ create, edit, delete codes and files on your computer. The rest of the
 work then is to deliberately decide to keep or discard these changes and
 keep it all in sync with the remote directory.</p>
 <hr />
-<p><img src="https://miro.medium.com/v2/resize:fit:1386/format:webp/1*pEduJdPky05DeojVGVtPpQ.jpeg" width="75%" /></p>
+</div>
+</div>
+<div id="set-up-your-repository" class="section level2">
+<h2>3. Set up your repository</h2>
+<div id="set-up-email-notification" class="section level3">
+<h3>Set up email notification</h3>
+<p>I would like for you to enable email notification so that we can
+communicate on your repository. Go to “setting”, then find “email
+notifications” at the bottom of the left navigation panel. Add your
+email.</p>
+</div>
+<div id="create-a-rstudio-project-directory." class="section level3">
+<h3>Create a RStudio Project directory.</h3>
+<p>Follow the same process as section 3 in the <a
+href="https://dshizuka.github.io/RCourse/03_Rproject.html">“Directories,
+Pathnames, and RStudio Projects”</a> module to set up your repository
+folder as an RStudio Project.</p>
 <hr />
 </div>
 </div>
 <div id="working-with-github-pull-stage-commit-push-with-github-desktop"
 class="section level2">
-<h2>3. Working with GitHub: Pull, Stage, Commit, Push with GitHub
+<h2>4. Working with GitHub: Pull, Stage, Commit, Push with GitHub
 Desktop</h2>
+<hr />
+<p><img src="https://miro.medium.com/v2/resize:fit:1386/format:webp/1*pEduJdPky05DeojVGVtPpQ.jpeg" width="75%" /></p>
 <p>Once you have finished the set up process, you are ready to start
 your workflow!</p>
 <p>The Git workflow may feel a bit painful for you in the beginning
@@ -582,7 +600,7 @@ always push your changes after you’re done with a session of
 work</strong></p></li>
 </ul>
 <div id="pull-from-the-repository" class="section level3">
-<h3>3.1. Pull from the repository</h3>
+<h3>4.1. Pull from the repository</h3>
 <p>First, click “Fetch Origin” in the top navigation panel on the GitHub
 Desktop window. This will check to see if there are any changes on the
 remote directory. If there are any changes, it will then show a “Pull”
@@ -594,7 +612,7 @@ version.</p>
 in the habit of doing this when you open your project.</p>
 </div>
 <div id="make-some-changes" class="section level3">
-<h3>3.2. Make some changes</h3>
+<h3>4.2. Make some changes</h3>
 <p>Now you can make any change on your project. Let’s just start by
 editing the readme file.</p>
 <p>On the bottom right window, click on the “Files” tab and select the
@@ -607,7 +625,7 @@ specific changes that have been made in the file that is selected.</p>
 <p><img src="images/githubdesktop_example.png" width="75%" /></p>
 </div>
 <div id="commit-changes" class="section level3">
-<h3>3.3. Commit changes</h3>
+<h3>4.3. Commit changes</h3>
 <p>You can see that, below the list of files that have changed, there is
 a place to write the summary of changes and a textbox for detailed
 description. This is where you document the changes that have been made.
@@ -623,7 +641,7 @@ says “Commit XX files to XX” will be available to click.</p>
 <p>Press “Commit” when you are done documenting the changes.</p>
 </div>
 <div id="push-changes-to-github." class="section level3">
-<h3>3.4. Push changes to GitHub.</h3>
+<h3>4.4. Push changes to GitHub.</h3>
 <p>Once you’ve committed the changes, you will now see that the “Push
 Origin” button appears on the top right corner (and also as a blue
 button on the right). Clicking this will now sync the changes you’ve
@@ -634,20 +652,55 @@ their own local version.</p>
 <hr />
 </div>
 </div>
-<div id="set-up-your-repository-with-rstudio-project-and-file-structure"
+<div id="working-together-remotely-branches-issues-and-pull-requests"
 class="section level2">
-<h2>4. Set up your repository with RStudio Project and file
-structure</h2>
-<p>Follow the same process as section 3 in the <a
-href="https://dshizuka.github.io/RCourse/03_Rproject.html">“Directories,
-Pathnames, and RStudio Projects”</a> module to set up your repository
-folder as an RStudio Project.</p>
+<h2>5. Working together remotely: Branches, issues and Pull
+Requests</h2>
+<p>For a large chunk of this course, we will be holding “work sessions”
+in class where I can help you work through issues. However, in some
+cases we may need to work together remotely. Luckily, GitHub provides
+nice tools that allows us to do this.</p>
+<p><img src="images/branch_merge.png" width="125%" /></p>
+<p>Here is how I envision us working together on independent projects in
+this course (refer to image above).</p>
+<div id="you-create-an-issue" class="section level3">
+<h3>1. (You) create an “issue”:</h3>
+<p>If you run into any challenges, or if you simply want to update me
+about something, you can create an ‘issue’ message on GitHub. There are
+a couple of ways you can do this:</p>
+<ul>
+<li><p>In GitHub Desktop, go to “Repository” &gt; “Create Issue on
+GitHub” (or simply click “command-I” on a Mac)</p></li>
+<li><p>Go to your repository on GitHub, click on the “Issues” tab on the
+top, click it, then find the green “New issue” button.</p></li>
+</ul>
+<p><img src="images/GitHub_issue.png" width="100%" /> You can include
+images (e.g., screenshots) or other files in your message (if they don’t
+appear in your repository, for example).</p>
+</div>
+<div
+id="instructor-responds-and-looks-at-your-repo-on-the-instructor-branch"
+class="section level3">
+<h3>2. (Instructor) responds and looks at your repo on the ‘instructor
+branch’</h3>
+<p>Once I get your message, I will either just respond back with a
+message, or I can examine the problem by looking into your data, code,
+etc.</p>
+<p>To avoid inadvertently messing up your code, I will create a new
+“branch”–i.e., a version of your repository that I can mess around with,
+that won’t automatically appear on your “master” branch. There, I may
+make some changes, like write suggested lines of code, etc.</p>
+</div>
+<div id="instructor-creates-a-pull-request-to-you"
+class="section level3">
+<h3>3. (Instructor) creates a ‘pull request’ to you</h3>
+<p>If I manage to figure out the problem, I can make suggestions in two
+ways. (1) I can simply message you back with suggestions for what you
+can do, or (2) if I have suggested edits to your code, I will make a
+‘pull request’. This send you a message that you’ve received a pull
+request. Then, you can review the edits I’ve made and, and if you</p>
 <hr />
 </div>
-<div id="working-together-branches-and-pull-requests"
-class="section level2">
-<h2>5. Working together: Branches and Pull Requests</h2>
-<hr />
 </div>
 <div id="alternative-setup-working-with-github-directly-with-rstudio"
 class="section level2">
