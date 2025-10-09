@@ -163,15 +163,25 @@ Now, navigate to the "Local Path" folder that was indicated when you cloned the 
 A repository is a collection of folders and files--i.e., a remote directory--that is stored remotely by GitHub. When you clone the repository, what you have done is create a local directory--a version of this repository on your computer. This allows you to make changes--e.g., create, edit, delete codes and files on your computer. The rest of the work then is to deliberately decide to keep or discard these changes and keep it all in sync with the remote directory.
 
 
+
+
 ***
 
 ## 3. Working with GitHub: Pull, Stage, Commit, Push with GitHub Desktop
+
+
+***
+```{r, out.width="75%", echo=F}
+knitr::include_graphics(path="https://miro.medium.com/v2/resize:fit:1386/format:webp/1*pEduJdPky05DeojVGVtPpQ.jpeg")
+
+```
+
 
 Once you have finished the set up process, you are ready to start your workflow!
 
 The Git workflow may feel a bit painful for you in the beginning because it seems a lot more manual and tedious than automated syncing that you may have gotten used to with Dropbox, Google Drive, etc. But really, it's no different than those systems--it's just that Git makes you much more intentional about when you update "local" vs. "remote" versions of your project files. 
 
-Here are the 4 main actions that you will take whenever you work with your GitHub repository:
+Here are the 3 main actions that you will take whenever you work with your GitHub repository:
 
 * **Pull:** When you open your project on your computer, I highly recommend that you always first click "Pull". This takes the version of your repository that is stored on GitHub remotely and pulls it to your local folder. Thus, you have synced your computer with whatever changes that other people (e.g., your instructor) has made on your repository. **Get used to pulling from your repository when you first open your project, even if you haven't made any changes since last time because I may have suggested changes for you!** 
 
@@ -225,6 +235,8 @@ Follow the same process as section 3 in the ["Directories, Pathnames, and RStudi
 ***
 
 ## 5. Working together: Branches and Pull Requests
+
+
 
 ***
 
