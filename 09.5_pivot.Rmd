@@ -1,0 +1,100 @@
+---
+title: "Reshaping data with pivot functions"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+***
+
+
+***This module deals with "wide" versus "long" format data.***
+
+This module is my own attempt to explain the `pivot_longer()` and `pivot_wider()` function in the tidyr package. Here are a couple of other explainers on the same topic: 
+
+https://tidyr.tidyverse.org/articles/pivot.html
+
+https://tavareshugo.github.io/r-intro-tidyverse-gapminder/09-reshaping/index.html
+
+### 1. Explaining "wide-format" and "long-format" data.
+
+<br>
+
+#### 1.1 What are "wide-format" and "long-format" data?
+
+
+*Wide-format* data is one in which **each row is a subject/entity that is measured repeatedly**, and each measurement appears on different columns. This may happen if you want to take repeated measurements at one point in time (e.g., if you want to take an average as a more reliable point measure), or if you take a measurement of the same individual at different points in time (e.g., to measure growth, immune response, or anything else that can change across time).
+
+*Long-format* data is one in which **each row is an observation.** So if a subject is measured multiple times, those will show up as multiple rows--one for each time the subject was measured. 
+
+#### 1.2 Why might we end up with wide- or long-format data?
+
+
+#### 1.3 Why do we care?
+
+
+
+### 1. Converting wide-format data to long-format data with `pivot_longer()`
+
+In this module, we will be using the `tidyr` package within the tidyverse suite of packages
+
+```{r, message=F}
+library(tidyverse)
+```
+
+The `billboard` data is a prime example of wide-format data because it lists the rankings of a song for each week in separate columns.
+
+```{r}
+billboard
+```
+
+You can see that each subject (song) is measured repeatedly across time (i.e., ranking each week). 
+
+Let's now convert this into a long-format, in which we have a column for "week" and then the rank of that song for that week in a column called "rank":
+
+```{r}
+billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+What happened here? 
+
+The minimal arguments that are required in here are: 
+
+* `data`: (self explanatory)
+* `cols`: The columns that we want to collapse into a single column. Here, we want all the columns that start with "wk", which contain the ranking of that song in that week. tidyverse has a friendly function called `starts_with()` that we use here. An alternative way to do this would be to *exclude* all the other columns, which we could do with `-c(artist, track, date.entered)`
+* `names_to`: The name of a new column that will contain names of the columns that you collapsed. Here, naming this "week" makes sense.
+* `values_to`: The name of a new column that will have the values for each ID x names_from combination. In this case, this is "rank"
+
+<br>
+
+***
+
+### 3.5.  Converting long-format data to wide-format data with `pivot_wider()`
+
+Let's save the long-format version of the billboard data:
+```{r}
+bb_long=billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
+```
+
+We can then revert back to the wide-format version this way:
+
+```{r}
+bb_long %>% pivot_wider(names_from = "week", values_from = "rank")
+```
+So, what happened here? 
+The minimal arguments that are required in here are: 
+
+* `data`: is `bb_long`, forwarded by the %>%
+* `names_from`: The column that you want to expand into different columns. In this case, it is "age" because you want to see the heights of each tree at different ages as different columns.
+* `values_from`: The column that will have the values for each ID x names_from combination. In this case, this is "height"
+
+***
+
+
+
+### Get more practice with Worked Examples
+
+Go to the Worked Example on ["Wrangling World Bank Data"](Ex_WorldBank.html)
