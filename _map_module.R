@@ -1,5 +1,3 @@
-install.packages("tmap")
-
 library(tmap)
 
 ?tm_shape
@@ -29,37 +27,37 @@ tm_shape(World, crs="+proj=aeqd", bbox="FULL") +
 
 tm_shape(World, crs=4326) +
   tm_polygons() +
-  tm_style("natural") 
+  tm_style("natural")
 
 tm_shape(World, crs=3857) +
   tm_polygons() +
-  tm_style("natural") 
+  tm_style("natural")
 
 tm_shape(World, crs=9989) +
   tm_polygons() +
-  tm_style("natural") 
-
-tm_shape(World, crs="+proj=eckert") +
-  tm_polygons() +
-  tm_style("natural") 
+  tm_style("natural")
 
 
 ### just in ggplot
 
 library(tidyverse)
 library(maps)
+library(mapproj)
 
 #import map data
 ?map_data
 world=map_data("world")
 
 worldmap=ggplot(world, aes(long, lat))+
-  geom_polygon(aes(group=group), fill="white", color="black", linewidth=0.1)
+  geom_polygon(aes(group=group),fill="white", color="black", linewidth=0.1)
 worldmap
 
 worldmap + coord_map(projection="mercator")
 worldmap + coord_map(projection="azequalarea")
 worldmap + coord_map(projection="gilbert")
+
+unique(world$region)
+
 
 us=map_data("state")
 us
@@ -77,3 +75,8 @@ ne_county=map_data("county")
 nemap=ggplot(ne_county %>% filter(region=="nebraska"), aes(long, lat))+
   geom_polygon(aes(group=group), fill="white", color="black", linewidth=0.1)
 nemap
+
+####
+#sf
+
+
