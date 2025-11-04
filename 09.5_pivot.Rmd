@@ -1,5 +1,5 @@
 ---
-title: "Reshaping data with pivot functions"
+title: "Mini-Module: Reshaping data with pivot functions"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -31,14 +31,13 @@ https://tavareshugo.github.io/r-intro-tidyverse-gapminder/09-reshaping/index.htm
 
 *Long-format* data is one in which **each row is an observation.** So if a subject is measured multiple times, those will show up as multiple rows--one for each time the subject was measured. 
 
-#### 1.2 Why might we end up with wide- or long-format data?
+#### 1.2 Long-format is required for ggplot() functions
+
+The ggplot() function cannot take wide-format data to plot multiple variables!
 
 
-#### 1.3 Why do we care?
 
-
-
-### 1. Converting wide-format data to long-format data with `pivot_longer()`
+### 2. Converting wide-format data to long-format data with `pivot_longer()`
 
 In this module, we will be using the `tidyr` package within the tidyverse suite of packages
 
@@ -70,14 +69,42 @@ The minimal arguments that are required in here are:
 
 <br>
 
-***
-
-### 3.5.  Converting long-format data to wide-format data with `pivot_wider()`
+The next step would be to change the "week" column to be a number (1,2,3,...), rather than character that says "wk1", "wk2", etc. We can do this by using `str_replace()` from the stringr package. (More on that in the [text parsing module](https://dshizuka.github.io/RCourse/10_text_parsing.html)). 
 
 Let's save the long-format version of the billboard data:
 ```{r}
 bb_long=billboard %>% pivot_longer(cols=starts_with("wk"), names_to="week", values_to="rank")
 ```
+
+Then, let's modify the "week" column by:
+
+* removing the characters "wk" from all values using `str_replace()`
+
+* then telling R that the remaining character should be a number using `as.numeric()`
+
+```{r}
+bb_long=bb_long %>% mutate(week=as.numeric(str_replace(week, "wk", "")))
+```
+
+#### 2.1 Plot the trajectory of track rank
+
+
+```{r}
+ggplot(bb_long, aes(x=week, y=rank, group=track)) +
+  geom_line()
+```
+Since this is messy, let's filter the data to songs that first entered the rankings in the first 3 weeks of 2000. 
+
+```{r}
+ggplot(bb_long %>% filter(date.entered>=ymd("2000-01-01") & date.entered<=ymd("2000-01-21")), aes(x=week, y=rank, color=track)) +
+  geom_line()
+```
+
+***
+
+### 3.  Converting long-format data to wide-format data with `pivot_wider()`
+
+
 
 We can then revert back to the wide-format version this way:
 

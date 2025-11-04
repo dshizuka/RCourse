@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Learning Modules</title>
+<title>Mini-Module: Making Maps</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -30,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -220,6 +223,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -227,6 +293,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -264,115 +340,100 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Learning Modules</h1>
+<h1 class="title toc-ignore">Mini-Module: Making Maps</h1>
 <h4 class="author">Dai Shizuka</h4>
 <h4 class="date">updated 11/04/25</h4>
 
 </div>
 
 
-<ul>
-<li><h3 id="getting-started">1. Getting Started</h3>
-<ul>
-<li><h3 id="lets-get-started-with-r"><a href="01_Intro.html">Let’s get
-started with R!</a></h3></li>
-<li><h3
-id="types-of-objects-vectors-strings-matrices-dataframes-lists"><a
-href="02_ObjectTypes.html">Types of Objects (vectors, strings, matrices,
-dataframes, lists)</a></h3></li>
-<li><h3 id="directories-pathnames-and-rstudio-projects"><a
-href="03_Rproject.html">Directories, Pathnames, and RStudio
-Projects</a></h3></li>
-<li><h3 id="working-with-data"><a href="04_Data.html">Working with
-Data</a></h3></li>
-<li><h3 id="setting-up-github-for-your-independent-projects"><a
-href="05_GitHub.html">Setting up GitHub for your independent
-projects</a></h3></li>
-</ul></li>
-<li><h3 id="plotting-in-r">Plotting in R:</h3>
-<ul>
-<li><h3 id="basics-of-plots"><a href="06_Plots_basics.html">Basics of
-Plots</a></h3></li>
-<li><h3 id="intro-to-ggplot2"><a href="07_ggplot_intro.html">Intro to
-ggplot2</a></h3></li>
-</ul></li>
-<li><h3 id="wrangling-data-in-r">Wrangling data in R:</h3>
-<ul>
-<li><h3 id="data-wrangling-with-dplyr"><a href="09_dplyr.html">Data
-Wrangling with dplyr</a></h3></li>
-<li><h3 id="parsing-dates-and-text"><a
-href="10_text_parsing.html">Parsing Dates and Text</a></h3></li>
-</ul></li>
-<li><h3 id="stats-in-r">Stats in R:</h3>
-<ul>
-<li><h3 id="linear-models-in-r-including-anova-glm"><a
-href="08_Stats_LinearModels.html">Linear Models in R (including ANOVA,
-GLM)</a></h3></li>
-</ul></li>
-<li><h3 id="functions-sampling-and-batch-processing">Functions,
-Sampling, and Batch Processing</h3>
-<ul>
-<li><h3 id="custom-functions-and-if-else-statements"><a
-href="11_Functions.html">Custom Functions (and if-else
-statements)</a></h3></li>
-<li><h3 id="apply-fuctions-and-loops"><a href="12_Apply.html">Apply
-Fuctions and Loops</a></h3></li>
-<li><h3 id="randomizations-and-sampling-from-distributions"><a
-href="13_RandomNumbers.html">Randomizations and Sampling From
-Distributions</a></h3></li>
-<li><h3 id="batch-processing-example-using-flack-et-al.-2014"><a
-href="14_batch.html">Batch Processing (Example using Flack et
-al. 2014)</a></h3></li>
-</ul></li>
-<li><h3 id="mini-modules-in-progress">Mini-modules (in progress):</h3>
-<ul>
-<li><h3 id="reshaping-data-with-pivot-functions"><a
-href="09.5_pivot.html">Reshaping data with pivot functions</a></h3></li>
-</ul></li>
-<li><h3 id="reports">Reports</h3>
-<ul>
-<li><h3 id="generating-reports-with-rmarkdown"><a
-href="15_Rmarkdown.html">Generating reports with RMarkdown</a></h3></li>
-</ul></li>
-<li><h3 id="extras">Extras</h3>
-<ul>
-<li><h3 id="what-now-more-resources-for-continuing-to-learn-r"><a
-href="resources.html">What now? More resources for continuing to learn
-R</a></h3></li>
-</ul></li>
-</ul>
-<hr />
-<div id="worked-examples" class="section level2">
-<h2>Worked Examples:</h2>
-<div
-id="these-are-lessons-that-use-real-or-simulated-data-to-demonstrate-skills-that-are-covered-in-the-learning-modules-above."
-class="section level4">
-<h4><em>These are lessons that use real or simulated data to demonstrate
-skills that are covered in the learning modules above.</em></h4>
-<ul>
-<li><h4 id="worked-example-simulating-population-growth"><a
-href="x_PopGrowth.html">Worked Example: Simulating Population
-Growth</a></h4></li>
-<li><h4 id="worked-example-wrangling-world-bank-data"><a
-href="x_WorldBank.html">Worked Example: Wrangling World Bank
-Data</a></h4></li>
-<li><h4 id="worked-example-data-wrangling-with-coot-chick-color-data"><a
-href="x_CootDataWrangling.html">Worked Example: Data wrangling with coot
-chick color data</a></h4></li>
-<li><h4
-id="worked-example-plotting-the-change-of-butterfly-size-under-climate-change"><a
-href="x_Bowden.html">Worked Example: Plotting the change of butterfly
-size under climate change</a></h4></li>
-<li><h4
-id="worked-example-plots-and-stats-on-effect-of-anthropogenic-noise-on-crab-physiology"><a
-href="x_Wale.html">Worked Example: Plots and stats on effect of
-anthropogenic noise on crab physiology</a></h4></li>
-</ul>
+<div id="using-sf-by-downloading-shapefile-and-use-it."
+class="section level1">
+<h1>Using sf by downloading shapefile and use it.</h1>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.2
+## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+## ✔ purrr     1.1.0     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(sf)</code></pre>
+<pre><code>## Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE</code></pre>
+<p>e.g., I downloaded US county data from US census bureau: <a
+href="https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html"
+class="uri">https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html</a></p>
+<pre class="r"><code>us_shp=st_read(&quot;data/cb_2018_us_county_20m/cb_2018_us_county_20m.shp&quot;)</code></pre>
+<pre><code>## Reading layer `cb_2018_us_county_20m&#39; from data source 
+##   `/Users/dshizuka2/Documents/GitHub/RCourse/data/cb_2018_us_county_20m/cb_2018_us_county_20m.shp&#39; 
+##   using driver `ESRI Shapefile&#39;
+## Simple feature collection with 3220 features and 9 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -179.1743 ymin: 17.91377 xmax: 179.7739 ymax: 71.35256
+## Geodetic CRS:  NAD83</code></pre>
+<pre class="r"><code>ggplot() +
+  geom_sf(data=us_shp, fill=&quot;goldenrod&quot;) +
+  coord_sf(xlim=c(-180,-50)) +
+  theme_bw()</code></pre>
+<p><img src="Map_module_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>co_data=read.csv(&quot;data/co-est2024-alldata.csv&quot;)</code></pre>
+<div id="mapping-county-data-on-map-of-nebraska" class="section level3">
+<h3>Mapping county data on map of Nebraska</h3>
+<p>downloaded NE counties data from <a
+href="https://www.nebraskamap.gov/datasets/county-boundaries-2/explore"
+class="uri">https://www.nebraskamap.gov/datasets/county-boundaries-2/explore</a></p>
+<pre class="r"><code>ne=st_read(&quot;data/NE_County_Boundaries/County_Boundaries.shp&quot;)</code></pre>
+<pre><code>## Reading layer `County_Boundaries&#39; from data source 
+##   `/Users/dshizuka2/Documents/GitHub/RCourse/data/NE_County_Boundaries/County_Boundaries.shp&#39; 
+##   using driver `ESRI Shapefile&#39;
+## Simple feature collection with 93 features and 7 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -11583190 ymin: 4865930 xmax: -10609650 ymax: 5312216
+## Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
+<pre class="r"><code>head(ne)</code></pre>
+<pre><code>## Simple feature collection with 6 features and 7 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -11583190 ymin: 4916973 xmax: -10890370 ymax: 5226775
+## Projected CRS: WGS 84 / Pseudo-Mercator
+##   OBJECTID Cnty_Name Cnty_No CountyFIPS                               GlobalID
+## 1        1     Adams       1        001 {16352331-3262-4EBB-A789-263D6FDBEBB3}
+## 2        2  Antelope       2        003 {FA9D8609-F002-4003-AF46-CE1F04A2B936}
+## 3        3    Arthur       3        005 {FF27D2CA-CA67-4D69-8720-0EF86DB743E5}
+## 4        4    Banner       4        007 {85111E3B-7990-4C93-A22A-5941EBEC0EBF}
+## 5        5    Blaine       5        009 {AA433830-4A29-4E78-8410-A51CD16A1136}
+## 6        6     Boone       6        011 {7525569E-EDEB-4C3D-B8B5-E3F2F666F8C7}
+##   Shape_Leng Shape_Area                       geometry
+## 1   201309.1 2531755015 POLYGON ((-10940269 4967940...
+## 2   260687.1 4052249963 POLYGON ((-10890881 5226775...
+## 3   232240.9 3326494107 POLYGON ((-11352965 5122450...
+## 4   242685.9 3451998712 POLYGON ((-11583096 5115840...
+## 5   232721.2 3342160310 POLYGON ((-11097092 5173901...
+## 6   233170.1 3197113116 POLYGON ((-10890751 5148454...</code></pre>
+<pre class="r"><code>ne_full2024=ne %&gt;% mutate(CountyFIPS=as.numeric(CountyFIPS)) %&gt;% left_join(co_data %&gt;% filter(STNAME==&quot;Nebraska&quot;), by=join_by(&quot;CountyFIPS&quot;==&quot;COUNTY&quot;))</code></pre>
+<pre class="r"><code>ggplot() +
+  geom_sf(data=ne_full2024, aes(fill=POPESTIMATE2024)) +
+  theme_bw()</code></pre>
+<p><img src="Map_module_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>ggplot() +
+  geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
+  theme_bw()</code></pre>
+<p><img src="Map_module_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>unl=data.frame(long=693904.69351446, lat=4521004.547643)</p>
+<p>ggplot() + geom_sf(data=ne_full2024, aes(fill=NPOPCHG2024)) +
+theme_bw() + geom_point(data=unl, aes(x=long, y=lat))</p>
 </div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -405,6 +466,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
