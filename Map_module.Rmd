@@ -13,19 +13,120 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Using sf by downloading shapefile and use it.
+This is a very quick intro to several ways to make maps in R. 
 
-```{r}
+**Please note that I am not an expert in cartography or spatial statistics!** There are probably better tutorials out there for this.
+
+
+## 1. Plot directly from shapefile 
+
+Using sf package to plot a map using a shapefile that you downloaded from somewhere.
+
+### Load packages:
+
+```{r, message=F}
 library(tidyverse)
 library(sf)
+library(tmap)
+```
+
+### Download shapefile & plot: Nebraska example 
+
+Shapefiles for countries, states, counties, etc. are often available on respective agency websites.  
+
+For example, I can download the Nebraska county boundaries shapefile from here:  https://www.nebraskamap.gov/datasets/county-boundaries-2/explore
+
+```{r, echo=F, out.width="50%"}
+knitr::include_graphics("images/NE_shp_download.png")
+```
+
+Click on "download" and select "Shapefile". Uncompress the .zip file and move the *whole folder* to your data folder. 
+
+**IMPORTANT: When you download a shapefile, you will be downloading a whole folder (or .zip file containing a whole folder) that includes both the .shp file and several other supplemental files. You need to keep all of these together!**
+
+So your .shp file should be saved within a subfolder in your data folder that looks like this:
+
+```{r, echo=F, out.width="50%"}
+knitr::include_graphics("images/shp_file_example.png")
+```
+
+Now you can import the shapefile using `st_read()` function. 
+
+```{r}
+ne_shp=st_read("data/NE_County_Boundaries/County_Boundaries.shp")
+```
+
+You can see what information is in this dataset using `str()`
+
+```{r}
+str(ne_shp)
+```
+
+#### `plot()` in sf
+
+You can use the `plot()` function on an sf object. 
+
+If you just use that function, it will plot different maps with all variables that are in the file.
+
+```{r}
+plot(ne_shp)
+```
+
+If you want to plot the map with one variable, you can use `[]` and indicate which variable you want to plot. 
+```{r}
+plot(ne_shp["Shape_Area"])
+```
+
+If you want to just plot the shapes, you can use `st_geometry()`
+
+```{r}
+plot(st_geometry(ne_shp))
+```
+
+#### Use ggplot
+
+And it's pretty simple to plot that using the `geom_sf()` function:
+
+```{r}
+ggplot() +
+  geom_sf(data=ne_shp) 
+```
+
+Let's color the state with the Husker colors (colors according to the university brand guide).
+
+```{r}
+ggplot() +
+  geom_sf(data=ne_shp, fill="#d00000", color="#f5f1e7") +
+  theme_bw()
 ```
 
 
-e.g., I downloaded US county data from US census bureau: https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+
+### Download shapefile & plot: U.S. example
+
+I downloaded the 2018 US county data from US census bureau: https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+
+Again, remember to save the entire folder that you downloaded into your data folder. 
+
+
+Import the .shp file into R:
 
 ```{r}
 us_shp=st_read("data/cb_2018_us_county_20m/cb_2018_us_county_20m.shp")
 ```
+
+Let's try plotting this:
+
+```{r}
+ggplot() +
+  geom_sf(data=us_shp, fill="goldenrod") +
+  theme_bw()
+```
+
+You can see that this looks funky because part of the Aleutian Islands crosses the international date line, and it appears on the right-hand side of the map.
+
+
+There are number of ways to deal with this, but they all seem complicated. Let's just do a quick fix and restrict the x-axis limits:
 
 ```{r}
 ggplot() +
@@ -35,40 +136,58 @@ ggplot() +
 ```
 
 
-Also downloaded county-level data. 
+## 2. Layering information on the map
+
+Now let's add more interesting information on the map. We can do this if we have a dataset that contains information at the same scale as our shapefile--i.e., if we have a shapefile that shows the county boundaries, we can add information at the county level and then display the map with that information. 
+
+Here, I'm going to use county-level data that I download from the U.S. Census Bureau.
+
+Here is the link:
 https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-detail.html
+
 "Annual County Resident Population Estimates by Age, Sex, Race, and Hispanic Origin: April 1, 2020 to July 1, 2024 (CC-EST2024-ALLDATA)"
---> select "United States"
+--> select "Nebraska"
 
 Read the county-level data.
 
 ```{r}
-co_data=read.csv("data/co-est2024-alldata.csv")
+co_data=read.csv("data/cc-est2024-alldata-31.csv")
 head(co_data)
+```
+
+```{r}
+co_data_allage2024=co_data %>% filter(AGEGRP==0 & YEAR==4)
 ```
 
 ### Mapping county data on map of Nebraska
 
-downloaded NE counties data from https://www.nebraskamap.gov/datasets/county-boundaries-2/explore
+
 
 ```{r}
-ne=st_read("data/NE_County_Boundaries/County_Boundaries.shp")
-head(ne)
+ne_full2024=ne_shp %>% mutate(CountyFIPS=as.numeric(CountyFIPS)) %>% left_join(co_data_allage2024, by=join_by("CountyFIPS"=="COUNTY"))
 ```
 
 ```{r}
-ne_full2024=ne %>% mutate(CountyFIPS=as.numeric(CountyFIPS)) %>% left_join(co_data %>% filter(STNAME=="Nebraska"), by=join_by("CountyFIPS"=="COUNTY"))
+ne_full2024
+```
+
+```{r}
+plot(ne_full2024["TOT_POP"])
 ```
 
 ```{r}
 ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=POPESTIMATE2024)) +
+  geom_sf(data=ne_full2024, aes(fill=TOT_POP)) +
   theme_bw()
+```
 
+
+```{r}
 ggplot() +
   geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
   theme_bw()
 ```
+
 ```{r}
 unl=data.frame(long=693966.4754863544, lat=4521321.303476614 )
 
