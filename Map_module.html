@@ -472,20 +472,25 @@ limits:</p>
   coord_sf(xlim=c(-180,-50)) +
   theme_bw()</code></pre>
 <p><img src="Map_module_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>At this scale, the projection method matters.</p>
-<pre class="r"><code># ggplot() +
-#   geom_sf(data=us_shp, fill=&quot;goldenrod&quot;) +
-#   st_crs()
-#   theme_bw()</code></pre>
 </div>
-<div id="layering-information-on-top" class="section level3">
-<h3>Layering information on top</h3>
-<p>Also downloaded county-level data. <a
-href="https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-detail.html"
-class="uri">https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-detail.html</a>
-“Annual County Resident Population Estimates by Age, Sex, Race, and
+</div>
+<div id="layering-information-on-the-map" class="section level2">
+<h2>2. Layering information on the map</h2>
+<p>Now let’s add more interesting information on the map. We can do this
+if we have a dataset that contains information at the same scale as our
+shapefile–i.e., if we have a shapefile that shows the county boundaries,
+we can add information at the county level and then display the map with
+that information.</p>
+<p>Here, I’m going to use county-level data that I download from the
+U.S. Census Bureau. <a
+href="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html">(at
+the bottom of this page)</a></p>
+<p><a
+href="https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv">Here
+is the direct link to the data</a></p>
+<p>“Annual County Resident Population Estimates by Age, Sex, Race, and
 Hispanic Origin: April 1, 2020 to July 1, 2024 (CC-EST2024-ALLDATA)”
-–&gt; select “United States”</p>
+–&gt; select “Nebraska”</p>
 <p>Read the county-level data.</p>
 <pre class="r"><code>co_data=read.csv(&quot;data/co-est2024-alldata.csv&quot;)
 head(co_data)</code></pre>
@@ -608,25 +613,240 @@ head(co_data)</code></pre>
 ## 4   -8.326191
 ## 5   16.988312
 ## 6    8.004002</code></pre>
-</div>
 <div id="mapping-county-data-on-map-of-nebraska" class="section level3">
 <h3>Mapping county data on map of Nebraska</h3>
 <pre class="r"><code>ne_full2024=ne_shp %&gt;% mutate(CountyFIPS=as.numeric(CountyFIPS)) %&gt;% left_join(co_data %&gt;% filter(STNAME==&quot;Nebraska&quot;), by=join_by(&quot;CountyFIPS&quot;==&quot;COUNTY&quot;))</code></pre>
+<pre class="r"><code>ne_full2024</code></pre>
+<pre><code>## Simple feature collection with 93 features and 89 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -11583190 ymin: 4865930 xmax: -10609650 ymax: 5312216
+## Projected CRS: WGS 84 / Pseudo-Mercator
+## First 10 features:
+##    OBJECTID Cnty_Name Cnty_No CountyFIPS                               GlobalID
+## 1         1     Adams       1          1 {16352331-3262-4EBB-A789-263D6FDBEBB3}
+## 2         2  Antelope       2          3 {FA9D8609-F002-4003-AF46-CE1F04A2B936}
+## 3         3    Arthur       3          5 {FF27D2CA-CA67-4D69-8720-0EF86DB743E5}
+## 4         4    Banner       4          7 {85111E3B-7990-4C93-A22A-5941EBEC0EBF}
+## 5         5    Blaine       5          9 {AA433830-4A29-4E78-8410-A51CD16A1136}
+## 6         6     Boone       6         11 {7525569E-EDEB-4C3D-B8B5-E3F2F666F8C7}
+## 7         7 Box Butte       7         13 {D6108A51-82ED-4D24-BC5B-424409BD7286}
+## 8         8      Boyd       8         15 {133AFDC8-A990-401A-BDBB-C8A21CFB8B58}
+## 9         9     Brown       9         17 {94BE7DBB-A860-4AE0-82E2-260B66A20B4A}
+## 10       10   Buffalo      10         19 {88742488-9B44-4D09-9814-04D6A2206E45}
+##    Shape_Leng Shape_Area SUMLEV REGION DIVISION STATE   STNAME          CTYNAME
+## 1    201309.1 2531755015     50      2        4    31 Nebraska     Adams County
+## 2    260687.1 4052249963     50      2        4    31 Nebraska  Antelope County
+## 3    232240.9 3326494107     50      2        4    31 Nebraska    Arthur County
+## 4    242685.9 3451998712     50      2        4    31 Nebraska    Banner County
+## 5    232721.2 3342160310     50      2        4    31 Nebraska    Blaine County
+## 6    233170.1 3197113116     50      2        4    31 Nebraska     Boone County
+## 7    295708.0 5095410386     50      2        4    31 Nebraska Box Butte County
+## 8    283608.5 2629154052     50      2        4    31 Nebraska      Boyd County
+## 9    342014.7 5827272792     50      2        4    31 Nebraska     Brown County
+## 10   270395.7 4404799322     50      2        4    31 Nebraska   Buffalo County
+##    ESTIMATESBASE2020 POPESTIMATE2020 POPESTIMATE2021 POPESTIMATE2022
+## 1              31197           31176           30974           31023
+## 2               6292            6279            6296            6299
+## 3                433             432             435             427
+## 4                675             678             689             656
+## 5                429             428             463             448
+## 6               5374            5357            5381            5366
+## 7              10833           10819           10658           10685
+## 8               1811            1803            1782            1737
+## 9               2902            2903            2922            2894
+## 10             50092           50204           50310           50528
+##    POPESTIMATE2023 POPESTIMATE2024 NPOPCHG2020 NPOPCHG2021 NPOPCHG2022
+## 1            30892           31196         -21        -202          49
+## 2             6291            6358         -13          17           3
+## 3              416             423          -1           3          -8
+## 4              671             665           3          11         -33
+## 5              431             454          -1          35         -15
+## 6             5320            5354         -17          24         -15
+## 7            10705           10703         -14        -161          27
+## 8             1739            1700          -8         -21         -45
+## 9             2877            2877           1          19         -28
+## 10           50696           51156         112         106         218
+##    NPOPCHG2023 NPOPCHG2024 BIRTHS2020 BIRTHS2021 BIRTHS2022 BIRTHS2023
+## 1         -131         304         97        356        379        365
+## 2           -8          67         27         86         75         73
+## 3          -11           7          1          1          4          4
+## 4           15          -6          2          9          7          5
+## 5          -17          23          0          7          4          6
+## 6          -46          34         19         59         62         65
+## 7           20          -2         36        121         96        120
+## 8            2         -39          5         14         12          8
+## 9          -17           0         10         35         42         33
+## 10         168         460        172        623        579        596
+##    BIRTHS2024 DEATHS2020 DEATHS2021 DEATHS2022 DEATHS2023 DEATHS2024
+## 1         364         96        375        389        366        363
+## 2          74         22         84         81         62         52
+## 3           4          1          5          5          3          4
+## 4           7          3          6          8          6          6
+## 5           6          2          6         11          8          6
+## 6          66         15         85         76         71         69
+## 7         117         30        126        140        134        127
+## 8           8         10         37         34         32         24
+## 9          34         15         41         50         36         32
+## 10        586         91        463        471        438        393
+##    NATURALCHG2020 NATURALCHG2021 NATURALCHG2022 NATURALCHG2023 NATURALCHG2024
+## 1               1            -19            -10             -1              1
+## 2               5              2             -6             11             22
+## 3               0             -4             -1              1              0
+## 4              -1              3             -1             -1              1
+## 5              -2              1             -7             -2              0
+## 6               4            -26            -14             -6             -3
+## 7               6             -5            -44            -14            -10
+## 8              -5            -23            -22            -24            -16
+## 9              -5             -6             -8             -3              2
+## 10             81            160            108            158            193
+##    INTERNATIONALMIG2020 INTERNATIONALMIG2021 INTERNATIONALMIG2022
+## 1                     1                   34                  165
+## 2                     0                    1                   11
+## 3                     0                    0                    0
+## 4                     0                    0                    1
+## 5                     0                    0                    0
+## 6                     0                    1                    4
+## 7                     0                   18                   65
+## 8                     0                    0                    1
+## 9                     0                   -1                    7
+## 10                    0                   17                   77
+##    INTERNATIONALMIG2023 INTERNATIONALMIG2024 DOMESTICMIG2020 DOMESTICMIG2021
+## 1                    57                   71             -24            -225
+## 2                     3                    3             -15              11
+## 3                     0                    0              -1               6
+## 4                     0                    0               5               8
+## 5                     0                    0               2              37
+## 6                     8                    9             -20              51
+## 7                    48                   60             -18            -168
+## 8                     4                    4              -3               3
+## 9                    17                   20               6              24
+## 10                   84                  108              12            -104
+##    DOMESTICMIG2022 DOMESTICMIG2023 DOMESTICMIG2024 NETMIG2020 NETMIG2021
+## 1             -100            -186             235        -23       -191
+## 2                1             -22              42        -15         12
+## 3               -4             -14               7         -1          6
+## 4              -33              14              -7          5          8
+## 5               -9             -15              22          2         37
+## 6               -5             -50              30        -20         52
+## 7               14             -11             -53        -18       -150
+## 8              -25              24             -26         -3          3
+## 9              -25             -30             -23          6         23
+## 10              62             -65             159         12        -87
+##    NETMIG2022 NETMIG2023 NETMIG2024 RESIDUAL2020 RESIDUAL2021 RESIDUAL2022
+## 1          65       -129        306            1            8           -6
+## 2          12        -19         45           -3            3           -3
+## 3          -4        -14          7            0            1           -3
+## 4         -32         14         -7           -1            0            0
+## 5          -9        -15         22           -1           -3            1
+## 6          -1        -42         39           -1           -2            0
+## 7          79         37          7           -2           -6           -8
+## 8         -24         28        -22            0           -1            1
+## 9         -18        -13         -3            0            2           -2
+## 10        139         19        267           19           33          -29
+##    RESIDUAL2023 RESIDUAL2024 GQESTIMATESBASE2020 GQESTIMATES2020
+## 1            -1           -3                 956             954
+## 2             0            0                  59              59
+## 3             2            0                   0               0
+## 4             2            0                   0               0
+## 5             0            1                   0               0
+## 6             2           -2                  93              93
+## 7            -3            1                 125             125
+## 8            -2           -1                  25              25
+## 9            -1            1                  21              21
+## 10           -9            0                2503            2501
+##    GQESTIMATES2021 GQESTIMATES2022 GQESTIMATES2023 GQESTIMATES2024 RBIRTH2021
+## 1              869             880             901             963  11.456154
+## 2               58              58              57              57  13.677932
+## 3                0               0               0               0   2.306805
+## 4                0               0               0               0  13.167520
+## 5                0               0               0               0  15.712682
+## 6               86              75              87              90  10.989011
+## 7              125             123             119             128  11.267868
+## 8               22              23              28              28   7.810321
+## 9               21              21              25              25  12.017167
+## 10            2280            2395            2364            2481  12.396283
+##    RBIRTH2022 RBIRTH2023 RBIRTH2024 RDEATH2021 RDEATH2022 RDEATH2023 RDEATH2024
+## 1   12.226398  11.790358  11.725293  12.067578  12.548994  11.822660  11.693081
+## 2   11.909488  11.596505  11.700530  13.359841  12.862247   9.849087   8.221994
+## 3    9.280742   9.489917   9.535161  11.534025  11.600928   7.117438   9.535161
+## 4   10.408922   7.535795  10.479042   8.778347  11.895911   9.042954   8.982036
+## 5    8.781559  13.651877  13.559322  13.468013  24.149286  18.202503  13.559322
+## 6   11.538104  12.165450  12.366498  15.831626  14.143482  13.288415  12.928612
+## 7    8.995924  11.220196  10.930493  11.733482  13.119055  12.529219  11.864723
+## 8    6.820119   4.602992   4.652515  20.641562  19.323671  18.411968  13.957546
+## 9   14.442916  11.436493  11.817866  14.077253  17.193948  12.476174  11.122697
+## 10  11.483766  11.775863  11.506892   9.212647   9.341716   8.654074   7.717080
+##    RNATURALCHG2021 RNATURALCHG2022 RNATURALCHG2023 RNATURALCHG2024
+## 1       -0.6114240      -0.3225963     -0.03230235      0.03221234
+## 2        0.3180915      -0.9527590      1.74741859      3.47853585
+## 3       -9.2272203      -2.3201856      2.37247924      0.00000000
+## 4        4.3891734      -1.4869888     -1.50715901      1.49700599
+## 5        2.2446689     -15.3677278     -4.55062571      0.00000000
+## 6       -4.8426150      -2.6053782     -1.12296463     -0.56211355
+## 7       -0.4656144      -4.1231317     -1.30902291     -0.93423019
+## 8      -12.8312413     -12.5035522    -13.80897583     -9.30503053
+## 9       -2.0600858      -2.7510316     -1.03968116      0.69516858
+## 10       3.1836361       2.1420496      3.12178930      3.78981267
+##    RINTERNATIONALMIG2021 RINTERNATIONALMIG2022 RINTERNATIONALMIG2023
+## 1              1.0941271             5.3228382             1.8412339
+## 2              0.1590457             1.7467249             0.4765687
+## 3              0.0000000             0.0000000             0.0000000
+## 4              0.0000000             1.4869888             0.0000000
+## 5              0.0000000             0.0000000             0.0000000
+## 6              0.1862544             0.7443938             1.4972862
+## 7              1.6762118             6.0909900             4.4880785
+## 8              0.0000000             0.5683433             2.3014960
+## 9             -0.3433476             2.4071527             5.8915266
+## 10             0.3382613             1.5272020             1.6596855
+##    RINTERNATIONALMIG2024 RDOMESTICMIG2021 RDOMESTICMIG2022 RDOMESTICMIG2023
+## 1              2.2870764        -7.240547       -3.2259625        -6.008237
+## 2              0.4743458         1.749503        0.1587932        -3.494837
+## 3              0.0000000        13.840830       -9.2807425       -33.214709
+## 4              0.0000000        11.704462      -49.0706320        21.100226
+## 5              0.0000000        83.052750      -19.7585071       -34.129693
+## 6              1.6863406         9.498976       -0.9304922        -9.358039
+## 7              5.6053812       -15.644643        1.3119055        -1.028518
+## 8              2.3262576         1.673640      -14.2085820        13.808976
+## 9              6.9516858         8.240343       -8.5969739       -10.396812
+## 10             2.1207242        -2.069363        1.2296952        -1.284280
+##    RDOMESTICMIG2024 RNETMIG2021 RNETMIG2022 RNETMIG2023 RNETMIG2024
+## 1          7.569901   -6.146420   2.0968757   -4.167003   9.8569772
+## 2          6.640841    1.908549   1.9055181   -3.018268   7.1151870
+## 3         16.686532   13.840830  -9.2807425  -33.214709  16.6865316
+## 4        -10.479042   11.704462 -47.5836431   21.100226 -10.4790419
+## 5         49.717514   83.052750 -19.7585071  -34.129693  49.7175141
+## 6          5.621135    9.685230  -0.1860984   -7.860752   7.3074761
+## 7         -4.951420  -13.968431   7.4028956    3.459561   0.6539611
+## 8        -15.120675    1.673640 -13.6402387   16.110472 -12.7944170
+## 9         -7.994439    7.896996  -6.1898212   -4.505285  -1.0427529
+## 10         3.122177   -1.731102   2.7568972    0.375405   5.2429015
+##                          geometry
+## 1  POLYGON ((-10940269 4967940...
+## 2  POLYGON ((-10890881 5226775...
+## 3  POLYGON ((-11352965 5122450...
+## 4  POLYGON ((-11583096 5115840...
+## 5  POLYGON ((-11097092 5173901...
+## 6  POLYGON ((-10890751 5148454...
+## 7  POLYGON ((-11515394 5226723...
+## 8  POLYGON ((-10964811 5311770...
+## 9  POLYGON ((-11154044 5288489...
+## 10 POLYGON ((-10989678 5019230...</code></pre>
+<pre class="r"><code>plot(ne_full2024[&quot;POPESTIMATE2024&quot;])</code></pre>
+<p><img src="Map_module_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>ggplot() +
   geom_sf(data=ne_full2024, aes(fill=POPESTIMATE2024)) +
   theme_bw()</code></pre>
-<p><img src="Map_module_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<pre class="r"><code>ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
-  theme_bw()</code></pre>
-<p><img src="Map_module_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
-<pre class="r"><code>unl=data.frame(long=693966.4754863544, lat=4521321.303476614 )
-
-ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=NPOPCHG2024)) +
-  annotate(&quot;point&quot;, x=unl$long, y=unl$lat) +
-  theme_bw() </code></pre>
 <p><img src="Map_module_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code># ggplot() +
+#   geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
+#   theme_bw()</code></pre>
+<pre class="r"><code># unl=data.frame(long=693966.4754863544, lat=4521321.303476614 )
+# 
+# ggplot() +
+#   geom_sf(data=ne_full2024, aes(fill=NPOPCHG2024)) +
+#   annotate(&quot;point&quot;, x=unl$long, y=unl$lat) +
+#   theme_bw() </code></pre>
 </div>
 </div>
 

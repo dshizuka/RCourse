@@ -140,10 +140,10 @@ ggplot() +
 
 Now let's add more interesting information on the map. We can do this if we have a dataset that contains information at the same scale as our shapefile--i.e., if we have a shapefile that shows the county boundaries, we can add information at the county level and then display the map with that information. 
 
-Here, I'm going to use county-level data that I download from the U.S. Census Bureau.
+Here, I'm going to use county-level data that I download from the U.S. Census Bureau. 
+[(at the bottom of this page)](https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html)
 
-Here is the link:
-https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-detail.html
+[Here is the direct link to the data](https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv)
 
 "Annual County Resident Population Estimates by Age, Sex, Race, and Hispanic Origin: April 1, 2020 to July 1, 2024 (CC-EST2024-ALLDATA)"
 --> select "Nebraska"
@@ -151,20 +151,18 @@ https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-deta
 Read the county-level data.
 
 ```{r}
-co_data=read.csv("data/cc-est2024-alldata-31.csv")
+co_data=read.csv("data/co-est2024-alldata.csv")
 head(co_data)
 ```
 
-```{r}
-co_data_allage2024=co_data %>% filter(AGEGRP==0 & YEAR==4)
-```
+
 
 ### Mapping county data on map of Nebraska
 
 
 
 ```{r}
-ne_full2024=ne_shp %>% mutate(CountyFIPS=as.numeric(CountyFIPS)) %>% left_join(co_data_allage2024, by=join_by("CountyFIPS"=="COUNTY"))
+ne_full2024=ne_shp %>% mutate(CountyFIPS=as.numeric(CountyFIPS)) %>% left_join(co_data %>% filter(STNAME=="Nebraska"), by=join_by("CountyFIPS"=="COUNTY"))
 ```
 
 ```{r}
@@ -172,27 +170,27 @@ ne_full2024
 ```
 
 ```{r}
-plot(ne_full2024["TOT_POP"])
+plot(ne_full2024["POPESTIMATE2024"])
 ```
 
 ```{r}
 ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=TOT_POP)) +
+  geom_sf(data=ne_full2024, aes(fill=POPESTIMATE2024)) +
   theme_bw()
 ```
 
 
 ```{r}
-ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
-  theme_bw()
+# ggplot() +
+#   geom_sf(data=ne_full2024, aes(fill=RBIRTH2024)) +
+#   theme_bw()
 ```
 
 ```{r}
-unl=data.frame(long=693966.4754863544, lat=4521321.303476614 )
-
-ggplot() +
-  geom_sf(data=ne_full2024, aes(fill=NPOPCHG2024)) +
-  annotate("point", x=unl$long, y=unl$lat) +
-  theme_bw() 
+# unl=data.frame(long=693966.4754863544, lat=4521321.303476614 )
+# 
+# ggplot() +
+#   geom_sf(data=ne_full2024, aes(fill=NPOPCHG2024)) +
+#   annotate("point", x=unl$long, y=unl$lat) +
+#   theme_bw() 
 ```
