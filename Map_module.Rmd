@@ -198,20 +198,6 @@ ggplot() +
   theme_bw()
 ```
 
-### add points 
-
-```{r}
-# unl=data.frame(campus="UNL", long=-96.7004763, lat=40.8201966 )
-# 
-# uni_sf=st_as_sf(unl, coords=c("long", "lat"))
-# st_crs(uni_sf)=st_crs(ne_full2024)
-# # 
-# ggplot() +
-#   geom_sf(data=ne_full2024) +
-#   geom_sf(data=uni_sf, aes(color=campus)) +
-#   theme_bw()
-```
-
 ### Use tigris package
 
 ```{r}
@@ -230,3 +216,20 @@ ggplot() +
   scale_fill_viridis_b() +
   theme_bw()
 ```
+
+### add points
+
+```{r}
+ne_cities=data.frame(city=c("Omaha", "Lincoln", "Grand Island"), long=c(-95.94, -96.67, -98.34), lat=c(41.26, 40.8, 40.925 ))
+
+
+ggplot() +
+  geom_sf(data=ne_tig2024) +
+  geom_point(data=ne_cities, aes(x=long, y=lat), color="red", size=1.5) +
+  geom_text(data=ne_cities, aes(x=long+0.5, y=lat+0.2, label=city)) +
+  theme_bw()
+```
+
+## tmap package
+
+Use this page for reference: https://r.geocompx.org/adv-map
