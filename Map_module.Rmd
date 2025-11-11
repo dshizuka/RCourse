@@ -136,15 +136,30 @@ ggplot() +
   theme_bw()
 ```
 
-## Use tigris package
+## 2. Use tigris package to directly download shapefiles
 
-```{r}
+You can use the tigris package to download shapefile data from the U.S. Census Bureau directly. 
+
+Here is a tutorial for using this package: https://walker-data.com/census-r/census-geographic-data-and-applications-in-r.html
+
+
+For example, let's download the county data for Nebraska:
+
+```{r, message=F, warning=F}
 ne_tig=counties("Nebraska", cb=TRUE)
-ne_tig
+```
+
+Here is what that data looks like
+```{r}
+tibble(ne_tig)
+```
+
+Again, you can plot this just the same way as an imported shapefile.
+```{r}
 plot(ne_tig)
 ```
 
-## 2. Layering information on the map
+## 3. Layering information on the map
 
 Now let's add more interesting information on the map. We can do this if we have a dataset that contains information at the same scale as our shapefile--i.e., if we have a shapefile that shows the county boundaries, we can add information at the county level and then display the map with that information. 
 
@@ -160,7 +175,7 @@ Read the county-level data.
 
 ```{r}
 co_data=read.csv("data/co-est2024-alldata.csv")
-head(co_data)
+tibble(co_data)
 ```
 
 
@@ -174,7 +189,7 @@ ne_full2024=ne_shp %>% mutate(CountyFIPS=as.numeric(CountyFIPS)) %>% left_join(c
 ```
 
 ```{r}
-ne_full2024
+tibble(ne_full2024)
 ```
 
 ```{r}
@@ -198,6 +213,7 @@ ggplot() +
 ```
 
 International migration rate in 2024
+
 ```{r}
 ggplot() +
   geom_sf(data=ne_full2024, aes(fill=RINTERNATIONALMIG2024)) +
@@ -218,7 +234,7 @@ ggplot() +
   theme_bw()
 ```
 
-### add points
+## 4. Add points
 
 ```{r}
 ne_cities=data.frame(city=c("Omaha", "Lincoln", "Grand Island"), long=c(-95.94, -96.67, -98.34), lat=c(41.26, 40.8, 40.925 ))
@@ -231,6 +247,15 @@ ggplot() +
   theme_bw()
 ```
 
-## tmap package
+
+
+## 5. Using the tmap package
 
 Use this page for reference: https://r.geocompx.org/adv-map
+
+```{r}
+tm_shape(ne_tig2024) +
+  tm_borders() +
+  tm_fill(fill="RBIRTH2024") 
+```
+

@@ -53,6 +53,8 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### Mini-modules (in progress):
   
   + ### [Reshaping data with pivot functions](09.5_pivot.html)
+  
+  + ### [Basic map making from shapefiles](Map_module.html)
 
 * ### Reports
 
