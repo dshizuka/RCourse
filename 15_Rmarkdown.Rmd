@@ -200,7 +200,7 @@ Now include this in your .Rmd file and "knit" to render.
 ![*This is a sample image*](images/RStudio-Logo-Blue-Gradient.png)
 ```
 
-![*This is a sample image*](../images/RStudio-Logo-Blue-Gradient.png)
+![*This is a sample image*](images/RStudio-Logo-Blue-Gradient.png)
 
 \
 
@@ -209,7 +209,7 @@ You can control the size of the image like this:
 ![*This is a sample image presented at 30% size*](../images/RStudio-Logo-Blue-Gradient.png){width=30%}
 ```
 
-![*This is a sample image presented at 30% size*](../images/RStudio-Logo-Blue-Gradient.png){width=30%}
+![*This is a sample image presented at 30% size*](images/RStudio-Logo-Blue-Gradient.png){width=30%}
 
 \
 
