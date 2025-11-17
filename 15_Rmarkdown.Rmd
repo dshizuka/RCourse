@@ -24,16 +24,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Before we start:
 
-1. You will need to make sure your computer can run a LaTex engine:
+* You should refer to this [Definitive Guide to R Markdown](https://bookdown.org/yihui/rmarkdown/)
 
-    * For Windows: Go to <https://miktex.org/howto/install-miktex> and follow directions to install MikTex.
-    * For Mac: Go to <https://tug.org/mactex/mactex-download.html> and follow directions to install MacTex.
-
-
-2. You should download this "R Markdown Reference Guide" <https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf>
-
-
-3. In your R Studio preferences, go to "R Markdown", and set "Show Output Preview in" to **Viewer Pane**.
+* In your R Studio preferences, go to "R Markdown", and set "Show Output Preview in" to **Viewer Pane**.
   
   ***
   

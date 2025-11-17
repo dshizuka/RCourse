@@ -20,7 +20,7 @@ library(tidyverse)
 
 
 ```{r}
-sample.dat1=tibble(subject=c("A", "B", "C", "D"), measure=c(12, 8, 10, 20))
+sample.dat1=tibble(subject=c("A", "B", "C", "D"), measure=c(10, 8, 12, 20))
 
 sample.dat2=tibble(subject=c("A", "B", "E", "F"), measure=c(5.0, 3.4, 4.5, 7.1))
 ```
