@@ -11,8 +11,9 @@
 
 <meta name="author" content="Dai Shizuka" />
 
+<meta name="date" content="2025-12-18" />
 
-<title>Learning Modules</title>
+<title>End of the course: transfer ownership of your repository</title>
 
 <script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -30,6 +31,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -220,6 +224,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -227,6 +294,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -264,121 +341,56 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Learning Modules</h1>
+<h1 class="title toc-ignore">End of the course: transfer ownership of
+your repository</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 12/18/25</h4>
+<h4 class="date">December 18, 2025</h4>
 
 </div>
 
 
-<ul>
-<li><h3 id="getting-started">1. Getting Started</h3>
-<ul>
-<li><h3 id="lets-get-started-with-r"><a href="01_Intro.html">Let’s get
-started with R!</a></h3></li>
-<li><h3
-id="types-of-objects-vectors-strings-matrices-dataframes-lists"><a
-href="02_ObjectTypes.html">Types of Objects (vectors, strings, matrices,
-dataframes, lists)</a></h3></li>
-<li><h3 id="directories-pathnames-and-rstudio-projects"><a
-href="03_Rproject.html">Directories, Pathnames, and RStudio
-Projects</a></h3></li>
-<li><h3 id="working-with-data"><a href="04_Data.html">Working with
-Data</a></h3></li>
-<li><h3 id="setting-up-github-for-your-independent-projects"><a
-href="05_GitHub.html">Setting up GitHub for your independent
-projects</a></h3></li>
-</ul></li>
-<li><h3 id="plotting-in-r">Plotting in R:</h3>
-<ul>
-<li><h3 id="basics-of-plots"><a href="06_Plots_basics.html">Basics of
-Plots</a></h3></li>
-<li><h3 id="intro-to-ggplot2"><a href="07_ggplot_intro.html">Intro to
-ggplot2</a></h3></li>
-</ul></li>
-<li><h3 id="wrangling-data-in-r">Wrangling data in R:</h3>
-<ul>
-<li><h3 id="data-wrangling-with-dplyr"><a href="09_dplyr.html">Data
-Wrangling with dplyr</a></h3></li>
-<li><h3 id="parsing-dates-and-text"><a
-href="10_text_parsing.html">Parsing Dates and Text</a></h3></li>
-</ul></li>
-<li><h3 id="stats-in-r">Stats in R:</h3>
-<ul>
-<li><h3 id="linear-models-in-r-including-anova-glm"><a
-href="08_Stats_LinearModels.html">Linear Models in R (including ANOVA,
-GLM)</a></h3></li>
-</ul></li>
-<li><h3 id="functions-sampling-and-batch-processing">Functions,
-Sampling, and Batch Processing</h3>
-<ul>
-<li><h3 id="custom-functions-and-if-else-statements"><a
-href="11_Functions.html">Custom Functions (and if-else
-statements)</a></h3></li>
-<li><h3 id="apply-fuctions-and-loops"><a href="12_Apply.html">Apply
-Fuctions and Loops</a></h3></li>
-<li><h3 id="randomizations-and-sampling-from-distributions"><a
-href="13_RandomNumbers.html">Randomizations and Sampling From
-Distributions</a></h3></li>
-<li><h3 id="batch-processing-example-using-flack-et-al.-2014"><a
-href="14_batch.html">Batch Processing (Example using Flack et
-al. 2014)</a></h3></li>
-</ul></li>
-<li><h3 id="mini-modules-in-progress">Mini-modules (in progress):</h3>
-<ul>
-<li><h3 id="reshaping-data-with-pivot-functions"><a
-href="09.5_pivot.html">Reshaping data with pivot functions</a></h3></li>
-<li><h3 id="basic-map-making-from-shapefiles"><a
-href="Map_module.html">Basic map making from shapefiles</a></h3></li>
-</ul></li>
-<li><h3 id="reports">Reports</h3>
-<ul>
-<li><h3 id="generating-reports-with-rmarkdown"><a
-href="15_Rmarkdown.html">Generating reports with RMarkdown</a></h3></li>
-</ul></li>
-<li><h3 id="extras">Extras</h3>
-<ul>
-<li><h3
-id="end-of-the-course-transferring-ownership-of-your-repository"><a
-href="x_transferowner.html">End of the course: Transferring ownership of
-your repository</a></h3></li>
-<li><h3 id="what-now-more-resources-for-continuing-to-learn-r"><a
-href="resources.html">What now? More resources for continuing to learn
-R</a></h3></li>
-</ul></li>
-</ul>
 <hr />
-<div id="worked-examples" class="section level2">
-<h2>Worked Examples:</h2>
-<div
-id="these-are-lessons-that-use-real-or-simulated-data-to-demonstrate-skills-that-are-covered-in-the-learning-modules-above."
-class="section level4">
-<h4><em>These are lessons that use real or simulated data to demonstrate
-skills that are covered in the learning modules above.</em></h4>
-<ul>
-<li><h4 id="worked-example-simulating-population-growth"><a
-href="x_PopGrowth.html">Worked Example: Simulating Population
-Growth</a></h4></li>
-<li><h4 id="worked-example-wrangling-world-bank-data"><a
-href="x_WorldBank.html">Worked Example: Wrangling World Bank
-Data</a></h4></li>
-<li><h4 id="worked-example-data-wrangling-with-coot-chick-color-data"><a
-href="x_CootDataWrangling.html">Worked Example: Data wrangling with coot
-chick color data</a></h4></li>
-<li><h4
-id="worked-example-plotting-the-change-of-butterfly-size-under-climate-change"><a
-href="x_Bowden.html">Worked Example: Plotting the change of butterfly
-size under climate change</a></h4></li>
-<li><h4
-id="worked-example-plots-and-stats-on-effect-of-anthropogenic-noise-on-crab-physiology"><a
-href="x_Wale.html">Worked Example: Plots and stats on effect of
-anthropogenic noise on crab physiology</a></h4></li>
-</ul>
+<div id="youre-done-with-the-r-course-now-what" class="section level3">
+<h3>You’re done with the R course! Now what?</h3>
+<p><strong><em>ONCE YOU HAVE RECEIVED CONFIRMATION THAT YOUR FINAL
+PROJECT HAS BEEN REVIEWED</em></strong>, you can transfer ownership out
+of the “BIOS967” organization on GitHub to your own account.</p>
+<p>This will allow you to continue conducting your research without me
+continuing to have access to your repository.</p>
+<p>Here is a simple way to transfer ownership of your repository:</p>
+<hr />
+<ol style="list-style-type: decimal">
+<li><p>Make sure your local and remote directories are synced by pulling
+and pushing the repo on GitHub Desktop.</p></li>
+<li><p>Go to your GitHub Repository on the GitHub website and click on
+“settings”</p></li>
+</ol>
+<p><img src="images/transferowner_settings.png" width="50%" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Scroll down to the “danger zone” and click on “transfer
+ownership”</li>
+</ol>
+<p><img src="images/transferowner_danger.png" width="50%" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Scroll down and hit the drop-down menu called “choose an owner” and
+select your account. Click “I understand, transfer this repository.</li>
+</ol>
+<p><img src="images/transferowner_newowner.png" width="50%" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Follow the directions (you will be asked to type out the
+repository path to confirm)</p></li>
+<li><p>Delete your local directory (i.e., find your folder on your
+computer and put it in the trash).</p></li>
+<li><p>Re-clone the repository from the GitHub website. (*Go to the
+repository, click on the green “&lt;&gt; Code” button, and click on
+“Open with GitHub Desktop”)</p></li>
+</ol>
+</div>
+
+
+
 </div>
 </div>
-
-
-
 
 </div>
 
@@ -411,6 +423,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

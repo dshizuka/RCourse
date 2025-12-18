@@ -61,6 +61,9 @@ knitr::opts_chunk$set(echo = TRUE)
   + ### [Generating reports with RMarkdown](15_Rmarkdown.html)
 
 * ### Extras
+
+  + ### [End of the course: Transferring ownership of your repository](x_transferowner.html)
+  
   + ### [What now? More resources for continuing to learn R](resources.html)
 
 ***
